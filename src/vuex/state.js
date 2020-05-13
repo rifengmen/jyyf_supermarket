@@ -1,13 +1,13 @@
 const state = {
   // 店铺wechatID
-  wechatID: '2',
-  // wechatID: '',
+  // wechatID: '2',
+  wechatID: '',
   // appid
-  appid: 'wx700e813e33fcebec',
-  // appid: '',
+  // appid: 'wx700e813e33fcebec',
+  appid: '',
   // 用户openid
-  openid: 'oWBPAv82A3OaXxPa6neaWv09g90A',
-  // openid: '',
+  // openid: 'oWBPAv82A3OaXxPa6neaWv09g90A',
+  openid: '',
   // 用户头像
   headimgurl: '',
   // 用户信息

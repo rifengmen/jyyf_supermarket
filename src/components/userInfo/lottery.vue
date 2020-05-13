@@ -118,7 +118,10 @@ export default {
     },
     // 中奖
     getResult (prize) {
-      alert(prize.prizename)
+      this.$message({
+        message: prize.prizename,
+        type: 'success'
+      })
     }
   },
   watch: {},
