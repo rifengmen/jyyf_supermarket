@@ -1,0 +1,12 @@
+.countdown_time {
+  width: 100%;
+  height: .3rem;
+  line-height: .3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.countdown_time > div {
+  height: 100%;
+  padding: 0 .04rem;
+}

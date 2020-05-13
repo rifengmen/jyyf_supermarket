@@ -1,0 +1,30 @@
+/* 消息列表 start */
+.wrapper {
+  width: 100%;
+  margin: 0;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+.messageList {
+  width: 100%;
+  height: auto;
+}
+.message_item {
+  width: calc(100% - .48rem);
+  height: 1.2rem;
+  padding: 0 .24rem;
+  border-bottom: .02rem solid #f4f4f4;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.message_item > div:first-child {
+  width: .12rem;
+  height: .12rem;
+  margin-right: .2rem;
+}
+.message_title {
+  width: 4.7rem;
+}
+/* 消息列表 end */

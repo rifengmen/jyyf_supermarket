@@ -1,0 +1,581 @@
+.user_main {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+/* card start */
+.userinfo {
+  width: calc(100% - .48rem);
+  height: 1.9rem;
+  margin: .2rem auto;
+  display: flex;
+  justify-content: space-between;
+  flex-flow: column;
+  align-items: center;
+  padding: .3rem 0 .2rem 0;
+}
+.card_name {
+  width: 100%;
+  height: .9rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+}
+.card_name .card_img {
+  width: .78rem;
+  height: .78rem;
+  padding: .06rem;
+  overflow: hidden;
+  margin-left: .3rem;
+}
+.card_name .card_img img {
+  width: 100%;
+}
+.card_name .card_num {
+  width: 3.5rem;
+  height: 100%;
+  margin-left: .3rem;
+  display: flex;
+  justify-content: space-around;
+  flex-flow: column;
+}
+.card_name .card_class {
+  width: 2.2rem;
+  height: .56rem;
+  border-radius: 5rem 0 0 5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.card_name .card_class .card_class_img {
+  width: .56rem;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card_class_img img {
+  width: 100%;
+}
+.card_class .card_class_name {
+  width: 1.6rem;
+}
+.card_des {
+  width: 100%;
+  height: .7rem;
+}
+.card_des ul {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.card_des .card_des_item {
+  width: 25%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-flow: column;
+  align-items: center;
+}
+/* card end */
+/* 功能部分 start */
+.user_cont {
+  width: calc(100% - .48rem);
+  height: calc(100vh - 4.7rem - 2px);
+  margin: 0 auto;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+.user_cont > ul {
+  width: 100%;
+  height: auto;
+  margin-bottom: .2rem;
+  padding: .1rem 0;
+}
+.user_item {
+  width: 100%;
+  min-height: 1rem;
+}
+.user_item .user_item_tit {
+  width: calc(100% - .48rem);
+  height: .8rem;
+  margin: 0 auto;
+  line-height: .8rem;
+  border-bottom: .02rem solid #f4f4f4;
+}
+.user_item ul {
+  width: 100%;
+  height: auto;
+  padding: .1rem 0 .6rem 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-flow: wrap;
+}
+.cont_item {
+  width: 25%;
+  height: 1.4rem;
+  display: flex;
+  justify-content: space-around;
+  flex-flow: column;
+  align-items: center;
+  margin-bottom: .2rem;
+}
+.cont_item .imgbox {
+  width: .8rem;
+  height: .8rem;
+  overflow: hidden;
+}
+.cont_item .imgbox img {
+  width: 100%;
+  height: 100%;
+}
+/* 功能部分 end */
+/* 内容部分盒子 start */
+.userinfo_main {
+  width: 100%;
+  height: calc(100% - 1.1rem - 1px);
+  margin-top: .2rem;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+/* 内容部分盒子 end */
+/* 支付密码 start */
+.userinfo_password {
+  width: 100%;
+  height: auto;
+  padding: .4rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-flow: column;
+}
+.section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /*flex-flow: column;*/
+  width: calc(100% - .8rem);
+  height: .7rem;
+  line-height: .7rem;
+  margin: 0 auto .3rem auto;
+}
+.areaDesc {
+  height: auto;
+}
+.userinfo_password .section.btn_box {
+  display: unset;
+  width: calc(100% - .8rem);
+  margin: 0 auto;
+}
+.section_tit {
+  width: 2.2rem;
+  height: 100%;
+}
+.section_input {
+  width: 4.5rem;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.areaDesc .section_input {
+  width: 4.5rem;
+  height: auto;
+  line-height: 1.5;
+  display: flex;
+  justify-content: space-between;
+  padding: .1rem 0;
+}
+.section_input .section_inputall {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #d6d6d6;
+}
+.section_input .section_inputall input {
+  width: calc(100% - .2rem);
+  height: calc(100% - 4px);
+  margin: 2px auto;
+}
+.section_input .section_input_l {
+  width: 2.2rem;
+  height: 100%;
+  border: 1px solid #d6d6d6;
+}
+.section_input .section_input_l input {
+  width: 90%;
+  height: 90%;
+}
+.section_input .section_input_r {
+  width: 1.6rem;
+  height: 100%;
+  border: 1px solid #ffae43;
+  display: flex;
+  justify-content: space-around;
+  flex-flow: column;
+  align-items: center;
+}
+.section_input .section_input_r img {
+  width: 100%;
+  height: 100%;
+}
+.section_input .section_input_r.disabled {
+  border: 1px solid #cccccc;
+}
+.userinfo_password .register_btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* 支付密码 end */
+/* 我的地址 start */
+.address_cont {
+  width: calc(100% - .48rem);
+  height: calc(100% - 2rem);
+  padding: 0 .24rem;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+.address_list {
+  width: 100%;
+  height: 100%;
+}
+.address_list ul {
+  width: 100%;
+  height: 100%;
+}
+.address_item {
+  width: 100%;
+  height: 1.2rem;
+  padding: .2rem 0;
+  border-bottom: 1px solid #f4f4f4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.address_item_img {
+  width: .8rem;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.address_item_img img {
+  width: .4rem;
+  height: .4rem;
+}
+.address_btn {
+  width: calc(100% - .48rem);
+  height: .8rem;
+  line-height: .8rem;
+  padding: .4rem .24rem;
+}
+/* 我的地址 end */
+/* 我的订单 start */
+.order_nav {
+  width: calc(100% - .48rem);
+  padding: 0 .24rem;
+  height: .88rem;
+  line-height: .88rem;
+}
+.order_nav > ul {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.order_nav_item {
+  height: .86rem;
+  padding: 0 .2rem;
+  border-bottom: .02rem solid #ffffff;
+}
+.order_nav_item.active {
+  height: .86rem;
+  padding: 0 .2rem;
+  border-bottom: .02rem solid #f64d4d;
+}
+.order_main {
+  width: calc(100% - .48rem);
+  /*height: calc(100% - 1.98rem - 1px);*/
+  height: calc(100% - 1.1rem - 1px);
+  margin-top: .2rem;
+  padding: 0 .24rem;
+  overflow: hidden;
+}
+.order_list {
+  width: 100%;
+  height: 100%;
+}
+/* 我的订单 end */
+/* 订单详情 start */
+.order_cont {
+  width: 100%;
+  height: calc(100% - .9rem - 1px);
+  overflow: hidden;
+  overflow-y: scroll;
+}
+.order_section {
+  width: calc(100% - .48rem);
+  height: auto;
+  padding: .3rem .24rem;
+  margin-top: .2rem;
+  display: flex;
+  justify-content: space-between;
+  flex-flow: column;
+}
+.order_sections {
+  width: 100%;
+  height: auto;
+  padding: .2rem 0;
+  margin-top: .2rem;
+  display: flex;
+  justify-content: space-between;
+}
+.order_sectionss {
+  width: calc(100% - .48rem);
+  height: auto;
+  padding: .3rem .24rem;
+  margin-top: .2rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+}
+.order_goods {
+  width: 100%;
+  height: auto;
+}
+.paydesc {
+  width: 100%;
+  height: .6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.orderdesc {
+  width: 100%;
+  height: auto;
+  padding: .2rem 0;
+  border-top: .02rem solid #f4f4f4;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.orderdesc:first-child {
+  border: unset;
+}
+.orderdesc > div:first-child {
+  width: 1.5rem;
+}
+.order_comment {
+  max-width: 6rem;
+  line-height: 1.5;
+}
+.pay_img {
+  width: calc(100% - 1.5rem);
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.pay_img img {
+  height: .4rem;
+}
+/* 订单详情 end */
+/* 再支付 start */
+.again_order_cont {
+  width: 100%;
+  height: calc(100% - 1.78rem - 1px);
+  overflow: hidden;
+  overflow-y: scroll;
+}
+.again_order_money {
+  width: 100%;
+  height: .88rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.order_money_totalMoney {
+  width: calc(100% - 3.68rem);
+  height: 100%;
+  padding: 0 .24rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.pay {
+  width: 3.2rem;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* 再支付 end */
+/* 我的资料 start */
+.user_section {
+  width: 100%;
+  height: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f4f4f4;
+}
+.user_desc {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.user_desc img {
+  width: .6rem;
+  height: .6rem;
+  margin-left: .2rem;
+}
+.user_desc input {
+  width: 5rem;
+  height: .8rem;
+  line-height: .8rem;
+}
+input::-webkit-input-placeholder{
+  color:#999999!important;
+  font-size: .26rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+input::-moz-placeholder{   /* Mozilla Firefox 19+ */
+  color:#999999!important;
+  font-size: .26rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+input:-moz-placeholder{    /* Mozilla Firefox 4 to 18 */
+  color:#999999!important;
+  font-size: .26rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
+  color:#999999!important;
+  font-size: .26rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+/* 我的资料 end */
+/* 在线充值 start */
+.recharge_card {
+  justify-content: flex-start;
+}
+.recharge_card > div:first-child {
+  width: 100%;
+  height: .5rem;
+  line-height: .5rem;
+  letter-spacing: 2px;
+  margin: 0 0 0 .4rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.recharge_card .card_desc{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+.recharge_card .card_desc > div:first-child {
+  margin-right: .1rem;
+}
+.recharge_cont {
+  padding: .2rem 0;
+}
+/* 在线充值 end */
+/* 拣配确认 start */
+.scan_section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-flow: column;
+  width: calc(100% - .8rem);
+  margin: 0 auto .3rem auto;
+}
+/* 拣配确认 end */
+/* 积分变化 start */
+.score_list {
+  width: 100%;
+  height: calc(100% - 2.8rem);
+  overflow: hidden;
+  overflow-y: scroll;
+}
+.score_item {
+  width: calc(100% - .48rem);
+  min-height: 1.6rem;
+  padding: 0 .24rem;
+  border-bottom: 1px solid #f4f4f4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.score_item > div:first-child {
+  width: 70%;
+  height: 100%;
+}
+/* 积分变化 end */
+/* 评价商品 start */
+.comment_cont {
+  width: calc(100% - .48rem);
+  height: auto;
+  padding: .2rem .24rem;
+}
+.comment_desc {
+  width: 100%;
+  margin-bottom: .2rem;
+}
+.comment_img {
+  width: 100%;
+  height: auto;
+  margin: .2rem 0;
+}
+/* 评价商品 end */
+/* 投诉建议 start */
+.complaint_list {
+  width: 100%;
+  height: 100%;
+}
+/* 投诉建议 end */
+/* 积分抽奖 start */
+.lottery_list {
+  width: 100%;
+  height: 8.5rem;
+}
+.score_desc {
+  width: 100%;
+  height: calc(100% - 8.5rem);
+}
+.lottery_score {
+  width: 100%;
+  height: calc(100% - 2.21rem);
+  padding-top: .3rem;
+  display: flex;
+  justify-content: space-around;
+  flex-flow: column;
+}
+/* 积分抽奖 end */
+/* 我的中奖记录 start */
+.lotterylist {
+  width: 100%;
+  height: 100%;
+}
+/* 我的中奖记录 end */
+/* 我的列表 start */
+.userlist {
+  width: 100%;
+  height: calc(100vh - .9rem - 2px);
+  overflow: hidden;
+  overflow-y: scroll;
+}
+/* 我的列表 end */
+

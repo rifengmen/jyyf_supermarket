@@ -1,0 +1,8 @@
+﻿/* 商品列表 start */
+.goodslist {
+  width: 100%;
+  height: calc(100vh - 2.1rem);
+  overflow: hidden;
+  margin-top: .2rem;
+}
+/* 商品列表 end */

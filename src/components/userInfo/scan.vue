@@ -1,0 +1,203 @@
+<template>
+  <div class="container bgeeeeee">
+    <!-- 头部 start -->
+    <my-header :froms="'userinfo'">
+      <template v-slot:userinfo>
+        <i class="el-icon-arrow-left"></i>
+      </template>
+      <template v-slot:header>拣配确认</template>
+    </my-header>
+    <!-- 内容部分盒子 start -->
+    <div class="order_main bgffffff">
+      <!-- 用户资料部分 start -->
+      <div class="user_detail">
+        <div class="user_section">
+          <div>拣配人员</div>
+          <div class="user_desc bgffffff">
+            <input type="text" v-model="userInfo.mobile" class="tr" disabled>
+          </div>
+        </div>
+        <div class="user_section">
+          <div>拣配类型</div>
+          <div class="user_desc bgffffff border_r500">
+            <input type="text" value="捡货" class="tr" disabled v-if="userInfo.role === 1">
+            <input type="text" value="配送" class="tr" disabled v-if="userInfo.role === 2">
+          </div>
+        </div>
+        <div class="user_section">
+          <div>订单号</div>
+          <div class="user_desc bgffffff border_r500">
+            <input type="text" v-model="tradeno" class="tr" placeholder="请输入订单号或者点击右侧自动录入">
+            <img src="static/img/scan.png" @click="scanTradeno">
+          </div>
+        </div>
+      </div>
+      <!-- 用户资料部分 end -->
+      <!-- 按钮部分 start -->
+      <div class="btn_box scan_section">
+        <!-- 确认按钮 start -->
+        <div class="send_btn border_r6 borderff7e42 bgff7e42 colorffffff font32 font_normal" @click="sendTradeno">确认</div>
+        <!-- 确认按钮 end -->
+        <!-- 重置按钮 start -->
+        <div class="send_btn border_r6 borderff7e42 bgffffff colorff7e42 font32 font_normal" @click="resetTradeno">重置</div>
+        <!-- 重置按钮 end -->
+      </div>
+      <!-- 按钮部分 end -->
+    </div>
+    <!-- 内容部分盒子 -->
+  </div>
+</template>
+
+<script>
+import MyHeader from '@/components/common/header/myheader'
+import wx from 'weixin-js-sdk'
+
+export default {
+  name: 'scan',
+  data () {
+    return {
+      // 订单编号
+      tradeno: '',
+      // wxstr 微信调用信息
+      wxstr: '',
+      // 路径
+      curPageUrl: ''
+    }
+  },
+  computed: {
+    // 用户信息
+    userInfo () {
+      return this.$store.state.userInfo
+    }
+  },
+  components: {
+    MyHeader
+  },
+  methods: {
+    // 发送订单编号
+    sendTradeno () {
+      if (this.tradeno) {
+        let data = new FormData()
+        let requestData = {
+          role: this.userInfo.role,
+          phone: this.userInfo.mobile,
+          tradeno: this.tradeno
+        }
+        requestData = JSON.stringify(requestData)
+        data.append('requestData', requestData)
+        this.$axios.post('api/order/pickOrder', data).then(result => {
+          let res = result.data
+          if (res.code === 200) {
+            this.$message({
+              message: '扫描成功!',
+              type: 'success'
+            })
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        }).catch(error => {
+          throw error
+        })
+      }
+    },
+    // 重置订单编号
+    resetTradeno () {
+      this.tradeno = ''
+    },
+    // 扫一扫
+    scanTradeno () {
+      let _this = this
+      wx.scanQRCode({
+        // 默认为0，扫描结果由微信处理，1则直接返回扫描结果
+        needResult: 1,
+        desc: 'scanQRCode desc',
+        scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
+        success: function (res) {
+          // 扫码后获取结果参数赋值给Input
+          let result = res.resultStr
+          if (result.indexOf(',') >= 0) {
+            let str1 = result.split(',')
+            // 订单号码
+            _this.tradeno = str1[1]
+            _this.sendTradeno()
+          } else {
+            _this.$message({
+              message: '请对准条形码扫码!',
+              type: 'error'
+            })
+          }
+        }
+      })
+    },
+    // 请求微信参数
+    getWXConfig () {
+      // let ua = navigator.userAgent.toLowerCase()
+      // android终端
+      // let isAndroid = ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1
+      // ios终端
+      // let isiOS = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
+      if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+        this.curPageUrl = 'https://www.spzlk.cn/author'
+      } else if (/(Android)/i.test(navigator.userAgent)) {
+        this.curPageUrl = window.location.href
+      }
+      let data = new FormData()
+      let requestData = {
+        wechatID: this.$store.state.wechatID,
+        curPageUrl: this.curPageUrl
+      }
+      requestData = JSON.stringify(requestData)
+      data.append('requestData', requestData)
+      this.$axios.post('api/payment/getWXConfig ', data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          this.wxstr = res.data
+          let _this = this
+          wx.config({
+            debug: false,
+            appId: _this.wxstr.appid,
+            timestamp: _this.wxstr.timestamp,
+            nonceStr: _this.wxstr.noncestr,
+            signature: _this.wxstr.signure,
+            // 所有要调用的 API 都要加到这个列表中
+            jsApiList: [
+              'onMenuShareTimeline',
+              'onMenuShareAppMessage',
+              'scanQRCode'// 使用的JS接口
+            ]
+          })
+          wx.ready(() => {
+          })
+          wx.error((res) => {
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      }).catch(error => {
+        throw error
+      })
+    }
+  },
+  watch: {},
+  beforeCreate () {
+  },
+  created () {
+    // 初始化扫一扫
+    this.getWXConfig()
+  },
+  beforeMount () {
+  },
+  mounted () {
+  }
+}
+</script>
+
+<style scoped>
+@import "./static/css/userInfo.css";
+</style>

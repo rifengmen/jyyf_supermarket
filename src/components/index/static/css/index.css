@@ -1,0 +1,222 @@
+/* 通知 start */
+.notice{
+  width: calc(100% - .48rem);
+  height: .65rem;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.notice .notice_img {
+  width: .28rem;
+}
+.notice .notice_img img {
+  width: 100%;
+}
+.notice .notice_list {
+  width: calc(100% - 2rem);
+  height: 100%;
+  line-height: .65rem;
+}
+.notice .notice_more {
+  width: 1rem;
+}
+/* 通知 end */
+/* 常用功能 start */
+.index_common {
+  width: calc(100% - .48rem);
+  height: 1.22rem;
+  margin: 0 auto;
+  padding: .24rem 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.index_common_item {
+  width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+}
+.index_common_img {
+  width: .84rem;
+  height: .84rem;
+  margin-bottom: .16rem;
+  background-size: cover;
+}
+.index_common_img img {
+  width: 100%;
+}
+/* 常用功能 end */
+/* 推荐模块 start */
+.recommend {
+  width: 100%;
+  height: calc(100% - 4.47rem);
+  margin: .2rem auto 0 auto;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+.recommend_cont {
+  width: 100%;
+  height: auto;
+}
+/* 推荐一 start */
+.recommend1 {
+  width: calc(100% - .48rem);
+  height: auto;
+  margin: 0 auto .2rem auto;
+}
+.recommend1_tit {
+  width: 100%;
+  height: .5rem;
+  padding: .1rem 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  margin-top: .3rem;
+}
+.recommend1_tit_img {
+  width: .5rem;
+  height: .5rem;
+  margin: 0 .1rem 0 .2rem;
+}
+.recommend1_tit_img img {
+  width: 100%;
+}
+.recommend1_tits {
+  margin-right: .2rem;
+}
+.recommend1_list {
+  width: 100%;
+  height: auto;
+  margin-top: .2rem;
+  display: flex;
+  justify-content: flex-start;
+  flex-flow: wrap;
+}
+.recommend1_item {
+  width: 2.26rem;
+  height: 3.52rem;
+  margin: 0 .12rem .1rem 0;
+}
+.recommend1_item:nth-child(3n) {
+  margin-right: 0;
+}
+.recommend1_item_img {
+  width: calc(100% - .16rem);
+  height: 1.64rem;
+  overflow: hidden;
+  position: relative;
+  padding: .08rem;
+}
+.recommend1_item_img img {
+  width: 100%;
+  height: 100%;
+}
+.recommend1_name {
+  width: calc(100% - .2rem);
+  margin: .2rem auto;
+}
+.recommend1_price {
+  width: calc(100% - .2rem);
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-start;
+}
+.recommend1_price > div:first-child {
+  margin-right: .2rem;
+}
+.recommend1_item_btn {
+  width: calc(100% - .2rem);
+  height: .4rem;
+  line-height: .4rem;
+  margin: .2rem auto;
+}
+/* 推荐一 end */
+/* 推荐二 start */
+.recommend2 {
+  width: calc(100% - .48rem);
+  height: auto;
+  margin: 0 auto .2rem auto;
+}
+.recommend2_img {
+  width: 100%;
+  height: 1.6rem;
+  overflow: hidden;
+  /*margin-top: .3rem;*/
+}
+.recommend2_img img {
+  width: 100%;
+  height: 100%;
+}
+/* 推荐二 end */
+/* 推荐三 start */
+.recommend3 {
+  width: calc(100% - .48rem);
+  height: auto;
+  margin: 0 auto .2rem auto;
+}
+.recommend3_tit {
+  width: 100%;
+  height: .7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: .3rem;
+}
+/* 推荐三 end */
+/* 推荐模块 end */
+/* 电子会员 start */
+.online {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.online_cont {
+  width: 6rem;
+  height: 8rem;
+  display: flex;
+  justify-content: space-between;
+  flex-flow: column;
+  align-items: center;
+}
+.online_tit {
+  width: calc(100% - .6rem);
+  height: 1.1rem;
+  line-height: 1.1rem;
+  padding: 0 .3rem;
+  border-bottom: 1px solid #f4f4f4;
+}
+.online_bar {
+  width: 3.3rem;
+  height: 1.6rem;
+  margin: .34rem auto 0 auto;
+}
+.online_qr {
+  width: 3.3rem;
+  height: 3.3rem;
+  margin: 0 auto;
+}
+.online_img img {
+  width: 100%;
+  height: 100%;
+}
+.online_btn {
+  width: calc(100% - .6rem);
+  display: flex;
+  justify-content: space-around;
+  padding: .5rem .3rem;
+}
+.online_btn div {
+  width: 2rem;
+  height: .7rem;
+  line-height: .7rem;
+}
+/* 电子会员 end */

@@ -1,0 +1,764 @@
+* {
+  font-size: 0.28rem;
+  margin: 0;
+  padding: 0;
+}
+input,
+select,
+textarea {
+  border: none!important;
+  outline: none;
+  width: 4.5rem;
+}
+input {
+  padding-left: .2rem;
+}
+textarea {
+  padding: .2rem;
+}
+li {
+  list-style: none;
+}
+input::-webkit-input-placeholder{
+  color:#999999!important;
+  font-size: .28rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+input::-moz-placeholder{   /* Mozilla Firefox 19+ */
+  color:#999999!important;
+  font-size: .28rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+input:-moz-placeholder{    /* Mozilla Firefox 4 to 18 */
+  color:#999999!important;
+  font-size: .28rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
+  color:#999999!important;
+  font-size: .28rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+i {
+  font-size: .40rem!important;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+/* 字体尺寸 start */
+.font8 {
+  font-size: .8rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+.font10 {
+  font-size: .10rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+.font12 {
+  font-size: .12rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+.font14 {
+  font-size: .14rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+.font16 {
+  font-size: .16rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+.font18 {
+  font-size: .18rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+.font20 {
+  font-size: .20rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+.font22 {
+  font-size: .22rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+.font24 {
+  font-size: .24rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+.font26 {
+  font-size: .26rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+.font28 {
+  font-size: .28rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+.font30 {
+  font-size: .30rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+.font32 {
+  font-size: .32rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+.font34 {
+  font-size: .34rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+.font36 {
+  font-size: .36rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+.font38 {
+  font-size: .38rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+.font40 {
+  font-size: .40rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+.font50 {
+  font-size: .50rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+.font60 {
+  font-size: .60rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+.font80 {
+  font-size: .80rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+.font96 {
+  font-size: .96rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+/* 字体尺寸 end */
+
+/* 字体粗细 start */
+.font_lighter {
+  font-weight: lighter;
+}
+.font_blod{
+  font-weight: bold;
+}
+.font_bloder {
+  font-weight: bolder
+}
+.font_inherit {
+  font-weight: inherit;
+}
+.font_normal {
+  font-weight: normal;
+}
+/* 字体粗细 end */
+
+/* 字体颜色 start */
+.color000000 {
+  color: #000000;
+}
+.color333333 {
+  color: #333333;
+}
+.color666666 {
+  color: #666666;
+}
+.color999999 {
+  color: #999999;
+}
+.coloreeeeee {
+  color: #eeeeee;
+}
+.colorffffff {
+  color: #ffffff;
+}
+.color2c2c2c {
+  color: #2c2c2c;;
+}
+.colorf14c4c {
+  color: #f14c4c;
+}
+.colorf84242 {
+  color: #f84242;
+}
+.colorfa2a2a {
+  color: #fa2a2a;
+}
+.colorff6400 {
+  color: #ff6400;
+}
+.colorf86442 {
+  color: #f86442;
+}
+.colorff7e42 {
+  color: #ff7e42;
+}
+/* 字体颜色 end */
+
+/* 背景颜色 start */
+.bgffffff {
+  background-color: #ffffff;
+}
+.bgcccccc {
+  background-color: #cccccc;
+}
+.bg2c2c2c {
+  background-color: #2c2c2c;
+}
+.bgeeeeee {
+  background-color: #eeeeee;
+}
+.bgf7f7f7 {
+  background-color: #f7f7f7;
+}
+.bgd9d9d9 {
+  background-color: #d9d9d9;
+}
+.bgc8f5ee {
+  background-color: #c8f5ee;
+}
+.bgff7e42 {
+  background-color: #ff7e42;
+}
+.bgfcfbf2 {
+  background-color: #fcfbf2;
+}
+.bgffae43 {
+  background-color: #ffae43;
+}
+.bgff6400 {
+  background-color: #ff6400;
+}
+.bgff9255 {
+  background-color: #ff9255;
+}
+.bgf75050 {
+  background-color: #f75050;
+}
+.bge42739 {
+  background-color: #e42739;
+}
+/* 背景颜色 end */
+/* 边框 start */
+.borderffffff {
+  border: 1px solid #ffffff;
+}
+.borderc7c7c7 {
+  border: 1px solid #c7c7c7;
+}
+.borderff7e42 {
+  border: 1px solid #ff7e42;
+}
+.borderffae43 {
+  border: 1px solid #ffae43;
+}
+.borderff6400 {
+  border: 1px solid #ff6400;
+}
+.borderff9255 {
+  border: 1px solid #ff9255;
+}
+/* 边框 end */
+/* 圆角 start */
+.border_r4 {
+  border-radius: .04rem;
+}
+.border_r6 {
+  border-radius: .06rem;
+}
+.border_r8 {
+  border-radius: .08rem;
+}
+.border_r10 {
+  border-radius: .1rem;
+}
+.border_r500 {
+  border-radius: 5rem;
+}
+/* 圆角 end */
+
+/* 单行文本溢出隐藏 start */
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* 单行文本溢出隐藏 end */
+
+/* 布局方式 start */
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+.tl {
+  text-align: left;
+}
+.tc {
+  text-align: center;
+}
+.tr {
+  text-align: right;
+}
+/* 布局方式 end */
+/* 基础容器 start */
+.container {
+  width: 100vw;
+  height: 100vh;
+  color: #333333;
+}
+/* 基础容器 end */
+/* 背景图 start */
+.register {
+  background-image: url("../img/register_bg.png");
+  background-size: cover;
+}
+.userinfo {
+  background-image: url('../img/card_bg.png');
+  background-size: cover;
+}
+/* 背景图 end */
+/* 公共样式 start */
+/* 按钮样式 start */
+.btn_box {
+  padding-top: .4rem;
+}
+.send_btn {
+  width: 100%;
+  height: .76rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: .4rem;
+}
+/* 按钮样式 end */
+/* 再支付按钮 start */
+.item_btn {
+  width: 100%;
+  height: 1rem;
+  line-height: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+.item_btn > div {
+  width: 1rem;
+  height: .5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: .2rem;
+}
+/* 再支付按钮 end */
+/* 底部单独按钮 start */
+.btn_footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px #eeeeee solid;
+}
+/* 底部单独按钮 end */
+/* 底部公共导航背景图 start */
+.footer_nav > div:first-child {
+  background-size: 90%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.footer_shops > div:first-child{
+  background-image: url('../img/index.png');
+}
+.footer_shops.router-link-exact-active > div:first-child {
+  background-image: url('../img/indexactive.png');
+}
+.footer_class > div:first-child{
+  background-image: url('../img/class.png');
+}
+.footer_class.router-link-exact-active > div:first-child {
+  background-image: url('../img/classactive.png');
+}
+.footer_cart > div:first-child{
+  background-image: url('../img/cart.png');
+}
+.footer_cart.router-link-exact-active > div:first-child {
+  background-image: url('../img/cartactive.png');
+}
+.footer_message > div:first-child{
+  background-image: url('../img/message.png');
+}
+.footer_message.router-link-exact-active > div:first-child {
+  background-image: url('../img/messageactive.png');
+}
+.footer_userinfo > div:first-child{
+  background-image: url('../img/userinfo.png');
+}
+.footer_userinfo.router-link-exact-active > div:first-child {
+  background-image: url('../img/userinfoactive.png');
+}
+/* 底部公共导航背景图 end */
+/* 搜索 start */
+.search_cont {
+  width: calc(100vw - .48rem);
+  height: auto;
+  margin: 0 auto;
+  padding: .2rem 0 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.search_backs {
+  width: .6rem;
+}
+.search_cont .search {
+  width: calc(100vw - .48rem);
+  height: .70rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+}
+.search_cont .search .search_input {
+  width: 4.6rem;
+  height: 100%;
+  padding: 0 .35rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.search_input input {
+  width: 100%;
+  height: .48rem;
+  border: none;
+  outline: none;
+}
+.search_input input::placeholder {
+  color: #999999;
+}
+.search_input img {
+  width: .3rem;
+}
+.search_btn {
+  width: 1.7rem;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.search_shade {
+  width: 100%;
+  height: calc(100% - 1.1rem);
+  margin-top: .2rem;
+}
+/* 搜索 end */
+/* 促销类型标签 start */
+.goods_age {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1rem;
+  height: .4rem;
+  line-height: .4rem;
+  background-image: url('../img/agebj.png');
+  background-size: cover;
+}
+/* 促销类型标签 end */
+/* 无数据样式 start */
+.nodata{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+}
+.nodata img {
+  width: 70%;
+}
+/* 无数据样式 end */
+/* 商品详情倒计时背景 start */
+.goods_promot {
+  background-image: url('../img/goodsname_bg.png');
+  background-size: cover;
+}
+.countdown {
+  background-image: url('../img/countdown.png');
+  background-size: cover;
+}
+/* 商品详情倒计时背景 end */
+/* 商品列表 start */
+.goods_li {
+  width: 100%;
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+}
+.goods_input {
+  width: .3rem;
+  height: 100%;
+  padding-left: .24rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+input[type=checkbox] {
+  margin-right: .04rem;
+  /*font-size: 14px;*/
+  width: .4rem;
+  /*height: 12px;*/
+  position: relative;
+  visibility: hidden;
+}
+input[type=checkbox]:after {
+  position: absolute;
+  width: .24rem;
+  height: .24rem;
+  top: 0;
+  content: " ";
+  color: #ffffff;
+  display: inline-block;
+  visibility: visible;
+  border-radius: .04rem;
+  background:#ffffff;
+  border:1px solid #dddddd;
+}
+input[type=checkbox]:checked:after {
+  content: "✓";
+  font-size: .2rem;
+  font-weight:600;
+  background-color: #ff6400;
+  text-align: center;
+  line-height: .24rem;
+}
+.goods_item {
+  width: calc(100% - .54rem);
+  height: 2.2rem;
+  margin-bottom: .06rem;
+  padding: 0 .24rem 0 .3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.goods_item_img {
+  width: 1.6rem;
+  height: 1.6rem;
+  overflow: hidden;
+  position: relative;
+}
+.goods_item_img img {
+  width: 100%;
+  height: 100%;
+}
+.goods_item_cont {
+  width: calc(100% - 1.6rem);
+  height: 1.8rem;
+  margin-left: .2rem;
+  display: flex;
+  justify-content: space-between;
+  flex-flow: column;
+}
+.goods_item_name {
+  width: 100%;
+  height: .4rem;
+  line-height: .4rem;
+}
+.goods_item_price {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+.goods_item_price > div:first-child {
+  margin-right: .2rem;
+}
+.goods_item_editnum {
+  width: 100%;
+  height: .6rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+.goods_item_cart {
+  width: .6rem;
+  height: .6rem;
+  overflow: hidden;
+}
+/* 商品列表 end */
+/* 地址列表 start */
+.address_item_desc {
+  width: calc(100% - .8rem);
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-flow: column;
+}
+.address_item_desc > div {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  padding: .1rem 0;
+}
+.address_item_desc > div > div {
+  margin-right: .2rem;
+}
+.address_item_age {
+  width: .72rem;
+  height: .34rem;
+  line-height: .34rem;
+}
+/* 地址列表 end */
+/* 优惠券 start */
+.tick_list {
+  width: calc(100% - .48rem);
+  height: calc(100% - .4rem);
+  margin: .2rem .24rem;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+.tick_list ul {
+  width: 100%;
+  height: auto;
+}
+.tick_item {
+  width: 100%;
+  height: 2.28rem;
+  background-image: url('../img/tick_bg.png');
+  background-size: cover;
+  margin-bottom: .2rem;
+  display: flex;
+  justify-content: space-between;
+}
+.tick_item_money {
+  width: 2.35rem;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-flow: column;
+}
+.tick_item_money > div {
+  width: 100%;
+  margin: .04rem auto;
+}
+.tick_item_time {
+  width: calc(100% - 2.35rem);
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.tick_item_desc {
+  width: 3.34rem;
+  height: 100%;
+  padding-left: .2rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-flow: column;
+}
+.tick_item_desc > div {
+  margin: .06rem 0;
+}
+.tick_item_get {
+  width: 1.14rem;
+  height: 100%;
+  background-image: url('../img/tick_get.png');
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+}
+.tick_item_get > div {
+  margin: .04rem 0;
+}
+/* 优惠券 end */
+/* 积分抵扣开关 start */
+.score_img img {
+  width: .72rem;
+}
+/* 积分抵扣开关 end */
+/* 返回键 start */
+.backs {
+  width: .7rem;
+  height: .7rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.header_right {
+  width: .7rem;
+  height: .7rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+/* 返回键 end */
+/* 支付方式 start */
+.paymode_img img {
+  height: .4rem;
+}
+/* 支付方式 end */
+/* 修改el默认样式 start */
+.el-message-box {
+  width: 5rem!important;
+}
+.el-date-editor {
+  width: .7rem;
+  height: .7rem;
+}
+.el-date-editor input {
+  display: none;
+}
+.el-input__inner {
+  width: 100%!important;
+  height: .7rem!important;
+  padding: 0 0 0 .2rem!important;
+  text-align: center;
+  border: none!important;
+}
+.el-select {
+  width: 100%;
+}
+.el-radio {
+  width: 2.1rem!important;
+  overflow: hidden!important;
+  margin: 0!important;
+  padding-left: .2rem!important;
+}
+.el-message-box__content {
+  padding: 10px 15px 0 15px;
+}
+.el-message-box__message p {
+  text-align: center;
+}
+.el-message-box__input {
+  height: .7rem!important;
+}
+.el-message-box__errormsg {
+  display: none!important;
+}
+.el-message-box__btns {
+  padding: 0 15px 20px 15px!important;
+  text-align: right;
+}
+.el-message-box__btns > button:first-child {
+  display: none;
+}
+.el-button--primary {
+  width: 100%;
+  margin: 15px 0 0 0!important;
+  height: .7rem;
+  background-color: #fa6400!important;
+  border-color: #fa6400!important;
+}
+.el-upload--picture-card {
+  width: 2rem!important;
+  height: 2rem!important;
+  display: flex!important;
+  justify-content: center;
+  align-items: center;
+}
+.el-upload-list--picture-card .el-upload-list__item {
+  width: 2rem!important;
+  height: 2rem!important;
+}
+/* 修改el默认样式 end */
+/* 公共样式 end */
+

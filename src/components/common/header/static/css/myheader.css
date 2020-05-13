@@ -1,0 +1,13 @@
+/* 用户信息 start */
+.myheader {
+  width: calc(100vw - .48rem);
+  height: .5rem;
+  border-bottom: 1px #eeeeee solid;
+  padding: .2rem .24rem;
+  z-index: 9999;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  letter-spacing: 2px;
+}
+/* 用户信息 end */

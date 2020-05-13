@@ -1,0 +1,75 @@
+
+/* 注册页面 start */
+.register {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.register_cont {
+  width: 7.1rem;
+  height: 6.3rem;
+  padding: .6rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-flow: column;
+}
+.register_cont .section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: calc(100% - .8rem);
+  height: .7rem;
+  line-height: .7rem;
+  margin: 0 auto;
+}
+.section_tit {
+  width: 2.2rem;
+  height: 100%;
+}
+.section_input {
+  width: 4.5rem;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.section_input .section_inputall {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #d6d6d6;
+}
+.section_input .section_inputall input {
+  width: 90%;
+  height: 90%;
+}
+.section_input .section_input_l {
+  width: 2.2rem;
+  height: 100%;
+  border: 1px solid #d6d6d6;
+}
+.section_input .section_input_l input {
+  width: 90%;
+  height: 90%;
+}
+.section_input .section_input_r {
+  width: 1.6rem;
+  height: 100%;
+  border: 1px solid #ffae43;
+  display: flex;
+  justify-content: space-around;
+  flex-flow: column;
+  align-items: center;
+}
+.section_input .section_input_r img {
+  width: 100%;
+  height: 100%;
+}
+.section_input .section_input_r.disabled {
+  border: 1px solid #cccccc;
+}
+.register_cont .register_btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* 注册页面 end */

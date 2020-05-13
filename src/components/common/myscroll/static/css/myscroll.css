@@ -1,0 +1,13 @@
+/* 商品列表 start */
+.wrapper {
+  width: 100%;
+  margin: 0;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+.goodsList {
+  width: 100%;
+  height: auto;
+}
+/* 商品列表 end */

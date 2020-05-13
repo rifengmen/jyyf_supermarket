@@ -1,0 +1,244 @@
+<template>
+  <div class="container bgeeeeee">
+    <!-- 头部 start -->
+    <my-header>
+      <template v-slot:backs>
+        <i class="el-icon-arrow-left"></i>
+      </template>
+      <template v-slot:header>{{$route.params.header_tit}}</template>
+    </my-header>
+    <!-- 头部 end -->
+    <!-- 内容部分盒子 start -->
+    <div class="userinfo_main bgffffff">
+      <!-- 地址列表 start -->
+      <div class="tick_list" v-if="tickList.length">
+        <ul>
+          <li class="tick_item border_r6 colorffffff" v-for="(item, index) in tickList" :key="index">
+            <!-- 折抵金额 start -->
+            <div class="tick_item_money" @click="editorder(item)">
+              <div class="font40 font_blod tc" v-if="item.tickettype === 1">
+                ￥
+                <span class="font80">{{item.usemoney}}</span>
+              </div>
+              <div class="font40 font_blod tc" v-if="item.tickettype === 2">
+                折
+                <span class="font80">{{item.usemoney * 10}}</span>
+              </div>
+              <div class="font26 tc">{{item.tickname}}</div>
+              <div class="font26 tc">满{{item.minsalemoney}}元使用</div>
+            </div>
+            <!-- 折抵金额 end -->
+            <!-- 时间 start -->
+            <div class="tick_item_time">
+              <div class="tick_item_desc" @click="editorder(item)">
+                <div class="font22">截止日期</div>
+                <div class="font22">{{item.enddate}}</div>
+                <div class="font22">每月禁用日：{{item.notuseday === '' ? '无' : item.notuseday}}</div>
+                <!--<div class="font22">已领/可领总数：</div>-->
+                <!--<div class="font22">使用说明：</div>-->
+              </div>
+              <!-- 领取 start -->
+              <div class="tick_item_get" v-if="indexFlag" @click="getTick(item)">
+                <div class="font34">立</div>
+                <div class="font34">即</div>
+                <div class="font34">领</div>
+                <div class="font34">用</div>
+              </div>
+              <!-- 领取 end -->
+            </div>
+            <!-- 时间 end -->
+          </li>
+        </ul>
+      </div>
+      <!-- 地址列表 end -->
+      <!-- 无信息提示 start -->
+      <nodata v-else></nodata>
+      <!-- 无信息提示 end -->
+    </div>
+    <!-- 内容部分盒子 end -->
+  </div>
+</template>
+
+<script>
+import MyHeader from '@/components/common/header/myheader'
+import nodata from '@/components/common/nodata/nodata'
+
+export default {
+  name: 'tickList',
+  data () {
+    return {
+      // 优惠券列表
+      tickList: {}
+    }
+  },
+  computed: {
+    // 是否来自填写订单
+    editorderFlag () {
+      return this.$route.params.froms === 'editorder'
+    },
+    // 是否来自会员中心
+    userinfoFlag () {
+      return this.$route.params.froms === 'userinfo'
+    },
+    // 是否领取
+    indexFlag () {
+      return this.$route.params.froms === 'index'
+    },
+    // 支付金额 来自填写订单
+    payMoney () {
+      return this.$route.params.payMoney
+    },
+    // 订单总额 来自填写订单
+    Totalmoney () {
+      return this.$route.params.Totalmoney
+    },
+    // 收货地址id 来自填写订单
+    addressid () {
+      return this.$route.params.addressid
+    }
+  },
+  components: {
+    MyHeader,
+    nodata
+  },
+  methods: {
+    // 获取优惠券列表
+    getTicklist () {
+      // 来自填写订单
+      if (this.editorderFlag) {
+        let data = new FormData()
+        let requestData
+        requestData = {
+          payMoney: this.payMoney,
+          Totalmoney: this.Totalmoney,
+          addressid: this.addressid
+        }
+        requestData = JSON.stringify(requestData)
+        data.append('requestData', requestData)
+        this.$axios.post('bill/pay/payMoneytick', data).then(result => {
+          let res = result.data
+          if (res.code === 200) {
+            this.tickList = res.data
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        }).catch(error => {
+          throw error
+        })
+      } else if (this.userinfoFlag) { // 来自会员中心
+        let data = new FormData()
+        let requestData
+        requestData = {}
+        requestData = JSON.stringify(requestData)
+        data.append('requestData', requestData)
+        this.$axios.post('mem/member/listCoupon', data).then(result => {
+          let res = result.data
+          if (res.code === 200) {
+            this.tickList = res.data
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        }).catch(error => {
+          throw error
+        })
+      } else if (this.indexFlag) {
+        let data = new FormData()
+        let requestData
+        requestData = {}
+        requestData = JSON.stringify(requestData)
+        data.append('requestData', requestData)
+        this.$axios.post('mem/member/listCouponForGet', data).then(result => {
+          let res = result.data
+          if (res.code === 200) {
+            this.tickList = res.data
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        }).catch(error => {
+          throw error
+        })
+      }
+    },
+    // 领取优惠券
+    getTick (item) {
+      let data = new FormData()
+      let requestData
+      requestData = {
+        tickid: item.tickid
+      }
+      requestData = JSON.stringify(requestData)
+      data.append('requestData', requestData)
+      this.$axios.post('mem/member/panicCoupon', data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          this.$message({
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      }).catch(error => {
+        throw error
+      })
+    },
+    // 去填写订单
+    editorder (tick) {
+      if (this.editorderFlag) {
+        let data = new FormData()
+        let requestData
+        requestData = {
+          payMoney: this.payMoney,
+          tick: tick,
+          otc: ''
+        }
+        requestData = JSON.stringify(requestData)
+        data.append('requestData', requestData)
+        this.$axios.post('invest/microFlow/payTicketCheck', data).then(result => {
+          let res = result.data
+          if (res.code === 200) {
+            tick.dicountMoney = res.data.dicountMoney
+            this.$store.commit('setTick', tick)
+            this.$router.push({name: 'editorder'})
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        }).catch(error => {
+          throw error
+        })
+      }
+    }
+  },
+  watch: {},
+  beforeCreate () {
+  },
+  created () {
+    // 获取优惠券列表
+    this.getTicklist()
+  },
+  beforeMount () {
+  },
+  mounted () {
+  }
+}
+</script>
+
+<style scoped>
+@import "static/css/userInfo.css";
+
+</style>
