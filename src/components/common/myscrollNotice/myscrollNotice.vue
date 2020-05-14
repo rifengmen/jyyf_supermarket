@@ -108,7 +108,7 @@ export default {
   },
   watch: {
     // 监听列表变化，重置滚动
-    messageList: {
+    noticeList: {
       handler (nval, oval) {
         if (oval.length) {
           this.scroll.refresh()

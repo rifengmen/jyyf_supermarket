@@ -1,6 +1,6 @@
 <template>
 
-  <div class="loading bgfff">
+  <div class="loading bgf7f7f7">
     <img src="static/img/loading.gif">
   </div>
 
@@ -15,11 +15,12 @@ export default {
 <style scoped>
 
   .loading {
-    position: fixed;
+    position: absolute;
     left: 0;
     bottom: 0;
     z-index: 999;
-    width: 100vw;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -27,8 +28,6 @@ export default {
 
   img {
     width: 2rem;
-    position: absolute;
-    top: 4rem;
     border-radius: 50%;
   }
 

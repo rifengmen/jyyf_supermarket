@@ -235,6 +235,7 @@ export default {
         })
         return false
       }
+      this.$store.commit('setTick', '')
       this.$router.push(
         {
           name: 'tickList',

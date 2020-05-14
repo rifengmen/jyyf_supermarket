@@ -8,6 +8,7 @@
 export default {
   name: 'addcart',
   props: {
+    // 商品id
     goodsid: {
       type: Number,
       // require: true,
@@ -15,10 +16,18 @@ export default {
         return 0
       }
     },
+    // 商品数量
     amount: {
       type: Number,
       default: function () {
         return 1
+      }
+    },
+    // 调用父组件
+    froms: {
+      type: String,
+      default: function () {
+        return ''
       }
     }
   },
@@ -101,8 +110,10 @@ export default {
   beforeCreate () {
   },
   created () {
-    // 获取购物车商品
-    this.getCart()
+    if (this.froms) {
+      // 获取购物车商品
+      this.getCart()
+    }
   },
   beforeMount () {
   },

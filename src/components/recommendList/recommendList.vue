@@ -10,9 +10,9 @@
     <!-- 头部 end -->
     <!-- 内容盒子 start -->
     <div class="recommend_list">
-      <!-- 下拉刷新动画 start -->
+      <!-- 加载中动画 start -->
       <loading v-if="isShowLoading"></loading>
-      <!-- 下拉刷新动画 end -->
+      <!-- 加载中动画 end -->
       <!-- 商品列表 start -->
       <div class="recommendlist">
         <my-scroll
@@ -51,7 +51,7 @@ export default {
       totalSize: '',
       // 目前总共多少页
       totalPages: '',
-      // 下拉刷新
+      // 加载中动画
       isShowLoading: true,
       // 加载提示语
       loadText: '加载更多...'
@@ -75,6 +75,7 @@ export default {
   methods: {
     // 获取商品列表公共方法
     getGoodsList () {
+      this.isShowLoading = true
       let data = new FormData()
       let requestData = {
         page: this.page,
@@ -84,8 +85,10 @@ export default {
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
       this.$axios.post('api/goods/getProductListByCate', data).then(result => {
+        this.$store.commit('setIsPullingDown', true)
         let res = result.data
         if (res.code === 200) {
+          this.isShowLoading = false
           this.goodsList = res.content
           this.totalSize = res.totalSize
         } else {
@@ -154,4 +157,7 @@ export default {
 
 <style scoped>
 @import 'static/css/recommendList.css';
+.recommend_list {
+  position: relative;
+}
 </style>

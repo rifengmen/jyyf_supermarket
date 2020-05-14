@@ -10,19 +10,21 @@
       </router-link>
     </div>
     <!-- 搜索 end -->
-    <!-- 下拉刷新动画 start -->
-    <loading v-if="isShowLoading"></loading>
-    <!-- 下拉刷新动画 end -->
-    <!-- 商品列表 start -->
-    <div class="goodslist">
-      <my-scroll
-        :goodsList="goodsList"
-        :loadText="loadText"
-        @pullingDown="_getShopsList"
-        @pullingup="getMoreShopsList">
-      </my-scroll>
+    <div class="search_list">
+      <!-- 加载中动画 start -->
+      <loading v-if="isShowLoading"></loading>
+      <!-- 加载中动画 end -->
+      <!-- 商品列表 start -->
+      <div class="goodslist">
+        <my-scroll
+          :goodsList="goodsList"
+          :loadText="loadText"
+          @pullingDown="_getShopsList"
+          @pullingup="getMoreShopsList">
+        </my-scroll>
+      </div>
+      <!-- 商品列表 end -->
     </div>
-    <!-- 商品列表 end -->
     <!-- 底部导航 start -->
     <my-footer></my-footer>
     <!-- 底部导航 end -->
@@ -43,7 +45,7 @@ export default {
       // 搜索关键词
       keyword: this.$store.getters.getKeyword,
       // 搜索结果
-      goodsList: '',
+      goodsList: [],
       // 重置当前页码
       resetpage: 1,
       // 当前页码
@@ -54,7 +56,7 @@ export default {
       totalSize: '',
       // 目前总共多少页
       totalPages: '',
-      // 下拉刷新
+      // 加载中动画
       isShowLoading: true,
       // 加载提示语
       loadText: '加载更多...'
@@ -70,6 +72,7 @@ export default {
   methods: {
     // 获取商品列表公共方法
     getGoodsList () {
+      this.isShowLoading = true
       let data = new FormData()
       let requestData = {
         classcode: this.classcode,
@@ -83,6 +86,7 @@ export default {
         this.$axios.post('api/goods/listGoodsForCategory', data).then(result => {
           let res = result.data
           if (res.code === 200) {
+            this.isShowLoading = false
             this.goodsList = res.data.content
             this.totalSize = res.data.totalSize
           } else {
@@ -98,6 +102,7 @@ export default {
     },
     // 下拉刷新
     _getShopsList () {
+      this.page = this.resetpage
       this.getGoodsList()
     },
     // 上拉加载更多
@@ -153,4 +158,7 @@ export default {
 
 <style scoped>
 @import "./static/css/search.css";
+.search_list {
+  position: relative;
+}
 </style>

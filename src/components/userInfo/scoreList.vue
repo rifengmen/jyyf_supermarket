@@ -19,22 +19,27 @@
         </div>
       </div>
       <!-- card end -->
-      <!-- 积分列表 start -->
-      <div class="score_list">
-        <ul v-if="scoreList.length">
-          <li class="score_item" v-for="(item, index) in scoreList" :key="index">
-            <div>
-              <div class="ellipsis">{{item.changetype}}</div>
-              <div class="font24 color999999">{{item.saletime}}</div>
-            </div>
-            <div class="font32">{{item.Score}}分</div>
-          </li>
-        </ul>
-        <!-- 无信息提示 start -->
-        <nodata v-else></nodata>
-        <!-- 无信息提示 end -->
+      <div class="score_cont">
+        <!-- 加载中动画 start -->
+        <loading v-if="isShowLoading"></loading>
+        <!-- 下拉刷新动画 end -->
+        <!-- 积分列表 start -->
+        <div class="score_list">
+          <ul v-if="scoreList.length">
+            <li class="score_item" v-for="(item, index) in scoreList" :key="index">
+              <div>
+                <div class="ellipsis">{{item.changetype}}</div>
+                <div class="font24 color999999">{{item.saletime}}</div>
+              </div>
+              <div class="font32">{{item.Score}}分</div>
+            </li>
+          </ul>
+          <!-- 无信息提示 start -->
+          <nodata v-else></nodata>
+          <!-- 无信息提示 end -->
+        </div>
+        <!-- 积分列表 end -->
       </div>
-      <!-- 积分列表 end -->
     </div>
     <!-- 内容部分盒子 end -->
   </div>
@@ -43,6 +48,7 @@
 <script>
 import MyHeader from '@/components/common/header/myheader'
 import nodata from '@/components/common/nodata/nodata'
+import loading from '@/components/common/loading/loading'
 
 export default {
   name: 'scoreList',
@@ -55,7 +61,9 @@ export default {
       // 年度积分
       yearScore: 0,
       // 当前积分
-      Score: 0
+      Score: 0,
+      // 加载中动画
+      isShowLoading: true
     }
   },
   computed: {
@@ -73,11 +81,13 @@ export default {
   },
   components: {
     MyHeader,
-    nodata
+    nodata,
+    loading
   },
   methods: {
     // 获取积分记录列表
     getScoreList () {
+      this.isShowLoading = true
       let data = new FormData()
       let requestData
       requestData = {
@@ -89,6 +99,7 @@ export default {
       this.$axios.post('mem/card/listScoreDtl', data).then(result => {
         let res = result.data
         if (res.code === 200) {
+          this.isShowLoading = false
           this.scoreList = res.data.dataList
           this.yearScore = res.data.yearScore
           this.Score = res.data.Score
@@ -123,5 +134,8 @@ export default {
 </script>
 
 <style scoped>
-  @import "static/css/userInfo.css";
+@import "static/css/userInfo.css";
+.score_cont {
+  position: relative;
+}
 </style>

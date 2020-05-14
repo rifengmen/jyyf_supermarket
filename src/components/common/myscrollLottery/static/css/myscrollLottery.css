@@ -27,4 +27,7 @@
 .message_title {
   width: 4.7rem;
 }
+.prize_name {
+  width: calc(100% - 5.02rem);
+}
 /* 消息列表 end */

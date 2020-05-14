@@ -1,13 +1,16 @@
 const state = {
   // 店铺wechatID
-  // wechatID: '2',
-  wechatID: '',
+  wechatID: '2',
+  // wechatID: 'yksmlm',
+  // wechatID: '',
   // appid
-  // appid: 'wx700e813e33fcebec',
-  appid: '',
+  appid: 'wx700e813e33fcebec',
+  // appid: 'wx504cefa17f46c39b',
+  // appid: '',
   // 用户openid
-  // openid: 'oWBPAv82A3OaXxPa6neaWv09g90A',
-  openid: '',
+  openid: 'oWBPAv82A3OaXxPa6neaWv09g90A',
+  // openid: 'oJkXG1RvLe9HbPHaODobVbQTqWjM',
+  // openid: '',
   // 用户头像
   headimgurl: '',
   // 用户信息

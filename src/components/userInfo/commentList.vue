@@ -10,6 +10,9 @@
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
     <div class="userinfo_main bgffffff">
+      <!-- 加载中动画 start -->
+      <loading v-if="isShowLoading"></loading>
+      <!-- 下拉刷新动画 end -->
     </div>
     <!-- 内容部分盒子 end -->
   </div>
@@ -17,13 +20,19 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
+import nodata from '@/components/common/nodata/nodata'
+import loading from '@/components/common/loading/loading'
 
 export default {
   name: 'commentList',
   data () {
     return {
       // 评价记录列表
-      commentList: ''
+      commentList: '',
+      // 查询开始时间
+      startdate: '',
+      // 加载中动画
+      isShowLoading: true
     }
   },
   computed: {
@@ -40,11 +49,14 @@ export default {
     }
   },
   components: {
-    MyHeader
+    MyHeader,
+    nodata,
+    loading
   },
   methods: {
     // 获取评价记录列表
     getCommentList () {
+      this.isShowLoading = true
       let data = new FormData()
       let requestData
       requestData = {
@@ -58,6 +70,7 @@ export default {
       this.$axios.post('mem/member/listMemberConsumGdscode', data).then(result => {
         let res = result.data
         if (res.code === 200) {
+          this.isShowLoading = false
           this.commentList = res.data
         } else {
           this.$message({

@@ -7,6 +7,9 @@
       <!-- 头部 end -->
       <!-- 购物车列表 start -->
       <div class="cart_cont">
+        <!-- 加载中动画 start -->
+        <loading v-if="isShowLoading"></loading>
+        <!-- 加载中动画 end -->
         <div class="cartlist" v-if="cartList.length">
           <div class="goodslist">
             <ul ref="cartlist">
@@ -15,10 +18,10 @@
                 <div class="goods_input bgffffff" @click="addorder(item.no)">
                   <input class="checkbox" type="checkbox" name="goods" v-model="item.addorder">
                 </div>
-                <div class="goods_item bgffffff" @click="goodsdetail(item.goodsid)">
+                <div class="goods_item bgffffff ellipsis" @click="goodsdetail(item.goodsid)">
                   <div class="goods_item_img">
                     <img :src="(item.picture1 ? (imgurl + 'image/' + item.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))">
-                    <div v-if="item.promotemode !== 0" class="goods_age font24 font_normal colorffffff tc">{{Promotemode[item.promotemode]}}</div>
+                    <div v-if="item.promotemode !== 0" class="goods_age font24 font_normal colorffffff tc">{{item.modenote}}</div>
                   </div>
                   <div class="goods_item_cont">
                     <div class="goods_item_name ellipsis font26">{{item.cusgoodsname}}</div>
@@ -79,6 +82,7 @@ import MyFooter from '@/components/common/footer/myfooter'
 import MyHeader from '@/components/common/header/myheader'
 import nodata from '@/components/common/nodata/nodata'
 import addorder from '@/components/common/addorder/addorder'
+import loading from '@/components/common/loading/loading'
 
 export default {
   name: 'cart',
@@ -108,11 +112,13 @@ export default {
     MyHeader,
     MyFooter,
     nodata,
-    addorder
+    addorder,
+    loading
   },
   methods: {
     // 获取购物车商品
     getCartList () {
+      this.isShowLoading = true
       let data = new FormData()
       let requestData = {}
       requestData = JSON.stringify(requestData)
@@ -120,6 +126,7 @@ export default {
       this.$axios.post('api/car/getCar', data).then(result => {
         let res = result.data
         if (res.code === 200) {
+          this.isShowLoading = false
           this.cartList = res.data
           for (let i = 0; i < this.cartList.length; i++) {
             this.cartList[i].addorder = true
@@ -243,7 +250,6 @@ export default {
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
       this.$axios.post('api/car/deleteCar', data).then(result => {
-        console.log(result)
         let res = result.data
         if (res.code === 200) {
           this.cartList = this.cartList.filter(item => item.addorder !== true)
@@ -294,4 +300,7 @@ export default {
 
 <style scoped>
 @import "./static/css/cart.css";
+.cart_cont {
+  position: relative;
+}
 </style>

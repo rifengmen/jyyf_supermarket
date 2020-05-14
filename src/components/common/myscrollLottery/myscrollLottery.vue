@@ -1,13 +1,16 @@
 <template>
   <div class="wrapper" ref="myscroll">
     <!-- 商品列表 start -->
-    <ul class="messageList bgeeeeee" v-if="lotteryList.length">
+    <ul class="messageList bgeeeeee" v-if="lotteryList && lotteryList.length">
       <!-- 商品简介 start -->
       <li v-for="(item, index) in lotteryList" :key="index">
         <div class="message_item bgffffff">
-          <div class="bgffae43 border_r500"></div>
-          <div class="message_title ellipsis">{{item.title}}</div>
-          <div class="font22 color999999">{{item.pubdate}}</div>
+          <div class="bgff6400 border_r500"></div>
+          <div class="message_title">
+            <div class="ellipsis">{{item.prizeCent}}</div>
+            <div class="font24 color999999">{{item.prizeDate}}</div>
+          </div>
+          <div class="prize_name font32 tr">{{item.prizeName}}</div>
         </div>
       </li>
       <!-- 商品简介 end -->
@@ -108,7 +111,7 @@ export default {
   },
   watch: {
     // 监听列表变化，重置滚动
-    messageList: {
+    lotteryList: {
       handler (nval, oval) {
         if (oval.length) {
           this.scroll.refresh()

@@ -21,9 +21,9 @@
         </div>
         <!-- 分类导航 end -->
         <div class="classify_cont">
-          <!-- 下拉刷新动画 start -->
+          <!-- 加载中动画 start -->
           <loading v-if="isShowLoading"></loading>
-          <!-- 下拉刷新动画 end -->
+          <!-- 加载中动画 end -->
           <!-- 分类列表 start -->
           <div class="classify_list">
             <my-scroll
@@ -94,7 +94,7 @@ export default {
       totalSize: '',
       // 目前总共多少页
       totalPages: '',
-      // 下拉刷新
+      // 加载中动画
       isShowLoading: true,
       // 加载提示语
       loadText: '加载更多...'
@@ -146,10 +146,11 @@ export default {
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
       this.$axios.post('api/goods/listGoodsForCategory', data).then(result => {
+        this.$store.commit('setIsPullingDown', true)
         let res = result.data
         if (res.code === 200) {
           this.isShowLoading = false
-          if (res.data.content.length) {
+          if (res.data.content && res.data.content.length) {
             this.goodsList = res.data.content
           } else {
             this.goodsList = []
@@ -233,4 +234,7 @@ export default {
 
 <style scoped>
 @import "./static/css/classify.css";
+.classify_cont {
+  position: relative;
+}
 </style>

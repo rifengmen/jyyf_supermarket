@@ -5,7 +5,7 @@
         <li
           v-for="(item,index) in prizeData"
           :key="index"
-          :style="{webkitTransform: 'rotate(' + -item.angle + 'deg) skewY(' + item.skew + 'deg)', backgroundColor: index%2 === 0 ? '#FFF4D6' : '#FFFFFF'}">
+          :style="{webkitTransform: 'rotate(' + -item.angle + 'deg) skewY(' + item.skew + 'deg)', backgroundColor: bgcolor[index%4]}">
         </li>
       </ul>
       <ul id="turnUltext" class="border_r500">
@@ -13,7 +13,7 @@
           v-for="(item,index) in prizeData"
           :key="index"
           :style="{webkitTransform: 'rotate(' + -item.angletext + 'deg)'}"
-          :class="index%2 === 0 ? 'colorffffff' : 'colorff6400'">
+          :class="index%2 === 0 ? 'color333333' : 'colorff6400'">
           <div v-html="autoWrap(item.prizename)"></div>
         </li>
       </ul>
@@ -31,6 +31,12 @@ export default {
       default: function () {
         return {}
       }
+    },
+    totalCent: {
+      type: Number,
+      default: function () {
+        return 0
+      }
     }
   },
   data () {
@@ -47,6 +53,10 @@ export default {
       oTurntable: '',
       // 0 图片 1 汉字
       type: 0,
+      // 圆盘各奖项背景色
+      bgcolor: ['#fff4d6', '#ffffff', '#c7c7c7', '#ffffff'],
+      // 抽奖开关，防止重复点击
+      flag: true,
       // 中奖信息
       prize: {
         // prizeno: 80
@@ -73,35 +83,44 @@ export default {
   components: {},
   methods: {
     // 抽奖测试
-    // async startPlay () {
+    // startPlay () {
     //   // 调抽奖
     //   this.startBtn(this.prize)
     // },
     // 点击开始,请求接口抽奖
-    async startPlay () {
-      let data = new FormData()
-      let requestData = {
-      }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/prize/centPrize', data).then(result => {
-        console.log(result, '中奖信息')
-        let res = result.data
-        if (res.code === 200) {
-          this.prize = res.data
-          // 更新积分
-          this.$emit('getResult')
-          // 调抽奖
-          this.startBtn(this.prize)
-        } else {
+    startPlay () {
+      if (this.flag) {
+        if (this.totalCent < this.activeObj.prizeUseCent) {
           this.$message({
-            message: res.msg,
+            message: '积分不足!',
             type: 'error'
           })
+          return false
         }
-      }).catch(error => {
-        throw error
-      })
+        this.flag = false
+        let data = new FormData()
+        let requestData = {
+        }
+        requestData = JSON.stringify(requestData)
+        data.append('requestData', requestData)
+        this.$axios.post('system/prize/centPrize', data).then(result => {
+          let res = result.data
+          if (res.code === 200) {
+            this.prize = res.data
+            // 更新积分
+            this.$emit('getTotalCent')
+            // 调抽奖
+            this.startBtn(this.prize)
+          } else {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        }).catch(error => {
+          throw error
+        })
+      }
     },
     // 开始转动,通过奖项级别进行匹配:id
     async startBtn (val) {
@@ -121,6 +140,7 @@ export default {
       // 相应的角度 + 满圈 只是在原角度多转了几圈 360 * 6
       let rotate = 2160 * (this.rotNum + 1) + angle
       this.oTurntable.style.webkitTransform = 'rotate(' + rotate + 'deg)'
+      this.oTurntable.style.position = 'fixed'
       this.oTurntabletext.style.webkitTransform = 'rotate(' + rotate + 'deg)'
       clearTimeout(this.timer)
       // 设置5秒后停止旋转,处理接口返回的数据
@@ -132,6 +152,7 @@ export default {
     // 得奖后的处理
     fulfillHandle (prize) {
       this.$emit('getResult', prize)
+      this.flag = true
     },
     // 自动换行
     autoWrap (str) {

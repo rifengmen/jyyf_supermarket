@@ -10,9 +10,9 @@
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
     <div class="userinfo_main bgffffff">
-      <!-- 下拉刷新动画 start -->
+      <!-- 加载中动画 start -->
       <loading v-if="isShowLoading"></loading>
-      <!-- 下拉刷新动画 end -->
+      <!-- 加载中动画 end -->
       <!-- 分类列表 start -->
       <div class="lotterylist">
         <my-scroll-lottery
@@ -52,7 +52,7 @@ export default {
       totalSize: '',
       // 目前总共多少页
       totalPages: '',
-      // 下拉刷新
+      // 加载中动画
       isShowLoading: true,
       // 加载提示语
       loadText: '加载更多...'
@@ -81,6 +81,7 @@ export default {
   methods: {
     // 获取中奖记录
     getLotteryList () {
+      this.isShowLoading = true
       let data = new FormData()
       let requestData = {
         startDate: this.date,
@@ -90,9 +91,11 @@ export default {
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
       this.$axios.post('system/prize/listPrizeLog', data).then(result => {
+        this.$store.commit('setIsPullingDown', true)
         let res = result.data
         if (res.code === 200) {
-          this.totalCent = res.data.Score
+          this.isShowLoading = false
+          this.lotteryList = res.data.content
         } else {
           this.$message({
             message: res.msg,
@@ -106,6 +109,7 @@ export default {
     // 设置查询开始时间
     setStartdate (data) {
       this.startdate = data
+      this.page = this.resetpage
       this.getLotteryList()
     },
     // 下拉刷新
@@ -134,7 +138,7 @@ export default {
           let res = result.data
           if (res.code === 200) {
             this.isShowLoading = false
-            this.noticeList.push(...res.data.content)
+            this.lotteryList.push(...res.data.content)
           } else {
             this.$message({
               message: res.msg,
@@ -164,4 +168,7 @@ export default {
 
 <style scoped>
 @import "static/css/userInfo.css";
+.userinfo_main {
+  position: relative;
+}
 </style>

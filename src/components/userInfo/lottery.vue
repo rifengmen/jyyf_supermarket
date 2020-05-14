@@ -9,16 +9,17 @@
     </my-header>
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
-    <div class="userinfo_main">
+    <div class="userinfo_main bge42739">
       <!--<div class="tc color666666">功能开发中，敬请期待...</div>-->
       <div class="lottery_list">
         <lottery-circle
           :activeObj="activeObj"
+          :totalCent="totalCent"
           @getTotalCent="getTotalCent"
           @getResult="getResult"></lottery-circle>
       </div>
       <div class="score_desc bge42739">
-        <div class="lottery_score bge42739">
+        <div class="lottery_score">
           <p class="font36 tc colorffffff" >剩余积分: {{totalCent}}</p>
           <p class="font30 tc colorffffff">每{{activeObj.prizeUseCent}}积分可抽奖一次</p>
         </div>
@@ -42,7 +43,7 @@ export default {
   data () {
     return {
       // 用户积分
-      totalCent: '',
+      totalCent: 0,
       // 奖项设置
       activeObj: {},
       // 查询积分用
@@ -118,6 +119,9 @@ export default {
     },
     // 中奖
     getResult (prize) {
+      // 刷新积分
+      this.getTotalCent()
+      // 抽奖成功弹窗
       this.$message({
         message: prize.prizename,
         type: 'success'

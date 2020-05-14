@@ -10,25 +10,30 @@
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
     <div class="userinfo_main bgffffff">
-      <!-- 零钱列表 start -->
-      <div class="tick_list" v-if="expendList.length">
-        <ul>
-          <router-link :to="{name: 'expendDetail', params: {Flowno: item.flowno, Deptcode: item.deptcode, saletime: item.saletime, deptname: item.deptname}}" tag="li" class="score_item" v-for="(item, index) in expendList" :key="index">
-            <div>
-              <div class="ellipsis">{{item.deptname}}</div>
-              <div class="font24 color999999">{{item.saletime}}</div>
-            </div>
-            <div class="tr">
-              <div class="font30">+{{item.Score}}分</div>
-              <div class="font30">{{item.Money}}元</div>
-            </div>
-          </router-link>
-        </ul>
+      <!-- 加载中动画 start -->
+      <loading v-if="isShowLoading"></loading>
+      <!-- 下拉刷新动画 end -->
+      <div class="expend_cont">
+        <!-- 零钱列表 start -->
+        <div class="score_list" v-if="expendList.length">
+          <ul>
+            <router-link :to="{name: 'expendDetail', params: {Flowno: item.flowno, Deptcode: item.deptcode, saletime: item.saletime, deptname: item.deptname}}" tag="li" class="score_item" v-for="(item, index) in expendList" :key="index">
+              <div>
+                <div class="ellipsis">{{item.deptname}}</div>
+                <div class="font24 color999999">{{item.saletime}}</div>
+              </div>
+              <div class="tr">
+                <div class="font30">+{{item.Score}}分</div>
+                <div class="font30">{{item.Money}}元</div>
+              </div>
+            </router-link>
+          </ul>
+        </div>
+        <!-- 零钱列表 end -->
+        <!-- 无信息提示 start -->
+        <nodata v-else></nodata>
+        <!-- 无信息提示 end -->
       </div>
-      <!-- 零钱列表 end -->
-      <!-- 无信息提示 start -->
-      <nodata v-else></nodata>
-      <!-- 无信息提示 end -->
     </div>
     <!-- 内容部分盒子 end -->
   </div>
@@ -37,13 +42,18 @@
 <script>
 import MyHeader from '@/components/common/header/myheader'
 import nodata from '@/components/common/nodata/nodata'
+import loading from '@/components/common/loading/loading'
 
 export default {
   name: 'expendList',
   data () {
     return {
       // 零钱记录列表
-      expendList: ''
+      expendList: '',
+      // 查询开始时间
+      startdate: '',
+      // 加载中动画
+      isShowLoading: true
     }
   },
   computed: {
@@ -61,11 +71,13 @@ export default {
   },
   components: {
     MyHeader,
-    nodata
+    nodata,
+    loading
   },
   methods: {
     // 获取积分记录列表
     getLooseChangeList () {
+      this.isShowLoading = true
       let data = new FormData()
       let requestData
       requestData = {
@@ -77,6 +89,7 @@ export default {
       this.$axios.post('mem/member/listMemberConsum', data).then(result => {
         let res = result.data
         if (res.code === 200) {
+          this.isShowLoading = false
           this.expendList = JSON.parse(res.data)
         } else {
           this.$message({
@@ -109,5 +122,8 @@ export default {
 </script>
 
 <style scoped>
-  @import "static/css/userInfo.css";
+@import "static/css/userInfo.css";
+.userinfo_main {
+  position: relative;
+}
 </style>

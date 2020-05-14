@@ -102,47 +102,29 @@ export default {
           }
         })
         // 是否触发下拉刷新
-        // if (this.isPullingDown) {
-        //   this.scroll.on('pullingDown', () => {
-        //     this.$store.commit('setIsPullingDown', false)
-        //     this.$emit('pullingDown')
-        //     this.scroll.finishPullDown()
-        //     setTimeout(() => {
-        //       this.scroll.refresh()
-        //     }, 2000)
-        //   })
-        // }
-        this.scroll.on('pullingDown', () => {
-          this.$store.commit('setIsPullingDown', false)
-          this.$emit('pullingDown')
-          this.scroll.finishPullDown()
-          setTimeout(() => {
-            this.scroll.refresh()
-          }, 2000)
-        })
+        if (this.isPullingDown) {
+          this.scroll.on('pullingDown', () => {
+            this.$store.commit('setIsPullingDown', false)
+            this.$emit('pullingDown')
+            this.scroll.finishPullDown()
+            setTimeout(() => {
+              this.scroll.refresh()
+            }, 2000)
+          })
+        }
         // 是否触发上拉加载
-        // if (this.isPullingUp) {
-        //   this.scroll.on('pullingUp', () => {
-        //     this.loading = true
-        //     this.$store.commit('setIsPullingUp', false)
-        //     this.$emit('pullingup')
-        //     this.scroll.finishPullUp()
-        //     setTimeout(() => {
-        //       this.scroll.refresh()
-        //       this.loading = false
-        //     }, 2000)
-        //   })
-        // }
-        this.scroll.on('pullingUp', () => {
-          this.loading = true
-          this.$store.commit('setIsPullingUp', false)
-          this.$emit('pullingup')
-          this.scroll.finishPullUp()
-          setTimeout(() => {
-            this.scroll.refresh()
-            this.loading = false
-          }, 2000)
-        })
+        if (this.isPullingUp) {
+          this.scroll.on('pullingUp', () => {
+            this.loading = true
+            this.$store.commit('setIsPullingUp', false)
+            this.$emit('pullingup')
+            this.scroll.finishPullUp()
+            setTimeout(() => {
+              this.scroll.refresh()
+              this.loading = false
+            }, 2000)
+          })
+        }
       }
     },
     // 订单详情

@@ -10,14 +10,14 @@
     <!-- 头部 end -->
     <!-- 商品介绍 start -->
     <div class="goods_cont bgeeeeee">
-      <div class="goods_img">
+      <div class="goods_img bgffffff">
         <img :src="(goodsdetail.picture1 ? (imgurl + 'image/' + goodsdetail.picture1) : ('static/img/goods.png'))">
       </div>
       <div class="goods_desc bgffffff border_r6">
         <div class="goods_promot">
           <div class="goods_price_cont">
             <div class="goods_price" v-if="goodsdetail.promotemode === 0 || goodsdetail.promotemode === 2 || goodsdetail.promotemode === 3 || goodsdetail.promotemode === 8">
-              <div class="goods_promot_age font24 colorffffff borderffffff border_r4" v-if="goodsdetail.promotemode !== 0">{{Promotemode[goodsdetail.promotemode]}}</div>
+              <div class="goods_promot_age font24 colorffffff borderffffff border_r4" v-if="goodsdetail.promotemode !== 0">{{goodsdetail.modenote}}</div>
               <div class="font32 font_blod colorffffff">￥{{goodsdetail.saleprice}}</div>
             </div>
             <div class="goods_price" v-if="goodsdetail.promotemode === 1 || goodsdetail.promotemode === 7">
@@ -59,7 +59,7 @@
       </router-link>
       <div class="btns">
         <div class="addcart tc font34 colorffffff bgffae43">
-          <addcart :goodsid="goodsdetail.goodsid">加入购物车</addcart>
+          <addcart :goodsid="goodsdetail.goodsid" :froms="'goodsdetail'">加入购物车</addcart>
         </div>
         <div class="pay tc font34 colorffffff bgff6400">
           <addorder :goodsid="goodsdetail.goodsid" :goodsdetail="true">立即购买</addorder>

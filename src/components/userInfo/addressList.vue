@@ -10,34 +10,39 @@
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
     <div class="userinfo_main bgffffff" v-if="addressFlag">
-      <!-- 地址列表 start -->
-      <div class="address_cont border_r6">
-        <div class="address_list" v-if="addressList.length">
-          <ul>
-            <li class="address_item" @click="editorder(item)" v-for="(item, index) in addressList" :key="index">
-              <div class="address_item_desc">
-                <div class="address_item_user font_blod ellipsis">
-                  <div>{{item.contactPerson}}</div>
-                  <div>{{item.contactNumber}}</div>
-                  <div class="address_item_age bgffae43 colorffffff tc border_r4 font22 font_normal" v-if="item.addressMark !== '1'">店铺</div>
+      <div class="addresslist">
+        <!-- 加载中动画 start -->
+        <loading v-if="isShowLoading"></loading>
+        <!-- 下拉刷新动画 end -->
+        <!-- 地址列表 start -->
+        <div class="address_cont border_r6">
+          <div class="address_list" v-if="addressList.length">
+            <ul>
+              <li class="address_item" @click="editorder(item)" v-for="(item, index) in addressList" :key="index">
+                <div class="address_item_desc">
+                  <div class="address_item_user font_blod ellipsis">
+                    <div>{{item.contactPerson}}</div>
+                    <div>{{item.contactNumber}}</div>
+                    <div class="address_item_age bgffae43 colorffffff tc border_r4 font22 font_normal" v-if="item.addressMark !== '1'">店铺</div>
+                  </div>
+                  <div class="address_item_address ellipsis color666666">
+                    <div class="font24">{{item.areaname}}</div>
+                    <div class="font24">{{item.sheetname}}</div>
+                    <div class="font24">{{item.address}}</div>
+                  </div>
                 </div>
-                <div class="address_item_address ellipsis color666666">
-                  <div class="font24">{{item.areaname}}</div>
-                  <div class="font24">{{item.sheetname}}</div>
-                  <div class="font24">{{item.address}}</div>
+                <div class="address_item_img" v-if="item.addressMark === '1'" @click="delAddress(item.addressid)">
+                  <img src="static/img/delete.png">
                 </div>
-              </div>
-              <div class="address_item_img" v-if="item.addressMark === '1'" @click="delAddress(item.addressid)">
-                <img src="static/img/delete.png">
-              </div>
-            </li>
-          </ul>
+              </li>
+            </ul>
+          </div>
+          <!-- 无信息提示 start -->
+          <nodata v-else></nodata>
+          <!-- 无信息提示 end -->
         </div>
-        <!-- 无信息提示 start -->
-        <nodata v-else></nodata>
-        <!-- 无信息提示 end -->
+        <!-- 地址列表 end -->
       </div>
-      <!-- 地址列表 end -->
       <!-- 添加按钮地址 start -->
       <div class="address_btn bgffffff">
         <div class="send_btn tc bgff7e42 colorffffff font32 border_r4" @click="editAddress">新建地址</div>
@@ -143,6 +148,7 @@
 <script>
 import MyHeader from '@/components/common/header/myheader'
 import nodata from '@/components/common/nodata/nodata'
+import loading from '@/components/common/loading/loading'
 
 export default {
   name: 'addressList',
@@ -169,7 +175,9 @@ export default {
       // 收货人
       contactPerson: '',
       // 收货人电话
-      contactNumber: ''
+      contactNumber: '',
+      // 加载中动画
+      isShowLoading: true
     }
   },
   computed: {
@@ -200,11 +208,13 @@ export default {
   },
   components: {
     MyHeader,
-    nodata
+    nodata,
+    loading
   },
   methods: {
     // 获取地址列表
     getAddresslist () {
+      this.isShowLoading = true
       // 来自填写订单
       let data = new FormData()
       let requestData = {}
@@ -213,6 +223,7 @@ export default {
       this.$axios.post('api/area/getAddressForOrder', data).then(result => {
         let res = result.data
         if (res.code === 200) {
+          this.isShowLoading = false
           if (this.editorderFlag) {
             this.addressList = res.data
           } else {
@@ -445,5 +456,7 @@ export default {
 
 <style scoped>
 @import "static/css/userInfo.css";
-
+.addresslist {
+  position: relative;
+}
 </style>

@@ -7,9 +7,9 @@
       <!-- 头部 end -->
       <!-- 内容部分盒子 start -->
       <div class="cont_main bgffffff">
-        <!-- 下拉刷新动画 start -->
+        <!-- 加载中动画 start -->
         <loading v-if="isShowLoading"></loading>
-        <!-- 下拉刷新动画 end -->
+        <!-- 加载中动画 end -->
         <!-- 分类列表 start -->
         <div class="message_list">
           <my-scroll-message
@@ -51,7 +51,7 @@ export default {
       totalSize: '',
       // 目前总共多少页
       totalPages: '',
-      // 下拉刷新
+      // 加载中动画
       isShowLoading: true,
       // 加载提示语
       loadText: '加载更多...'
@@ -79,6 +79,7 @@ export default {
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
       this.$axios.post('info/InformationController/listmessage', data).then(result => {
+        this.$store.commit('setIsPullingDown', true)
         let res = result.data
         if (res.code === 200) {
           this.isShowLoading = false
@@ -143,5 +144,7 @@ export default {
 
 <style scoped>
 @import "./static/css/messageList.css";
-
+.cont_main {
+  position: relative;
+}
 </style>

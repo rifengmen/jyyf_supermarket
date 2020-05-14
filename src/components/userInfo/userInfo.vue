@@ -200,10 +200,38 @@ export default {
     MyFooter
   },
   methods: {
+    // 设置用户信息
+    setUserInfo () {
+      let data = new FormData()
+      let requestData = {
+        wechatID: this.$store.state.wechatID,
+        wexinID: this.$store.state.openid
+      }
+      requestData = JSON.stringify(requestData)
+      data.append('requestData', requestData)
+      this.$axios.post('system/customlogin/login', data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          this.$store.commit('setUserInfo', res.data)
+          this.$store.commit('setMoneyDetail', res.data.moneyDetail)
+          sessionStorage.setItem('jyyf_token', res.data.token)
+          this.$axios.defaults.headers.common.Authorization = res.data.token
+        } else {
+          this.$message({
+            message: '登陆失败，请重新登陆！',
+            type: 'error'
+          })
+        }
+      }).catch(error => {
+        throw error
+      })
+    }
   },
   watch: {
   },
   created () {
+    // 设置用户信息
+    this.setUserInfo()
   }
 }
 </script>

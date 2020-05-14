@@ -250,7 +250,6 @@ export default {
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
       this.$axios.post('bill/pay/cardpayclose', data).then(result => {
-        console.log(result)
         let res = result.data
         if (res.code === 200) {
           this.$message({
@@ -315,7 +314,6 @@ export default {
         if (this.coflag) {
           this.$axios.post('bill/pay/payPasswordReset', data).then(result => {
             this.btnFlag = true
-            console.log(result)
             let res = result.data
             if (res.code === 200) {
               this.$message({
@@ -336,7 +334,6 @@ export default {
         }
         this.$axios.post('bill/pay/cardpayopen', data).then(result => {
           this.btnFlag = true
-          console.log(result)
           let res = result.data
           if (res.code === 200) {
             this.$message({

@@ -93,7 +93,7 @@
             <div @click="goodsdetail(goods.goodsid)" class="recommend1_item bgffffff border_r6" v-for="(goods, index) in item.gdscodelist" :key="index">
               <div class="recommend1_item_img border_r6">
                 <img :src="(goods.picture1 ? (imgurl + 'image/' + goods.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))" class="border_r6">
-                <div v-if="goods.promotemode !== 0" class="goods_age font24 font_normal colorffffff tc">{{Promotemode[goods.promotemode]}}</div>
+                <div v-if="goods.promotemode !== 0" class="goods_age font24 font_normal colorffffff tc">{{goods.modenote}}</div>
               </div>
               <div class="recommend1_name ellipsis font24">{{goods.cusgoodsname}}</div>
               <div class="recommend1_price" v-if="goods.promotemode === 0 || goods.promotemode === 2 || goods.promotemode === 3 || goods.promotemode === 8">
@@ -132,7 +132,7 @@
             <div @click="goodsdetail(goods.goodsid)" class="recommend1_item bgffffff border_r6" v-for="(goods, index) in item.gdscodelist" :key="index">
               <div class="recommend1_item_img border_r6">
                 <img :src="(goods.picture1 ? (imgurl + 'image/' + goods.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))" class="border_r6">
-                <div v-if="goods.promotemode !== 0" class="goods_age font24 font_normal colorffffff tc">{{Promotemode[goods.promotemode]}}</div>
+                <div v-if="goods.promotemode !== 0" class="goods_age font24 font_normal colorffffff tc">{{goods.modenote}}</div>
               </div>
               <div class="recommend1_name ellipsis font24">{{goods.cusgoodsname}}</div>
               <div class="recommend1_price" v-if="goods.promotemode === 0 || goods.promotemode === 2 || goods.promotemode === 3 || goods.promotemode === 8">
@@ -384,8 +384,16 @@ export default {
     }
   },
   created () {
-    // 设置用户信息
-    this.setUserInfo()
+    let token = this.$axios.defaults.headers.common.Authorization
+    if (token) {
+      // 获取通知信息
+      this.getNotice()
+      // 获取推荐
+      this.getRecommend()
+    } else {
+      // 设置用户信息
+      this.setUserInfo()
+    }
   },
   mounted () {
   }

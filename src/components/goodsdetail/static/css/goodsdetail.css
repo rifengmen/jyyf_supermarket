@@ -6,9 +6,10 @@
   overflow-y: scroll;
 }
 .goods_img {
-  width: 100%;
-  height: 7.5rem;
+  width: calc(100% - .5rem);
+  height: 7.00rem;
   margin-top: .2rem;
+  padding: 0 .25rem;
 }
 .goods_img img {
   width: 100%;

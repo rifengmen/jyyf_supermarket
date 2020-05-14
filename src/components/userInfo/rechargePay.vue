@@ -97,7 +97,6 @@ export default {
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
       this.$axios.post('invest/microFlow/reChargePay', data).then(result => {
-        console.log(result, 1)
         let res = result.data
         if (res.code === 200) {
           // 微信支付

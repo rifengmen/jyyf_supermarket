@@ -10,50 +10,55 @@
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
     <div class="userinfo_main bgffffff">
-      <!-- 地址列表 start -->
-      <div class="tick_list" v-if="tickList.length">
-        <ul>
-          <li class="tick_item border_r6 colorffffff" v-for="(item, index) in tickList" :key="index">
-            <!-- 折抵金额 start -->
-            <div class="tick_item_money" @click="editorder(item)">
-              <div class="font40 font_blod tc" v-if="item.tickettype === 1">
-                ￥
-                <span class="font80">{{item.usemoney}}</span>
+      <!-- 加载中动画 start -->
+      <loading v-if="isShowLoading"></loading>
+      <!-- 下拉刷新动画 end -->
+      <div class="tick_cont">
+        <!-- 优惠券列表 start -->
+        <div class="tick_list" v-if="tickList.length">
+          <ul>
+            <li class="tick_item border_r6 colorffffff" v-for="(item, index) in tickList" :key="index">
+              <!-- 折抵金额 start -->
+              <div class="tick_item_money" @click="editorder(item)">
+                <div class="font40 font_blod tc" v-if="item.tickettype === 1">
+                  ￥
+                  <span class="font80">{{item.usemoney}}</span>
+                </div>
+                <div class="font40 font_blod tc" v-if="item.tickettype === 2">
+                  折
+                  <span class="font80">{{item.usemoney * 10}}</span>
+                </div>
+                <div class="font26 tc">{{item.tickname}}</div>
+                <div class="font26 tc">满{{item.minsalemoney}}元使用</div>
               </div>
-              <div class="font40 font_blod tc" v-if="item.tickettype === 2">
-                折
-                <span class="font80">{{item.usemoney * 10}}</span>
+              <!-- 折抵金额 end -->
+              <!-- 时间 start -->
+              <div class="tick_item_time">
+                <div class="tick_item_desc" @click="editorder(item)">
+                  <div class="font22">截止日期</div>
+                  <div class="font22">{{item.enddate}}</div>
+                  <div class="font22">每月禁用日：{{item.notuseday === '' ? '无' : item.notuseday}}</div>
+                  <!--<div class="font22">已领/可领总数：</div>-->
+                  <!--<div class="font22">使用说明：</div>-->
+                </div>
+                <!-- 领取 start -->
+                <div class="tick_item_get" v-if="indexFlag" @click="getTick(item)">
+                  <div class="font34">立</div>
+                  <div class="font34">即</div>
+                  <div class="font34">领</div>
+                  <div class="font34">用</div>
+                </div>
+                <!-- 领取 end -->
               </div>
-              <div class="font26 tc">{{item.tickname}}</div>
-              <div class="font26 tc">满{{item.minsalemoney}}元使用</div>
-            </div>
-            <!-- 折抵金额 end -->
-            <!-- 时间 start -->
-            <div class="tick_item_time">
-              <div class="tick_item_desc" @click="editorder(item)">
-                <div class="font22">截止日期</div>
-                <div class="font22">{{item.enddate}}</div>
-                <div class="font22">每月禁用日：{{item.notuseday === '' ? '无' : item.notuseday}}</div>
-                <!--<div class="font22">已领/可领总数：</div>-->
-                <!--<div class="font22">使用说明：</div>-->
-              </div>
-              <!-- 领取 start -->
-              <div class="tick_item_get" v-if="indexFlag" @click="getTick(item)">
-                <div class="font34">立</div>
-                <div class="font34">即</div>
-                <div class="font34">领</div>
-                <div class="font34">用</div>
-              </div>
-              <!-- 领取 end -->
-            </div>
-            <!-- 时间 end -->
-          </li>
-        </ul>
+              <!-- 时间 end -->
+            </li>
+          </ul>
+        </div>
+        <!-- 优惠券列表 end -->
+        <!-- 无信息提示 start -->
+        <nodata v-else></nodata>
+        <!-- 无信息提示 end -->
       </div>
-      <!-- 地址列表 end -->
-      <!-- 无信息提示 start -->
-      <nodata v-else></nodata>
-      <!-- 无信息提示 end -->
     </div>
     <!-- 内容部分盒子 end -->
   </div>
@@ -62,13 +67,16 @@
 <script>
 import MyHeader from '@/components/common/header/myheader'
 import nodata from '@/components/common/nodata/nodata'
+import loading from '@/components/common/loading/loading'
 
 export default {
   name: 'tickList',
   data () {
     return {
       // 优惠券列表
-      tickList: {}
+      tickList: {},
+      // 加载中动画
+      isShowLoading: true
     }
   },
   computed: {
@@ -99,13 +107,31 @@ export default {
   },
   components: {
     MyHeader,
-    nodata
+    nodata,
+    loading
   },
   methods: {
+    // 请求优惠券
+    getList (data, url) {
+      this.isShowLoading = true
+      this.$axios.post(url, data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          this.isShowLoading = false
+          this.tickList = res.data
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      }).catch(error => {
+        throw error
+      })
+    },
     // 获取优惠券列表
     getTicklist () {
-      // 来自填写订单
-      if (this.editorderFlag) {
+      if (this.editorderFlag) { // 来自填写订单
         let data = new FormData()
         let requestData
         requestData = {
@@ -115,57 +141,26 @@ export default {
         }
         requestData = JSON.stringify(requestData)
         data.append('requestData', requestData)
-        this.$axios.post('bill/pay/payMoneytick', data).then(result => {
-          let res = result.data
-          if (res.code === 200) {
-            this.tickList = res.data
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        }).catch(error => {
-          throw error
-        })
+        let url = 'bill/pay/payMoneytick'
+        this.getList(data, url)
       } else if (this.userinfoFlag) { // 来自会员中心
         let data = new FormData()
         let requestData
-        requestData = {}
+        requestData = {
+        }
         requestData = JSON.stringify(requestData)
         data.append('requestData', requestData)
-        this.$axios.post('mem/member/listCoupon', data).then(result => {
-          let res = result.data
-          if (res.code === 200) {
-            this.tickList = res.data
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        }).catch(error => {
-          throw error
-        })
-      } else if (this.indexFlag) {
+        let url = 'mem/member/listCoupon'
+        this.getList(data, url)
+      } else if (this.indexFlag) { // 来自首页
         let data = new FormData()
         let requestData
-        requestData = {}
+        requestData = {
+        }
         requestData = JSON.stringify(requestData)
         data.append('requestData', requestData)
-        this.$axios.post('mem/member/listCouponForGet', data).then(result => {
-          let res = result.data
-          if (res.code === 200) {
-            this.tickList = res.data
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        }).catch(error => {
-          throw error
-        })
+        let url = 'mem/member/listCouponForGet'
+        this.getList(data, url)
       }
     },
     // 领取优惠券
@@ -240,5 +235,7 @@ export default {
 
 <style scoped>
 @import "static/css/userInfo.css";
-
+.userinfo_main {
+  position: relative;
+}
 </style>

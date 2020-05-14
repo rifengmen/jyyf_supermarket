@@ -17,7 +17,7 @@
     <!--&lt;!&ndash; 订单分类 end &ndash;&gt;-->
     <!-- 内容部分盒子 start -->
     <div class="order_main bgffffff">
-      <!-- 下拉刷新动画 start -->
+      <!-- 加载中动画 start -->
       <loading v-if="isShowLoading"></loading>
       <!-- 下拉刷新动画 end -->
       <!-- 订单列表 start -->
@@ -67,7 +67,7 @@ export default {
       totalSize: '',
       // 目前总共多少页
       totalPages: '',
-      // 下拉刷新
+      // 加载中动画
       isShowLoading: true,
       // 加载提示语
       loadText: '加载更多...'
@@ -89,7 +89,6 @@ export default {
   methods: {
     // 获取订单列表
     getOrderList () {
-      this.orderList = []
       this.isShowLoading = true
       let data = new FormData()
       let requestData = {
@@ -100,6 +99,7 @@ export default {
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
       this.$axios.post('api/order/getOrder', data).then(result => {
+        this.$store.commit('setIsPullingDown', true)
         let res = result.data
         if (res.code === 200) {
           this.isShowLoading = false
@@ -175,5 +175,7 @@ export default {
 
 <style scoped>
 @import "static/css/userInfo.css";
-
+.order_main {
+  position: relative;
+}
 </style>

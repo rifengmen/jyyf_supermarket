@@ -54,7 +54,6 @@ const router = new Router({
     {path: '/register', component: register, name: 'register'},
     // 首页
     {path: '/', component: index, name: 'index'},
-    // {path: '/', component: index, name: 'index', meta: { requiresAuth: true }},
     // 搜索页
     {path: '/search', component: search, name: 'search'},
     // 搜索结果页
@@ -131,44 +130,15 @@ const router = new Router({
 })
 
 //  使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
-router.beforeEach((to, from, next) => {
-  let jyyfopenid = sessionStorage.getItem('jyyf_openid')
-  if (!jyyfopenid && to.fullPath !== '/author') {
-    // 保存用户进入的url
-    sessionStorage.setItem('jyyf_beforeLoginUrl', JSON.stringify(to.fullPath))
-    next('/author')
-    return false
-  }
-
-  // if (to.matched.some(record => record.meta.requiresAuth)) {
-  //   if (!sessionStorage.jyyf_token) {
-  //     next({
-  //       path: '/register',
-  //       query: { redirect: to.fullPath }
-  //     })
-  //   } else {
-  //     next()
-  //   }
-  // } else {
-  //   next() // 确保一定要调用 next()
-  // }
-
-  // 获取权限验证配置(签名) 后端返回 getConfig, 注意返回字段的大小写!
-  // console.log(this, 1)
-  // let wechat
-  // // 注入配置信息
-  // wx.config({
-  //   debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-  //   appId: wechat.appId, // 必填，公众号的唯一标识
-  //   timestamp: wechat.timestamp, // 必填，生成签名的时间戳
-  //   nonceStr: wechat.nonceStr, // 必填，生成签名的随机串
-  //   signature: wechat.signature, // 必填，签名
-  //   jsApiList: [
-  //     'scanQRCode' // 扫一扫
-  //   ] // 必填，需要使用的JS接口列表
-  // })
-
-  next()
-})
+// router.beforeEach((to, from, next) => {
+//   let jyyfopenid = sessionStorage.getItem('jyyf_openid')
+//   if (!jyyfopenid && to.fullPath !== '/author') {
+//     // 保存用户进入的url
+//     sessionStorage.setItem('jyyf_beforeLoginUrl', JSON.stringify(to.fullPath))
+//     next('/author')
+//     return false
+//   }
+//   next()
+// })
 
 export default router

@@ -114,8 +114,10 @@ export default {
     sendpay () {
       // 订单总金额
       let totalMoney = this.order.totalMoney
+      // console.log(totalMoney, '订单总金额')
       // 支付金额
       let paymoney = totalMoney + parseFloat(this.freightmoney.freightmoney)
+      // console.log(paymoney, '支付金额')
       // 支付列表下标
       let index = 0
       // 优惠券类型 1：金额券；2：折扣券
@@ -137,7 +139,8 @@ export default {
         paylist4.paymoney = this.tick.dicountMoney
         this.paylist[index] = paylist4
         index++
-        paymoney = paymoney - this.freightmoney.freightmoney - paylist4.paymoney
+        // paymoney = paymoney - this.freightmoney.freightmoney - paylist4.paymoney
+        paymoney = paymoney - paylist4.paymoney
       }
       // 积分
       if (this.scoreFlag) {
@@ -156,7 +159,7 @@ export default {
         if (paymoney < 0) {
           paymoney = 0
         }
-        paylist3.paymoney = paymoney
+        paylist3.paymoney = parseFloat(paymoney.toFixed(2))
         this.paylist[index] = paylist3
         index++
       }
@@ -167,7 +170,7 @@ export default {
         if (paymoney < 0) {
           paymoney = 0
         }
-        paylist7.paymoney = paymoney
+        paylist7.paymoney = parseFloat(paymoney.toFixed(2))
         this.paylist[index] = paylist7
         index++
       }
@@ -185,6 +188,8 @@ export default {
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
+      // console.log(JSON.parse(requestData), '支付信息')
+      // return false
       this.$axios.post('invest/microFlow/orderCommit', data).then(result => {
         let res = result.data
         if (res.code === 200) {
@@ -211,7 +216,7 @@ export default {
             this.orderdetail(res.data.tradeno)
           }
           return false
-        } else if (res.code === 500) {
+        } else {
           if (res.data) {
             this.$message({
               message: res.msg,
