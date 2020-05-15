@@ -1,46 +1,47 @@
-﻿<template>
-    <div class="container bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
-      <!-- 头部 start -->
-      <my-header>
-        <template v-slot:header>消息中心</template>
-      </my-header>
-      <!-- 头部 end -->
-      <!-- 内容部分盒子 start -->
-      <div class="cont_main bgffffff">
-        <!-- 加载中动画 start -->
-        <loading v-if="isShowLoading"></loading>
-        <!-- 加载中动画 end -->
-        <!-- 分类列表 start -->
-        <div class="message_list">
-          <my-scroll-message
-            :messageList="messageList"
-            :loadText="loadText"
-            @pullingDown="_getMessageList"
-            @pullingup="getMoreMessageList">
-          </my-scroll-message>
-        </div>
-        <!-- 分类列表 end -->
+<template>
+  <div class="container bgeeeeee">
+    <!-- 头部 start -->
+    <my-header @setStartdate="setStartdate" :addFlag="'dateFlag'">
+      <template v-slot:backs>
+        <i class="el-icon-arrow-left"></i>
+      </template>
+      <template v-slot:header>中奖记录</template>
+    </my-header>
+    <!-- 头部 end -->
+    <!-- 内容部分盒子 start -->
+    <div class="other_main bgffffff">
+      <!-- 加载中动画 start -->
+      <loading v-if="isShowLoading"></loading>
+      <!-- 加载中动画 end -->
+      <!-- 分类列表 start -->
+      <div class="lotterylist">
+        <my-scroll-lottery
+          :lotteryList="lotteryList"
+          :loadText="loadText"
+          @pullingDown="_getLotteryList"
+          @pullingup="getMoreLotteryList">
+        </my-scroll-lottery>
       </div>
-      <!-- 内容部分盒子 end -->
-      <!-- 底部导航 start -->
-      <my-footer></my-footer>
-      <!-- 底部导航 end -->
+      <!-- 分类列表 end -->
     </div>
+    <!-- 内容部分盒子 end -->
+  </div>
 </template>
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
-import MyFooter from '@/components/common/footer/myfooter'
-import MyScrollMessage from '@/components/common/myscrollMessage/myscrollMessage'
+import MyScrollLottery from '@/components/common/myscrollLottery/myscrollLottery'
 import nodata from '@/components/common/nodata/nodata'
 import loading from '@/components/common/loading/loading'
 
 export default {
-  name: 'messageList',
+  name: 'lotteryList',
   data () {
     return {
-      // 消息列表
-      messageList: [],
+      // 中奖记录
+      lotteryList: [],
+      // 查询时间
+      startdate: '',
       // 重置当前页码
       resetpage: 1,
       // 当前页码
@@ -58,33 +59,43 @@ export default {
     }
   },
   computed: {
+    // 查询时间
+    date () {
+      let _this = this
+      if (!this.startdate) {
+        let dt = new Date()
+        dt.setMonth(dt.getMonth() - 6)
+        dt = dt.toLocaleString()
+        dt = (dt.replace(/\//g, '-')).split(' ')[0]
+        _this.startdate = dt
+      }
+      return this.startdate
+    }
   },
   components: {
     MyHeader,
-    MyFooter,
-    MyScrollMessage,
+    MyScrollLottery,
     nodata,
     loading
   },
   methods: {
-    // 获取消息列表
-    getMessageList () {
+    // 获取中奖记录
+    getLotteryList () {
       this.isShowLoading = true
       let data = new FormData()
       let requestData = {
-        messageFlag: '1',
+        startDate: this.date,
         Page: this.page,
         pageSize: this.pageSize
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
-      this.$axios.post('info/InformationController/listmessage', data).then(result => {
+      this.$axios.post('system/prize/listPrizeLog', data).then(result => {
         this.$store.commit('setIsPullingDown', true)
         let res = result.data
         if (res.code === 200) {
           this.isShowLoading = false
-          this.messageList = res.data.content
-          this.totalSize = res.data.totalSize
+          this.lotteryList = res.data.content
         } else {
           this.$message({
             message: res.msg,
@@ -95,19 +106,25 @@ export default {
         throw error
       })
     },
-    // 下拉刷新
-    _getMessageList () {
+    // 设置查询开始时间
+    setStartdate (data) {
+      this.startdate = data
       this.page = this.resetpage
-      this.getMessageList()
+      this.getLotteryList()
+    },
+    // 下拉刷新
+    _getLotteryList () {
+      this.page = this.resetpage
+      this.getLotteryList()
     },
     // 上拉加载更多
-    getMoreMessageList () {
+    getMoreLotteryList () {
       this.page++
       let currentpage = this.page
       let total = Math.ceil(this.totalSize / this.pageSize)
       let data = new FormData()
       let requestData = {
-        messageFlag: '1',
+        listtype: '2',
         Page: this.page,
         pageSize: this.pageSize
       }
@@ -116,12 +133,12 @@ export default {
       if (currentpage > total) {
         this.loadText = '暂无更多数据'
       } else {
-        this.$axios.post('info/InformationController/listmessage', data).then(result => {
+        this.$axios.post('system/prize/listPrizeLog', data).then(result => {
           this.$store.commit('setIsPullingUp', true)
           let res = result.data
           if (res.code === 200) {
             this.isShowLoading = false
-            this.messageList.push(...res.data.content)
+            this.lotteryList.push(...res.data.content)
           } else {
             this.$message({
               message: res.msg,
@@ -135,16 +152,23 @@ export default {
       this.$store.commit('setIsPullingUp', false)
     }
   },
+  watch: {},
+  beforeCreate () {
+  },
   created () {
-    // 页面加载时获取消息列表
-    this.getMessageList()
+    // 获取中奖记录
+    this.getLotteryList()
+  },
+  beforeMount () {
+  },
+  mounted () {
   }
 }
 </script>
 
 <style scoped>
-@import "./static/css/messageList.css";
-.cont_main {
+@import "static/css/other.css";
+.userinfo_main {
   position: relative;
 }
 </style>

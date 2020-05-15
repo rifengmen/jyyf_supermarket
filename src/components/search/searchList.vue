@@ -157,7 +157,7 @@ export default {
 </script>
 
 <style scoped>
-@import "./static/css/search.css";
+@import "static/css/search.css";
 .search_list {
   position: relative;
 }

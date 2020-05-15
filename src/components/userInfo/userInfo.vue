@@ -7,7 +7,7 @@
     </my-header>
     <!-- 头部标题 end -->
     <!-- card start -->
-    <div class="userinfo colorffffff">
+    <div class="card userinfo colorffffff">
       <div class="card_name">
         <div class="card_img bgffffff border_r500">
           <img :src="headimgurl || 'static/img/userimg.png'" class="border_r500">

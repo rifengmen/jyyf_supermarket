@@ -1,26 +1,26 @@
-<template>
-  <div class="container bgeeeeee">
+﻿<template>
+  <div class="container bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
     <!-- 头部 start -->
-    <my-header @setStartdate="setStartdate" :addFlag="'dateFlag'">
+    <my-header>
       <template v-slot:backs>
         <i class="el-icon-arrow-left"></i>
       </template>
-      <template v-slot:header>中奖记录</template>
+      <template v-slot:header>通知中心</template>
     </my-header>
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
-    <div class="userinfo_main bgffffff">
+    <div class="cont_main bgffffff">
       <!-- 加载中动画 start -->
       <loading v-if="isShowLoading"></loading>
       <!-- 加载中动画 end -->
       <!-- 分类列表 start -->
-      <div class="lotterylist">
-        <my-scroll-lottery
-          :lotteryList="lotteryList"
+      <div class="message_list">
+        <my-scroll-notice
+          :noticeList="noticeList"
           :loadText="loadText"
-          @pullingDown="_getLotteryList"
-          @pullingup="getMoreLotteryList">
-        </my-scroll-lottery>
+          @pullingDown="_getNoticeList"
+          @pullingup="getMoreNoticeList">
+        </my-scroll-notice>
       </div>
       <!-- 分类列表 end -->
     </div>
@@ -30,18 +30,17 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
-import MyScrollLottery from '@/components/common/myscrollLottery/myscrollLottery'
+import MyFooter from '@/components/common/footer/myfooter'
+import MyScrollNotice from '@/components/common/myscrollNotice/myscrollNotice'
 import nodata from '@/components/common/nodata/nodata'
 import loading from '@/components/common/loading/loading'
 
 export default {
-  name: 'lotteryList',
+  name: 'noticeList',
   data () {
     return {
-      // 中奖记录
-      lotteryList: [],
-      // 查询时间
-      startdate: '',
+      // 消息列表
+      noticeList: [],
       // 重置当前页码
       resetpage: 1,
       // 当前页码
@@ -59,66 +58,45 @@ export default {
     }
   },
   computed: {
-    // 查询时间
-    date () {
-      let _this = this
-      if (!this.startdate) {
-        let dt = new Date()
-        dt.setMonth(dt.getMonth() - 6)
-        dt = dt.toLocaleString()
-        dt = (dt.replace(/\//g, '-')).split(' ')[0]
-        _this.startdate = dt
-      }
-      return this.startdate
-    }
   },
   components: {
     MyHeader,
-    MyScrollLottery,
+    MyFooter,
+    MyScrollNotice,
     nodata,
     loading
   },
   methods: {
-    // 获取中奖记录
-    getLotteryList () {
+    // 获取消息列表
+    getNoticeList () {
       this.isShowLoading = true
       let data = new FormData()
       let requestData = {
-        startDate: this.date,
-        Page: this.page,
+        listtype: '2',
+        page: this.page,
         pageSize: this.pageSize
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
-      this.$axios.post('system/prize/listPrizeLog', data).then(result => {
+      this.$axios.post('info/InformationController/listNotice', data).then(result => {
         this.$store.commit('setIsPullingDown', true)
         let res = result.data
         if (res.code === 200) {
           this.isShowLoading = false
-          this.lotteryList = res.data.content
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
+          this.noticeList = res.data.content
+          this.totalSize = res.data.totalSize
         }
       }).catch(error => {
         throw error
       })
     },
-    // 设置查询开始时间
-    setStartdate (data) {
-      this.startdate = data
-      this.page = this.resetpage
-      this.getLotteryList()
-    },
     // 下拉刷新
-    _getLotteryList () {
+    _getNoticeList () {
       this.page = this.resetpage
-      this.getLotteryList()
+      this.getNoticeList()
     },
     // 上拉加载更多
-    getMoreLotteryList () {
+    getMoreNoticeList () {
       this.page++
       let currentpage = this.page
       let total = Math.ceil(this.totalSize / this.pageSize)
@@ -133,12 +111,12 @@ export default {
       if (currentpage > total) {
         this.loadText = '暂无更多数据'
       } else {
-        this.$axios.post('system/prize/listPrizeLog', data).then(result => {
+        this.$axios.post('info/InformationController/listNotice', data).then(result => {
           this.$store.commit('setIsPullingUp', true)
           let res = result.data
           if (res.code === 200) {
             this.isShowLoading = false
-            this.lotteryList.push(...res.data.content)
+            this.noticeList.push(...res.data.content)
           } else {
             this.$message({
               message: res.msg,
@@ -152,23 +130,16 @@ export default {
       this.$store.commit('setIsPullingUp', false)
     }
   },
-  watch: {},
-  beforeCreate () {
-  },
   created () {
-    // 获取中奖记录
-    this.getLotteryList()
-  },
-  beforeMount () {
-  },
-  mounted () {
+    // 页面加载时获取消息列表
+    this.getNoticeList()
   }
 }
 </script>
 
 <style scoped>
-@import "static/css/userInfo.css";
-.userinfo_main {
+@import "static/css/message.css";
+.cont_main {
   position: relative;
 }
 </style>

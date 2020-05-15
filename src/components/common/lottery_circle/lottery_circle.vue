@@ -13,7 +13,7 @@
           v-for="(item,index) in prizeData"
           :key="index"
           :style="{webkitTransform: 'rotate(' + -item.angletext + 'deg)'}"
-          :class="index%2 === 0 ? 'color333333' : 'colorff6400'">
+          class="colore52b39">
           <div v-html="autoWrap(item.prizename)"></div>
         </li>
       </ul>
@@ -54,7 +54,7 @@ export default {
       // 0 图片 1 汉字
       type: 0,
       // 圆盘各奖项背景色
-      bgcolor: ['#fff4d6', '#ffffff', '#c7c7c7', '#ffffff'],
+      bgcolor: ['#f9cd56', '#ffffff', '#fee8ad', '#ffffff'],
       // 抽奖开关，防止重复点击
       flag: true,
       // 中奖信息
@@ -139,9 +139,8 @@ export default {
     startrotate (angle, complete) {
       // 相应的角度 + 满圈 只是在原角度多转了几圈 360 * 6
       let rotate = 2160 * (this.rotNum + 1) + angle
-      this.oTurntable.style.webkitTransform = 'rotate(' + rotate + 'deg)'
-      this.oTurntable.style.position = 'fixed'
-      this.oTurntabletext.style.webkitTransform = 'rotate(' + rotate + 'deg)'
+      this.oTurntable.style.transform = 'rotate(' + rotate + 'deg)'
+      this.oTurntabletext.style.transform = 'rotate(' + rotate + 'deg)'
       clearTimeout(this.timer)
       // 设置5秒后停止旋转,处理接口返回的数据
       this.timer = setTimeout(() => {

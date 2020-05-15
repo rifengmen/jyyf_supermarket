@@ -1,46 +1,46 @@
 ﻿<template>
-  <div class="container bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
-    <!-- 头部 start -->
-    <my-header>
-      <template v-slot:backs>
-        <i class="el-icon-arrow-left"></i>
-      </template>
-      <template v-slot:header>通知中心</template>
-    </my-header>
-    <!-- 头部 end -->
-    <!-- 内容部分盒子 start -->
-    <div class="cont_main bgffffff">
-      <!-- 加载中动画 start -->
-      <loading v-if="isShowLoading"></loading>
-      <!-- 加载中动画 end -->
-      <!-- 分类列表 start -->
-      <div class="message_list">
-        <my-scroll-notice
-          :noticeList="noticeList"
-          :loadText="loadText"
-          @pullingDown="_getNoticeList"
-          @pullingup="getMoreNoticeList">
-        </my-scroll-notice>
+    <div class="container bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
+      <!-- 头部 start -->
+      <my-header>
+        <template v-slot:header>消息中心</template>
+      </my-header>
+      <!-- 头部 end -->
+      <!-- 内容部分盒子 start -->
+      <div class="cont_main bgffffff">
+        <!-- 加载中动画 start -->
+        <loading v-if="isShowLoading"></loading>
+        <!-- 加载中动画 end -->
+        <!-- 分类列表 start -->
+        <div class="message_list">
+          <my-scroll-message
+            :messageList="messageList"
+            :loadText="loadText"
+            @pullingDown="_getMessageList"
+            @pullingup="getMoreMessageList">
+          </my-scroll-message>
+        </div>
+        <!-- 分类列表 end -->
       </div>
-      <!-- 分类列表 end -->
+      <!-- 内容部分盒子 end -->
+      <!-- 底部导航 start -->
+      <my-footer></my-footer>
+      <!-- 底部导航 end -->
     </div>
-    <!-- 内容部分盒子 end -->
-  </div>
 </template>
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
 import MyFooter from '@/components/common/footer/myfooter'
-import MyScrollNotice from '@/components/common/myscrollNotice/myscrollNotice'
+import MyScrollMessage from '@/components/common/myscrollMessage/myscrollMessage'
 import nodata from '@/components/common/nodata/nodata'
 import loading from '@/components/common/loading/loading'
 
 export default {
-  name: 'noticeList',
+  name: 'messageList',
   data () {
     return {
       // 消息列表
-      noticeList: [],
+      messageList: [],
       // 重置当前页码
       resetpage: 1,
       // 当前页码
@@ -62,47 +62,52 @@ export default {
   components: {
     MyHeader,
     MyFooter,
-    MyScrollNotice,
+    MyScrollMessage,
     nodata,
     loading
   },
   methods: {
     // 获取消息列表
-    getNoticeList () {
+    getMessageList () {
       this.isShowLoading = true
       let data = new FormData()
       let requestData = {
-        listtype: '2',
-        page: this.page,
+        messageFlag: '1',
+        Page: this.page,
         pageSize: this.pageSize
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
-      this.$axios.post('info/InformationController/listNotice', data).then(result => {
+      this.$axios.post('info/InformationController/listmessage', data).then(result => {
         this.$store.commit('setIsPullingDown', true)
         let res = result.data
         if (res.code === 200) {
           this.isShowLoading = false
-          this.noticeList = res.data.content
+          this.messageList = res.data.content
           this.totalSize = res.data.totalSize
+        } else {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
       }).catch(error => {
         throw error
       })
     },
     // 下拉刷新
-    _getNoticeList () {
+    _getMessageList () {
       this.page = this.resetpage
-      this.getNoticeList()
+      this.getMessageList()
     },
     // 上拉加载更多
-    getMoreNoticeList () {
+    getMoreMessageList () {
       this.page++
       let currentpage = this.page
       let total = Math.ceil(this.totalSize / this.pageSize)
       let data = new FormData()
       let requestData = {
-        listtype: '2',
+        messageFlag: '1',
         Page: this.page,
         pageSize: this.pageSize
       }
@@ -111,12 +116,12 @@ export default {
       if (currentpage > total) {
         this.loadText = '暂无更多数据'
       } else {
-        this.$axios.post('info/InformationController/listNotice', data).then(result => {
+        this.$axios.post('info/InformationController/listmessage', data).then(result => {
           this.$store.commit('setIsPullingUp', true)
           let res = result.data
           if (res.code === 200) {
             this.isShowLoading = false
-            this.noticeList.push(...res.data.content)
+            this.messageList.push(...res.data.content)
           } else {
             this.$message({
               message: res.msg,
@@ -132,13 +137,13 @@ export default {
   },
   created () {
     // 页面加载时获取消息列表
-    this.getNoticeList()
+    this.getMessageList()
   }
 }
 </script>
 
 <style scoped>
-@import "./static/css/noticeList.css";
+@import "static/css/message.css";
 .cont_main {
   position: relative;
 }

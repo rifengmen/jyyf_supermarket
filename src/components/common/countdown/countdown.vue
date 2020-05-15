@@ -38,7 +38,9 @@ export default {
     },
     // 格式化时间
     timeTodate () {
-      let times = new Date(this.times).getTime()
+      let _t = this.times
+      _t = _t.replace(/-/g, '/')
+      let times = new Date(_t).getTime()
       let time = (times - new Date().getTime()) / 1000
       if (time !== null && time !== '') {
         let h = parseInt(time / (60 * 60))
@@ -77,5 +79,5 @@ export default {
 </script>
 
 <style scoped>
-@import './static/css/countdown.css';
+@import 'static/css/countdown.css';
 </style>

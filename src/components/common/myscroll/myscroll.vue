@@ -3,7 +3,7 @@
     <!-- 商品列表 start -->
     <ul class="goodsList bgeeeeee" v-if="goodsList && goodsList.length">
       <!-- 商品简介 start -->
-      <li v-for="(item, index) in goodsList" :key="index">
+      <li v-for="(item, index) in goodsList" :key="index" class="goods_li">
         <div class="goods_item bgffffff ellipsis" @click="goodsdetail(item.goodsid)">
           <div class="goods_item_img">
             <img :src="(item.picture1 ? (imgurl + 'image/' + item.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))">
@@ -176,7 +176,7 @@ export default {
 </script>
 
 <style scoped>
-  @import "./static/css/myscroll.css";
+  @import "static/css/myscroll.css";
 
   .loading {
     width: 100%;

@@ -47,6 +47,6 @@ export default {
 </script>
 
 <style scoped>
-  @import "./static/css/myfooter.css";
+  @import "static/css/myfooter.css";
 
 </style>

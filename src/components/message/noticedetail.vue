@@ -76,6 +76,6 @@ export default {
 </script>
 
 <style scoped>
-@import 'static/css/noticeList.css';
+@import 'static/css/message.css';
 
 </style>

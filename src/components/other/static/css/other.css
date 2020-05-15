@@ -1,0 +1,41 @@
+/* 内容部分盒子 start */
+.other_main {
+  width: 100%;
+  height: calc(100% - 1.1rem - 1px);
+  margin-top: .2rem;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+/* 内容部分盒子 end */
+/* 积分抽奖 start */
+.lottery_main {
+  overflow-y: hidden;
+}
+.lottery_list {
+  width: 100%;
+  height: 7.5rem;
+}
+.score_desc {
+  width: calc(100% - .48rem);
+  height: calc(100% - 7.5rem);
+  padding: 0 .24rem;
+}
+.lottery_score {
+  width: 100%;
+  height: calc(100% - 2.21rem);
+  /*padding-top: .3rem;*/
+  display: flex;
+  justify-content: space-around;
+  flex-flow: column;
+}
+.lottery_score p {
+  padding: .04rem 0;
+}
+/* 积分抽奖 end */
+/* 我的中奖记录 start */
+.lotterylist {
+  width: 100%;
+  height: 100%;
+}
+/* 我的中奖记录 end */
+

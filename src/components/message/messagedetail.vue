@@ -81,6 +81,6 @@ export default {
 </script>
 
 <style scoped>
-@import 'static/css/messageList.css';
+@import 'static/css/message.css';
 
 </style>

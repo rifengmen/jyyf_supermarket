@@ -9,7 +9,7 @@
     </my-header>
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
-    <div class="userinfo_main bge42739">
+    <div class="other_main lottery_main bge42739">
       <!--<div class="tc color666666">功能开发中，敬请期待...</div>-->
       <div class="lottery_list">
         <lottery-circle
@@ -20,8 +20,8 @@
       </div>
       <div class="score_desc bge42739">
         <div class="lottery_score">
-          <p class="font36 tc colorffffff" >剩余积分: {{totalCent}}</p>
-          <p class="font30 tc colorffffff">每{{activeObj.prizeUseCent}}积分可抽奖一次</p>
+          <p class="font34 tc colorffffff" >剩余积分: {{totalCent}}</p>
+          <p class="tc colorffffff">每{{activeObj.prizeUseCent}}积分可抽奖一次</p>
         </div>
         <div class="btn_box scan_section">
           <!-- 确认按钮 start -->
@@ -145,5 +145,14 @@ export default {
 </script>
 
 <style scoped>
-@import "static/css/userInfo.css";
+@import "static/css/other.css";
+.scan_section {
+  margin: 0 auto;
+}
+.btn_box {
+  padding-top: .2rem;
+}
+.send_btn {
+  margin-bottom: .2rem;
+}
 </style>

@@ -9,9 +9,9 @@
     </my-header>
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
-    <div class="userinfo_main bgffffff">
+    <div class="other_main bgffffff">
       <!-- 他人充值 start -->
-      <div class="recharge_cont">
+      <div class="card_cont">
         <div class="section">
           <div class="section_tit">
             <span>卡号</span>
@@ -169,5 +169,5 @@ export default {
 </script>
 
 <style scoped>
-  @import "static/css/userInfo.css";
+  @import "static/css/other.css";
 </style>

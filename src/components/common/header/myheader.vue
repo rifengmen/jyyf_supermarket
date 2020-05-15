@@ -107,6 +107,6 @@ export default {
 </script>
 
 <style scoped>
-  @import "./static/css/myheader.css";
+  @import "static/css/myheader.css";
 
 </style>

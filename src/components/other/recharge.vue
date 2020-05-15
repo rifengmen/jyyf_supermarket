@@ -9,9 +9,9 @@
     </my-header>
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
-    <div class="userinfo_main bgffffff">
+    <div class="other_main bgffffff">
       <!-- card start -->
-      <div class="userinfo recharge_card colorffffff bgffffff">
+      <div class="card card_card colorffffff bgffffff">
         <div class="font36 colorffffff">账户余额</div>
         <div class="card_desc">
           <div class="font96 font_blod">{{moneyDetail.moneyBal}}</div>
@@ -20,14 +20,14 @@
       </div>
       <!-- card end -->
       <!-- 本卡充值 start -->
-      <div class="recharge_cont" v-if="!flag">
+      <div class="card_cont" v-if="!flag">
         <div class="section borderc7c7c7 border_r6">
           <input type="text" v-model="money" placeholder="请输入充值金额（元）">
         </div>
       </div>
       <!-- 本卡充值 end -->
       <!-- 他人充值 start -->
-      <div class="recharge_cont" v-else>
+      <div class="card_cont" v-else>
         <div class="section borderc7c7c7 border_r6">
           <input type="text" v-model="cardno" placeholder="请输入会员卡号" onKeyUp="this.value = this.value.replace(/\D/g,'')">
         </div>
@@ -175,6 +175,6 @@ export default {
 </script>
 
 <style scoped>
-@import "static/css/userInfo.css";
+@import "static/css/other.css";
 
 </style>

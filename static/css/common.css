@@ -179,6 +179,9 @@ i {
 .colorfa2a2a {
   color: #fa2a2a;
 }
+.colore52b39 {
+  color: #e52b39;
+}
 .colorff6400 {
   color: #ff6400;
 }
@@ -187,6 +190,9 @@ i {
 }
 .colorff7e42 {
   color: #ff7e42;
+}
+.colorf58d37 {
+  color: #f58d37;
 }
 /* 字体颜色 end */
 
@@ -312,7 +318,7 @@ i {
   background-image: url("../img/register_bg.png");
   background-size: cover;
 }
-.userinfo {
+.card {
   background-image: url('../img/card_bg.png');
   background-size: cover;
 }
@@ -494,11 +500,12 @@ i {
   height: 2.2rem;
   display: flex;
   align-items: center;
+  margin-bottom: .1rem;
 }
 .goods_input {
   width: .3rem;
   height: 100%;
-  padding-left: .24rem;
+  padding: 0 .24rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -533,10 +540,10 @@ input[type=checkbox]:checked:after {
   line-height: .24rem;
 }
 .goods_item {
-  width: calc(100% - .54rem);
+  width: calc(100% - .48rem);
   height: 2.2rem;
   margin-bottom: .06rem;
-  padding: 0 .24rem 0 .3rem;
+  padding: 0 .24rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -672,6 +679,163 @@ input[type=checkbox]:checked:after {
   margin: .04rem 0;
 }
 /* 优惠券 end */
+/* 卡片样式 start */
+.card_name {
+  width: 100%;
+  height: .9rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+}
+.card_name .card_img {
+  width: .78rem;
+  height: .78rem;
+  padding: .06rem;
+  overflow: hidden;
+  margin-left: .3rem;
+}
+.card_name .card_img img {
+  width: 100%;
+}
+.card_name .card_num {
+  width: 3.5rem;
+  height: 100%;
+  margin-left: .3rem;
+  display: flex;
+  justify-content: space-around;
+  flex-flow: column;
+}
+.card_name .card_class {
+  width: 2.2rem;
+  height: .56rem;
+  border-radius: 5rem 0 0 5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.card_name .card_class .card_class_img {
+  width: .56rem;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card_class_img img {
+  width: 100%;
+}
+.card_class .card_class_name {
+  width: 1.6rem;
+}
+.card_des {
+  width: 100%;
+  height: .7rem;
+}
+.card_des ul {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.card_des .card_des_item {
+  width: 25%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-flow: column;
+  align-items: center;
+}
+.card_card {
+  width: calc(100% - .48rem);
+  height: 1.9rem;
+  margin: .2rem auto;
+  display: flex;
+  justify-content: flex-start;
+  flex-flow: column;
+  align-items: center;
+  padding: .3rem 0 .2rem 0;
+}
+.card_card > div:first-child {
+  width: 100%;
+  height: .5rem;
+  line-height: .5rem;
+  letter-spacing: 2px;
+  margin: 0 0 0 .4rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.card_card .card_desc{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+.card_card .card_desc > div:first-child {
+  margin-right: .1rem;
+}
+.card_cont {
+  padding: .2rem 0;
+}
+/* 卡片样式 end */
+/* 表单样式 start */
+.section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /*flex-flow: column;*/
+  width: calc(100% - .8rem);
+  height: .7rem;
+  line-height: .7rem;
+  margin: 0 auto .3rem auto;
+}
+.section_tit {
+  width: 2.2rem;
+  height: 100%;
+}
+.section_input {
+  width: 4.5rem;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.section_input .section_inputall {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #d6d6d6;
+}
+.section_input .section_inputall input {
+  width: calc(100% - .2rem);
+  height: calc(100% - 4px);
+  margin: 2px auto;
+}
+.section_input .section_input_l {
+  width: 2.2rem;
+  height: 100%;
+  border: 1px solid #d6d6d6;
+}
+.section_input .section_input_l input {
+  width: 90%;
+  height: 90%;
+}
+.section_input .section_input_r {
+  width: 1.6rem;
+  height: 100%;
+  border: 1px solid #ffae43;
+  display: flex;
+  justify-content: space-around;
+  flex-flow: column;
+  align-items: center;
+}
+.section_input .section_input_r img {
+  width: 100%;
+  height: 100%;
+}
+.section_input .section_input_r.disabled {
+  border: 1px solid #cccccc;
+}
+/* 表单样式 end */
 /* 积分抵扣开关 start */
 .score_img img {
   width: .72rem;
@@ -713,8 +877,12 @@ input[type=checkbox]:checked:after {
   width: 100%!important;
   height: .7rem!important;
   padding: 0 0 0 .2rem!important;
-  text-align: center;
+  margin: 0 auto!important;
   border: none!important;
+  text-align: left;
+}
+input.el-input__inner::placeholder {
+  font-size: .26rem!important;
 }
 .el-select {
   width: 100%;

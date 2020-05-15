@@ -11,10 +11,9 @@
 }
 .goodslist {
   width: 100%;
-  height: calc(100% - 1.2rem);
+  height: calc(100% - 1rem);
   overflow: hidden;
   overflow-y: scroll;
-  margin-top: .2rem;
 }
 .goods_num {
   width: 1.76rem;

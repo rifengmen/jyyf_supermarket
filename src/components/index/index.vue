@@ -401,5 +401,5 @@ export default {
 </script>
 
 <style scoped>
-@import "./static/css/index.css";
+@import "static/css/index.css";
 </style>

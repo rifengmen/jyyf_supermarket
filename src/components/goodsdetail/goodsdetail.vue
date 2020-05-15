@@ -32,7 +32,7 @@
             </div>
           </div>
           <div class="countdown" v-if="goodsdetail.startstate === 1 && goodsdetail.promotemode !== 0">
-            <div class="font20 colorffffff">距结束还剩：</div>
+            <div class="font20 colorffffff">距结束还剩:</div>
             <div class="countdown_cont">
               <countdown :times="goodsdetail.promoteend"></countdown>
             </div>
@@ -143,5 +143,5 @@ export default {
 </script>
 
 <style scoped>
-@import "./static/css/goodsdetail.css";
+@import "static/css/goodsdetail.css";
 </style>

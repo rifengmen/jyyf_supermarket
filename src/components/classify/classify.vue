@@ -233,7 +233,7 @@ export default {
 </script>
 
 <style scoped>
-@import "./static/css/classify.css";
+@import "static/css/classify.css";
 .classify_cont {
   position: relative;
 }

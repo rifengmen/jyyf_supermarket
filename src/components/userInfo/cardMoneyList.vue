@@ -11,7 +11,7 @@
     <!-- 内容部分盒子 start -->
     <div class="userinfo_main bgffffff">
       <!-- card start -->
-      <div class="userinfo recharge_card colorffffff bgffffff">
+      <div class="card card_card colorffffff bgffffff">
         <div class="font36 colorffffff">可用余额</div>
         <div class="card_desc">
           <div class="font96 font_blod">{{Balancemoney}}</div>

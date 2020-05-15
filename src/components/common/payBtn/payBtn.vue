@@ -191,23 +191,29 @@ export default {
       // console.log(JSON.parse(requestData), '支付信息')
       // return false
       this.$axios.post('invest/microFlow/orderCommit', data).then(result => {
+        console.log(result, '支付信息')
         let res = result.data
         if (res.code === 200) {
           // 微信支付
           if (res.data.beecloud) {
-            let vm = this
-            let wechatstr = res.data.beecloud.wechatPayStr
-            if (typeof WeixinJSBridge === 'undefined') {
-              if (document.addEventListener) {
-                document.addEventListener('WeixinJSBridgeReady', vm.onBridgeReady(wechatstr, res.data.tradeno), false)
-              } else if (document.attachEvent) {
-                document.attachEvent('WeixinJSBridgeReady', vm.onBridgeReady(wechatstr, res.data.tradeno))
-                document.attachEvent('onWeixinJSBridgeReady', vm.onBridgeReady(wechatstr, res.data.tradeno))
+            let beecloud = res.data.beecloud
+            if (beecloud.paymentchannel === 4) {
+              window.location.href = beecloud.tmPayStr.payUrl
+            } else if (beecloud.paymentchannel === 2) {
+              let vm = this
+              let wechatstr = res.data.beecloud.wechatPayStr
+              if (typeof WeixinJSBridge === 'undefined') {
+                if (document.addEventListener) {
+                  document.addEventListener('WeixinJSBridgeReady', vm.onBridgeReady(wechatstr, res.data.tradeno), false)
+                } else if (document.attachEvent) {
+                  document.attachEvent('WeixinJSBridgeReady', vm.onBridgeReady(wechatstr, res.data.tradeno))
+                  document.attachEvent('onWeixinJSBridgeReady', vm.onBridgeReady(wechatstr, res.data.tradeno))
+                }
+              } else {
+                vm.onBridgeReady(wechatstr, res.data.tradeno)
               }
-            } else {
-              vm.onBridgeReady(wechatstr, res.data.tradeno)
+              return false
             }
-            return false
           } else {
             this.$message({
               message: '支付成功!',
@@ -328,5 +334,8 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.el-input {
+  border: 1px solid #dcdfe6;
 }
 </style>

@@ -253,6 +253,7 @@ export default {
         let res = result.data
         if (res.code === 200) {
           this.cartList = this.cartList.filter(item => item.addorder !== true)
+          this.setTotalmoney()
         } else {
           this.$message({
             message: res.msg,
@@ -299,7 +300,7 @@ export default {
 </script>
 
 <style scoped>
-@import "./static/css/cart.css";
+@import "static/css/cart.css";
 .cart_cont {
   position: relative;
 }
