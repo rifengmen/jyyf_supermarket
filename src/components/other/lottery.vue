@@ -150,7 +150,7 @@ export default {
   margin: 0 auto;
 }
 .btn_box {
-  padding-top: .2rem;
+  padding-top: 0;
 }
 .send_btn {
   margin-bottom: .2rem;

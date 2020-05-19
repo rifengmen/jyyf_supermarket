@@ -25,9 +25,9 @@
 /* 常用功能 start */
 .index_common {
   width: calc(100% - .48rem);
-  height: 1.22rem;
+  height: 1.3rem;
   margin: 0 auto;
-  padding: .24rem 0;
+  padding: .2rem 0;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -52,8 +52,8 @@
 /* 推荐模块 start */
 .recommend {
   width: 100%;
-  height: calc(100% - 4.47rem);
-  margin: .2rem auto 0 auto;
+  height: calc(100% - 2.1rem - 1px);
+  margin: 0 auto;
   overflow: hidden;
   overflow-y: scroll;
 }
@@ -172,6 +172,7 @@
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 9;
   width: 100%;
   height: 100%;
   background-color: rgba(0,0,0,.5);

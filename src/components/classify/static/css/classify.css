@@ -1,7 +1,7 @@
 .classify {
   width: 100%;
-  height: calc(100% - 2.2rem);
-  margin: .2rem auto 0 auto;
+  height: calc(100% - 2.2rem - 1px);
+  margin: 0 auto;
   overflow: hidden;
   display: flex;
   border-top: .1rem solid #ffffff;
@@ -21,10 +21,10 @@
   width: calc(100% - .02rem);
   height: 1rem;
   line-height: 1rem;
-  border-left: .02rem solid #eeeeee;
+  border-left: .1rem solid #eeeeee;
 }
 .classify_nav li.active {
-  border-left: .02rem solid #fa6400;
+  border-left: .1rem solid #fa6400;
 }
 .classify_list {
   width: 100%;

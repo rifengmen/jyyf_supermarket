@@ -22,10 +22,10 @@
 }
 .lottery_score {
   width: 100%;
-  height: calc(100% - 2.21rem);
+  /*height: calc(100% - 1.5rem);*/
   /*padding-top: .3rem;*/
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
   flex-flow: column;
 }
 .lottery_score p {

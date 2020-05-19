@@ -22,6 +22,7 @@ Vue.prototype.$qs = qs
 Vue.prototype.IMGURL = 'http://www.spzlk.cn:8000/wemember/'
 Vue.use(ElementUI)
 Vue.use(VueAwesomeSwiper /* { default options with global component } */)
+// 设置页面title
 Vue.directive('title', {
   inserted: function (el, binding) {
     document.title = el.dataset.title

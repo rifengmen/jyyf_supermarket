@@ -1,5 +1,9 @@
 <template>
   <div class="container bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
+    <!-- 获取微信凭证 start -->
+    <wechat-config>
+    </wechat-config>
+    <!-- 获取微信凭证 end -->
     <!-- 搜索 start -->
     <div class="search_cont">
       <router-link :to="{name: 'search'}" tag="div" class="search border_r6 bgffffff">
@@ -32,6 +36,7 @@
 </template>
 
 <script>
+import WechatConfig from '@/components/common/wechatConfig/wechatConfig'
 import MyScroll from '@/components/common/myscroll/myscroll'
 import loading from '@/components/common/loading/loading'
 import MyFooter from '@/components/common/footer/myfooter'
@@ -65,6 +70,7 @@ export default {
   computed: {
   },
   components: {
+    WechatConfig,
     MyScroll,
     loading,
     MyFooter

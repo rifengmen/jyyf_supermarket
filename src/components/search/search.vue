@@ -1,5 +1,9 @@
 ﻿<template>
     <div class="container bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
+      <!-- 获取微信凭证 start -->
+      <wechat-config>
+      </wechat-config>
+      <!-- 获取微信凭证 end -->
       <!-- 搜索 start -->
       <div class="search_cont">
         <!-- 返回 start -->
@@ -23,6 +27,7 @@
 </template>
 
 <script>
+import WechatConfig from '@/components/common/wechatConfig/wechatConfig'
 
 export default {
   name: 'search',
@@ -35,6 +40,7 @@ export default {
   computed: {
   },
   components: {
+    WechatConfig
   },
   methods: {
     // 设置搜索关键字

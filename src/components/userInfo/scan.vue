@@ -28,7 +28,11 @@
           <div>订单号</div>
           <div class="user_desc bgffffff border_r500">
             <input type="text" v-model="tradeno" class="tr" placeholder="请输入订单号或者点击右侧自动录入">
-            <img src="static/img/scan.png" @click="scanTradeno">
+            <!-- 扫一扫按钮 start -->
+            <div class="scan" @click="scanTradeno">
+              <img src="static/img/scan.png">
+            </div>
+            <!-- 扫一扫按钮 end -->
           </div>
         </div>
       </div>
@@ -56,12 +60,14 @@ export default {
   name: 'scan',
   data () {
     return {
+      // wxstr 微信调用信息
+      // wxstr: '',
+      // 路径
+      // curPageUrl: '',
       // 订单编号
       tradeno: '',
-      // wxstr 微信调用信息
-      wxstr: '',
-      // 路径
-      curPageUrl: ''
+      // 扫一扫调用开关
+      scanFlag: true
     }
   },
   computed: {
@@ -89,7 +95,7 @@ export default {
           let res = result.data
           if (res.code === 200) {
             this.$message({
-              message: '扫描成功!',
+              message: '拣配成功!',
               type: 'success'
             })
           } else {
@@ -109,87 +115,42 @@ export default {
     },
     // 扫一扫
     scanTradeno () {
-      let _this = this
-      wx.scanQRCode({
-        // 默认为0，扫描结果由微信处理，1则直接返回扫描结果
-        needResult: 1,
-        desc: 'scanQRCode desc',
-        scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
-        success: function (res) {
-          // 扫码后获取结果参数赋值给Input
-          let result = res.resultStr
-          if (result.indexOf(',') >= 0) {
-            let str1 = result.split(',')
-            // 订单号码
-            _this.tradeno = str1[1]
-            _this.sendTradeno()
-          } else {
-            _this.$message({
-              message: '请对准条形码扫码!',
-              type: 'error'
-            })
+      if (this.scanFlag) {
+        this.scanFlag = false
+        let _this = this
+        wx.scanQRCode({
+          // 默认为0，扫描结果由微信处理，1则直接返回扫描结果
+          needResult: 1,
+          scanType: ['barCode'], // 可以指定扫二维码还是一维码，默认二者都有
+          desc: 'scanQRCode desc',
+          success: function (res) {
+            // 扫码后获取结果参数赋值给Input
+            let result = res.resultStr
+            if (result.indexOf(',') >= 0) {
+              _this.$message({
+                message: '扫描成功!',
+                type: 'success'
+              })
+              let str1 = result.split(',')
+              // 订单号码
+              _this.tradeno = str1[1]
+              _this.scanFlag = true
+              _this.sendTradeno()
+            } else {
+              _this.$message({
+                message: '请对准条形码扫码!',
+                type: 'error'
+              })
+            }
           }
-        }
-      })
-    },
-    // 请求微信参数
-    getWXConfig () {
-      // let ua = navigator.userAgent.toLowerCase()
-      // android终端
-      // let isAndroid = ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1
-      // ios终端
-      // let isiOS = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
-      if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
-        this.curPageUrl = 'https://www.spzlk.cn/author'
-      } else if (/(Android)/i.test(navigator.userAgent)) {
-        this.curPageUrl = window.location.href
+        })
       }
-      let data = new FormData()
-      let requestData = {
-        wechatID: this.$store.state.wechatID,
-        curPageUrl: this.curPageUrl
-      }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/payment/getWXConfig ', data).then(result => {
-        let res = result.data
-        if (res.code === 200) {
-          this.wxstr = res.data
-          let _this = this
-          wx.config({
-            debug: false,
-            appId: _this.wxstr.appid,
-            timestamp: _this.wxstr.timestamp,
-            nonceStr: _this.wxstr.noncestr,
-            signature: _this.wxstr.signure,
-            // 所有要调用的 API 都要加到这个列表中
-            jsApiList: [
-              'onMenuShareTimeline',
-              'onMenuShareAppMessage',
-              'scanQRCode'// 使用的JS接口
-            ]
-          })
-          wx.ready(() => {
-          })
-          wx.error((res) => {
-          })
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      }).catch(error => {
-        throw error
-      })
     }
   },
   watch: {},
   beforeCreate () {
   },
   created () {
-    // 初始化扫一扫
-    this.getWXConfig()
   },
   beforeMount () {
   },

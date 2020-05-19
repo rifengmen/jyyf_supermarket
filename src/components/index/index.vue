@@ -1,5 +1,9 @@
 <template>
   <div class="container bgeeeeee" v-title :data-title="userInfo.deptname">
+    <!-- 获取微信凭证 start -->
+    <wechat-config>
+    </wechat-config>
+    <!-- 获取微信凭证 end -->
     <!-- 搜索 start -->
     <router-link :to="{name: 'search'}" tag="div" class="search_cont">
       <div class="search border_r6 bgffffff">
@@ -10,65 +14,68 @@
       </div>
     </router-link>
     <!-- 搜索 end -->
-    <!-- 通知 start -->
-    <div class="swiper-container notice">
-      <div class="notice_img">
-        <img src="static/img/lb.png">
-      </div>
-      <swiper ref="mySwiper" :options="swiperOptions" class="notice_list">
-        <swiper-slide class="ellipsis" v-for="(item, index) in noticelist" :key="index">
-          <router-link :to="{name: 'noticedetail', params: {id: item.id}}" tag="div" class="font24 color666666">{{item.title}}</router-link>
-        </swiper-slide>
-      </swiper>
-      <router-link :to="{name:'noticeList'}" tag="div" class="notice_more font24 tr">更多 > </router-link>
-    </div>
-    <!-- 通知 end -->
-    <!-- 常用功能 start -->
-    <div class="index_common border_r6 bgffffff color666666">
-      <!-- 在线充值 start -->
-      <router-link :to="{name: 'recharge'}" tag="div" class="index_common_item">
-        <div class="index_common_img">
-          <img src="static/img/zxcz.png">
-        </div>
-        <div class="font20">在线充值</div>
-      </router-link>
-      <!-- 在线充值 end -->
-      <!-- 领券中心 start -->
-      <router-link :to="{name: 'tickList', params: {header_tit: '领券中心', froms: 'index'}}" tag="div" class="index_common_item">
-        <div class="index_common_img">
-          <img src="static/img/lqzx.png">
-        </div>
-        <div class="font20">领券中心</div>
-      </router-link>
-      <!-- 领券中心 end -->
-      <!-- 积分抽奖 start -->
-      <router-link :to="{name: 'lottery'}" tag="div" class="index_common_item">
-        <div class="index_common_img">
-          <img src="static/img/jfcj.png">
-        </div>
-        <div class="font20">积分抽奖</div>
-      </router-link>
-      <!-- 积分抽奖 end -->
-      <!-- 电子会员 start -->
-      <div class="index_common_item" @click="openOnline">
-        <div class="index_common_img">
-          <img src="static/img/dzhy.png">
-        </div>
-        <div class="font20">电子会员</div>
-      </div>
-      <!-- 电子会员 end -->
-      <!-- 我的订单 start -->
-      <router-link :to="{name: 'orderList'}" tag="div" class="index_common_item">
-        <div class="index_common_img">
-          <img src="static/img/wddd.png">
-        </div>
-        <div class="font20">我的订单</div>
-      </router-link>
-      <!-- 我的订单 end -->
-    </div>
-    <!-- 常用功能 end -->
-    <!-- 推荐模块 start -->
     <div class="recommend">
+      <!-- 加载中动画 start -->
+      <loading v-if="isShowLoading"></loading>
+      <!-- 下拉刷新动画 end -->
+      <!-- 通知 start -->
+      <div class="swiper-container notice">
+        <div class="notice_img">
+          <img src="static/img/lb.png">
+        </div>
+        <swiper ref="mySwiper" :options="swiperOptions" class="notice_list">
+          <swiper-slide class="ellipsis" v-for="(item, index) in noticelist" :key="index">
+            <router-link :to="{name: 'noticedetail', params: {id: item.id}}" tag="div" class="font24 color666666">{{item.title}}</router-link>
+          </swiper-slide>
+        </swiper>
+        <router-link :to="{name:'noticeList'}" tag="div" class="notice_more font24 tr">更多 > </router-link>
+      </div>
+      <!-- 通知 end -->
+      <!-- 常用功能 start -->
+      <div class="index_common border_r6 bgffffff color666666">
+        <!-- 在线充值 start -->
+        <router-link :to="{name: 'recharge'}" tag="div" class="index_common_item">
+          <div class="index_common_img">
+            <img src="static/img/zxcz.png">
+          </div>
+          <div class="font20">在线充值</div>
+        </router-link>
+        <!-- 在线充值 end -->
+        <!-- 领券中心 start -->
+        <router-link :to="{name: 'tickList', params: {header_tit: '领券中心', froms: 'index'}}" tag="div" class="index_common_item">
+          <div class="index_common_img">
+            <img src="static/img/lqzx.png">
+          </div>
+          <div class="font20">领券中心</div>
+        </router-link>
+        <!-- 领券中心 end -->
+        <!-- 积分抽奖 start -->
+        <router-link :to="{name: 'lottery'}" tag="div" class="index_common_item">
+          <div class="index_common_img">
+            <img src="static/img/jfcj.png">
+          </div>
+          <div class="font20">积分抽奖</div>
+        </router-link>
+        <!-- 积分抽奖 end -->
+        <!-- 电子会员 start -->
+        <div class="index_common_item" @click="openOnline">
+          <div class="index_common_img">
+            <img src="static/img/dzhy.png">
+          </div>
+          <div class="font20">电子会员</div>
+        </div>
+        <!-- 电子会员 end -->
+        <!-- 我的订单 start -->
+        <router-link :to="{name: 'orderList'}" tag="div" class="index_common_item">
+          <div class="index_common_img">
+            <img src="static/img/wddd.png">
+          </div>
+          <div class="font20">我的订单</div>
+        </router-link>
+        <!-- 我的订单 end -->
+      </div>
+      <!-- 常用功能 end -->
+      <!-- 推荐模块 start -->
       <div class="recommend_cont" v-if="recommendList.length" v-for="(item, index) in recommendList" :key="index">
         <!-- 推荐一 start -->
         <div class="recommend1" v-if="item.showway === 1">
@@ -93,7 +100,7 @@
             <div @click="goodsdetail(goods.goodsid)" class="recommend1_item bgffffff border_r6" v-for="(goods, index) in item.gdscodelist" :key="index">
               <div class="recommend1_item_img border_r6">
                 <img :src="(goods.picture1 ? (imgurl + 'image/' + goods.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))" class="border_r6">
-                <div v-if="goods.promotemode !== 0" class="goods_age font24 font_normal colorffffff tc">{{goods.modenote}}</div>
+                <div v-if="goods.promotemode !== 0" class="goods_age font24 font_normal colorffffff">{{goods.modenote}}</div>
               </div>
               <div class="recommend1_name ellipsis font24">{{goods.cusgoodsname}}</div>
               <div class="recommend1_price" v-if="goods.promotemode === 0 || goods.promotemode === 2 || goods.promotemode === 3 || goods.promotemode === 8">
@@ -132,7 +139,7 @@
             <div @click="goodsdetail(goods.goodsid)" class="recommend1_item bgffffff border_r6" v-for="(goods, index) in item.gdscodelist" :key="index">
               <div class="recommend1_item_img border_r6">
                 <img :src="(goods.picture1 ? (imgurl + 'image/' + goods.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))" class="border_r6">
-                <div v-if="goods.promotemode !== 0" class="goods_age font24 font_normal colorffffff tc">{{goods.modenote}}</div>
+                <div v-if="goods.promotemode !== 0" class="goods_age font24 font_normal colorffffff">{{goods.modenote}}</div>
               </div>
               <div class="recommend1_name ellipsis font24">{{goods.cusgoodsname}}</div>
               <div class="recommend1_price" v-if="goods.promotemode === 0 || goods.promotemode === 2 || goods.promotemode === 3 || goods.promotemode === 8">
@@ -179,7 +186,9 @@
 </template>
 
 <script>
+import WechatConfig from '@/components/common/wechatConfig/wechatConfig'
 import MyFooter from '@/components/common/footer/myfooter'
+import loading from '@/components/common/loading/loading'
 
 export default {
   name: 'index',
@@ -209,7 +218,9 @@ export default {
       // 二维码
       online_qr: 'static/img/goods.png',
       // 储值卡支付密码
-      Cpassword: ''
+      Cpassword: '',
+      // 加载中动画
+      isShowLoading: true
     }
   },
   computed: {
@@ -223,11 +234,14 @@ export default {
     }
   },
   components: {
-    MyFooter
+    WechatConfig,
+    MyFooter,
+    loading
   },
   methods: {
     // 设置用户信息
     setUserInfo () {
+      this.isShowLoading = true
       let data = new FormData()
       let requestData = {
         wechatID: this.$store.state.wechatID,
@@ -284,6 +298,7 @@ export default {
       this.$axios.post('api/goods/listThemeAndGdscode', data).then(result => {
         let res = result.data
         if (res.code === 200) {
+          this.isShowLoading = false
           this.recommendList = res.data
         } else {
           this.$message({
@@ -384,16 +399,18 @@ export default {
     }
   },
   created () {
-    let token = this.$axios.defaults.headers.common.Authorization
-    if (token) {
-      // 获取通知信息
-      this.getNotice()
-      // 获取推荐
-      this.getRecommend()
-    } else {
-      // 设置用户信息
-      this.setUserInfo()
-    }
+    // 设置用户信息
+    this.setUserInfo()
+    // let token = this.$axios.defaults.headers.common.Authorization
+    // if (token) {
+    //   // 获取通知信息
+    //   this.getNotice()
+    //   // 获取推荐
+    //   this.getRecommend()
+    // } else {
+    //   // 设置用户信息
+    //   this.setUserInfo()
+    // }
   },
   mounted () {
   }
@@ -402,4 +419,7 @@ export default {
 
 <style scoped>
 @import "static/css/index.css";
+.recommend{
+  position: relative;
+}
 </style>

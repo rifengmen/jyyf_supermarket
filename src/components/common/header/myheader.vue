@@ -1,5 +1,8 @@
 <template>
   <div class="myheader bgffffff color333333">
+    <!-- 获取微信凭证 start -->
+    <wechat-config></wechat-config>
+    <!-- 获取微信凭证 end -->
     <div class="backs" @click="editorder" v-if="froms === 'editorder'">
       <slot name="editorder"></slot>
     </div>
@@ -40,6 +43,8 @@
 </template>
 
 <script>
+import WechatConfig from '@/components/common/wechatConfig/wechatConfig'
+
 export default {
   name: 'myheader',
   props: {
@@ -72,6 +77,9 @@ export default {
     }
   },
   computed: {
+  },
+  components: {
+    WechatConfig
   },
   methods: {
     // 返回
@@ -107,6 +115,8 @@ export default {
 </script>
 
 <style scoped>
-  @import "static/css/myheader.css";
-
+@import "static/css/myheader.css";
+.wechatConfig {
+  display: none;
+}
 </style>

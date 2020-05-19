@@ -21,12 +21,12 @@
               <div class="font32 font_blod colorffffff">￥{{goodsdetail.saleprice}}</div>
             </div>
             <div class="goods_price" v-if="goodsdetail.promotemode === 1 || goodsdetail.promotemode === 7">
-              <div class="goods_promot_age font24 colorffffff borderffffff border_r4">{{Promotemode[goodsdetail.promotemode]}}</div>
+              <div class="goods_promot_age font24 colorffffff borderffffff border_r4">{{goodsdetail.modenote}}</div>
               <div class="font32 font_blod colorffffff">￥{{goodsdetail.promotevalue}}</div>
               <del class="font20 color999999">￥{{goodsdetail.saleprice}}</del>
             </div>
             <div class="goods_price" v-if="goodsdetail.Promotemode === 6">
-              <div class="goods_promot_age font24 colorffffff borderffffff border_r4">{{Promotemode[goodsdetail.promotemode]}}</div>
+              <div class="goods_promot_age font24 colorffffff borderffffff border_r4">{{goodsdetail.modenote}}</div>
               <div class="font32 font_blod colorffffff">￥{{goodsdetail.groupprice}}</div>
               <del class="font20 color999999">￥{{goodsdetail.saleprice}}</del>
             </div>

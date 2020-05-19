@@ -7,7 +7,7 @@
         <div class="goods_item bgffffff ellipsis" @click="goodsdetail(item.goodsid)">
           <div class="goods_item_img">
             <img :src="(item.picture1 ? (imgurl + 'image/' + item.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))">
-            <div v-if="item.promotemode !== 0" class="goods_age font24 font_normal colorffffff tc">{{Promotemode[item.promotemode]}}</div>
+            <div v-if="item.promotemode !== 0" class="goods_age font24 font_normal colorffffff">{{item.modenote}}</div>
           </div>
           <div class="goods_item_cont">
             <div class="goods_item_name ellipsis font26">{{item.cusgoodsname}}</div>
