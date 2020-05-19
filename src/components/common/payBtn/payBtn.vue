@@ -91,40 +91,60 @@ export default {
           return false
         }
       }
+      // 设置支付信息
+      this.setPaymoney()
       // 验证输入会员密码
-      if (this.paymodeid === '3' || this.scoreFlag || this.tick) {
-        this.$prompt('请输入会员密码！', '在线支付', {
-          confirmButtonText: '确定',
-          inputPlaceholder: '请输入四位会员密码',
-          inputType: 'password'
-        }).then(({ value }) => {
-          this.Cpassword = value
-          this.sendpay()
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消输入'
-          })
+      if (this.paymodeid === '3') {
+        let data = new FormData()
+        let requestData = {
+          paymode: 3,
+          paymoney: this.paylist.reverse()[0]
+        }
+        requestData = JSON.stringify(requestData)
+        data.append('requestData', requestData)
+        this.$axios.post('invest/microFlow/getInputPayPasswdFlag', data).then(result => {
+          let res = result.data
+          if (res.code === 200) {
+            // passwdflag,0:不输密码，1:输密码
+            if (res.data.passwdflag) {
+              this.$prompt('请输入会员密码！', '在线支付', {
+                confirmButtonText: '确定',
+                inputPlaceholder: '请输入四位会员密码',
+                inputType: 'password'
+              }).then(({ value }) => {
+                this.Cpassword = value
+                this.sendpay()
+              }).catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '取消输入'
+                })
+              })
+            }
+          } else {
+          }
+        }).catch(error => {
+          throw error
         })
         return false
       }
       this.sendpay()
     },
-    // 发送支付信息
-    sendpay () {
+    // 设置支付信息
+    setPaymoney () {
       // 订单总金额
       let totalMoney = this.order.totalMoney
+      // 零钱金额
+      let smallmoney = this.order.smallmoney
       // console.log(totalMoney, '订单总金额')
       // 支付金额
-      let paymoney = totalMoney + parseFloat(this.freightmoney.freightmoney)
+      let paymoney = totalMoney - smallmoney + parseFloat(this.freightmoney.freightmoney)
       // console.log(paymoney, '支付金额')
       // 支付列表下标
       let index = 0
       // 优惠券类型 1：金额券；2：折扣券
-      // let tickettype = 0
       // 优惠券
       if (this.tick) {
-        // tickettype = this.tick.tickettype
         let paylist4 = {}
         paylist4.paymode = 4
         paylist4.ticketid = parseInt(this.tick.tickid)
@@ -152,6 +172,23 @@ export default {
         index++
         paymoney = paymoney - paylist5.paymoney
       }
+      // 零钱
+      if (this.order.smallmoney !== 0) {
+        let paylist10 = {}
+        paylist10.paymode = 10
+        if (paymoney > 0) {
+          let money = paymoney - smallmoney
+          if (money <= 0) {
+            paylist10.paymoney = paymoney
+          } else {
+            paylist10.paymoney = smallmoney
+          }
+        } else {
+          paylist10.paymoney = 0
+        }
+        this.paylist[index] = paylist10
+        index++
+      }
       // 储值卡
       if (this.paymodeid === '3') {
         let paylist3 = {}
@@ -174,6 +211,9 @@ export default {
         this.paylist[index] = paylist7
         index++
       }
+    },
+    // 发送支付信息
+    sendpay () {
       let data = new FormData()
       let requestData = {
         otc: '',
@@ -310,9 +350,8 @@ export default {
       this.$store.commit('setAddress', '')
       this.$store.commit('setFreightmoney', '')
       this.$store.commit('setTick', '')
-      this.$store.commit('setTradeno', tradeno)
       this.getCart()
-      this.$router.push({name: 'orderdetail'})
+      this.$router.push({name: 'orderdetail', tradeno: tradeno})
     }
   },
   watch: {},

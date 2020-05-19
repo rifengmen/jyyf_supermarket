@@ -318,8 +318,7 @@ export default {
     },
     // 商品详情
     goodsdetail (goodsid) {
-      this.$store.commit('setGoodsid', goodsid)
-      this.$router.push({name: 'goodsdetail', query: {dianpu: this.$store.state.wechatID}})
+      this.$router.push({name: 'goodsdetail', query: {dianpu: this.$store.state.wechatID, goodsid: goodsid}})
     },
     // 电子会员
     openOnline () {
@@ -421,5 +420,9 @@ export default {
 @import "static/css/index.css";
 .recommend{
   position: relative;
+}
+input.el-input__inner {
+  border: 1px solid #dcdfe6!important;
+  text-align: center;
 }
 </style>

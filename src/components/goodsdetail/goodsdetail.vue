@@ -81,7 +81,8 @@ export default {
   data () {
     return {
       // 商品goodsid
-      goodsid: this.$store.state.goodsid,
+      // goodsid: this.$store.state.goodsid,
+      goodsid: this.$route.query.goodsid,
       // 商品详情
       goodsdetail: {},
       // 图片路径

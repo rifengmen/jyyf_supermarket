@@ -33,15 +33,17 @@ const router = new Router({
 })
 
 //  使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
-router.beforeEach((to, from, next) => {
-  let jyyfopenid = sessionStorage.getItem('jyyf_openid')
-  if (!jyyfopenid && to.fullPath !== '/author') {
-    // 保存用户进入的url
-    sessionStorage.setItem('jyyf_beforeLoginUrl', JSON.stringify(to.fullPath))
-    next('/author')
-    return false
-  }
-  next()
-})
+// router.beforeEach((to, from, next) => {
+//   let jyyfopenid = sessionStorage.getItem('jyyf_openid')
+//   if (!jyyfopenid && to.fullPath !== '/author') {
+//     // 保存用户进入的url
+//     sessionStorage.setItem('jyyf_beforeLoginUrl', JSON.stringify(to.fullPath))
+//     console.log(JSON.stringify(to), 'to')
+//     console.log(JSON.stringify(to.fullPath), 'to.fullPath')
+//     next('/author')
+//     return false
+//   }
+//   next()
+// })
 
 export default router

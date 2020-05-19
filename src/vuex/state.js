@@ -1,16 +1,16 @@
 const state = {
   // 店铺wechatID
-  // wechatID: '2',
   // wechatID: 'yksmlm',
-  wechatID: '',
+  wechatID: '2',
+  // wechatID: '',
   // appid
-  // appid: 'wx700e813e33fcebec',
   // appid: 'wx504cefa17f46c39b',
-  appid: '',
+  appid: 'wx700e813e33fcebec',
+  // appid: '',
   // 用户openid
-  // openid: 'oWBPAv82A3OaXxPa6neaWv09g90A',
   // openid: 'oJkXG1RvLe9HbPHaODobVbQTqWjM',
-  openid: '',
+  openid: 'oWBPAv82A3OaXxPa6neaWv09g90A',
+  // openid: '',
   // 用户头像
   headimgurl: '',
   // 用户信息
@@ -58,8 +58,6 @@ const state = {
   recommendName: '',
   // 搜索关键字
   keyword: '',
-  // goodsid
-  goodsid: '',
   // 购物车
   cart: {},
   // 购物车商品数量
@@ -74,8 +72,6 @@ const state = {
   freightmoney: '',
   // 临时订单优惠券信息
   tick: '',
-  // 订单详情-订单编号
-  tradeno: '',
   // 下拉刷新请求开关
   isPullingDown: true,
   // 上拉加载请求开关

@@ -29,13 +29,15 @@ export default {
     // 获取wechatID
     getWechatID () {
       let beforeLoginUrl = sessionStorage.getItem('jyyf_beforeLoginUrl')
-      // https://www.spzlk.cn/login.php?dianpu=2
-      // https://www.spzlk.cn/index.html?dianpu=2
-      let id = beforeLoginUrl.split('=')[1].replace('"', '')
+      // https://www.spzlk.cn/login.php?dianpu=2；微会员
+      // https://www.spzlk.cn/index.html?dianpu=2；新微会员
+      // https://www.spzlk.cn/indexs.html?dianpu=2；新版测试
+      // let id = beforeLoginUrl.split('=')[1].replace('"', '')
+      let id = beforeLoginUrl.split('=')[1]
       if (id.indexOf('&') >= 0) {
-        this.wechatID = beforeLoginUrl.split('=')[1].split('&')[0].replace('"', '')
+        this.wechatID = id.split('&')[0].replace('"', '')
       } else if (id.indexOf('&') === -1) {
-        this.wechatID = beforeLoginUrl.split('=')[1].replace('"', '')
+        this.wechatID = id.replace('"', '')
       }
       this.$store.commit('setWechatID', this.wechatID)
     },
@@ -51,7 +53,6 @@ export default {
         let res = result.data
         if (res.code === 200) {
           this.$store.commit('setAppid', res.data.appid)
-          // sessionStorage.setItem('jyyf_appid', this.appid)
           this.getCode()
         }
       }).catch(error => {
@@ -60,7 +61,10 @@ export default {
     },
     // 非静默授权，第一次有弹框
     getCode () {
+      // 新微会员
       const REDIRECT_URI = 'https://www.spzlk.cn/index.html?dianpu=' + this.wechatID
+      // 新版测试
+      // const REDIRECT_URI = 'https://www.spzlk.cn/indexs.html?dianpu=' + this.wechatID
       const URL = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + this.appid + '&redirect_uri=' + REDIRECT_URI + '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
       // 非静默授权，第一次有弹框
       // 如果没有code，则去请求
@@ -68,7 +72,6 @@ export default {
       let url = sessionStorage.getItem('jyyf_beforeLoginUrl')
       if (url.indexOf('code=') >= 0) {
         this.code = url.substring(url.indexOf('code=') + 5, url.indexOf('state=') - 1)
-        // this.$store.commit('setAppid', sessionStorage.getItem('jyyf_appid'))
         this.getOpenid()
       } else if (url.indexOf('code=') === -1) {
         window.location.href = URL

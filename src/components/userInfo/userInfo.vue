@@ -11,16 +11,15 @@
       <div class="card_name">
         <div class="card_img bgffffff border_r500">
           <img :src="headimgurl || 'static/img/userimg.png'" class="border_r500">
+          <div class="vip_desc colorffc06e bgffffff border_r500 font26">v1</div>
         </div>
         <div class="card_num tl">
           <div>{{userInfo.memname}}</div>
           <div>会员号：{{userInfo.memcode}}</div>
         </div>
-        <div class="card_class bgff9255">
-          <div class="card_class_img border_r500 bgffffff">
-            <img src="static/img/vip.png">
-          </div>
-          <div class="card_class_name tc">{{userInfo.memtypename}}</div>
+        <div class="card_class" @click="sendSign">
+          <img src="static/img/sign_bg.png">
+          <div class="sign_btn">签到</div>
         </div>
       </div>
       <div class="card_des">
@@ -219,6 +218,30 @@ export default {
         } else {
           this.$message({
             message: '登陆失败，请重新登陆！',
+            type: 'error'
+          })
+        }
+      }).catch(error => {
+        throw error
+      })
+    },
+    // 签到
+    sendSign () {
+      let data = new FormData()
+      let requestData = {}
+      requestData = JSON.stringify(requestData)
+      data.append('requestData', requestData)
+      this.$axios.post('pay/bill/member/signInCentChange', data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          this.$message({
+            message: '签到成功，' + res.msg,
+            type: 'success'
+          })
+          this.setUserInfo()
+        } else {
+          this.$message({
+            message: res.msg,
             type: 'error'
           })
         }

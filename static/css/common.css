@@ -194,6 +194,9 @@ i {
 .colorf58d37 {
   color: #f58d37;
 }
+.colorffc06e {
+  color: #ffc06e;
+}
 /* 字体颜色 end */
 
 /* 背景颜色 start */
@@ -693,11 +696,21 @@ input[type=checkbox]:checked:after {
   width: .78rem;
   height: .78rem;
   padding: .06rem;
-  overflow: hidden;
   margin-left: .3rem;
+  position: relative;
 }
 .card_name .card_img img {
   width: 100%;
+}
+.vip_desc {
+  position: absolute;
+  top: 0;
+  right: -.2rem;
+  width: .4rem;
+  height: .4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .card_name .card_num {
   width: 3.5rem;
@@ -708,23 +721,26 @@ input[type=checkbox]:checked:after {
   flex-flow: column;
 }
 .card_name .card_class {
-  width: 2.2rem;
   height: .56rem;
   border-radius: 5rem 0 0 5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
-.card_name .card_class .card_class_img {
-  width: .56rem;
+.card_name .card_class img {
   height: 100%;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.card_class_img img {
-  width: 100%;
+.sign_btn {
+  position: absolute;
+  top: 0;
+  right: .2rem;
+  height: 100%;
+  line-height: .56rem;
 }
 .card_class .card_class_name {
   width: 1.6rem;
@@ -881,6 +897,10 @@ input[type=checkbox]:checked:after {
   margin: 0 auto!important;
   border: none!important;
   text-align: left;
+}
+.el-message-box__input .el-input__inner {
+  border: 1px solid #dcdfe6!important;
+  text-align: center;
 }
 input.el-input__inner::placeholder {
   font-size: .26rem!important;

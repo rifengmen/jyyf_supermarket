@@ -148,8 +148,7 @@ export default {
     },
     // 商品详情
     goodsdetail (goodsid) {
-      this.$store.commit('setGoodsid', goodsid)
-      this.$router.push({name: 'goodsdetail', query: {dianpu: this.$store.state.wechatID}})
+      this.$router.push({name: 'goodsdetail', query: {dianpu: this.$store.state.wechatID, goodsid: goodsid}})
     }
   },
   watch: {

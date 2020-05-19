@@ -39,10 +39,6 @@ const mutations = {
   setKeyword (state, data) {
     state.keyword = data
   },
-  // 设置商品详情-商品goodsid
-  setGoodsid (state, data) {
-    state.goodsid = data
-  },
   // 设置购物车
   setCart (state, data) {
     state.cart = data
@@ -70,10 +66,6 @@ const mutations = {
   // 设置临时订单优惠券信息
   setTick (state, data) {
     state.tick = data
-  },
-  // 设置订单详情-订单tradeno
-  setTradeno (state, data) {
-    state.tradeno = data
   },
   // 设置下拉刷新请求开关
   setIsPullingDown (state, isPullingDown) {

@@ -129,8 +129,7 @@ export default {
     },
     // 订单详情
     orderdetail (tradeno) {
-      this.$store.commit('setTradeno', tradeno)
-      this.$router.push({name: 'orderdetail'})
+      this.$router.push({name: 'orderdetail', query: {tradeno: tradeno}})
     },
     // 触发父组件方法
     getOrderList () {
