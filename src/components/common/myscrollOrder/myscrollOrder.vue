@@ -138,7 +138,7 @@ export default {
     // 再支付
     againPay (tradeno) {
       window.event.stopPropagation()
-      this.$router.push({name: 'againPay', params: {tradeno: tradeno}})
+      this.$router.push({name: 'againPay', query: {tradeno: tradeno}})
     }
   },
   watch: {

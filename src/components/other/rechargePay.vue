@@ -100,19 +100,32 @@ export default {
         let res = result.data
         if (res.code === 200) {
           // 微信支付
-          let vm = this
-          let wechatstr = res.data.beecloud.wechatPayStr
-          if (typeof WeixinJSBridge === 'undefined') {
-            if (document.addEventListener) {
-              document.addEventListener('WeixinJSBridgeReady', vm.onBridgeReady(wechatstr), false)
-            } else if (document.attachEvent) {
-              document.attachEvent('WeixinJSBridgeReady', vm.onBridgeReady(wechatstr))
-              document.attachEvent('onWeixinJSBridgeReady', vm.onBridgeReady(wechatstr))
+          if (res.data.beeloud) {
+            let beecloud = res.data.beecloud
+            if (beecloud.paymentchannel === 4) {
+              window.location.href = beecloud.tmPayStr.payUrl
+            } else if (beecloud.paymentchannel === 2) {
+              let vm = this
+              let wechatstr = res.data.beecloud.wechatPayStr
+              if (typeof WeixinJSBridge === 'undefined') {
+                if (document.addEventListener) {
+                  document.addEventListener('WeixinJSBridgeReady', vm.onBridgeReady(wechatstr), false)
+                } else if (document.attachEvent) {
+                  document.attachEvent('WeixinJSBridgeReady', vm.onBridgeReady(wechatstr))
+                  document.attachEvent('onWeixinJSBridgeReady', vm.onBridgeReady(wechatstr))
+                }
+              } else {
+                vm.onBridgeReady(wechatstr)
+              }
+              return false
             }
           } else {
-            vm.onBridgeReady(wechatstr)
+            this.$message({
+              message: '支付成功!',
+              type: 'success'
+            })
+            this.$router.push({name: 'recharge'})
           }
-          return false
         } else {
           this.$message({
             message: res.msg,

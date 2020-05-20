@@ -11,7 +11,7 @@
       <div class="card_name">
         <div class="card_img bgffffff border_r500">
           <img :src="headimgurl || 'static/img/userimg.png'" class="border_r500">
-          <div class="vip_desc colorffc06e bgffffff border_r500 font26">v1</div>
+          <div class="vip_desc colorffc06e bgffffff border_r500 font24">v{{userInfo.mem_type}}</div>
         </div>
         <div class="card_num tl">
           <div>{{userInfo.memname}}</div>

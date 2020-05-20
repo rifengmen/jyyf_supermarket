@@ -98,7 +98,7 @@ export default {
         let data = new FormData()
         let requestData = {
           paymode: 3,
-          paymoney: this.paylist.reverse()[0]
+          paymoney: (this.paylist.reverse()[0].paymoney).toFixed(2)
         }
         requestData = JSON.stringify(requestData)
         data.append('requestData', requestData)
@@ -120,8 +120,14 @@ export default {
                   message: '取消输入'
                 })
               })
+            } else {
+              this.sendpay()
             }
           } else {
+            this.$message({
+              type: 'error',
+              message: res.msg
+            })
           }
         }).catch(error => {
           throw error
@@ -135,10 +141,11 @@ export default {
       // 订单总金额
       let totalMoney = this.order.totalMoney
       // 零钱金额
-      let smallmoney = this.order.smallmoney
+      // let smallmoney = this.order.smallmoney
       // console.log(totalMoney, '订单总金额')
       // 支付金额
-      let paymoney = totalMoney - smallmoney + parseFloat(this.freightmoney.freightmoney)
+      // let paymoney = totalMoney - smallmoney + parseFloat(this.freightmoney.freightmoney)
+      let paymoney = totalMoney + parseFloat(this.freightmoney.freightmoney)
       // console.log(paymoney, '支付金额')
       // 支付列表下标
       let index = 0
@@ -173,22 +180,22 @@ export default {
         paymoney = paymoney - paylist5.paymoney
       }
       // 零钱
-      if (this.order.smallmoney !== 0) {
-        let paylist10 = {}
-        paylist10.paymode = 10
-        if (paymoney > 0) {
-          let money = paymoney - smallmoney
-          if (money <= 0) {
-            paylist10.paymoney = paymoney
-          } else {
-            paylist10.paymoney = smallmoney
-          }
-        } else {
-          paylist10.paymoney = 0
-        }
-        this.paylist[index] = paylist10
-        index++
-      }
+      // if (this.order.smallmoney !== 0) {
+      //   let paylist10 = {}
+      //   paylist10.paymode = 10
+      //   if (paymoney > 0) {
+      //     let money = paymoney - smallmoney
+      //     if (money <= 0) {
+      //       paylist10.paymoney = paymoney
+      //     } else {
+      //       paylist10.paymoney = smallmoney
+      //     }
+      //   } else {
+      //     paylist10.paymoney = 0
+      //   }
+      //   this.paylist[index] = paylist10
+      //   index++
+      // }
       // 储值卡
       if (this.paymodeid === '3') {
         let paylist3 = {}
@@ -231,7 +238,7 @@ export default {
       // console.log(JSON.parse(requestData), '支付信息')
       // return false
       this.$axios.post('invest/microFlow/orderCommit', data).then(result => {
-        console.log(result, '支付信息')
+        // console.log(result, '支付信息')
         let res = result.data
         if (res.code === 200) {
           // 微信支付
@@ -351,7 +358,7 @@ export default {
       this.$store.commit('setFreightmoney', '')
       this.$store.commit('setTick', '')
       this.getCart()
-      this.$router.push({name: 'orderdetail', tradeno: tradeno})
+      this.$router.push({name: 'orderdetail', query: {tradeno: tradeno}})
     }
   },
   watch: {},

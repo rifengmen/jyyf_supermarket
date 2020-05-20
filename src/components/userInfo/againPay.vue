@@ -124,15 +124,13 @@ export default {
   data () {
     return {
       // 订单tradeno
-      tradeno: this.$route.params.tradeno,
+      tradeno: this.$route.query.tradeno,
       // 订单详情
       orderdetail: '',
       // 订单商品列表
       goodsList: '',
       // 图片路径
       imgurl: this.IMGURL,
-      // 促销类型
-      Promotemode: this.$store.state.Promotemode,
       // 计算付款金额
       paymoney: 0,
       // 积分使用开关

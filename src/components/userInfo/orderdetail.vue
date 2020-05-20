@@ -204,7 +204,7 @@ export default {
     },
     // 再支付
     againPay () {
-      this.$router.push({name: 'againPay', params: {tradeno: this.tradeno}})
+      this.$router.push({name: 'againPay', query: {tradeno: this.tradeno}})
     }
   },
   watch: {},
