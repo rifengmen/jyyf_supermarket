@@ -188,9 +188,9 @@ export default {
           this.imgCode = this.IMGURL + res.data.GraphicFileName
           this.token = res.data.token
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
@@ -200,9 +200,9 @@ export default {
     // 发送图片验证码请求短信验证码
     sendImgcode () {
       // if (this.mobilecode === '') {
-      //   this.$message({
+      //   this.$toast({
       //     message: '请输入图形验证码！',
-      //     type: 'error'
+      //     type: 'fail'
       //   })
       //   return false
       // }
@@ -220,14 +220,14 @@ export default {
         if (res.code === 200) {
           // 关闭发送按钮，开始倒计时
           this.msgFlag = false
-          this.$message({
+          this.$toast({
             message: '发送验证码成功，请查收短信!',
             type: 'success'
           })
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       })
@@ -252,15 +252,15 @@ export default {
       this.$axios.post('bill/pay/cardpayclose', data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$message({
+          this.$toast({
             message: '关闭成功！',
             type: 'success'
           })
           this.coflags = false
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
@@ -274,28 +274,28 @@ export default {
     // 设置支付密码 修改支付密码
     payPasswordEdit () {
       if (this.password === '' || this.password.length < 4) {
-        this.$message({
+        this.$toast({
           message: '请输入四位支付密码！',
-          type: 'error'
+          type: 'fail'
         })
         return false
       }
       if (this.password1 === '' || this.password1.length < 4) {
-        this.$message({
+        this.$toast({
           message: '请再次输入四位支付密码！',
           type: 'error'
         })
         return false
       }
       if (this.password !== this.password1) {
-        this.$message({
+        this.$toast({
           message: '两次输入密码不一致，请重新输入！',
           type: 'error'
         })
         return false
       }
       if (this.Checkno === '') {
-        this.$message({
+        this.$toast({
           message: '请输入短信验证码！',
           type: 'error'
         })
@@ -316,13 +316,13 @@ export default {
             this.btnFlag = true
             let res = result.data
             if (res.code === 200) {
-              this.$message({
+              this.$toast({
                 message: '重置成功！',
                 type: 'success'
               })
               this.coflags = true
             } else {
-              this.$message({
+              this.$toast({
                 message: res.msg,
                 type: 'error'
               })
@@ -336,13 +336,13 @@ export default {
           this.btnFlag = true
           let res = result.data
           if (res.code === 200) {
-            this.$message({
+            this.$toast({
               message: '开通成功！',
               type: 'success'
             })
             this.coflags = true
           } else {
-            this.$message({
+            this.$toast({
               message: res.msg,
               type: 'error'
             })

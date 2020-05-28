@@ -28,7 +28,7 @@ export default {
   data () {
     return {
       // 消息id
-      id: this.$route.params.id,
+      id: this.$route.query.id,
       // 消息详情
       noticedetail: ''
     }
@@ -51,9 +51,9 @@ export default {
         if (res.code === 200) {
           this.noticedetail = res.data
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {

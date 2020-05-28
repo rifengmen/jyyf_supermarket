@@ -1,0 +1,6 @@
+.recommend_list {
+  width: 100%;
+  height: calc(100% - 1.1rem - 1px);
+  margin: .2rem auto 0 auto;
+  overflow: auto;
+}

@@ -230,9 +230,9 @@ export default {
             this.addressList = res.data.filter(item => item.addressMark === '1')
           }
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
@@ -255,22 +255,22 @@ export default {
         this.$axios.post('api/area/deleteAddress', data).then(result => {
           let res = result.data
           if (res.code === 200) {
-            this.$message({
+            this.$toast({
               type: 'success',
               message: '删除成功!'
             })
             this.addressList = this.addressList.filter(item => item.addressid !== addressid)
           } else {
-            this.$message({
+            this.$toast({
               message: res.msg,
-              type: 'error'
+              type: 'fail'
             })
           }
         }).catch(error => {
           throw error
         })
       }).catch(() => {
-        this.$message({
+        this.$toast({
           type: 'info',
           message: '操作已取消'
         })
@@ -291,9 +291,9 @@ export default {
         if (res.code === 200) {
           this.areaList = res.data
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
@@ -316,9 +316,9 @@ export default {
           if (res.code === 200) {
             this.sheetList = res.data
           } else {
-            this.$message({
+            this.$toast({
               message: res.msg,
-              type: 'error'
+              type: 'fail'
             })
           }
         }).catch(error => {
@@ -329,44 +329,44 @@ export default {
     // 保存地址
     addaddress () {
       if (this.contactPerson === '') {
-        this.$message({
+        this.$toast({
           message: '请输入收货人！',
-          type: 'error'
+          type: 'fail'
         })
         return false
       }
       if (this.contactNumber === '') {
-        this.$message({
+        this.$toast({
           message: '请输入手机号！',
-          type: 'error'
+          type: 'fail'
         })
         return false
       }
       if (!this.flag) {
-        this.$message({
+        this.$toast({
           message: '手机号码格式有误，请重新输入！',
-          type: 'error'
+          type: 'fail'
         })
         return false
       }
       if (this.areaid === '') {
-        this.$message({
+        this.$toast({
           message: '请选择片！',
-          type: 'error'
+          type: 'fail'
         })
         return false
       }
       if (this.sheetid === '') {
-        this.$message({
+        this.$toast({
           message: '请选择区！',
-          type: 'error'
+          type: 'fail'
         })
         return false
       }
       if (this.address === '') {
-        this.$message({
+        this.$toast({
           message: '请输入详细地址！',
-          type: 'error'
+          type: 'fail'
         })
         return false
       }
@@ -383,7 +383,7 @@ export default {
       this.$axios.post('api/area/addAddress', data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$message({
+          this.$toast({
             message: '添加成功！',
             type: 'success'
           })
@@ -391,9 +391,9 @@ export default {
           this.addressFlag = true
           this.editorder(res.data)
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
@@ -418,9 +418,9 @@ export default {
             this.$store.commit('setFreightmoney', res.data)
             this.$router.push({name: 'editorder'})
           } else {
-            this.$message({
+            this.$toast({
               message: res.msg,
-              type: 'error'
+              type: 'fail'
             })
           }
         }).catch(error => {

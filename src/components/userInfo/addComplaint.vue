@@ -71,9 +71,9 @@ export default {
     // 发送投诉内容
     sendComplaint () {
       if (!this.complaint) {
-        this.$message({
+        this.$toast({
           message: '内容不能为空！',
-          type: 'error'
+          type: 'fail'
         })
         return false
       }
@@ -86,15 +86,15 @@ export default {
       this.$axios.post('system/suggestion/addSuggestion', data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$message({
+          this.$toast({
             message: '提交成功!',
             type: 'success'
           })
           this.$router.push({name: 'complaintList'})
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {

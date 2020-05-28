@@ -11,6 +11,10 @@ const mutations = {
   setOpenid (state, data) {
     state.openid = data
   },
+  // 设置基础路径baseURL
+  setBaseURL (state, data) {
+    state.baseURL = data
+  },
   // 设置用户头像
   setHeadimgurl (state, data) {
     state.headimgurl = data
@@ -26,14 +30,6 @@ const mutations = {
   // 设置卡片信息
   setMoneyDetail (state, data) {
     state.moneyDetail = JSON.parse(data)
-  },
-  // 设置推荐主题id
-  setRecommendid (state, data) {
-    state.recommendid = data
-  },
-  // 设置推荐主题标题
-  setRecommendName (state, data) {
-    state.recommendName = data
   },
   // 设置搜索关键字
   setKeyword (state, data) {
@@ -67,13 +63,9 @@ const mutations = {
   setTick (state, data) {
     state.tick = data
   },
-  // 设置下拉刷新请求开关
-  setIsPullingDown (state, isPullingDown) {
-    state.isPullingDown = isPullingDown
-  },
-  // 设置上拉加载请求开关
-  setIsPullingUp (state, isPullingUp) {
-    state.isPullingUp = isPullingUp
+  // 设置商品详情
+  setGoodsdetail (state, data) {
+    state.goodsdetail = data
   }
 }
 

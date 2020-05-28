@@ -10,8 +10,23 @@
     <!-- 头部 end -->
     <!-- 商品介绍 start -->
     <div class="goods_cont bgeeeeee">
-      <div class="goods_img bgffffff">
-        <img :src="(goodsdetail.picture1 ? (imgurl + 'image/' + goodsdetail.picture1) : ('static/img/goods.png'))">
+      <div class="goods_img bgffffff" v-if="goodsPictureList.length">
+        <van-swipe
+          class="banner_swipe"
+          :autoplay="3000"
+          indicator-color="#ff6400"
+          @change="onChangePage">
+          <van-swipe-item v-for="(item, index) in goodsPictureList" :key="index">
+            <div class="img_box" @click="enlargedView">
+              <img :src="item">
+            </div>
+          </van-swipe-item>
+          <template #indicator>
+            <div class="custom-indicator bgff6400 border_r8 font22 colorffffff">
+              {{ goodsPage + 1 }}/{{goodsPictureList.length}}
+            </div>
+          </template>
+        </van-swipe>
       </div>
       <div class="goods_desc bgffffff border_r6">
         <div class="goods_promot">
@@ -23,12 +38,12 @@
             <div class="goods_price" v-if="goodsdetail.promotemode === 1 || goodsdetail.promotemode === 7">
               <div class="goods_promot_age font24 colorffffff borderffffff border_r4">{{goodsdetail.modenote}}</div>
               <div class="font32 font_blod colorffffff">￥{{goodsdetail.promotevalue}}</div>
-              <del class="font20 color999999">￥{{goodsdetail.saleprice}}</del>
+              <del class="font20 colorffc06e">￥{{goodsdetail.saleprice}}</del>
             </div>
             <div class="goods_price" v-if="goodsdetail.Promotemode === 6">
               <div class="goods_promot_age font24 colorffffff borderffffff border_r4">{{goodsdetail.modenote}}</div>
               <div class="font32 font_blod colorffffff">￥{{goodsdetail.groupprice}}</div>
-              <del class="font20 color999999">￥{{goodsdetail.saleprice}}</del>
+              <del class="font20 colorffc06e">￥{{goodsdetail.saleprice}}</del>
             </div>
           </div>
           <div class="countdown" v-if="goodsdetail.startstate === 1 && goodsdetail.promotemode !== 0">
@@ -50,6 +65,16 @@
         </div>
       </div>
     </div>
+    <van-image-preview
+      v-model="showFlag"
+      @change="onChangeEnlarged"
+      :images="goodsPictureList"
+      :max-zoom="3"
+      :min-zoom="1/3"
+      :start-position="startPage"
+      :closeable="true">
+      <template v-slot:index>{{ enlargedViewPage + 1 }}/{{goodsPictureList.length}}</template>
+    </van-image-preview>
     <!-- 商品介绍 end -->
     <!-- 购物车 start -->
     <div class="carts bgffffff">
@@ -80,13 +105,18 @@ export default {
   name: 'goodsdetail',
   data () {
     return {
+      // 放大图
+      showFlag: false,
+      // 放大图页码
+      enlargedViewPage: 0,
+      // 放大图开始页码
+      startPage: 0,
+      // 商品图片页码
+      goodsPage: 0,
       // 商品goodsid
-      // goodsid: this.$store.state.goodsid,
       goodsid: this.$route.query.goodsid,
       // 商品详情
       goodsdetail: {},
-      // 图片路径
-      imgurl: this.IMGURL,
       // 促销类型
       Promotemode: this.$store.state.Promotemode,
       // 购物车列表
@@ -97,6 +127,38 @@ export default {
     // 购物车商品数量
     cartnums () {
       return this.$store.state.cartnums
+    },
+    // 图片列表
+    goodsPictureList () {
+      let arr = []
+      let data = this.goodsdetail
+      if (data) {
+        if (data.picture1) {
+          let str = this.IMGURL + 'image/' + data.picture1
+          arr.push(str)
+        }
+        if (data.picture2) {
+          let str = this.IMGURL + 'image/' + data.picture2
+          arr.push(str)
+        }
+        if (data.picture3) {
+          let str = this.IMGURL + 'image/' + data.picture3
+          arr.push(str)
+        }
+        if (data.gdsimg2) {
+          let str = this.IMGURL + 'image/' + data.gdsimg2
+          arr.push(str)
+        }
+        if (data.gdsimg3) {
+          let str = this.IMGURL + 'image/' + data.gdsimg3
+          arr.push(str)
+        }
+        if (data.ingredientImage) {
+          let str = this.IMGURL + 'image/' + data.ingredientImage
+          arr.push(str)
+        }
+      }
+      return arr
     }
   },
   components: {
@@ -106,6 +168,19 @@ export default {
     addorder
   },
   methods: {
+    // 页码指示器
+    onChangePage (index) {
+      this.goodsPage = index
+    },
+    // 放大图预览
+    enlargedView () {
+      this.showFlag = true
+      this.startPage = this.goodsPage
+    },
+    // 放大图页码
+    onChangeEnlarged (index) {
+      this.enlargedViewPage = index
+    },
     // 获取商品详情
     getGoodsdetail () {
       let data = new FormData()
@@ -119,9 +194,9 @@ export default {
         if (res.code === 200) {
           this.goodsdetail = res.data
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {

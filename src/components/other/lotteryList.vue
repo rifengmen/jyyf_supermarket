@@ -14,15 +14,29 @@
       <loading v-if="isShowLoading"></loading>
       <!-- 加载中动画 end -->
       <!-- 分类列表 start -->
-      <div class="lotterylist">
-        <my-scroll-lottery
-          :lotteryList="lotteryList"
-          :loadText="loadText"
-          @pullingDown="_getLotteryList"
-          @pullingup="getMoreLotteryList">
-        </my-scroll-lottery>
+      <div class="lotterylist" v-if="lotteryList.length">
+        <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+          <van-list
+            v-model="loading"
+            :finished="finished"
+            :offset="offset"
+            finished-text="没有更多了"
+            @load="onLoad">
+            <div class="lottery_item bgffffff" v-for="(item, index) in lotteryList" :key="index">
+              <div class="bgff6400 border_r500"></div>
+              <div class="lottery_title">
+                <div class="ellipsis">{{item.prizeCent}}</div>
+                <div class="font24 color999999">{{item.prizeDate}}</div>
+              </div>
+              <div class="prize_name font32 tr">{{item.prizeName}}</div>
+            </div>
+          </van-list>
+        </van-pull-refresh>
       </div>
       <!-- 分类列表 end -->
+      <!-- 无信息提示 start -->
+      <nodata v-else></nodata>
+      <!-- 无信息提示 end -->
     </div>
     <!-- 内容部分盒子 end -->
   </div>
@@ -30,22 +44,27 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
-import MyScrollLottery from '@/components/common/myscrollLottery/myscrollLottery'
-import nodata from '@/components/common/nodata/nodata'
 import loading from '@/components/common/loading/loading'
+import nodata from '@/components/common/nodata/nodata'
 
 export default {
   name: 'lotteryList',
   data () {
     return {
+      // 是否处在加载状态
+      loading: false,
+      // 是否已加载完成
+      finished: false,
+      // 下拉刷新
+      refreshing: false,
+      // 滚动条与底部距离小于 offset 时触发load事件
+      offset: 100,
       // 中奖记录
       lotteryList: [],
       // 查询时间
       startdate: '',
-      // 重置当前页码
-      resetpage: 1,
       // 当前页码
-      page: 1,
+      page: 0,
       // 每页显示条数
       pageSize: 15,
       // 目前总共多少条
@@ -53,9 +72,7 @@ export default {
       // 目前总共多少页
       totalPages: '',
       // 加载中动画
-      isShowLoading: true,
-      // 加载提示语
-      loadText: '加载更多...'
+      isShowLoading: true
     }
   },
   computed: {
@@ -74,14 +91,27 @@ export default {
   },
   components: {
     MyHeader,
-    MyScrollLottery,
-    nodata,
-    loading
+    loading,
+    nodata
   },
   methods: {
-    // 获取中奖记录
-    getLotteryList () {
+    onLoad () {
+      this.page++
+      this.getLotteryList()
+    },
+    onRefresh () {
       this.isShowLoading = true
+      // 清空列表数据
+      this.finished = false
+      // 重新加载数据
+      // 将 loading 设置为 true，表示处于加载状态
+      this.loading = true
+      this.page = 0
+      this.lotteryList = []
+      this.onLoad()
+    },
+    // 获取商品列表公共方法
+    getLotteryList () {
       let data = new FormData()
       let requestData = {
         startDate: this.date,
@@ -91,15 +121,33 @@ export default {
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
       this.$axios.post('system/prize/listPrizeLog', data).then(result => {
-        this.$store.commit('setIsPullingDown', true)
         let res = result.data
         if (res.code === 200) {
           this.isShowLoading = false
-          this.lotteryList = res.data.content
+          // 无数据时
+          if (!res.data.totalSize) {
+            this.finished = true
+          }
+          if (res.data.content && res.data.content.length) {
+            let currentpage = this.page
+            let total = Math.ceil(res.data.rowCount / this.pageSize)
+            // 页码不足或者最后一页不足的情况
+            if (currentpage > total || res.data.content.length < this.pageSize) {
+              this.finished = true
+            }
+            // 刷新
+            if (this.refreshing) {
+              this.lotteryList = res.data.content
+              this.refreshing = false
+            } else {
+              this.lotteryList.push(...res.data.content)
+            }
+            this.loading = false
+          }
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
@@ -109,55 +157,14 @@ export default {
     // 设置查询开始时间
     setStartdate (data) {
       this.startdate = data
-      this.page = this.resetpage
-      this.getLotteryList()
-    },
-    // 下拉刷新
-    _getLotteryList () {
-      this.page = this.resetpage
-      this.getLotteryList()
-    },
-    // 上拉加载更多
-    getMoreLotteryList () {
-      this.page++
-      let currentpage = this.page
-      let total = Math.ceil(this.totalSize / this.pageSize)
-      let data = new FormData()
-      let requestData = {
-        listtype: '2',
-        Page: this.page,
-        pageSize: this.pageSize
-      }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      if (currentpage > total) {
-        this.loadText = '暂无更多数据'
-      } else {
-        this.$axios.post('system/prize/listPrizeLog', data).then(result => {
-          this.$store.commit('setIsPullingUp', true)
-          let res = result.data
-          if (res.code === 200) {
-            this.isShowLoading = false
-            this.lotteryList.push(...res.data.content)
-          } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        }).catch(error => {
-          throw error
-        })
-      }
-      this.$store.commit('setIsPullingUp', false)
+      this.onRefresh()
     }
   },
   watch: {},
   beforeCreate () {
   },
   created () {
-    // 获取中奖记录
-    this.getLotteryList()
+    this.onLoad()
   },
   beforeMount () {
   },
@@ -168,7 +175,7 @@ export default {
 
 <style scoped>
 @import "static/css/other.css";
-.userinfo_main {
+.other_main {
   position: relative;
 }
 </style>

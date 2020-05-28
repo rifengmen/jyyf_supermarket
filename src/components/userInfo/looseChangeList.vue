@@ -11,7 +11,7 @@
     <!-- 内容部分盒子 start -->
     <div class="userinfo_main bgffffff">
       <!-- card start -->
-      <div class="card card_card colorffffff bgffffff">
+      <div class="card1 card_card colorffffff bgffffff">
         <div class="font36 colorffffff">可用零钱</div>
         <div class="card_desc">
           <div class="font96 font_blod">{{smallMoney}}</div>
@@ -101,9 +101,9 @@ export default {
           this.looseChangeList = res.data.dataList
           this.smallMoney = res.data.smallMoney
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {

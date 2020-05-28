@@ -1,10 +1,5 @@
 <template>
-  <div class="wechatConfig">
-    <!--<div class="scan_btn" v-if="wechats === 'scan'" @click="scanTradeno">-->
-      <!--<img src="static/img/scan.png">-->
-    <!--</div>-->
-    <!--<div v-else></div>-->
-  </div>
+  <div class="wechatConfig"></div>
 </template>
 
 <script>
@@ -13,15 +8,11 @@ import wx from 'weixin-js-sdk'
 export default {
   name: 'wechatConfig',
   props: {
-    wechats: {
-      type: String,
-      default: function () {
-        return ''
-      }
-    }
   },
   data () {
     return {
+      // 商品详情页用，goodsid
+      goodsid: this.$route.query.goodsid || '',
       // 请求地址url,IOS为进入时url,Android为当前页面url
       curPageUrl: '',
       // 微信签名信息
@@ -29,21 +20,33 @@ export default {
       // 分享时展示信息
       shareConfig: {
         title: this.$store.state.userInfo.deptname,
-        // desc: this.$store.state.userInfo.sharedesc,
-        desc: '这是测试，这是一段测试文字，这里是测试分享简介，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字，测试文字',
-        link: 'https://www.spzlk.cn/index.html?dianpu=' + this.$store.state.wechatID,
-        // imgUrl: this.$store.state.IMGURL + this.$store.state.userInfo.picture
-        imgUrl: 'https://www.spzlk.cn/static/img/timg.jpg'
+        desc: this.$store.state.userInfo.sharedesc,
+        link: this.$store.state.baseURL + '/index.html?dianpu=' + this.$store.state.wechatID,
+        imgUrl: this.IMGURL + 'image/' + this.$store.state.userInfo.picture
       }
     }
   },
-  computed: {},
+  computed: {
+    // baseURL
+    baseURL () {
+      return this.$store.state.baseURL
+    },
+    // 商品详情页用，商品详情
+    goodsdetail () {
+      return this.$store.state.goodsdetail
+    }
+  },
   components: {},
   methods: {
     // 请求微信参数
     getWXConfig () {
+      if (this.goodsid) {
+        this.shareConfig.link = this.$store.state.baseURL + '/index.html?dianpu=' + this.$store.state.wechatID + '&router=goodsdetail&goodsid=' + this.goodsdetail.goodsid
+        this.shareConfig.imgUrl = this.IMGURL + 'image/' + this.goodsdetail.picture1
+        this.shareConfig.desc = this.goodsdetail.cusgoodsname + this.goodsdetail.remark
+      }
       if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
-        this.curPageUrl = 'https://www.spzlk.cn/author'
+        this.curPageUrl = this.baseURL + '/author'
       } else if (/(Android)/i.test(navigator.userAgent)) {
         this.curPageUrl = window.location.href
       }
@@ -182,9 +185,9 @@ export default {
           wx.error((res) => {
           })
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {

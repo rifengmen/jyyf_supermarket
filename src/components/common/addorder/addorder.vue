@@ -58,9 +58,9 @@ export default {
             let noList = [res.data.no]
             this.setOrder(noList)
           } else {
-            this.$message({
+            this.$toast({
               message: res.msg,
-              type: 'error'
+              type: 'fail'
             })
           }
         }).catch(error => {
@@ -85,9 +85,9 @@ export default {
           this.$store.commit('setOrder', res.data)
           this.$router.push({name: 'editorder'})
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {

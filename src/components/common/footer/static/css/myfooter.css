@@ -37,3 +37,7 @@
 .router-link-exact-active > div.listname {
   color: #ff7e42;
 }
+.footer_nav img {
+  width: .84rem;
+  height: .84rem;
+}

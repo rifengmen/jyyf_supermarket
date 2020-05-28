@@ -1,8 +1,8 @@
 <template>
   <div class="container bgeeeeee">
     <!-- 头部 start -->
-    <my-header :froms="'orderdetail'">
-      <template v-slot:orderdetail>
+    <my-header>
+      <template v-slot:backs>
         <i class="el-icon-arrow-left"></i>
       </template>
       <template v-slot:header>订单详情</template>
@@ -40,11 +40,11 @@
                 <div class="goods_item_cont">
                   <div class="goods_item_name ellipsis font26">{{item.goodsname}}</div>
                   <div class="goods_item_name ellipsis font24 colorfa2a2a"></div>
-                  <div class="goods_item_price">
-                    <div class="font30 font_blod colorf84242">￥{{item.price}}</div>
-                    <del class="font24 color999999">￥{{item.saleprice}}</del>
-                  </div>
                   <div class="goods_item_editnum">
+                    <div class="goods_item_price">
+                      <div class="font30 font_blod colorf84242">￥{{item.price}}</div>
+                      <del class="font24 color999999">￥{{item.saleprice}}</del>
+                    </div>
                     <div class="font30 color999999">x <span class="">{{item.amount}}</span></div>
                   </div>
                 </div>
@@ -73,6 +73,11 @@
         <div class="paydesc"  v-for="(item, index) in orderdetail.PayDetail" :key="index" v-if="item.paymodeid === 4">
           <div class="font24">优惠券</div>
           <div class="font24 color666666">-￥{{item.paymoney.toFixed(2)}}</div>
+        </div>
+        <div class="paydesc"  v-for="(item, index) in orderdetail.PayDetail" :key="index" v-if="item.paymodeid === 10">
+          <div class="font24">零钱</div>
+          <div class="font24 color666666" v-if="item.paymoney >= 0">-￥{{item.paymoney.toFixed(2)}}</div>
+          <div class="font24 color666666" v-if="item.paymoney < 0">+￥{{(Math.abs(item.paymoney)).toFixed(2)}}</div>
         </div>
         <div class="paydesc">
           <div>实付金额</div>
@@ -188,14 +193,14 @@ export default {
           let _this = this
           // 页面加载时计算实付金额
           this.orderdetail.PayDetail.forEach((item) => {
-            if (item.paymodeid === 4 || item.paymodeid === 5) {
+            if (item.paymodeid === 4 || item.paymodeid === 5 || item.paymodeid === 10) {
               _this.paymoney -= item.paymoney
             }
           })
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {

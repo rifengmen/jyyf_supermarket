@@ -92,7 +92,9 @@ export default {
         paymodeid: this.payData.Paymodelist[0].paymodeid,
         paymoney: this.payData.paymoney,
         presentmoney: this.payData.presentmoney,
-        channel: this.channel
+        channel: this.channel,
+        // 支付完成后返回路径
+        frontUrl: 'https://www.spzlk.cn/index.html?dianpu=' + this.$store.state.wechatID
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
@@ -100,9 +102,10 @@ export default {
         let res = result.data
         if (res.code === 200) {
           // 微信支付
-          if (res.data.beeloud) {
+          if (res.data.beecloud) {
             let beecloud = res.data.beecloud
             if (beecloud.paymentchannel === 4) {
+              sessionStorage.removeItem('jyyf_openid')
               window.location.href = beecloud.tmPayStr.payUrl
             } else if (beecloud.paymentchannel === 2) {
               let vm = this
@@ -120,16 +123,16 @@ export default {
               return false
             }
           } else {
-            this.$message({
+            this.$toast({
               message: '支付成功!',
               type: 'success'
             })
             this.$router.push({name: 'recharge'})
           }
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
@@ -160,9 +163,9 @@ export default {
             // 使用以上方式判断前端返回,微信团队郑重提示：
             // res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
           } else if (_res.err_msg === 'get_brand_wcpay_request:cancel' || _res.err_msg === 'get_brand_wcpay_request:fail') {
-            _this.$message({
+            _this.$toast({
               message: '支付失败！',
-              type: 'error'
+              type: 'fail'
             })
           }
         }

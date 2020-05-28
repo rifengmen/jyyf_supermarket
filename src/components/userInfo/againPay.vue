@@ -77,7 +77,7 @@
         <div class="">积分抵扣</div>
         <div class="color999999">
           <span class="colorf84242">￥{{score.Money}}</span>&nbsp;
-          共
+          抵扣
           <span class="colorf84242">{{score.useScore}}</span>
           分
         </div>
@@ -87,6 +87,23 @@
         </div>
       </div>
       <!-- 积分抵扣 end -->
+      <!-- 可用零钱 start -->
+      <div class="order_sectionss bgffffff">
+        <div class="">零钱</div>
+        <div class="color999999">
+          <span class="colorf84242" v-if="smallmoney >= 0">
+            <span class="font26">使用零钱</span>
+            ￥{{smallmoney.toFixed(2)}}
+          </span>
+          <span class="colorf84242" v-if="smallmoney < 0">
+            <span class="font26">补缴零钱</span>
+            ￥{{(Math.abs(smallmoney)).toFixed(2)}}
+          </span>
+        </div>
+        <div class="score_img">
+        </div>
+      </div>
+      <!-- 可用零钱 end -->
       <!-- 支付方式 start -->
       <div class="order_sectionss bgffffff paymode_img">
         <div class="">支付方式</div>
@@ -102,7 +119,7 @@
     <!-- 订单内容 end -->
     <!-- 支付按钮 start -->
     <div class="again_order_money bgffffff">
-      <div class="order_money_totalMoney font24 ellipsis">实付：<span class="colorf84242 font34">￥{{paymoney.toFixed(2)}}</span></div>
+      <div class="order_money_totalMoney font24 ellipsis">实付：<span class="colorf84242 font34">￥{{(paymoney - smallmoney).toFixed(2)}}</span></div>
       <div class="pay colorffffff bgff6400">
         <pay-btn
           :paymodeid="paymodeid"
@@ -155,6 +172,14 @@ export default {
         money = this.score.Money || 0
       }
       return money
+    },
+    // 零钱
+    smallmoney () {
+      let money = this.paymoney - this.order.smallmoney
+      if (money < 0) {
+        return this.paymoney
+      }
+      return this.order.smallmoney
     }
   },
   components: {
@@ -184,9 +209,9 @@ export default {
             }
           })
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
@@ -210,9 +235,9 @@ export default {
           // 页面加载时请求积分
           this.getScore()
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
@@ -233,9 +258,9 @@ export default {
         if (res.code === 200) {
           this.$store.commit('setScore', res.data)
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {

@@ -17,30 +17,25 @@
       </div>
     </div>
     <!-- 内容部分盒子 -->
-    <!-- 底部导航 start -->
-    <my-footer></my-footer>
-    <!-- 底部导航 end -->
   </div>
 </template>
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
-import MyFooter from '@/components/common/footer/myfooter'
 
 export default {
   name: 'messagedetail',
   data () {
     return {
       // 消息id
-      id: this.$route.params.id,
+      id: this.$route.query.id,
       // 消息详情
       messagedetail: ''
     }
   },
   computed: {},
   components: {
-    MyHeader,
-    MyFooter
+    MyHeader
   },
   methods: {
     // 获取消息详情
@@ -56,9 +51,9 @@ export default {
         if (res.code === 200) {
           this.messagedetail = res.data
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {

@@ -85,9 +85,9 @@ export default {
         if (res.code === 200) {
           this.activeObj = res.data
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
@@ -108,9 +108,9 @@ export default {
         if (res.code === 200) {
           this.totalCent = res.data.Score
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
@@ -122,7 +122,7 @@ export default {
       // 刷新积分
       this.getTotalCent()
       // 抽奖成功弹窗
-      this.$message({
+      this.$toast({
         message: prize.prizename,
         type: 'success'
       })

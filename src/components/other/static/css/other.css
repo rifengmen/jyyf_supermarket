@@ -36,6 +36,27 @@
 .lotterylist {
   width: 100%;
   height: 100%;
+  overflow: auto;
+}
+.lottery_item {
+  width: calc(100% - .48rem);
+  height: 1.2rem;
+  padding: 0 .24rem;
+  border-bottom: .02rem solid #f4f4f4;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.lottery_item > div:first-child {
+  width: .12rem;
+  height: .12rem;
+  margin-right: .2rem;
+}
+.lottery_title {
+  width: 4.7rem;
+}
+.prize_name {
+  width: calc(100% - 5.02rem);
 }
 /* 我的中奖记录 end */
 

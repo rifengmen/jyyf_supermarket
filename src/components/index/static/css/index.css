@@ -1,27 +1,35 @@
-/* 通知 start */
-.notice{
-  width: calc(100% - .48rem);
-  height: .65rem;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.notice .notice_img {
-  width: .28rem;
-}
-.notice .notice_img img {
+.index_main {
   width: 100%;
+  /*height: calc(100% - 2.1rem - 1px);*/
+  /*margin: 0 auto 1rem auto;*/
+  padding-bottom: 1rem;
+  overflow: auto;
 }
-.notice .notice_list {
-  width: calc(100% - 2rem);
+/* 轮播图 start */
+.banner {
+  width: 100%;
+  min-height: 1.1rem;
+  position: relative;
+}
+.banner_cont {
+  width: 100%;
+  height: 4rem;
+  overflow: hidden;
+  margin-bottom: .2rem;
+}
+.banner_swipe {
+  width: 100%;
   height: 100%;
-  line-height: .65rem;
 }
-.notice .notice_more {
-  width: 1rem;
+.banner_img {
+  width: 100%;
+  height: 100%;
 }
-/* 通知 end */
+.banner_img img {
+  width: 100%;
+  height: 100%;
+}
+/* 轮播图 end */
 /* 常用功能 start */
 .index_common {
   width: calc(100% - .48rem);
@@ -49,23 +57,45 @@
   width: 100%;
 }
 /* 常用功能 end */
-/* 推荐模块 start */
-.recommend {
-  width: 100%;
-  height: calc(100% - 2.1rem - 1px);
+/* 通知 start */
+.notice{
+  width: calc(100% - .48rem);
+  height: .65rem;
   margin: 0 auto;
-  overflow: hidden;
-  overflow-y: scroll;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+.notice .notice_img {
+  width: .28rem;
+}
+.notice .notice_img img {
+  width: 100%;
+}
+.notice .notice_list {
+  width: calc(100% - 2rem);
+  height: 100%;
+  line-height: .65rem;
+}
+.notice_swipe {
+  width: 100%;
+  height: 100%;
+}
+.notice .notice_more {
+  width: 1rem;
+}
+/* 通知 end */
+/* 推荐模块 start */
 .recommend_cont {
   width: 100%;
   height: auto;
+  margin-top: .1rem;
 }
 /* 推荐一 start */
 .recommend1 {
   width: calc(100% - .48rem);
   height: auto;
-  margin: 0 auto .2rem auto;
+  margin: 0 auto .1rem auto;
 }
 .recommend1_tit {
   width: 100%;
@@ -74,7 +104,8 @@
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
-  margin-top: .3rem;
+  /*margin-bottom: .06rem;*/
+  margin-top: .2rem;
 }
 .recommend1_tit_img {
   width: .5rem;
@@ -90,25 +121,26 @@
 .recommend1_list {
   width: 100%;
   height: auto;
-  margin-top: .2rem;
+  margin-top: .12rem;
   display: flex;
   justify-content: flex-start;
   flex-flow: wrap;
 }
 .recommend1_item {
   width: 2.26rem;
-  height: 3.52rem;
-  margin: 0 .12rem .1rem 0;
+  /*height: 3.52rem;*/
+  margin: 0 .12rem .12rem 0;
+  box-shadow: 0 0 8px 0 rgba(214,214,214,0.5);
 }
 .recommend1_item:nth-child(3n) {
   margin-right: 0;
 }
 .recommend1_item_img {
-  width: calc(100% - .16rem);
-  height: 1.64rem;
+  width: calc(100% - .26rem);
+  height: 2rem;
   overflow: hidden;
   position: relative;
-  padding: .08rem;
+  padding: .13rem;
 }
 .recommend1_item_img img {
   width: 100%;
@@ -138,13 +170,13 @@
 .recommend2 {
   width: calc(100% - .48rem);
   height: auto;
-  margin: 0 auto .2rem auto;
+  margin: 0 auto .1rem auto;
 }
 .recommend2_img {
   width: 100%;
-  height: 1.6rem;
+  height: 2rem;
   overflow: hidden;
-  /*margin-top: .3rem;*/
+  margin-top: .12rem;
 }
 .recommend2_img img {
   width: 100%;
@@ -162,62 +194,9 @@
   height: .7rem;
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-top: .3rem;
+  align-items: flex-end;
+  /*margin-top: .1rem;*/
 }
 /* 推荐三 end */
 /* 推荐模块 end */
-/* 电子会员 start */
-.online {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.online_cont {
-  width: 6rem;
-  height: 8rem;
-  display: flex;
-  justify-content: space-between;
-  flex-flow: column;
-  align-items: center;
-}
-.online_tit {
-  width: calc(100% - .6rem);
-  height: 1.1rem;
-  line-height: 1.1rem;
-  padding: 0 .3rem;
-  border-bottom: 1px solid #f4f4f4;
-}
-.online_bar {
-  width: 3.3rem;
-  height: 1.6rem;
-  margin: .34rem auto 0 auto;
-}
-.online_qr {
-  width: 3.3rem;
-  height: 3.3rem;
-  margin: 0 auto;
-}
-.online_img img {
-  width: 100%;
-  height: 100%;
-}
-.online_btn {
-  width: calc(100% - .6rem);
-  display: flex;
-  justify-content: space-around;
-  padding: .5rem .3rem;
-}
-.online_btn div {
-  width: 2rem;
-  height: .7rem;
-  line-height: .7rem;
-}
-/* 电子会员 end */
+

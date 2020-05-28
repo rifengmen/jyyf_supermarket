@@ -100,9 +100,9 @@ export default {
           this.myInfo = res.data
           this.radio = res.data.birthday ? 'birthday' : 'lunarbirthday'
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
@@ -133,16 +133,16 @@ export default {
       this.$axios.post('system/customlogin/modifyname', data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$message({
+          this.$toast({
             message: '资料修改成功！',
             type: 'success'
           })
           // 更新用户资料
           this.setUserInfo()
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {

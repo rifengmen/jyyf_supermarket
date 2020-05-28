@@ -1,0 +1,74 @@
+/* 电子会员 start */
+.online {
+  width: 100%;
+  height: calc(100% - 1rem - 1px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+}
+.online_cont {
+  width: 6.5rem;
+  height: 7.26rem;
+}
+.online_tit {
+  width: 100%;
+  height: .46rem;
+  line-height: .46rem;
+}
+.online_bar {
+  width: 5.9rem;
+  height: 1.4rem;
+  margin: .4rem auto .4rem auto;
+}
+.online_qr {
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto;
+}
+.online_img img {
+  width: 100%;
+  height: 100%;
+}
+.online_age {
+  height: .3rem;
+  line-height: .3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: .05rem 0;
+}
+.online_age img {
+  width: .3rem;
+  height: .3rem;
+  margin-right: .2rem;
+}
+.online_num {
+  width: 100%;
+  height: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.online_num img {
+  width: .4rem;
+  height: .4rem;
+  margin-right: .2rem;
+}
+.online_btn {
+  width: calc(100% - .6rem);
+  display: flex;
+  justify-content: center;
+  margin-top: .5rem;
+}
+.online_btn > div {
+  width: 1rem;
+  height: 1.2rem;
+  margin: 0 1.1rem;
+}
+.online_btn > div img {
+  width: .7rem;
+  height: .7rem;
+  margin-bottom: .2rem;
+}
+/* 电子会员 end */

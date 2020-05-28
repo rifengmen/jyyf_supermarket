@@ -18,7 +18,7 @@
                 <div class="goods_input bgffffff" @click="addorder(item.no)">
                   <input class="checkbox" type="checkbox" name="goods" v-model="item.addorder">
                 </div>
-                <div class="goods_item bgffffff ellipsis" @click="goodsdetail(item.goodsid)">
+                <div class="goods_item bgffffff ellipsis" @click="goodsdetail(item)">
                   <div class="goods_item_img">
                     <img :src="(item.picture1 ? (imgurl + 'image/' + item.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))">
                     <div v-if="item.promotemode !== 0" class="goods_age font24 font_normal colorffffff">{{item.modenote}}</div>
@@ -26,18 +26,18 @@
                   <div class="goods_item_cont">
                     <div class="goods_item_name ellipsis font26">{{item.cusgoodsname}}</div>
                     <div class="goods_item_name ellipsis font24 colorfa2a2a">{{item.remark}}</div>
-                    <div class="goods_item_price" v-if="item.promotemode === 0 || item.promotemode === 2 || item.promotemode === 3 || item.promotemode === 8">
-                      <div class="font30 font_blod colorf84242">￥{{item.saleprice}}</div>
-                    </div>
-                    <div class="goods_item_price" v-if="item.promotemode === 1 || item.promotemode === 7">
-                      <div class="font30 font_blod colorf84242">￥{{item.promotevalue}}</div>
-                      <del class="font24 color999999">￥{{item.saleprice}}</del>
-                    </div>
-                    <div class="goods_item_price" v-if="item.promotemode === 6">
-                      <div class="font30 font_blod colorf84242">￥{{item.groupprice}}</div>
-                      <del class="font24 color999999">￥{{item.saleprice}}</del>
-                    </div>
                     <div class="goods_item_editnum">
+                      <div class="goods_item_price" v-if="item.promotemode === 0 || item.promotemode === 2 || item.promotemode === 3 || item.promotemode === 8">
+                        <div class="font30 font_blod colorf84242">￥{{item.saleprice}}</div>
+                      </div>
+                      <div class="goods_item_price" v-if="item.promotemode === 1 || item.promotemode === 7">
+                        <div class="font30 font_blod colorf84242">￥{{item.promotevalue}}</div>
+                        <del class="font24 color999999">￥{{item.saleprice}}</del>
+                      </div>
+                      <div class="goods_item_price" v-if="item.promotemode === 6">
+                        <div class="font30 font_blod colorf84242">￥{{item.groupprice}}</div>
+                        <del class="font24 color999999">￥{{item.saleprice}}</del>
+                      </div>
                       <div class="goods_num">
                         <div class="goods_num_btn goods_num_countnum borderc7c7c7 border_r4 tc font40 font_lighter color999999" @click="countAmount(item.amount, item.no)">-</div>
                         <div class="goods_num_input borderc7c7c7 border_r4 tc colorff6400 font30" @click="changeAmount">{{item.amount}}</div>
@@ -135,9 +135,9 @@ export default {
           this.setTotalmoney()
           this.$store.commit('setCart', res.data)
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
@@ -145,8 +145,9 @@ export default {
       })
     },
     // 商品详情
-    goodsdetail (goodsid) {
-      this.$router.push({name: 'goodsdetail', query: {dianpu: this.$store.state.wechatID, goodsid: goodsid}})
+    goodsdetail (goodsdetail) {
+      this.$store.commit('setGoodsdetail', goodsdetail)
+      this.$router.push({name: 'goodsdetail', query: {goodsid: goodsdetail.goodsid}})
     },
     // 加
     addAmount (amount, no) {
@@ -188,9 +189,9 @@ export default {
           // 计算选中商品总价
           this.setTotalmoney()
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
@@ -254,9 +255,9 @@ export default {
           this.cartList = this.cartList.filter(item => item.addorder !== true)
           this.setTotalmoney()
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       })

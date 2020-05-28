@@ -1,9 +1,12 @@
+const mycode = () => import(/* webpackChunkName: 'other' */ '@/components/mycode/mycode')
 const recharge = () => import(/* webpackChunkName: 'other' */ '@/components/other/recharge')
 const rechargePay = () => import(/* webpackChunkName: 'other' */ '@/components/other/rechargePay')
 const lottery = () => import(/* webpackChunkName: 'other' */ '@/components/other/lottery')
 const lotteryList = () => import(/* webpackChunkName: 'other' */ '@/components/other/lotteryList')
 
 export default [
+  // 其他-电子码
+  {path: '/mycode', name: 'mycode', component: mycode},
   // 其他-在线充值
   {path: '/recharge', name: 'recharge', component: recharge},
   // 其他-充值支付

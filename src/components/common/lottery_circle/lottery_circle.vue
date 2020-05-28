@@ -91,9 +91,9 @@ export default {
     startPlay () {
       if (this.flag) {
         if (this.totalCent < this.activeObj.prizeUseCent) {
-          this.$message({
+          this.$toast({
             message: '积分不足!',
-            type: 'error'
+            type: 'fail'
           })
           return false
         }
@@ -112,9 +112,9 @@ export default {
             // 调抽奖
             this.startBtn(this.prize)
           } else {
-            this.$message({
+            this.$toast({
               message: res.msg,
-              type: 'error'
+              type: 'fail'
             })
           }
         }).catch(error => {

@@ -10,10 +10,10 @@
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
     <div class="userinfo_main bgffffff">
-      <!-- 加载中动画 start -->
-      <loading v-if="isShowLoading"></loading>
-      <!-- 下拉刷新动画 end -->
       <div class="tick_cont">
+        <!-- 加载中动画 start -->
+        <loading v-if="isShowLoading"></loading>
+        <!-- 下拉刷新动画 end -->
         <!-- 优惠券列表 start -->
         <div class="tick_list" v-if="tickList.length">
           <ul>
@@ -120,9 +120,9 @@ export default {
           this.isShowLoading = false
           this.tickList = res.data
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
@@ -175,14 +175,14 @@ export default {
       this.$axios.post('mem/member/panicCoupon', data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$message({
+          this.$toast({
             message: res.msg,
             type: 'success'
           })
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
@@ -208,9 +208,9 @@ export default {
             this.$store.commit('setTick', tick)
             this.$router.push({name: 'editorder'})
           } else {
-            this.$message({
+            this.$toast({
               message: res.msg,
-              type: 'error'
+              type: 'fail'
             })
           }
         }).catch(error => {

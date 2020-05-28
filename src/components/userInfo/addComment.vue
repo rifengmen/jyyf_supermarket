@@ -81,9 +81,9 @@ export default {
     // 发送评价
     sendComment () {
       if (!this.comment) {
-        this.$message({
+        this.$toast({
           message: '内容不能为空！',
-          type: 'error'
+          type: 'fail'
         })
         return false
       }
@@ -97,15 +97,15 @@ export default {
       this.$axios.post('api/goods/addAppraise', data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$message({
+          this.$toast({
             message: '提交成功!',
             type: 'success'
           })
           this.$router.push({name: 'commentList'})
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {

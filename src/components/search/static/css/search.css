@@ -1,9 +1,15 @@
-﻿/* 商品列表 start */
+﻿/* 搜索页 start */
+.search_main {
+  width: calc(100% - .48rem);
+  padding: 0 .24rem;
+}
+/* 搜索页 end */
+/* 商品列表 start */
 .search_list {
   width: 100%;
   height: calc(100vh - 2.1rem);
   overflow: hidden;
-  margin-top: .2rem;
+  /*margin-top: .2rem;*/
 }
 .goodslist {
   width: 100%;

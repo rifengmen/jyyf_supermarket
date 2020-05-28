@@ -73,9 +73,9 @@ export default {
           this.isShowLoading = false
           this.commentList = res.data
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {

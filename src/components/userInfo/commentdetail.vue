@@ -70,9 +70,9 @@ export default {
         if (res.code === 200) {
           this.commentdetail = res.data
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {

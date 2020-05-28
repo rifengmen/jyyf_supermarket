@@ -1,95 +1,118 @@
 <template>
   <!--<div class="container bgeeeeee" v-if="userInfo.moneyDetail">-->
   <div class="container bgeeeeee">
-    <!-- 头部标题 start -->
-    <my-header>
-      <template v-slot:header>会员中心</template>
-    </my-header>
-    <!-- 头部标题 end -->
+    <!-- 获取微信凭证 start -->
+    <wechat-config>
+    </wechat-config>
+    <!-- 获取微信凭证 end -->
     <!-- card start -->
-    <div class="card userinfo colorffffff">
-      <div class="card_name">
-        <div class="card_img bgffffff border_r500">
-          <img :src="headimgurl || 'static/img/userimg.png'" class="border_r500">
-          <div class="vip_desc colorffc06e bgffffff border_r500 font24">v{{userInfo.mem_type}}</div>
+    <div class="userinfo colorffffff">
+      <div class="card">
+        <div class="card_name">
+          <div class="card_img bgffffff border_r500">
+            <img :src="headimgurl || 'static/img/userimg.png'" class="border_r500">
+            <div class="vip_desc colorffffff bge7cb92 border_r500 font24">v{{userInfo.mem_type || 0}}</div>
+          </div>
+          <div class="card_num tl">
+            <div>{{userInfo.memname}}</div>
+            <div class="font_lighter">NO：{{userInfo.memcode}}</div>
+          </div>
         </div>
-        <div class="card_num tl">
-          <div>{{userInfo.memname}}</div>
-          <div>会员号：{{userInfo.memcode}}</div>
-        </div>
-        <div class="card_class" @click="sendSign">
-          <img src="static/img/sign_bg.png">
-          <div class="sign_btn">签到</div>
-        </div>
-      </div>
-      <div class="card_des">
-        <ul>
-          <router-link :to="{name: 'cardMoneyList'}" tag="li" class="card_des_item font24">
-            <div>{{moneyDetail.moneyBal}}</div>
-            <div>卡值</div>
-          </router-link>
-          <router-link :to="{name: 'scoreList'}" tag="li" class="card_des_item font24">
-            <div>{{moneyDetail.totalCent}}</div>
-            <div>积分</div>
-          </router-link>
-          <router-link :to="{name: 'tickList', params:{header_tit: '优惠券', froms: 'userinfo'}}" tag="li" class="card_des_item font24">
-            <div>{{moneyDetail.couponAmount}}</div>
-            <div>券数量</div>
-          </router-link>
-          <router-link :to="{name: 'looseChangeList'}" tag="li" class="card_des_item font24">
-            <div>{{moneyDetail.smallMoneyBal}}</div>
-            <div>零钱</div>
-          </router-link>
-        </ul>
       </div>
     </div>
     <!-- card end -->
     <!-- 功能部分 start -->
-    <div class="user_cont">
-      <ul class=" border_r10 bgffffff">
-        <li class="user_item">
+    <div class="user_cont userinfo_cont">
+      <ul class="">
+        <!-- 我的钱包 start -->
+        <li class="user_item border_r10 bgffffff">
+          <div class="card_des">
+            <ul>
+              <router-link :to="{name: 'cardMoneyList'}" tag="li" class="card_des_item font24">
+                <div class="font32">{{moneyDetail.moneyBal || 0}}</div>
+                <div class="font22">卡值</div>
+              </router-link>
+              <li class="card_des_item bgd9d9d9"></li>
+              <router-link :to="{name: 'scoreList'}" tag="li" class="card_des_item font24">
+                <div class="font32">{{moneyDetail.totalCent || 0}}</div>
+                <div class="font22">积分</div>
+              </router-link>
+              <li class="card_des_item bgd9d9d9"></li>
+              <router-link :to="{name: 'tickList', params:{header_tit: '优惠券', froms: 'userinfo'}}" tag="li" class="card_des_item font24">
+                <div class="font32">{{moneyDetail.couponAmount || 0}}</div>
+                <div class="font22">券数量</div>
+              </router-link>
+              <li class="card_des_item bgd9d9d9"></li>
+              <router-link :to="{name: 'looseChangeList'}" tag="li" class="card_des_item font24">
+                <div class="font32">{{moneyDetail.smallMoneyBal || 0}}</div>
+                <div class="font22">零钱</div>
+              </router-link>
+            </ul>
+          </div>
+        </li>
+        <!-- 我的钱包 end -->
+        <!-- 我的订单 start -->
+        <li class="user_item border_r10 bgffffff">
+          <div class="user_item_tit font32">
+            <div>我的订单</div>
+            <router-link :to="{name: 'orderList', query: {billstatus: '-2'}}" tag="div" class="font24 color666666">全部订单 <i class="el-icon-arrow-right" style="font-size: .28rem!important;"></i></router-link>
+          </div>
+          <ul class="color666666">
+            <!-- 未完成 start -->
+            <router-link :to="{name: 'orderList', query: {billstatus: '-1'}}" tag="li" class="cont_item cont_order">
+              <div class="imgbox">
+                <img src="static/img/order_-1.png">
+              </div>
+              <div class="imgname font24">未完成</div>
+            </router-link>
+            <!-- 未完成 end -->
+            <!-- 未受理 start -->
+            <router-link :to="{name: 'orderList', query: {billstatus: '0'}}" tag="li" class="cont_item cont_order">
+              <div class="imgbox">
+                <img src="static/img/order_0.png">
+              </div>
+              <div class="imgname font24">未受理</div>
+            </router-link>
+            <!-- 未受理 end -->
+            <!-- 待配送 start -->
+            <router-link :to="{name: 'orderList', query: {billstatus: '10'}}" tag="li"  class="cont_item cont_order">
+              <div class="imgbox">
+                <img src="static/img/order_10.png">
+              </div>
+              <div class="imgname font24">待配送</div>
+            </router-link>
+            <!-- 待配送 end -->
+            <!-- 配送中 start -->
+            <router-link :to="{name: 'orderList', query: {billstatus: '11'}}" tag="li"  class="cont_item cont_order">
+              <div class="imgbox">
+                <img src="static/img/order_11.png">
+              </div>
+              <div class="imgname font24">配送中</div>
+            </router-link>
+            <!-- 配送中 end -->
+            <!-- 已完成 start -->
+            <router-link :to="{name: 'orderList', query: {billstatus: '12'}}" tag="li"  class="cont_item cont_order">
+              <div class="imgbox">
+                <img src="static/img/order_12.png">
+              </div>
+              <div class="imgname font24">已完成</div>
+            </router-link>
+            <!-- 已完成 end -->
+          </ul>
+        </li>
+        <!-- 我的订单 end -->
+        <!-- 常用功能 start -->
+        <li class="user_item border_r10 bgffffff">
           <div class="user_item_tit font32">常用功能</div>
           <ul class="color666666">
-            <!-- 积分变化 start -->
-            <router-link :to="{name: 'scoreList'}" tag="li" class="cont_item">
-              <div class="imgbox">
-                <img src="static/img/user_jfbh.png">
-              </div>
-              <div class="imgname font24">积分变化</div>
-            </router-link>
-            <!-- 积分变化 end -->
-            <!-- 卡值变化 start -->
-            <router-link :to="{name: 'cardMoneyList'}" tag="li"  class="cont_item">
-              <div class="imgbox">
-                <img src="static/img/user_kzbh.png">
-              </div>
-              <div class="imgname font24">卡值变化</div>
-            </router-link>
-            <!-- 卡值变化 end -->
-            <!-- 零钱变化 start -->
-            <router-link :to="{name: 'looseChangeList'}" tag="li"  class="cont_item">
-              <div class="imgbox">
-                <img src="static/img/user_lqbh.png">
-              </div>
-              <div class="imgname font24">零钱变化</div>
-            </router-link>
-            <!-- 零钱变化 end -->
             <!-- 购物评价 start -->
             <!--<router-link :to="{name: 'commentList'}" tag="li"  class="cont_item">-->
-              <!--<div class="imgbox">-->
-                <!--<img src="static/img/user_gwpj.png">-->
-              <!--</div>-->
-              <!--<div class="imgname font24">购物评价</div>-->
+            <!--<div class="imgbox">-->
+            <!--<img src="static/img/user_gwpj.png">-->
+            <!--</div>-->
+            <!--<div class="imgname font24">购物评价</div>-->
             <!--</router-link>-->
             <!-- 购物评价 end -->
-            <!-- 我的订单 start -->
-            <router-link :to="{name: 'orderList', params:{header_tit: '我的订单'}}" tag="li"  class="cont_item">
-              <div class="imgbox">
-                <img src="static/img/user_wddd.png">
-              </div>
-              <div class="imgname font24">我的订单</div>
-            </router-link>
-            <!-- 我的订单 end -->
             <!-- 我的资料 start -->
             <router-link :to="{name: 'userDetail', params:{header_tit: '我的资料'}}" tag="li"  class="cont_item">
               <div class="imgbox">
@@ -114,14 +137,14 @@
               <div class="imgname font24">支付密码</div>
             </router-link>
             <!-- 支付密码 end -->
-            <!-- 优惠券 start -->
-            <router-link :to="{name: 'tickList', params:{header_tit: '优惠券', froms: 'userinfo'}}" tag="li"  class="cont_item">
+            <!-- 我的消息 start -->
+            <router-link :to="{name: 'messageList'}" tag="li"  class="cont_item">
               <div class="imgbox">
-                <img src="static/img/user_yhq.png">
+                <img src="static/img/user_message.png">
               </div>
-              <div class="imgname font24">优惠券</div>
+              <div class="imgname font24">我的消息</div>
             </router-link>
-            <!-- 优惠券 end -->
+            <!-- 我的消息 end -->
             <!-- 投诉建议 start -->
             <router-link :to="{name: 'complaintList', params:{froms: 'userinfo'}}" tag="li"  class="cont_item">
               <div class="imgbox">
@@ -140,22 +163,23 @@
             <!-- 消费记录 end -->
             <!-- 会员解绑 start -->
             <!--<router-link :to="{name: 'userList', params:{header_tit: '会员解绑'}}" tag="li"  class="cont_item">-->
-              <!--<div class="imgbox">-->
-                <!--<img src="static/img/user_hyjb.png">-->
-              <!--</div>-->
-              <!--<div class="imgname font24">会员解绑</div>-->
+            <!--<div class="imgbox">-->
+            <!--<img src="static/img/user_hyjb.png">-->
+            <!--</div>-->
+            <!--<div class="imgname font24">会员解绑</div>-->
             <!--</router-link>-->
             <!-- 会员解绑 end -->
             <!-- 拣配确认 start -->
             <router-link :to="{name: 'scan', params:{header_tit: '拣配确认'}}" tag="li"  class="cont_item" v-if="userInfo.role">
               <div class="imgbox">
-                <img src="static/img/user_smyh.png">
+                <img src="static/img/user_jpqr.png">
               </div>
               <div class="imgname font24">拣配确认</div>
             </router-link>
             <!-- 拣配确认 end -->
           </ul>
         </li>
+        <!-- 常用功能 end -->
       </ul>
     </div>
     <!-- 功能部分 end -->
@@ -166,7 +190,7 @@
 </template>
 
 <script>
-import MyHeader from '@/components/common/header/myheader'
+import WechatConfig from '@/components/common/wechatConfig/wechatConfig'
 import MyFooter from '@/components/common/footer/myfooter'
 // import { mapState } from 'vuex'
 
@@ -195,7 +219,7 @@ export default {
     // })
   },
   components: {
-    MyHeader,
+    WechatConfig,
     MyFooter
   },
   methods: {
@@ -216,33 +240,9 @@ export default {
           sessionStorage.setItem('jyyf_token', res.data.token)
           this.$axios.defaults.headers.common.Authorization = res.data.token
         } else {
-          this.$message({
+          this.$toast({
             message: '登陆失败，请重新登陆！',
-            type: 'error'
-          })
-        }
-      }).catch(error => {
-        throw error
-      })
-    },
-    // 签到
-    sendSign () {
-      let data = new FormData()
-      let requestData = {}
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('pay/bill/member/signInCentChange', data).then(result => {
-        let res = result.data
-        if (res.code === 200) {
-          this.$message({
-            message: '签到成功，' + res.msg,
-            type: 'success'
-          })
-          this.setUserInfo()
-        } else {
-          this.$message({
-            message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {

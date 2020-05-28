@@ -29,35 +29,33 @@ export default {
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
-      this.$confirm('确认取消订单吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
+      this.$dialog.confirm({
+        message: '确认取消订单吗？'
       }).then(() => {
         this.$axios.post('api/order/cancleOrder', data).then(result => {
           let res = result.data
           if (res.code === 200) {
-            this.$message({
+            this.$toast({
               message: '取消成功！',
               type: 'success'
             })
             if (this.$route.name === 'orderList') {
-              this.$emit('getOrderList')
+              this.$emit('onRefresh')
               return false
             }
-            this.$router.push({name: 'orderList'})
+            this.$router.push({name: 'orderList', query: {billstatus: '-2'}})
           } else {
-            this.$message({
+            this.$toast({
               message: res.msg,
-              type: 'error'
+              type: 'fail'
             })
           }
         }).catch(error => {
           throw error
         })
       }).catch(() => {
-        this.$message({
-          type: 'info',
+        this.$toast({
+          type: 'fail',
           message: '操作已取消'
         })
       })

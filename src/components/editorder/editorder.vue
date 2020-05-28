@@ -55,7 +55,7 @@
           <div class="">积分抵扣</div>
           <div class="color999999">
             <span class="colorf84242">￥{{score.Money}}</span>&nbsp;
-            共
+            抵扣
             <span class="colorf84242">{{score.useScore}}</span>
             分
           </div>
@@ -107,13 +107,18 @@
             <div class="font24">积分抵扣</div>
             <div class="font24 color999999">-￥{{(scoreMoney || 0).toFixed(2)}}</div>
           </div>
+          <div class="order_desc">
+            <div class="font24">零钱</div>
+            <div class="font24 color999999" v-if="smallmoney >= 0">-￥{{smallmoney.toFixed(2)}}</div>
+            <div class="font24 color999999" v-if="smallmoney < 0">+￥{{(Math.abs(smallmoney)).toFixed(2)}}</div>
+          </div>
         </div>
         <!-- 结算信息 end -->
       </div>
       <!-- 订单内容 end -->
       <!-- 结算金额 start -->
       <div class="order_money bgffffff">
-        <div class="order_money_totalMoney font24 ellipsis">实付：<span class="colorf84242 font34">￥{{payMoney.toFixed(2)}}</span></div>
+        <div class="order_money_totalMoney font24 ellipsis">实付：<span class="colorf84242 font34">￥{{(payMoney - smallmoney).toFixed(2)}}</span></div>
         <div class="pay colorffffff bgff6400">
           <pay-btn
             :paymodeid="paymodeid"
@@ -177,12 +182,22 @@ export default {
       }
       return money
     },
+    // 零钱
+    smallmoney () {
+      let money = this.payMoney - this.order.smallmoney
+      if (money < 0) {
+        return this.payMoney
+      }
+      return this.order.smallmoney
+    },
+    // 优惠券
     tick () {
       return this.$store.state.tick
     },
     // 计算支付金额
     payMoney () {
-      return (parseFloat(this.Totalmoney) + parseFloat(this.freightmoney.freightmoney || 0) - parseFloat(this.scoreMoney || 0) - parseFloat(this.tick.dicountMoney || 0))
+      let money = parseFloat(this.Totalmoney) + parseFloat(this.freightmoney.freightmoney || 0) - parseFloat(this.scoreMoney || 0) - parseFloat(this.tick.dicountMoney || 0)
+      return money
     }
   },
   components: {
@@ -204,9 +219,9 @@ export default {
         if (res.code === 200) {
           this.$store.commit('setScore', res.data)
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
@@ -229,9 +244,9 @@ export default {
     // 去优惠券列表
     tickList () {
       if (!this.address) {
-        this.$message({
+        this.$toast({
           message: '请选择收货地址！',
-          type: 'error'
+          type: 'fail'
         })
         return false
       }

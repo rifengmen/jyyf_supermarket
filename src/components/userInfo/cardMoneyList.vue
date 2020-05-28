@@ -11,7 +11,7 @@
     <!-- 内容部分盒子 start -->
     <div class="userinfo_main bgffffff">
       <!-- card start -->
-      <div class="card card_card colorffffff bgffffff">
+      <div class="card_card card1 border_r8 colorffffff bgffffff">
         <div class="font36 colorffffff">可用余额</div>
         <div class="card_desc">
           <div class="font96 font_blod">{{Balancemoney}}</div>
@@ -54,6 +54,8 @@ export default {
   name: 'cardMoneyList',
   data () {
     return {
+      maxDate: new Date(),
+      currentDate: new Date(),
       // 卡值记录列表
       cardMoneyList: '',
       // 查询开始时间
@@ -101,9 +103,9 @@ export default {
           this.cardMoneyList = res.data.dataList
           this.Balancemoney = res.data.Balancemoney
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {

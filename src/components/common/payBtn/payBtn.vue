@@ -1,6 +1,8 @@
 <template>
-  <div class="sendpay" @click="pay">
-    <slot></slot>
+  <div class="sendpay">
+    <div class="" @click="pay">
+      <slot></slot>
+    </div>
   </div>
 </template>
 
@@ -78,15 +80,26 @@ export default {
   },
   components: {},
   methods: {
+    onInput (key) {
+      this.value = (this.value + key).slice(0, 4)
+      if (this.value.length === 4) {
+        this.errorInfo = '密码错误'
+      } else {
+        this.errorInfo = ''
+      }
+    },
+    onDelete () {
+      this.value = this.value.slice(0, this.value.length - 1)
+    },
     // 支付
     pay (e) {
       e.stopPropagation()
       if (!this.tradeno) {
         // 验证选择收货地址
         if (!this.address) {
-          this.$message({
+          this.$toast({
             message: '请选择收货地址！',
-            type: 'error'
+            type: 'fail'
           })
           return false
         }
@@ -115,7 +128,7 @@ export default {
                 this.Cpassword = value
                 this.sendpay()
               }).catch(() => {
-                this.$message({
+                this.$toast({
                   type: 'info',
                   message: '取消输入'
                 })
@@ -124,8 +137,8 @@ export default {
               this.sendpay()
             }
           } else {
-            this.$message({
-              type: 'error',
+            this.$toast({
+              type: 'fail',
               message: res.msg
             })
           }
@@ -141,7 +154,7 @@ export default {
       // 订单总金额
       let totalMoney = this.order.totalMoney
       // 零钱金额
-      // let smallmoney = this.order.smallmoney
+      let smallmoney = this.order.smallmoney
       // console.log(totalMoney, '订单总金额')
       // 支付金额
       // let paymoney = totalMoney - smallmoney + parseFloat(this.freightmoney.freightmoney)
@@ -166,7 +179,6 @@ export default {
         paylist4.paymoney = this.tick.dicountMoney
         this.paylist[index] = paylist4
         index++
-        // paymoney = paymoney - this.freightmoney.freightmoney - paylist4.paymoney
         paymoney = paymoney - paylist4.paymoney
       }
       // 积分
@@ -180,22 +192,23 @@ export default {
         paymoney = paymoney - paylist5.paymoney
       }
       // 零钱
-      // if (this.order.smallmoney !== 0) {
-      //   let paylist10 = {}
-      //   paylist10.paymode = 10
-      //   if (paymoney > 0) {
-      //     let money = paymoney - smallmoney
-      //     if (money <= 0) {
-      //       paylist10.paymoney = paymoney
-      //     } else {
-      //       paylist10.paymoney = smallmoney
-      //     }
-      //   } else {
-      //     paylist10.paymoney = 0
-      //   }
-      //   this.paylist[index] = paylist10
-      //   index++
-      // }
+      if (this.order.smallmoney !== 0) {
+        let paylist10 = {}
+        paylist10.paymode = 10
+        if (paymoney > 0) {
+          let money = paymoney - smallmoney
+          if (money <= 0) {
+            paylist10.paymoney = paymoney
+          } else {
+            paylist10.paymoney = smallmoney
+          }
+        } else {
+          paylist10.paymoney = 0
+        }
+        this.paylist[index] = paylist10
+        index++
+        paymoney = paymoney - paylist10.paymoney
+      }
       // 储值卡
       if (this.paymodeid === '3') {
         let paylist3 = {}
@@ -231,20 +244,20 @@ export default {
         Cpassword: this.Cpassword,
         channel: this.channel,
         freight: this.freightmoney.freightmoney,
-        Tradeno: this.tradeno
+        Tradeno: this.tradeno,
+        // 支付完成后返回路径
+        frontUrl: 'https://www.spzlk.cn/index.html?dianpu=' + this.$store.state.wechatID
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
-      // console.log(JSON.parse(requestData), '支付信息')
-      // return false
       this.$axios.post('invest/microFlow/orderCommit', data).then(result => {
-        // console.log(result, '支付信息')
         let res = result.data
         if (res.code === 200) {
           // 微信支付
           if (res.data.beecloud) {
             let beecloud = res.data.beecloud
             if (beecloud.paymentchannel === 4) {
+              sessionStorage.removeItem('jyyf_openid')
               window.location.href = beecloud.tmPayStr.payUrl
             } else if (beecloud.paymentchannel === 2) {
               let vm = this
@@ -262,7 +275,7 @@ export default {
               return false
             }
           } else {
-            this.$message({
+            this.$toast({
               message: '支付成功!',
               type: 'success'
             })
@@ -271,16 +284,16 @@ export default {
           return false
         } else {
           if (res.data) {
-            this.$message({
+            this.$toast({
               message: res.msg,
-              type: 'error'
+              type: 'fail'
             })
             this.orderdetail(res.data.tradeno)
             return false
           }
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
@@ -311,9 +324,9 @@ export default {
             // 使用以上方式判断前端返回,微信团队郑重提示：
             // res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
           } else if (_res.err_msg === 'get_brand_wcpay_request:cancel' || _res.err_msg === 'get_brand_wcpay_request:fail') {
-            _this.$message({
+            _this.$toast({
               message: '支付失败！',
-              type: 'error'
+              type: 'fail'
             })
             _this.orderdetail(tradeno)
           }
@@ -341,16 +354,16 @@ export default {
             this.$store.commit('setCartnums', 0)
           }
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
         throw error
       })
     },
-    // 去订单详情页面
+    // 去会员中心页面
     orderdetail (tradeno) {
       this.$store.commit('setOrder', '')
       this.$store.commit('setScore', '')
@@ -358,7 +371,7 @@ export default {
       this.$store.commit('setFreightmoney', '')
       this.$store.commit('setTick', '')
       this.getCart()
-      this.$router.push({name: 'orderdetail', query: {tradeno: tradeno}})
+      this.$router.push({name: 'userInfo'})
     }
   },
   watch: {},

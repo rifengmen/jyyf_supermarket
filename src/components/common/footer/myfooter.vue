@@ -15,6 +15,13 @@
         <div class="listname font24 color666">分类</div>
       </router-link>
       <!-- 分类 end -->
+      <!-- 电子码 start -->
+      <router-link :to="{name:'mycode'}" tag="div" class="footer_message footer_nav tc">
+        <!--<div class="bgimg"></div>-->
+        <img src="static/img/code.png">
+        <!--<div class="listname font24 color666">电子码</div>-->
+      </router-link>
+      <!-- 电子码 end -->
       <!-- 购物车 start -->
       <router-link :to="{name:'cart'}" tag="div" class="footer_cart footer_nav tc">
         <div class="bgimg"></div>
@@ -22,13 +29,6 @@
         <div class="listname font24 color666">购物车</div>
       </router-link>
       <!-- 购物车 end -->
-      <!-- 消息 start -->
-      <router-link :to="{name:'messageList'}" tag="div" class="footer_message footer_nav tc">
-        <div class="bgimg"></div>
-        <!--<img src="static/img/supplier.png">-->
-        <div class="listname font24 color666">消息</div>
-      </router-link>
-      <!-- 消息 end -->
       <!-- 我的 start -->
       <router-link :to="{name:'userInfo'}" tag="div" class="footer_userinfo footer_nav tc">
         <div class="bgimg"></div>

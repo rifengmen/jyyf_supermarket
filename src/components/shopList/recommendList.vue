@@ -1,0 +1,203 @@
+<template>
+  <div class="container bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
+    <!-- 头部 start -->
+    <my-header>
+      <template v-slot:backs>
+        <i class="el-icon-arrow-left"></i>
+      </template>
+      <template v-slot:header>{{recommendName}}</template>
+    </my-header>
+    <!-- 头部 end -->
+    <!-- 内容盒子 start -->
+    <div class="recommend_list">
+      <!-- 加载中动画 start -->
+      <loading v-if="isShowLoading"></loading>
+      <!-- 加载中动画 end -->
+      <!-- 商品列表 start -->
+      <div class="goods_list" v-if="goodsList.length">
+        <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+          <van-list
+            v-model="loading"
+            :finished="finished"
+            :offset="offset"
+            finished-text="没有更多了"
+            @load="onLoad">
+            <div v-for="(item, index) in goodsList" :key="index" class="goods_li">
+              <div class="goods_item bgffffff ellipsis" @click="goodsdetail(item)">
+                <div class="goods_item_img">
+                  <img :src="(item.picture1 ? (imgurl + 'image/' + item.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))">
+                  <div v-if="item.promotemode !== 0" class="goods_age font24 font_normal colorffffff">{{item.modenote}}</div>
+                </div>
+                <div class="goods_item_cont">
+                  <div class="goods_item_name ellipsis font26">{{item.cusgoodsname}}</div>
+                  <div class="goods_item_name ellipsis font24 colorfa2a2a">{{item.remark}}</div>
+                  <div class="goods_item_editnum">
+                    <div class="goods_item_price" v-if="item.promotemode === 0 || item.promotemode === 2 || item.promotemode === 3 || item.promotemode === 8">
+                      <div class="font32 font_blod colorf84242">￥{{item.saleprice}}</div>
+                    </div>
+                    <div class="goods_item_price" v-if="item.promotemode === 1 || item.promotemode === 7">
+                      <div class="font32 font_blod colorf84242">￥{{item.promotevalue}}</div>
+                      <del class="font26 color999999">￥{{item.saleprice}}</del>
+                    </div>
+                    <div class="goods_item_price" v-if="item.promotemode === 6">
+                      <div class="font32 font_blod colorf84242">￥{{item.groupprice}}</div>
+                      <del class="font26 color999999">￥{{item.saleprice}}</del>
+                    </div>
+                    <div class="goods_item_cart" v-if="item.Promotemode !== 7">
+                      <addcart :goodsid="item.goodsid">
+                        <img src="static/img/gwc.png">
+                      </addcart>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </van-list>
+        </van-pull-refresh>
+      </div>
+      <!-- 商品列表 end -->
+      <!-- 无信息提示 start -->
+      <nodata v-else></nodata>
+      <!-- 无信息提示 end -->
+    </div>
+    <!-- 内容盒子 end -->
+  </div>
+</template>
+
+<script>
+import MyHeader from '@/components/common/header/myheader'
+import loading from '@/components/common/loading/loading'
+import addcart from '@/components/common/addcart/addcart'
+import nodata from '@/components/common/nodata/nodata'
+
+export default {
+  name: 'recommendlist',
+  data () {
+    return {
+      // 图片路径
+      imgurl: this.IMGURL,
+      // 是否处在加载状态
+      loading: false,
+      // 是否已加载完成
+      finished: false,
+      // 下拉刷新
+      refreshing: false,
+      // 滚动条与底部距离小于 offset 时触发load事件
+      offset: 100,
+      // 搜索关键词
+      keyword: this.$store.getters.getKeyword,
+      // 推荐商品列表
+      goodsList: [],
+      // 当前页码
+      page: 0,
+      // 每页显示条数
+      pageSize: 10,
+      // 目前总共多少条
+      totalSize: '',
+      // 目前总共多少页
+      totalPages: '',
+      // 加载中动画
+      isShowLoading: true
+    }
+  },
+  computed: {
+    // 推荐主题商品id
+    recommendid () {
+      return this.$route.query.recommendid
+    },
+    // 推荐主题商品标题
+    recommendName () {
+      return this.$route.query.recommendName
+    }
+  },
+  components: {
+    MyHeader,
+    loading,
+    addcart,
+    nodata
+  },
+  methods: {
+    onLoad () {
+      this.page++
+      this.getGoodsList()
+    },
+    onRefresh () {
+      this.isShowLoading = true
+      // 清空列表数据
+      this.finished = false
+      // 重新加载数据
+      // 将 loading 设置为 true，表示处于加载状态
+      this.loading = true
+      this.page = 0
+      this.goodsList = []
+      this.onLoad()
+    },
+    // 获取商品列表公共方法
+    getGoodsList () {
+      let data = new FormData()
+      let requestData = {
+        Id: this.recommendid,
+        page: this.page,
+        pageSize: this.pageSize
+      }
+      requestData = JSON.stringify(requestData)
+      data.append('requestData', requestData)
+      this.$axios.post('api/goods/getProductListByCate', data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          this.isShowLoading = false
+          // 无数据时
+          if (!res.totalSize) {
+            this.finished = true
+          }
+          if (res.content && res.content.length) {
+            let currentpage = this.page
+            let total = Math.ceil(res.totalSize / this.pageSize)
+            // 页码不足或者最后一页不足的情况
+            if (currentpage > total || res.content.length < this.pageSize) {
+              this.finished = true
+            }
+            // 刷新
+            if (this.refreshing) {
+              this.goodsList = res.content
+              this.refreshing = false
+            } else {
+              this.goodsList.push(...res.content)
+            }
+            this.loading = false
+          }
+        } else {
+          this.$toast({
+            message: res.msg,
+            type: 'fail'
+          })
+        }
+      }).catch(error => {
+        throw error
+      })
+    },
+    // 商品详情
+    goodsdetail (goodsdetail) {
+      this.$store.commit('setGoodsdetail', goodsdetail)
+      this.$router.push({name: 'goodsdetail', query: {goodsid: goodsdetail.goodsid}})
+    }
+  },
+  watch: {},
+  beforeCreate () {
+  },
+  created () {
+    this.onLoad()
+  },
+  beforeMount () {
+  },
+  mounted () {
+  }
+}
+</script>
+
+<style scoped>
+@import 'static/css/recommendList.css';
+.recommend_list {
+  position: relative;
+}
+</style>

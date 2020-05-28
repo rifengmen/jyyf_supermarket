@@ -1,16 +1,16 @@
 const state = {
   // 店铺wechatID
-  // wechatID: 'yksmlm',
   wechatID: '2',
   // wechatID: '',
   // appid
-  // appid: 'wx504cefa17f46c39b',
   appid: 'wx700e813e33fcebec',
   // appid: '',
   // 用户openid
-  // openid: 'oJkXG1RvLe9HbPHaODobVbQTqWjM',
   openid: 'oWBPAv82A3OaXxPa6neaWv09g90A',
   // openid: '',
+  // 基础路径
+  baseURL: 'https://www.spzlk.cn',
+  // baseURL: '',
   // 用户头像
   headimgurl: '',
   // 用户信息
@@ -52,10 +52,6 @@ const state = {
     10: '',
     11: ''
   },
-  // 推荐主题id
-  recommendid: '',
-  // 推荐主题标题
-  recommendName: '',
   // 搜索关键字
   keyword: '',
   // 购物车
@@ -72,10 +68,8 @@ const state = {
   freightmoney: '',
   // 临时订单优惠券信息
   tick: '',
-  // 下拉刷新请求开关
-  isPullingDown: true,
-  // 上拉加载请求开关
-  isPullingUp: true
+  // 商品详情，用作分享商品
+  goodsdetail: ''
 }
 
 export default state

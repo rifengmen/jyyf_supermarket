@@ -9,9 +9,12 @@
 }
 /* card start */
 .userinfo {
-  width: calc(100% - .48rem);
-  height: 1.9rem;
-  margin: .2rem auto;
+  width: 100%;
+  height: 2.7rem;
+}
+.card {
+  width: 100%;
+  height: calc(100% - .5rem);
   display: flex;
   justify-content: space-between;
   flex-flow: column;
@@ -22,20 +25,24 @@
 /* 功能部分 start */
 .user_cont {
   width: calc(100% - .48rem);
-  height: calc(100vh - 4.7rem - 2px);
+  height: calc(100vh - 3rem - 1px);
   margin: 0 auto;
   overflow: hidden;
   overflow-y: scroll;
+}
+.userinfo_cont {
+  margin-top: -.7rem;
 }
 .user_cont > ul {
   width: 100%;
   height: auto;
   margin-bottom: .2rem;
-  padding: .1rem 0;
+  /*padding: .1rem 0;*/
 }
 .user_item {
   width: 100%;
   min-height: 1rem;
+  margin-bottom: .2rem;
 }
 .user_item .user_item_tit {
   width: calc(100% - .48rem);
@@ -43,11 +50,13 @@
   margin: 0 auto;
   line-height: .8rem;
   border-bottom: .02rem solid #f4f4f4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .user_item ul {
   width: 100%;
-  height: auto;
-  padding: .1rem 0 .6rem 0;
+  padding: .1rem 0;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -61,6 +70,9 @@
   flex-flow: column;
   align-items: center;
   margin-bottom: .2rem;
+}
+.cont_order {
+  width: 20%;
 }
 .cont_item .imgbox {
   width: .8rem;
@@ -162,10 +174,9 @@
 /* 我的地址 end */
 /* 我的订单 start */
 .order_nav {
-  width: calc(100% - .48rem);
-  padding: 0 .24rem;
-  height: .88rem;
-  line-height: .88rem;
+  width: 100%;
+  height: .68rem;
+  line-height: .68rem;
 }
 .order_nav > ul {
   width: 100%;
@@ -175,14 +186,16 @@
   align-items: center;
 }
 .order_nav_item {
-  height: .86rem;
+  height: .66rem;
   padding: 0 .2rem;
   border-bottom: .02rem solid #ffffff;
 }
 .order_nav_item.active {
-  height: .86rem;
+  height: .66rem;
   padding: 0 .2rem;
   border-bottom: .02rem solid #f64d4d;
+  color: #fa6400;
+  font-weight: bold;
 }
 .order_main {
   width: calc(100% - .48rem);
@@ -192,9 +205,38 @@
   padding: 0 .24rem;
   overflow: hidden;
 }
+.orderlist {
+  width: 100%;
+  height: calc(100% - .68rem);
+}
 .order_list {
   width: 100%;
   height: 100%;
+  overflow: auto;
+}
+.order_item {
+  width: 100%;
+  height: 1.7rem;
+  padding: .2rem 0;
+  border-bottom: .02rem solid #f4f4f4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.order_item_desc {
+  width: 4.4rem;
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  flex-flow: column;
+}
+.order_item_status {
+  width: calc(100% - 4.4rem);
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-flow: column;
+  align-items: flex-end;
 }
 /* 我的订单 end */
 /* 订单详情 start */
@@ -418,6 +460,23 @@ input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
 .complaint_list {
   width: 100%;
   height: 100%;
+}
+.complaint_item {
+  width: calc(100% - .48rem);
+  height: 1.2rem;
+  padding: 0 .24rem;
+  border-bottom: .02rem solid #f4f4f4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.complaint_item > div:first-child {
+  width: .12rem;
+  height: .12rem;
+  margin-right: .2rem;
+}
+.complaint_title {
+  width: 4.4rem;
 }
 /* 投诉建议 end */
 

@@ -11,7 +11,7 @@
     <!-- 内容部分盒子 start -->
     <div class="other_main bgffffff">
       <!-- card start -->
-      <div class="card card_card colorffffff bgffffff">
+      <div class="card1 card_card colorffffff bgffffff">
         <div class="font36 colorffffff">账户余额</div>
         <div class="card_desc">
           <div class="font96 font_blod">{{moneyDetail.moneyBal}}</div>
@@ -97,39 +97,39 @@ export default {
     isSend () {
       if (this.flag) {
         if (!this.cardno) {
-          this.$message({
+          this.$toast({
             message: '请输入会员卡号！',
-            type: 'error'
+            type: 'fail'
           })
           return false
         }
         if (!this.cardnos) {
-          this.$message({
+          this.$toast({
             message: '请再次输入会员卡号！',
-            type: 'error'
+            type: 'fail'
           })
           return false
         }
         if (this.cardno !== this.cardnos) {
-          this.$message({
+          this.$toast({
             message: '两次会员卡号不一致，请重新输入！',
-            type: 'error'
+            type: 'fail'
           })
           return false
         }
         if (!this.money) {
-          this.$message({
+          this.$toast({
             message: '请输入充值金额！',
-            type: 'error'
+            type: 'fail'
           })
           return false
         }
         this.sendRecharge()
       } else {
         if (!this.money) {
-          this.$message({
+          this.$toast({
             message: '请输入充值金额！',
-            type: 'error'
+            type: 'fail'
           })
           return false
         }
@@ -152,9 +152,9 @@ export default {
         if (res.code === 200) {
           this.$router.push({name: 'rechargePay', params: {payData: res.data}})
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {

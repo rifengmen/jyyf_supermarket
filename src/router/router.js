@@ -10,10 +10,16 @@ import other from './other'
 
 Vue.use(Router)
 
+// 解决两次访问相同路由地址报错
+// const originalPush = Router.prototype.push
+// Router.prototype.push = function push (location) {
+//   return originalPush.call(this, location).catch(err => err)
+// }
+
 const router = new Router({
   mode: 'history',
-  // base: '/author/?#',
-  // base: '/?#',
+  // 测试
+  // base: '/test',
   routes: [
     // 微信授权模块
     ...author,
@@ -38,8 +44,6 @@ const router = new Router({
 //   if (!jyyfopenid && to.fullPath !== '/author') {
 //     // 保存用户进入的url
 //     sessionStorage.setItem('jyyf_beforeLoginUrl', JSON.stringify(to.fullPath))
-//     console.log(JSON.stringify(to), 'to')
-//     console.log(JSON.stringify(to.fullPath), 'to.fullPath')
 //     next('/author')
 //     return false
 //   }

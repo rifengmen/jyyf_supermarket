@@ -94,14 +94,14 @@ export default {
         this.$axios.post('api/order/pickOrder', data).then(result => {
           let res = result.data
           if (res.code === 200) {
-            this.$message({
+            this.$toast({
               message: '拣配成功!',
               type: 'success'
             })
           } else {
-            this.$message({
+            this.$toast({
               message: res.msg,
-              type: 'error'
+              type: 'fail'
             })
           }
         }).catch(error => {
@@ -127,7 +127,7 @@ export default {
             // 扫码后获取结果参数赋值给Input
             let result = res.resultStr
             if (result.indexOf(',') >= 0) {
-              _this.$message({
+              _this.$toast({
                 message: '扫描成功!',
                 type: 'success'
               })
@@ -137,9 +137,9 @@ export default {
               _this.scanFlag = true
               _this.sendTradeno()
             } else {
-              _this.$message({
+              _this.$toast({
                 message: '请对准条形码扫码!',
-                type: 'error'
+                type: 'fail'
               })
             }
           }

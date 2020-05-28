@@ -129,23 +129,23 @@ export default {
     // 发送图片验证码请求短信验证码
     sendImgcode () {
       if (this.mobile === '') {
-        this.$message({
+        this.$toast({
           message: '请输入手机号码！',
-          type: 'error'
+          type: 'fail'
         })
         return false
       }
       if (!this.flag) {
-        this.$message({
+        this.$toast({
           message: '手机号码格式有误，请重新输入！',
-          type: 'error'
+          type: 'fail'
         })
         return false
       }
       if (this.mobilecode === '') {
-        this.$message({
+        this.$toast({
           message: '请输入图形验证码！',
-          type: 'error'
+          type: 'fail'
         })
         return false
       }
@@ -163,14 +163,14 @@ export default {
         if (res.code === 200) {
           // 关闭发送按钮，开始倒计时
           this.msgFlag = false
-          this.$message({
+          this.$toast({
             message: '发送验证码成功，请查收短信!',
             type: 'success'
           })
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
@@ -191,30 +191,30 @@ export default {
     // 发送注册信息
     sendRegister () {
       if (this.mobile === '') {
-        this.$message({
+        this.$toast({
           message: '请输入手机号码！',
-          type: 'error'
+          type: 'fail'
         })
         return false
       }
       if (!this.flag) {
-        this.$message({
+        this.$toast({
           message: '手机号码格式有误，请重新输入！',
-          type: 'error'
+          type: 'fail'
         })
         return false
       }
       if (this.mobilecode === '') {
-        this.$message({
+        this.$toast({
           message: '请输入图形验证码！',
-          type: 'error'
+          type: 'fail'
         })
         return false
       }
       if (this.Checkno === '') {
-        this.$message({
+        this.$toast({
           message: '请输入短信验证码！',
-          type: 'error'
+          type: 'fail'
         })
         return false
       }
@@ -235,15 +235,15 @@ export default {
           this.btnFlag = true
           let res = result.data
           if (res.code === 200) {
-            this.$message({
+            this.$toast({
               message: '注册成功!',
               type: 'success'
             })
             this.setUserInfo()
           } else {
-            this.$message({
+            this.$toast({
               message: res.msg,
-              type: 'error'
+              type: 'fail'
             })
           }
         }).catch(error => {
@@ -264,13 +264,21 @@ export default {
         let res = result.data
         if (res.code === 200) {
           this.$store.commit('setUserInfo', res.data)
+          this.$store.commit('setMoneyDetail', res.data.moneyDetail)
           sessionStorage.setItem('jyyf_token', res.data.token)
           this.$axios.defaults.headers.common.Authorization = res.data.token
-          this.$router.push('/')
+          let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
+          if (url.indexOf('router=goodsdetail') >= 0) {
+            let router = url.split('&')[1].split('=')[1]
+            let goodsid = url.split('&')[2].split('=')[1]
+            this.$router.push({name: router, query: {goodsid: goodsid}})
+          } else {
+            this.$router.push('/')
+          }
         } else {
-          this.$message({
+          this.$toast({
             message: '登陆失败，请重新登陆！',
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {

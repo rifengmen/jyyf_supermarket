@@ -53,22 +53,24 @@ export default {
       let data = new FormData()
       let requestData = {
         goodsid: this.goodsid.toString(),
-        amount: this.amount
+        amount: this.amount,
+        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+        flag: 'wemember'
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
       this.$axios.post('api/car/addCar', data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$message({
+          this.$toast({
             message: '添加成功！',
             type: 'success'
           })
           this.getCart()
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
@@ -96,9 +98,9 @@ export default {
             this.$store.commit('setCartnums', 0)
           }
         } else {
-          this.$message({
+          this.$toast({
             message: res.msg,
-            type: 'error'
+            type: 'fail'
           })
         }
       }).catch(error => {
