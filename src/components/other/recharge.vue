@@ -41,7 +41,12 @@
       <!-- 他人充值 end -->
       <!-- 切换按钮 start -->
       <div class="section">
-        <el-checkbox v-model="flag" @change="resetrecharge">为其他卡充值</el-checkbox>
+        <van-checkbox
+          v-model="flag"
+          checked-color="#ff6400"
+          @change="resetrecharge">
+          为其他卡充值
+        </van-checkbox>
       </div>
       <!-- 切换按钮 end -->
       <!-- 按钮部分 start -->

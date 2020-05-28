@@ -33,6 +33,29 @@
       </div>
     </div>
     <!-- 电子会员 end -->
+    <!-- 密码弹框 start -->
+    <van-dialog
+      v-model="passwordShow"
+      title="请输入会员密码"
+      @confirm="getOnlinecard"
+      show-cancel-button>
+      <van-password-input
+        :value="Cpassword"
+        :length="4"
+        :gutter="15"
+        :focused="showKeyboard"
+        @focus="showKeyboard = true"
+      />
+    </van-dialog>
+    <!-- 密码弹框 end -->
+    <!-- 数字键盘 start -->
+    <van-number-keyboard
+      :show="showKeyboard"
+      @input="onInput"
+      @delete="onDelete"
+      @blur="showKeyboard = false"
+    />
+    <!-- 数字键盘 end -->
     <!-- 底部导航 start -->
     <my-footer></my-footer>
     <!-- 底部导航 end -->
@@ -46,6 +69,10 @@ export default {
   name: 'mycode',
   data () {
     return {
+      // 密码弹框
+      passwordShow: false,
+      // 密码框是否聚焦
+      showKeyboard: false,
       // 电子码名称
       codename: '会员码',
       // 电子码类型 codetype，1：会员码；2：付款码
@@ -98,21 +125,17 @@ export default {
         throw error
       })
     },
+    onInput (key) {
+      this.Cpassword = (this.Cpassword + key).slice(0, 4)
+    },
+    onDelete () {
+      this.Cpassword = this.Cpassword.slice(0, this.Cpassword.length - 1)
+    },
     // 输入储值卡支付密码
     sendCpassword () {
-      this.$prompt('请输入会员密码！', '在线支付', {
-        confirmButtonText: '确定',
-        inputPlaceholder: '请输入四位会员密码',
-        inputType: 'password'
-      }).then(({ value }) => {
-        this.Cpassword = value
-        this.getOnlinecard()
-      }).catch(() => {
-        this.$toast({
-          type: 'info',
-          message: '取消输入'
-        })
-      })
+      this.passwordShow = true
+      this.showKeyboard = true
+      this.Cpassword = ''
     },
     // 获取储值卡付款码
     getOnlinecard () {

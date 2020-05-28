@@ -107,12 +107,22 @@
       <!-- 支付方式 start -->
       <div class="order_sectionss bgffffff paymode_img">
         <div class="">支付方式</div>
-        <el-radio v-model="paymodeid" label="3">
-          <img src="static/img/card.png">&nbsp;储值卡
-        </el-radio>
-        <el-radio v-model="paymodeid" label="7">
-          <img src="static/img/wechat.png">&nbsp;微信
-        </el-radio>
+        <van-radio-group
+          direction="horizontal"
+          v-model="paymodeid">
+          <van-radio
+            name="3"
+            checked-color="#ff6400">
+            <img src="static/img/card.png">&nbsp;
+            <span class="payname font24">储值卡</span>
+          </van-radio>
+          <van-radio
+            name="7"
+            checked-color="#ff6400">
+            <img src="static/img/wechat.png">&nbsp;
+            <span class="payname font24">微信</span>
+          </van-radio>
+        </van-radio-group>
       </div>
       <!-- 支付方式 end -->
     </div>

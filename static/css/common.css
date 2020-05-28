@@ -39,10 +39,10 @@ input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
   font-size: .28rem;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
 }
-i {
-  font-size: .40rem!important;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
-}
+/*i {*/
+  /*font-size: .40rem!important;*/
+  /*font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif*/
+/*}*/
 /* 字体尺寸 start */
 .font8 {
   font-size: .8rem;
@@ -994,5 +994,37 @@ input.el-input__inner::placeholder {
   height: 2rem!important;
 }
 /* 修改el默认样式 end */
+/* 修改vant默认样式 start */
+.van-dialog {
+  width: 5rem!important;
+  border-radius: .08rem!important;
+}
+.van-dialog__confirm,
+.van-dialog__confirm:active {
+  color: #ff6400!important;
+}
+.van-password-input__security li {
+  height: calc(100% - 2px)!important;
+  border: 1px solid #ff6400;
+  border-radius: 0.06rem;
+}
+.van-dialog__header {
+  padding: .4rem 0!important;
+}
+.van-number-keyboard {
+  z-index: 999999!important;
+}
+.van-radio__label {
+  display: flex;
+  align-items: center;
+}
+.van-radio--horizontal {
+  margin: 0 0 0 .3rem;
+}
+.van-radio--horizontal .payname {
+  display: flex;
+  width: 1rem;
+}
+/* 修改vant默认样式 end */
 /* 公共样式 end */
 

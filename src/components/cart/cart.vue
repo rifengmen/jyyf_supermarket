@@ -1,9 +1,9 @@
 ﻿<template>
     <div class="container bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
       <!-- 头部 start -->
-      <my-header>
-        <template v-slot:header>购物车</template>
-      </my-header>
+      <!--<my-header>-->
+        <!--<template v-slot:header>购物车</template>-->
+      <!--</my-header>-->
       <!-- 头部 end -->
       <!-- 购物车列表 start -->
       <div class="cart_cont">
@@ -15,6 +15,14 @@
             <ul ref="cartlist">
               <!-- 商品简介 start -->
               <li class="goods_li" v-for="(item, index) in cartList" :key="index">
+                <!--<div class="goods_input bgffffff">-->
+                  <!--<van-checkbox-->
+                    <!--v-model="item.addorder"-->
+                    <!--icon-size=".28rem"-->
+                    <!--checked-color="#ff6400"-->
+                    <!--@change="addorder(item.no)">-->
+                  <!--</van-checkbox>-->
+                <!--</div>-->
                 <div class="goods_input bgffffff" @click="addorder(item.no)">
                   <input class="checkbox" type="checkbox" name="goods" v-model="item.addorder">
                 </div>
@@ -60,7 +68,10 @@
               <label for="noall">不选</label>
             </div>
             <div class="editcart_btn font28 font_normal color999999" @click="delGoods">删除</div>
-            <div class="cart_nums font24 color666666">合计：<span class="colorf86442 font32">￥{{totalmoney}}</span></div>
+            <div class="cart_nums">
+              <span class="font24 color666666">合计：</span>
+              <span class="colorf86442 font32">￥{{totalmoney}}</span>
+            </div>
             <div class="pay bgff6400 colorffffff tc">
               <addorder :no="no">结算</addorder>
             </div>

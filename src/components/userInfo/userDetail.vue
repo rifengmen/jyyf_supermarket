@@ -30,8 +30,21 @@
           </div>
         </div>
         <div class="user_section">
-          <el-radio v-model="radio" label="birthday">公历生日</el-radio>
-          <el-radio v-model="radio" label="lunarbirthday">农历生日</el-radio>
+          <div></div>
+          <van-radio-group
+            direction="horizontal"
+            v-model="radio">
+            <van-radio
+              name="birthday"
+              checked-color="#ff6400">
+              公历生日
+            </van-radio>
+            <van-radio
+              name="lunarbirthday"
+              checked-color="#ff6400">
+              农历生日
+            </van-radio>
+          </van-radio-group>
         </div>
         <div class="user_section" v-if="radio === 'birthday'">
           <div>公历生日</div>

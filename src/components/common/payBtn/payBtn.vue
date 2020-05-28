@@ -3,6 +3,31 @@
     <div class="" @click="pay">
       <slot></slot>
     </div>
+    <!-- 密码弹框 start -->
+    <van-dialog
+      class="color333333"
+      v-model="passwordShow"
+      title="请输入会员密码"
+      @confirm="sendpay"
+      show-cancel-button>
+      <van-password-input
+        :value="Cpassword"
+        :length="4"
+        :gutter="15"
+        :focused="showKeyboard"
+        @focus="showKeyboard = true"
+      />
+    </van-dialog>
+    <!-- 密码弹框 end -->
+    <!-- 数字键盘 start -->
+    <van-number-keyboard
+      class="color333333"
+      :show="showKeyboard"
+      @input="onInput"
+      @delete="onDelete"
+      @blur="showKeyboard = false"
+    />
+    <!-- 数字键盘 end -->
   </div>
 </template>
 
@@ -44,6 +69,10 @@ export default {
   },
   data () {
     return {
+      // 密码弹框
+      passwordShow: false,
+      // 密码框是否聚焦
+      showKeyboard: false,
       // 支付密码
       Cpassword: '',
       // 收货地址
@@ -81,15 +110,10 @@ export default {
   components: {},
   methods: {
     onInput (key) {
-      this.value = (this.value + key).slice(0, 4)
-      if (this.value.length === 4) {
-        this.errorInfo = '密码错误'
-      } else {
-        this.errorInfo = ''
-      }
+      this.Cpassword = (this.Cpassword + key).slice(0, 4)
     },
     onDelete () {
-      this.value = this.value.slice(0, this.value.length - 1)
+      this.Cpassword = this.Cpassword.slice(0, this.Cpassword.length - 1)
     },
     // 支付
     pay (e) {
@@ -120,19 +144,9 @@ export default {
           if (res.code === 200) {
             // passwdflag,0:不输密码，1:输密码
             if (res.data.passwdflag) {
-              this.$prompt('请输入会员密码！', '在线支付', {
-                confirmButtonText: '确定',
-                inputPlaceholder: '请输入四位会员密码',
-                inputType: 'password'
-              }).then(({ value }) => {
-                this.Cpassword = value
-                this.sendpay()
-              }).catch(() => {
-                this.$toast({
-                  type: 'info',
-                  message: '取消输入'
-                })
-              })
+              this.passwordShow = true
+              this.showKeyboard = true
+              this.Cpassword = ''
             } else {
               this.sendpay()
             }

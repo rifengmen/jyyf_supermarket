@@ -457,4 +457,9 @@ input.el-input__inner {
 .search_cont .search input {
   background-color: unset;
 }
+.banner_swipe >>> .van-swipe__indicator {
+  width: .3rem;
+  height: .04rem;
+  border-radius: 500rem;
+}
 </style>

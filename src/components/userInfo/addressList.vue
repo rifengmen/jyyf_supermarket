@@ -215,7 +215,6 @@ export default {
     // 获取地址列表
     getAddresslist () {
       this.isShowLoading = true
-      // 来自填写订单
       let data = new FormData()
       let requestData = {}
       requestData = JSON.stringify(requestData)
@@ -247,10 +246,8 @@ export default {
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
-      this.$confirm('确认删除地址吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
+      this.$dialog.confirm({
+        message: '确认删除地址吗？'
       }).then(() => {
         this.$axios.post('api/area/deleteAddress', data).then(result => {
           let res = result.data
