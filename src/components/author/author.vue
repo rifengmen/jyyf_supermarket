@@ -36,9 +36,8 @@ export default {
       this.$store.commit('setBaseURL', baseURL)
       let beforeLoginUrl = sessionStorage.getItem('jyyf_beforeLoginUrl')
       // https://www.spzlk.cn/login.php?dianpu=2；微会员
-      // https://www.spzlk.cn/index.html?dianpu=2；新微会员
-      // https://www.spzlk.cn/test/index.html?dianpu=2；新版测试
-      // https://www.spzlk.cn/test/index.html?dianpu=2&router=goodsdetail&goodsid=46；新版测试
+      // https://www.spzlk.cn/testSupermarket/?dianpu=2;超市测试
+      // https://www.spzlk.cn/supermarket/?dianpu=2;超市
       let id = beforeLoginUrl.split('=')[1]
       if (id.indexOf('&') >= 0) {
         this.wechatID = id.split('&')[0].replace(/"/g, '')
@@ -121,13 +120,7 @@ export default {
           sessionStorage.setItem('jyyf_token', res.data.token)
           this.$axios.defaults.headers.common.Authorization = res.data.token
           let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
-          if (url.indexOf('router=goodsdetail') >= 0) {
-            let router = url.split('&')[1].split('=')[1]
-            let goodsid = url.split('&')[2].split('=')[1]
-            this.$router.push({name: router, query: {goodsid: goodsid}})
-          } else {
-            this.$router.push('/')
-          }
+          this.$router.push(url)
         } else {
           this.$router.push('/register')
         }

@@ -268,13 +268,7 @@ export default {
           sessionStorage.setItem('jyyf_token', res.data.token)
           this.$axios.defaults.headers.common.Authorization = res.data.token
           let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
-          if (url.indexOf('router=goodsdetail') >= 0) {
-            let router = url.split('&')[1].split('=')[1]
-            let goodsid = url.split('&')[2].split('=')[1]
-            this.$router.push({name: router, query: {goodsid: goodsid}})
-          } else {
-            this.$router.push('/')
-          }
+          this.$router.push(url)
         } else {
           this.$toast({
             message: '登陆失败，请重新登陆！',

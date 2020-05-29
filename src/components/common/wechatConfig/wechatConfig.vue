@@ -21,7 +21,7 @@ export default {
       shareConfig: {
         title: this.$store.state.userInfo.deptname,
         desc: this.$store.state.userInfo.sharedesc,
-        link: this.$store.state.baseURL + '/index.html?dianpu=' + this.$store.state.wechatID,
+        link: this.$store.state.baseURL + '/?dianpu=' + this.$store.state.wechatID,
         imgUrl: this.IMGURL + 'image/' + this.$store.state.userInfo.picture
       }
     }
@@ -41,7 +41,7 @@ export default {
     // 请求微信参数
     getWXConfig () {
       if (this.goodsid) {
-        this.shareConfig.link = this.$store.state.baseURL + '/index.html?dianpu=' + this.$store.state.wechatID + '&router=goodsdetail&goodsid=' + this.goodsdetail.goodsid
+        this.shareConfig.link = this.$store.state.baseURL + '/goodsdetail?dianpu=' + this.$store.state.wechatID + '&goodsid=' + this.goodsdetail.goodsid
         this.shareConfig.imgUrl = this.IMGURL + 'image/' + this.goodsdetail.picture1
         this.shareConfig.desc = this.goodsdetail.cusgoodsname + this.goodsdetail.remark
       }

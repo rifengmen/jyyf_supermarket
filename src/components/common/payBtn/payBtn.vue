@@ -260,7 +260,7 @@ export default {
         freight: this.freightmoney.freightmoney,
         Tradeno: this.tradeno,
         // 支付完成后返回路径
-        frontUrl: 'https://www.spzlk.cn/index.html?dianpu=' + this.$store.state.wechatID
+        frontUrl: this.$store.state.baseURL + '/userInfo?dianpu=' + this.$store.state.wechatID
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)

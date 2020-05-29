@@ -14,27 +14,7 @@ const state = {
   // 用户头像
   headimgurl: '',
   // 用户信息
-  userInfo: {
-    // customertype: '2',
-    // memtypename: '0级会员',
-    // coflag: 1,
-    // loginname: 18734565827,
-    // moneyDetail: '{"couponAmount": 0.0, "smallMoneyBal": 0.0, "totalCent": 500.0, "moneyBal": 1000.03}',
-    // mobile: '18734565827',
-    // contextPath: '',
-    // smgMode: 2,
-    // memcode: 99001001,
-    // deptname: '测试用户',
-    // token: 'token:PC-fadee829886185ae3e9d178188da189f-20200406185354788-645088',
-    // validflag: 1,
-    // logoPicture: null,
-    // memname: '这是昵称',
-    // iscustomer: 1,
-    // noticeCount: 7,
-    // customerid: 102208,
-    // wechatID: 'E6B40FD4-191E-4D03-9FA1-317D90D8CCF7',
-    // newMessage: 0
-  },
+  userInfo: {},
   // 卡片信息
   moneyDetail: '',
   // 促销类型

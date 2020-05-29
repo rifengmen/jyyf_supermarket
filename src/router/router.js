@@ -12,8 +12,10 @@ Vue.use(Router)
 
 const router = new Router({
   mode: 'history',
-  // 测试
-  // base: '/test',
+  // 超市测试
+  // base: '/testSupermarket',
+  // 超市生产
+  // base: '/supermarket',
   routes: [
     // 微信授权模块
     ...author,

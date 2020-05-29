@@ -110,6 +110,9 @@ export default {
     addComplaint () {
       this.$router.push({name: 'addComplaint'})
     }
+  },
+  created () {
+    // alert(JSON.stringify(window.history))
   }
 }
 </script>

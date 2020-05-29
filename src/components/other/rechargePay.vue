@@ -94,7 +94,7 @@ export default {
         presentmoney: this.payData.presentmoney,
         channel: this.channel,
         // 支付完成后返回路径
-        frontUrl: 'https://www.spzlk.cn/index.html?dianpu=' + this.$store.state.wechatID
+        frontUrl: this.$store.state.baseURL + '/userInfo?dianpu=' + this.$store.state.wechatID
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
@@ -127,7 +127,7 @@ export default {
               message: '支付成功!',
               type: 'success'
             })
-            this.$router.push({name: 'recharge'})
+            this.$router.push({name: 'userInfo'})
           }
         } else {
           this.$toast({
