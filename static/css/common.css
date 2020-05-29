@@ -493,10 +493,10 @@ input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
   position: absolute;
   top: 0;
   left: 0;
-  width: 1rem;
+  max-width: 80%;
   height: .4rem;
   line-height: .4rem;
-  padding-left: .1rem;
+  padding: 0 .2rem 0 .1rem;
   background-image: url('../img/agebj.png');
   background-size: cover;
 }

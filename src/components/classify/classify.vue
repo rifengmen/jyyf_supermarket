@@ -234,7 +234,10 @@ export default {
     // 获取商品分类
     getClassify () {
       let data = new FormData()
-      let requestData = {}
+      let requestData = {
+        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+        flag: 'wemember'
+      }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
       this.$axios.post('system/globaldata/getCusClassOption2', data).then(result => {
