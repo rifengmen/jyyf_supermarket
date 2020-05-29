@@ -72,6 +72,7 @@ export default {
       // 非静默授权，第一次有弹框
       // 如果没有code，则去请求
       // 截取code
+      // https://www.spzlk.cn/testSupermarket/?dianpu=2&code=001PKA0j2nSOTD0WYe2j2qnT0j2PKA09&state=STATE
       if (url.indexOf('code=') >= 0) {
         this.code = url.substring(url.indexOf('code=') + 5, url.indexOf('state=') - 1)
         this.getOpenid()

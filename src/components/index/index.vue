@@ -368,7 +368,7 @@ export default {
       let data = new FormData()
       let requestData = {
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
-        // flag: 'wemember'
+        flag: 'wemember'
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)

@@ -260,7 +260,9 @@ export default {
         freight: this.freightmoney.freightmoney,
         Tradeno: this.tradeno,
         // 支付完成后返回路径
-        frontUrl: this.$store.state.baseURL + '/userInfo?dianpu=' + this.$store.state.wechatID
+        frontUrl: this.$store.state.baseURL + '/userInfo?dianpu=' + this.$store.state.wechatID,
+        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+        flag: 'wemember'
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
@@ -350,7 +352,10 @@ export default {
     // 获取购物车商品
     getCart () {
       let data = new FormData()
-      let requestData = {}
+      let requestData = {
+        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+        flag: 'wemember'
+      }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
       this.$axios.post('api/car/getCar', data).then(result => {

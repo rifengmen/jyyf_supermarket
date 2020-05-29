@@ -142,7 +142,9 @@ export default {
         classcode: this.classcode,
         keyword: this.keyword,
         page: this.page,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
+        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+        flag: 'wemember'
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)

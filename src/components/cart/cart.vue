@@ -131,7 +131,10 @@ export default {
     getCartList () {
       this.isShowLoading = true
       let data = new FormData()
-      let requestData = {}
+      let requestData = {
+        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+        flag: 'wemember'
+      }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
       this.$axios.post('api/car/getCar', data).then(result => {
@@ -185,7 +188,9 @@ export default {
       let data = new FormData()
       let requestData = {
         amount: amount,
-        no: no
+        no: no,
+        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+        flag: 'wemember'
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
@@ -256,7 +261,9 @@ export default {
       let arrno = arrlist.map(item => item.no)
       let data = new FormData()
       let requestData = {
-        no: arrno
+        no: arrno,
+        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+        flag: 'wemember'
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)

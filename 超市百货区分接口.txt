@@ -1,0 +1,31 @@
+﻿api/goods/listGoodsForCategory 分类列表
+
+api/goods/getById 商品详情
+
+api/goods/listThemeAndGdscode 首页集群
+
+api/goods/getProductListByCate 集群列表
+
+api/goods/addAppraise 商品评价
+
+api/car/addCar 添加购物车    standardid：规格     百货模式下需要
+
+api/car/getCar 获取购物车列表
+
+api/car/modifyCar 修改购物车商品数量
+
+api/car/deleteCar 删除购物车商品
+
+api/order/getOrder 订单列表
+
+invest/microFlow/buyEnd 去结算
+
+invest/microFlow/orderCommit //提交订单
+
+invest/microFlow/getFreight //获取运费
+
+
+
+
+// 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+        flag: 'wemember'

@@ -404,7 +404,9 @@ export default {
         let requestData
         requestData = {
           address: address,
-          totalmoney: this.Totalmoney
+          totalmoney: this.Totalmoney,
+          // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+          flag: 'wemember'
         }
         requestData = JSON.stringify(requestData)
         data.append('requestData', requestData)

@@ -90,7 +90,9 @@ export default {
       let data = new FormData()
       let requestData = {
         gdsid: this.goods.Gdscode,
-        content: this.comment
+        content: this.comment,
+        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+        flag: 'wemember'
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
