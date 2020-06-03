@@ -83,10 +83,10 @@
         <div class="carts_num tc border_r500 bgf75050 colorffffff font22">{{cartnums}}</div>
       </router-link>
       <div class="btns">
-        <div class="addcart tc font34 colorffffff bgffae43">
+        <div class="addcart goods_btn tc font34 colorffffff bgffae43">
           <addcart :goodsid="goodsdetail.goodsid" :froms="'goodsdetail'">加入购物车</addcart>
         </div>
-        <div class="pay tc font34 colorffffff bgff6400">
+        <div class="pay goods_btn tc font34 colorffffff bgff6400">
           <addorder :goodsid="goodsdetail.goodsid" :goodsdetail="true">立即购买</addorder>
         </div>
       </div>

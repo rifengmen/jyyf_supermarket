@@ -137,7 +137,9 @@ export default {
         requestData = {
           payMoney: this.payMoney,
           Totalmoney: this.Totalmoney,
-          addressid: this.addressid
+          addressid: this.addressid,
+          // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+          flag: 'wemember'
         }
         requestData = JSON.stringify(requestData)
         data.append('requestData', requestData)
@@ -147,6 +149,8 @@ export default {
         let data = new FormData()
         let requestData
         requestData = {
+          // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+          flag: 'wemember'
         }
         requestData = JSON.stringify(requestData)
         data.append('requestData', requestData)
@@ -197,7 +201,9 @@ export default {
         requestData = {
           payMoney: this.payMoney,
           tick: tick,
-          otc: ''
+          otc: '',
+          // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+          flag: 'wemember'
         }
         requestData = JSON.stringify(requestData)
         data.append('requestData', requestData)
@@ -206,7 +212,7 @@ export default {
           if (res.code === 200) {
             tick.dicountMoney = res.data.dicountMoney
             this.$store.commit('setTick', tick)
-            this.$router.push({name: 'editorder'})
+            this.$router.back()
           } else {
             this.$toast({
               message: res.msg,

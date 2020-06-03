@@ -493,10 +493,10 @@ input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
   position: absolute;
   top: 0;
   left: 0;
-  max-width: 80%;
+  max-width: 70%;
   height: .4rem;
   line-height: .4rem;
-  padding: 0 .2rem 0 .1rem;
+  padding: 0 .4rem 0 .1rem;
   background-image: url('../img/agebj.png');
   background-size: cover;
 }
@@ -607,9 +607,13 @@ input[type=checkbox]:checked:after {
   line-height: .4rem;
 }
 .goods_item_price {
+  width: 56%;
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
+}
+.goods_item_prices {
+  width: 80%;
 }
 .goods_item_price > div:first-child {
   margin-right: .2rem;

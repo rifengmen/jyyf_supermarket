@@ -73,7 +73,7 @@
       </div>
       <!-- 订单信息 end -->
       <!-- 积分抵扣 start -->
-      <div class="order_sectionss bgffffff">
+      <div class="order_sectionss bgffffff" v-if="paymodeList.filter(item => item.paymodeid === 5).length">
         <div class="">积分抵扣</div>
         <div class="color999999">
           <span class="colorf84242">￥{{score.Money}}</span>&nbsp;
@@ -88,7 +88,7 @@
       </div>
       <!-- 积分抵扣 end -->
       <!-- 可用零钱 start -->
-      <div class="order_sectionss bgffffff">
+      <div class="order_sectionss bgffffff" v-if="smallmoney">
         <div class="">零钱</div>
         <div class="color999999">
           <span class="colorf84242" v-if="smallmoney >= 0">
@@ -99,8 +99,6 @@
             <span class="font26">补缴零钱</span>
             ￥{{(Math.abs(smallmoney)).toFixed(2)}}
           </span>
-        </div>
-        <div class="score_img">
         </div>
       </div>
       <!-- 可用零钱 end -->
@@ -169,6 +167,10 @@ export default {
     }
   },
   computed: {
+    // 支付方式列表
+    paymodeList () {
+      return this.$store.state.order.paymodeList
+    },
     // 积分
     score () {
       return this.$store.state.score

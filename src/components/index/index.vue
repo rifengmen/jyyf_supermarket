@@ -119,7 +119,7 @@
             <div @click="goodsdetail(goods)" class="recommend1_item bgffffff border_r6" v-for="(goods, index) in item.gdscodelist" :key="index">
               <div class="recommend1_item_img border_r6">
                 <img :src="(goods.picture1 ? (imgurl + 'image/' + goods.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))" class="border_r6">
-                <div v-if="goods.promotemode !== 0" class="goods_age font24 font_normal colorffffff">{{goods.modenote}}</div>
+                <div v-if="goods.promotemode !== 0" class="goods_age ellipsis font24 font_normal colorffffff">{{goods.modenote}}</div>
               </div>
               <div class="recommend1_name ellipsis font24">{{goods.cusgoodsname}}</div>
               <div class="recommend1_price" v-if="goods.promotemode === 0 || goods.promotemode === 2 || goods.promotemode === 3 || goods.promotemode === 8">
@@ -158,7 +158,7 @@
             <div @click="goodsdetail(goods)" class="recommend1_item bgffffff border_r6" v-for="(goods, index) in item.gdscodelist" :key="index">
               <div class="recommend1_item_img border_r6">
                 <img :src="(goods.picture1 ? (imgurl + 'image/' + goods.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))" class="border_r6">
-                <div v-if="goods.promotemode !== 0" class="goods_age font24 font_normal colorffffff">{{goods.modenote}}</div>
+                <div v-if="goods.promotemode !== 0" class="goods_age ellipsis font24 font_normal colorffffff">{{goods.modenote}}</div>
               </div>
               <div class="recommend1_name ellipsis font24">{{goods.cusgoodsname}}</div>
               <div class="recommend1_price" v-if="goods.promotemode === 0 || goods.promotemode === 2 || goods.promotemode === 3 || goods.promotemode === 8">
@@ -288,6 +288,8 @@ export default {
     getBanner () {
       let data = new FormData()
       let requestData = {
+        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+        flag: 'wemember'
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)

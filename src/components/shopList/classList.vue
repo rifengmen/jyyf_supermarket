@@ -26,22 +26,22 @@
               <div class="goods_item bgffffff ellipsis" @click="goodsdetail(item)">
                 <div class="goods_item_img">
                   <img :src="(item.picture1 ? (imgurl + 'image/' + item.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))">
-                  <div v-if="item.promotemode !== 0" class="goods_age font24 font_normal colorffffff">{{item.modenote}}</div>
+                  <div v-if="item.promotemode !== 0" class="goods_age ellipsis font24 font_normal colorffffff">{{item.modenote}}</div>
                 </div>
                 <div class="goods_item_cont">
                   <div class="goods_item_name ellipsis font26">{{item.cusgoodsname}}</div>
                   <div class="goods_item_name ellipsis font24 colorfa2a2a">{{item.remark}}</div>
                   <div class="goods_item_editnum">
-                    <div class="goods_item_price" v-if="item.promotemode === 0 || item.promotemode === 2 || item.promotemode === 3 || item.promotemode === 8">
-                      <div class="font32 font_blod colorf84242">￥{{item.saleprice}}</div>
+                    <div class="goods_item_price goods_item_prices" v-if="item.promotemode === 0 || item.promotemode === 2 || item.promotemode === 3 || item.promotemode === 8">
+                      <div class="ellipsis font32 font_blod colorf84242">￥{{item.saleprice}}</div>
                     </div>
-                    <div class="goods_item_price" v-if="item.promotemode === 1 || item.promotemode === 7">
-                      <div class="font32 font_blod colorf84242">￥{{item.promotevalue}}</div>
-                      <del class="font26 color999999">￥{{item.saleprice}}</del>
+                    <div class="goods_item_price goods_item_prices" v-if="item.promotemode === 1 || item.promotemode === 7">
+                      <div class="ellipsis font32 font_blod colorf84242">￥{{item.promotevalue}}</div>
+                      <del class="ellipsis font26 color999999">￥{{item.saleprice}}</del>
                     </div>
-                    <div class="goods_item_price" v-if="item.promotemode === 6">
-                      <div class="font32 font_blod colorf84242">￥{{item.groupprice}}</div>
-                      <del class="font26 color999999">￥{{item.saleprice}}</del>
+                    <div class="goods_item_price goods_item_prices" v-if="item.promotemode === 6">
+                      <div class="ellipsis font32 font_blod colorf84242">￥{{item.groupprice}}</div>
+                      <del class="ellipsis font26 color999999">￥{{item.saleprice}}</del>
                     </div>
                     <div class="goods_item_cart" v-if="item.Promotemode !== 7">
                       <addcart :goodsid="item.goodsid">

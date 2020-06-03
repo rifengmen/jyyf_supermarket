@@ -216,7 +216,10 @@ export default {
     getAddresslist () {
       this.isShowLoading = true
       let data = new FormData()
-      let requestData = {}
+      let requestData = {
+        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+        flag: 'wemember'
+      }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
       this.$axios.post('api/area/getAddressForOrder', data).then(result => {
@@ -415,7 +418,7 @@ export default {
           if (res.code === 200) {
             this.$store.commit('setAddress', address)
             this.$store.commit('setFreightmoney', res.data)
-            this.$router.push({name: 'editorder'})
+            this.$router.back()
           } else {
             this.$toast({
               message: res.msg,

@@ -1,8 +1,8 @@
 <template>
   <div class="container bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
     <!-- 头部 start -->
-    <my-header :froms="'editorder'">
-      <template v-slot:editorder>
+    <my-header>
+      <template v-slot:backs>
         <i class="el-icon-arrow-left"></i>
       </template>
       <template v-slot:header>填写订单</template>
@@ -41,7 +41,7 @@
         </div>
         <!-- 配送服务费 end -->
         <!-- 优惠券 start -->
-        <div class="order_section bgffffff" @click="tickList">
+        <div class="order_section bgffffff" @click="tickList" v-if="paymodeList.filter(item => item.paymodeid === 4).length">
           <div class="">优惠券</div>
           <div class="colorf84242" v-if="tick.dicountMoney">￥{{tick.dicountMoney}}</div>
           <div class="color999999" v-else>请选择优惠券</div>
@@ -51,10 +51,10 @@
         </div>
         <!-- 优惠券 end -->
         <!-- 积分抵扣 start -->
-        <div class="order_section bgffffff">
+        <div class="order_section bgffffff" v-if="paymodeList.filter(item => item.paymodeid === 5).length">
           <div class="">积分抵扣</div>
           <div class="color999999">
-            <span class="colorf84242">￥{{score.Money}}</span>&nbsp;
+            <span class="colorf84242">￥{{(score.Money).toFixed(2)}}</span>&nbsp;
             抵扣
             <span class="colorf84242">{{score.useScore}}</span>
             分
@@ -109,15 +109,15 @@
             <div class="font24">配送服务费</div>
             <div class="font24 color999999">+￥{{(freightmoney.freightmoney || 0).toFixed(2)}}</div>
           </div>
-          <div class="order_desc">
+          <div class="order_desc" v-if="paymodeList.filter(item => item.paymodeid === 4).length">
             <div class="font24">优惠券</div>
             <div class="font24 color999999">-￥{{(tick.dicountMoney || 0).toFixed(2)}}</div>
           </div>
-          <div class="order_desc">
+          <div class="order_desc" v-if="paymodeList.filter(item => item.paymodeid === 5).length">
             <div class="font24">积分抵扣</div>
             <div class="font24 color999999">-￥{{(scoreMoney || 0).toFixed(2)}}</div>
           </div>
-          <div class="order_desc">
+          <div class="order_desc" v-if="smallmoney">
             <div class="font24">零钱</div>
             <div class="font24 color999999" v-if="smallmoney >= 0">-￥{{smallmoney.toFixed(2)}}</div>
             <div class="font24 color999999" v-if="smallmoney < 0">+￥{{(Math.abs(smallmoney)).toFixed(2)}}</div>
@@ -166,6 +166,10 @@ export default {
     }
   },
   computed: {
+    // 支付方式列表
+    paymodeList () {
+      return this.$store.state.order.paymodeList
+    },
     // 订单总金额
     Totalmoney () {
       return this.order.totalMoney

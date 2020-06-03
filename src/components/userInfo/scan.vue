@@ -87,7 +87,9 @@ export default {
         let requestData = {
           role: this.userInfo.role,
           phone: this.userInfo.mobile,
-          tradeno: this.tradeno
+          tradeno: this.tradeno,
+          // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+          flag: 'wemember'
         }
         requestData = JSON.stringify(requestData)
         data.append('requestData', requestData)

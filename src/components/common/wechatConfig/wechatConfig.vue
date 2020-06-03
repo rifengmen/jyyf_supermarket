@@ -98,7 +98,7 @@ export default {
                 alert('已取消')
               },
               fail: function (res) {
-                alert(JSON.stringify(res))
+                // alert(JSON.stringify(res))
               }
             })
             // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容
@@ -117,7 +117,7 @@ export default {
                 alert('已取消')
               },
               fail: function (res) {
-                alert(JSON.stringify(res))
+                // alert(JSON.stringify(res))
               }
             })
             // 监听“分享给朋友”，按钮点击、自定义分享内容及分享结果接口
@@ -137,7 +137,7 @@ export default {
                 alert('已取消')
               },
               fail: function (res) {
-                alert(JSON.stringify(res))
+                // alert(JSON.stringify(res))
               }
             })
             // 监听“分享到朋友圈”按钮点击、自定义分享内容及分享结果接口
@@ -156,7 +156,7 @@ export default {
                 alert('已取消')
               },
               fail: function (res) {
-                alert(JSON.stringify(res))
+                // alert(JSON.stringify(res))
               }
             })
             // 监听“分享到微博”按钮点击、自定义分享内容及分享结果接口
@@ -178,7 +178,7 @@ export default {
                 alert('已取消')
               },
               fail: function (res) {
-                alert(JSON.stringify(res))
+                // alert(JSON.stringify(res))
               }
             })
           })
