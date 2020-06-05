@@ -20,14 +20,14 @@
         <div class="user_section">
           <div>拣配类型</div>
           <div class="user_desc bgffffff border_r500">
-            <input type="text" value="捡货" class="tr" disabled v-if="userInfo.role === 1">
+            <input type="text" value="拣货" class="tr" disabled v-if="userInfo.role === 1">
             <input type="text" value="配送" class="tr" disabled v-if="userInfo.role === 2">
           </div>
         </div>
         <div class="user_section">
           <div>订单号</div>
           <div class="user_desc bgffffff border_r500">
-            <input type="text" v-model="tradeno" class="tr" placeholder="请输入订单号或者点击右侧自动录入">
+            <input type="text" v-model="tradeno" class="tr" placeholder="请输入订单号或者点击右侧扫一扫">
             <!-- 扫一扫按钮 start -->
             <div class="scan" @click="scanTradeno">
               <img src="static/img/scan.png">

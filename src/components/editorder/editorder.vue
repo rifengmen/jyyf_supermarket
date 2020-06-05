@@ -72,6 +72,7 @@
             direction="horizontal"
             v-model="paymodeid">
             <van-radio
+              v-if="paymodeList.filter(item => item.paymodeid === 3).length"
               name="3"
               checked-color="#ff6400">
               <img src="static/img/card.png">&nbsp;
@@ -105,7 +106,7 @@
             <div class="font24">商品金额</div>
             <div class="font24 color999999">￥{{Totalmoney.toFixed(2)}}</div>
           </div>
-          <div class="order_desc">
+          <div class="order_desc" v-if="freightmoney.freightmoney">
             <div class="font24">配送服务费</div>
             <div class="font24 color999999">+￥{{(freightmoney.freightmoney || 0).toFixed(2)}}</div>
           </div>

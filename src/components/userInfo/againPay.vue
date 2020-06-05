@@ -40,11 +40,11 @@
                 <div class="goods_item_cont">
                   <div class="goods_item_name ellipsis font26">{{item.goodsname}}</div>
                   <div class="goods_item_name ellipsis font24 colorfa2a2a"></div>
-                  <div class="goods_item_price">
-                    <div class="font30 font_blod colorf84242">￥{{item.price}}</div>
-                    <del class="font24 color999999">￥{{item.saleprice}}</del>
-                  </div>
                   <div class="goods_item_editnum">
+                    <div class="goods_item_price">
+                      <div class="font30 font_blod colorf84242">￥{{item.price}}</div>
+                      <del class="font24 color999999">￥{{item.saleprice}}</del>
+                    </div>
                     <div class="font30 color999999">x <span class="">{{item.amount}}</span></div>
                   </div>
                 </div>
@@ -109,6 +109,7 @@
           direction="horizontal"
           v-model="paymodeid">
           <van-radio
+            v-if="paymodeList.filter(item => item.paymodeid === 3).length"
             name="3"
             checked-color="#ff6400">
             <img src="static/img/card.png">&nbsp;
