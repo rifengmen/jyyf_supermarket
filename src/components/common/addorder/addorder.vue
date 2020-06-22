@@ -14,11 +14,12 @@ export default {
         return false
       }
     },
-    goodsid: {
-      type: Number,
+    // 商品详情
+    goods: {
+      type: Object,
       // require: true,
       default: function () {
-        return 0
+        return {}
       }
     },
     amount: {
@@ -32,6 +33,12 @@ export default {
       default: function () {
         return []
       }
+    },
+    pay: {
+      type: Number,
+      default: function () {
+        return 0
+      }
     }
   },
   data () {
@@ -44,10 +51,11 @@ export default {
   methods: {
     // 添加购物车
     addorder () {
-      if (this.goodsdetail) {
+      // goodsdetail 标识是从详情页直接立即购买正常商品
+      if (this.goodsdetail && this.goods.promotemode !== 6 && this.goods.promotemode !== 8) {
         let data = new FormData()
         let requestData = {
-          goodsid: this.goodsid.toString(),
+          goodsid: this.goods.goodsid.toString(),
           amount: this.amount,
           // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
           flag: 'wemember'
@@ -68,26 +76,53 @@ export default {
         }).catch(error => {
           throw error
         })
+      } else if (this.goodsdetail && this.goods.promotemode === 6) { // 判断拼团的立即购买
+        this.setOrder(this.no, 'group')
+      } else if (this.goodsdetail && this.goods.promotemode === 8) { // 判断砍价的立即购买
+        this.setOrder(this.no, 'hack', this.pay)
       } else {
-        this.setOrder(this.no)
+        this.setOrder(this.no, '')
       }
     },
     // 设置临时订单
-    setOrder (no) {
-      let data = new FormData()
+    setOrder (no, otc, pay) {
       let requestData = {
-        no: no,
         otc: '',
+        isotc: '',
+        amount: this.amount,
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
+      if (!otc && no) {
+        requestData.no = no
+      } else if (otc === 'group') { // 拼团的立即购买
+        requestData.otc = 'group'
+        requestData.isotc = 'otc'
+        requestData.goodsid = this.goods.goodsid.toString()
+      } else if (otc === 'hack' && pay === 0) { // 砍价的立即购买
+        requestData.otc = 'hack'
+        requestData.isotc = 'otc'
+        requestData.goodsid = this.goods.goodsid.toString()
+      } else if (otc === 'hack' && pay === 1) { // 砍价成功的立即购买
+        requestData.otc = 'hack'
+        requestData.isotc = 'otc'
+        requestData.pay = this.pay
+        requestData.goodsid = this.goods.goodsid.toString()
+      }
+      let data = new FormData()
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
       this.$axios.post('invest/microFlow/buyEnd', data).then(result => {
         let res = result.data
         if (res.code === 200) {
           this.$store.commit('setOrder', res.data)
-          this.$router.push({name: 'editorder'})
+          if (!otc && no) {
+            this.$router.push({name: 'editorder'})
+          } else if (otc === 'group') {
+            this.$router.push({name: 'editorder', query: {goodsid: this.goods.goodsid.toString(), otc: 'group'}})
+          } else if (otc === 'hack') {
+            this.$router.push({name: 'editorder', query: {goodsid: this.goods.goodsid.toString(), otc: 'hack'}})
+          }
         } else {
           this.$toast({
             message: res.msg,

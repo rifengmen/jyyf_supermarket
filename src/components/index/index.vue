@@ -23,7 +23,7 @@
           indicator-color="#ff6400">
           <van-swipe-item v-for="(item, index) in bannerlist" :key="index">
             <div class="banner_img font24 color666666" @click="getLinkForSlide(item.Sort)">
-              <img :src="IMGURL + 'image/' + item.Imageurl">
+              <img v-lazy="IMGURL + 'image/' + item.Imageurl">
             </div>
           </van-swipe-item>
         </van-swipe>
@@ -118,19 +118,15 @@
           <div class="recommend1_list" v-if="item.gdscodelist.length">
             <div @click="goodsdetail(goods)" class="recommend1_item bgffffff border_r6" v-for="(goods, index) in item.gdscodelist" :key="index">
               <div class="recommend1_item_img border_r6">
-                <img :src="(goods.picture1 ? (imgurl + 'image/' + goods.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))" class="border_r6">
+                <img v-lazy="(goods.picture1) ? IMGURL + 'image/' + goods.picture1.replace('.', '-zip-300.') : ''" class="border_r6">
                 <div v-if="goods.promotemode !== 0" class="goods_age ellipsis font24 font_normal colorffffff">{{goods.modenote}}</div>
               </div>
               <div class="recommend1_name ellipsis font24">{{goods.cusgoodsname}}</div>
               <div class="recommend1_price" v-if="goods.promotemode === 0 || goods.promotemode === 2 || goods.promotemode === 3 || goods.promotemode === 8">
                 <div class="font24 font_blod colorf84242">￥{{goods.saleprice}}</div>
               </div>
-              <div class="recommend1_price" v-if="goods.promotemode === 1 || goods.promotemode === 7">
+              <div class="recommend1_price" v-if="goods.promotemode === 1 || goods.promotemode === 6 || goods.promotemode === 7">
                 <div class="font24 font_blod colorf84242">￥{{goods.promotevalue}}</div>
-                <del class="font20 color999999">￥{{goods.saleprice}}</del>
-              </div>
-              <div class="recommend1_price" v-if="goods.promotemode === 6">
-                <div class="font24 font_blod colorf84242">￥{{goods.groupprice}}</div>
                 <del class="font20 color999999">￥{{goods.saleprice}}</del>
               </div>
               <div class="recommend1_item_btn tc colorffffff bgff6400 border_r4">购买</div>
@@ -150,26 +146,22 @@
           <!-- 标题2 end -->
           <!-- 标题 start -->
           <router-link :to="{name: 'recommendList', query: {recommendid: item.Id, recommendName: item.storecategoryname}}" tag="div" class="recommend2_img bgffffff">
-            <img :src="imgurl + 'image/' + item.ico">
+            <img v-lazy="IMGURL + 'image/' + item.ico">
           </router-link>
           <!-- 标题 end -->
           <!-- 内容列表 start -->
           <div class="recommend1_list" v-if="item.gdscodelist.length">
             <div @click="goodsdetail(goods)" class="recommend1_item bgffffff border_r6" v-for="(goods, index) in item.gdscodelist" :key="index">
               <div class="recommend1_item_img border_r6">
-                <img :src="(goods.picture1 ? (imgurl + 'image/' + goods.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))" class="border_r6">
+                <img v-lazy="(goods.picture1) ? IMGURL + 'image/' + goods.picture1.replace('.', '-zip-300.') : ''" class="border_r6">
                 <div v-if="goods.promotemode !== 0" class="goods_age ellipsis font24 font_normal colorffffff">{{goods.modenote}}</div>
               </div>
               <div class="recommend1_name ellipsis font24">{{goods.cusgoodsname}}</div>
               <div class="recommend1_price" v-if="goods.promotemode === 0 || goods.promotemode === 2 || goods.promotemode === 3 || goods.promotemode === 8">
                 <div class="font24 font_blod colorf84242">￥{{goods.saleprice}}</div>
               </div>
-              <div class="recommend1_price" v-if="goods.promotemode === 1 || goods.promotemode === 7">
+              <div class="recommend1_price" v-if="goods.promotemode === 1 || goods.promotemode === 6 || goods.promotemode === 7">
                 <div class="font24 font_blod colorf84242">￥{{goods.promotevalue}}</div>
-                <del class="font20 color999999">￥{{goods.saleprice}}</del>
-              </div>
-              <div class="recommend1_price" v-if="goods.promotemode === 6">
-                <div class="font24 font_blod colorf84242">￥{{goods.groupprice}}</div>
                 <del class="font20 color999999">￥{{goods.saleprice}}</del>
               </div>
               <div class="recommend1_item_btn tc colorffffff bgff6400 border_r4">购买</div>
@@ -230,7 +222,7 @@ export default {
       // 推荐
       recommendList: [],
       // 图片路径
-      imgurl: this.IMGURL,
+      IMGURL: this.IMGURL,
       // 加载中动画
       isShowLoading: true
     }
@@ -251,40 +243,6 @@ export default {
     loading
   },
   methods: {
-    // 设置用户信息
-    setUserInfo () {
-      this.isShowLoading = true
-      let data = new FormData()
-      let requestData = {
-        wechatID: this.$store.state.wechatID,
-        wexinID: this.$store.state.openid
-      }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/customlogin/login', data).then(result => {
-        let res = result.data
-        if (res.code === 200) {
-          this.$store.commit('setUserInfo', res.data)
-          this.$store.commit('setMoneyDetail', res.data.moneyDetail)
-          sessionStorage.setItem('jyyf_token', res.data.token)
-          this.$axios.defaults.headers.common.Authorization = res.data.token
-          // 获取banner列表
-          this.getBanner()
-          // 获取通知信息
-          this.getNotice()
-          // 获取推荐
-          this.getRecommend()
-        } else {
-          this.$toast({
-            message: '登陆失败，请重新登陆！',
-            type: 'fail'
-          })
-        }
-      }).catch(error => {
-        throw error
-      })
-    },
-    // 获取banner列表
     getBanner () {
       let data = new FormData()
       let requestData = {
@@ -392,7 +350,7 @@ export default {
     // 商品详情
     goodsdetail (goodsdetail) {
       this.$store.commit('setGoodsdetail', goodsdetail)
-      this.$router.push({name: 'goodsdetail', query: {goodsid: goodsdetail.goodsid}})
+      this.$router.push({name: 'goodsdetail', query: {goodsid: goodsdetail.goodsid, goodsname: goodsdetail.cusgoodsname}})
     },
     // 签到
     sendSign () {
@@ -420,18 +378,12 @@ export default {
     }
   },
   created () {
-    // 检查token，判断是否重新加载
-    if (!sessionStorage.getItem('jyyf_token')) {
-      // 设置用户信息
-      this.setUserInfo()
-    } else {
-      // 获取banner列表
-      this.getBanner()
-      // 获取通知信息
-      this.getNotice()
-      // 获取推荐
-      this.getRecommend()
-    }
+    // 获取banner列表
+    this.getBanner()
+    // 获取通知信息
+    this.getNotice()
+    // 获取推荐
+    this.getRecommend()
   },
   mounted () {
   }

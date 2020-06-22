@@ -35,6 +35,13 @@
 export default {
   name: 'payBtn',
   props: {
+    // 组件调用地方froms
+    froms: {
+      type: String,
+      default: function () {
+        return ''
+      }
+    },
     // 订单编号
     tradeno: {
       type: String,
@@ -64,6 +71,13 @@ export default {
       type: String,
       default: function () {
         return '3'
+      }
+    },
+    // 商品数量
+    amount: {
+      type: Number,
+      default: function () {
+        return 1
       }
     }
   },
@@ -105,6 +119,14 @@ export default {
     // 购物车详情
     cart () {
       return this.$store.state.cart
+    },
+    // 拼团标识,1: 发起拼团，2：参与拼团
+    group () {
+      return this.$route.query.group || 0
+    },
+    // 团号
+    groupno () {
+      return this.$route.query.groupno || ''
     }
   },
   components: {},
@@ -166,13 +188,17 @@ export default {
     // 设置支付信息
     setPaymoney () {
       // 订单总金额
-      let totalMoney = this.order.totalMoney
+      let totalMoney
+      if (this.froms === 'editorder') {
+        totalMoney = this.order.totalMoney + parseFloat(this.freightmoney.freightmoney)
+      } else {
+        totalMoney = this.order.canPayMoney
+      }
       // 零钱金额
       let smallmoney = this.order.smallmoney
       // console.log(totalMoney, '订单总金额')
       // 支付金额
-      // let paymoney = totalMoney - smallmoney + parseFloat(this.freightmoney.freightmoney)
-      let paymoney = totalMoney + parseFloat(this.freightmoney.freightmoney)
+      let paymoney = totalMoney
       // console.log(paymoney, '支付金额')
       // 支付列表下标
       let index = 0
@@ -221,7 +247,9 @@ export default {
         }
         this.paylist[index] = paylist10
         index++
-        paymoney = paymoney - paylist10.paymoney
+        if (this.froms !== 'againpay') {
+          paymoney = paymoney - paylist10.paymoney
+        }
       }
       // 储值卡
       if (this.paymodeid === '3') {
@@ -250,7 +278,12 @@ export default {
     sendpay () {
       let data = new FormData()
       let requestData = {
-        otc: '',
+        ordertype: this.group,
+        otc: this.order.otc,
+        isotc: this.order.isotc,
+        goodsid: this.$route.query.goodsid,
+        groupno: this.$route.query.groupno,
+        amount: this.amount,
         Sendid: this.address.addressid,
         Usernote: this.usernote,
         paylist: this.paylist,
@@ -291,11 +324,19 @@ export default {
               return false
             }
           } else {
-            this.$toast({
-              message: '支付成功!',
-              type: 'success'
-            })
-            this.orderdetail(res.data.tradeno)
+            if (parseInt(this.group) === 1) {
+              this.groupAdd(res.data.tradeno)
+              this.orderdetail(res.data.tradeno)
+            } else if (parseInt(this.group) === 2) {
+              this.groupEnd(res.data.tradeno)
+              this.orderdetail(res.data.tradeno)
+            } else {
+              this.$toast({
+                message: '支付成功！',
+                type: 'success'
+              })
+              this.orderdetail(res.data.tradeno)
+            }
           }
           return false
         } else {
@@ -380,6 +421,61 @@ export default {
         }
       }).catch(error => {
         throw error
+      })
+    },
+    // 生成团信息
+    groupAdd (tradeno) {
+      let data = new FormData()
+      let requestData = {
+        goodsid: this.$route.query.goodsid,
+        amount: this.amount,
+        tradeno: tradeno,
+        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+        flag: 'wemember'
+      }
+      requestData = JSON.stringify(requestData)
+      data.append('requestData', requestData)
+      this.$axios.post('api/goods/groupAdd', data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          this.$toast({
+            message: '建团成功!',
+            type: 'success'
+          })
+        } else {
+          this.$toast({
+            message: res.msg,
+            type: 'fail'
+          })
+        }
+      })
+    },
+    // 加入团信息
+    groupEnd (tradeno) {
+      let data = new FormData()
+      let requestData = {
+        goodsid: this.$route.query.goodsid,
+        amount: this.amount,
+        tradeno: tradeno,
+        groupno: this.groupno,
+        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+        flag: 'wemember'
+      }
+      requestData = JSON.stringify(requestData)
+      data.append('requestData', requestData)
+      this.$axios.post('api/goods/groupEnd', data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          this.$toast({
+            message: '参团成功!',
+            type: 'success'
+          })
+        } else {
+          this.$toast({
+            message: res.msg,
+            type: 'fail'
+          })
+        }
       })
     },
     // 去会员中心页面

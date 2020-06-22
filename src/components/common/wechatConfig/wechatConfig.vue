@@ -34,20 +34,26 @@ export default {
     // 商品详情页用，商品详情
     goodsdetail () {
       return this.$store.state.goodsdetail
+    },
+    // token
+    token () {
+      return this.$axios.defaults.headers.common.Authorization || ''
     }
   },
   components: {},
   methods: {
-    // 请求微信参数
+    // 获取微信凭证
     getWXConfig () {
       if (this.goodsid) {
-        this.shareConfig.link = this.$store.state.baseURL + '/goodsdetail?dianpu=' + this.$store.state.wechatID + '&goodsid=' + this.goodsdetail.goodsid
+        this.shareConfig.link = this.$store.state.baseURL + '/goodsdetail?dianpu=' + this.$store.state.wechatID + '&goodsid=' + this.goodsdetail.goodsid + '&goodsname=' + this.goodsdetail.cusgoodsname
         this.shareConfig.imgUrl = this.IMGURL + 'image/' + this.goodsdetail.picture1
         this.shareConfig.desc = this.goodsdetail.cusgoodsname + this.goodsdetail.remark
       }
       if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
         this.curPageUrl = this.baseURL + '/author'
-      } else if (/(Android)/i.test(navigator.userAgent)) {
+      } else if (/(Android|Windows)/i.test(navigator.userAgent)) {
+        this.curPageUrl = window.location.href
+      } else {
         this.curPageUrl = window.location.href
       }
       let data = new FormData()
@@ -71,6 +77,8 @@ export default {
             signature: _this.wxstr.signure,
             // 所有要调用的 API 都要加到这个列表中
             jsApiList: [
+              'addCard',
+              'openCard',
               'scanQRCode',
               'updateAppMessageShareData',
               'updateTimelineShareData',
@@ -199,8 +207,11 @@ export default {
   beforeCreate () {
   },
   created () {
-    // 获取微信凭证
-    this.getWXConfig()
+    // token存在时执行
+    if (this.token) {
+      // 获取微信凭证
+      this.getWXConfig()
+    }
   },
   beforeMount () {
   },

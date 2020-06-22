@@ -60,10 +60,6 @@ export default {
   name: 'scan',
   data () {
     return {
-      // wxstr 微信调用信息
-      // wxstr: '',
-      // 路径
-      // curPageUrl: '',
       // 订单编号
       tradeno: '',
       // 扫一扫调用开关

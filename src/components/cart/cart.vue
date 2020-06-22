@@ -38,12 +38,8 @@
                       <div class="goods_item_price" v-if="item.promotemode === 0 || item.promotemode === 2 || item.promotemode === 3 || item.promotemode === 8">
                         <div class="font30 font_blod colorf84242">￥{{item.saleprice}}</div>
                       </div>
-                      <div class="goods_item_price" v-if="item.promotemode === 1 || item.promotemode === 7">
+                      <div class="goods_item_price" v-if="item.promotemode === 1 || item.promotemode === 6 || item.promotemode === 7">
                         <div class="font30 font_blod colorf84242">￥{{item.promotevalue}}</div>
-                        <del class="font24 color999999">￥{{item.saleprice}}</del>
-                      </div>
-                      <div class="goods_item_price" v-if="item.promotemode === 6">
-                        <div class="font30 font_blod colorf84242">￥{{item.groupprice}}</div>
                         <del class="font24 color999999">￥{{item.saleprice}}</del>
                       </div>
                       <div class="goods_num">
@@ -161,7 +157,7 @@ export default {
     // 商品详情
     goodsdetail (goodsdetail) {
       this.$store.commit('setGoodsdetail', goodsdetail)
-      this.$router.push({name: 'goodsdetail', query: {goodsid: goodsdetail.goodsid}})
+      this.$router.push({name: 'goodsdetail', query: {goodsid: goodsdetail.goodsid, goodsname: goodsdetail.cusgoodsname}})
     },
     // 加
     addAmount (amount, no) {

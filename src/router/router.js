@@ -36,10 +36,21 @@ const router = new Router({
 
 //  使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
 // router.beforeEach((to, from, next) => {
-//   let jyyfopenid = sessionStorage.getItem('jyyf_openid')
-//   if (!jyyfopenid && to.fullPath !== '/author') {
+//   // let jyyfopenid = sessionStorage.getItem('jyyf_openid')
+//   // let fullpath = to.fullPath
+//   // alert(JSON.stringify(sessionStorage) + '缓存')
+//   // let paths = JSON.stringify(fullpath)
+//   // 检查缓存，是否首次登陆，首次登陆存在openid则删除
+//   // if (paths.indexOf('?') >= 0 && paths.indexOf('code=') === -1 && jyyfopenid) {
+//   //   sessionStorage.removeItem('jyyf_openid')
+//   // }
+//   let jyyfopenids = sessionStorage.getItem('jyyf_openid')
+//   if (!jyyfopenids && to.fullPath !== '/author') {
+//     let urlPath = to.fullPath
+//     urlPath = urlPath.replace(/%5Cu003d/g, '=')
+//     urlPath = urlPath.replace(/%5Cu0026/g, '&')
 //     // 保存用户进入的url
-//     sessionStorage.setItem('jyyf_beforeLoginUrl', JSON.stringify(to.fullPath))
+//     sessionStorage.setItem('jyyf_beforeLoginUrl', urlPath)
 //     next('/author')
 //     return false
 //   }

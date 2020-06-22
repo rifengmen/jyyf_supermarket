@@ -1,6 +1,5 @@
 <template>
-  <!--<div class="container bgeeeeee" v-if="userInfo.moneyDetail">-->
-  <div class="container bgeeeeee">
+  <div class="container bgeeeeee" v-title :data-title="userInfo.deptname">
     <!-- 获取微信凭证 start -->
     <wechat-config>
     </wechat-config>
@@ -62,6 +61,10 @@
             <router-link :to="{name: 'orderList', query: {billstatus: '-1'}}" tag="li" class="cont_item cont_order">
               <div class="imgbox">
                 <img src="static/img/order_-1.png">
+                <div
+                  class="ordernums border_r500 font18 bgff6400 colorffffff ellipsis"
+                  v-if="ordernums1"
+                >{{ordernums1}}</div>
               </div>
               <div class="imgname font24">未完成</div>
             </router-link>
@@ -70,6 +73,10 @@
             <router-link :to="{name: 'orderList', query: {billstatus: '0'}}" tag="li" class="cont_item cont_order">
               <div class="imgbox">
                 <img src="static/img/order_0.png">
+                <div
+                  class="ordernums border_r500 font18 bgff6400 colorffffff ellipsis"
+                  v-if="ordernums2"
+                >{{ordernums2}}</div>
               </div>
               <div class="imgname font24">未受理</div>
             </router-link>
@@ -78,6 +85,10 @@
             <router-link :to="{name: 'orderList', query: {billstatus: '10'}}" tag="li"  class="cont_item cont_order">
               <div class="imgbox">
                 <img src="static/img/order_10.png">
+                <div
+                  class="ordernums border_r500 font18 bgff6400 colorffffff ellipsis"
+                  v-if="ordernums3"
+                >{{ordernums3}}</div>
               </div>
               <div class="imgname font24">待配送</div>
             </router-link>
@@ -86,6 +97,10 @@
             <router-link :to="{name: 'orderList', query: {billstatus: '11'}}" tag="li"  class="cont_item cont_order">
               <div class="imgbox">
                 <img src="static/img/order_11.png">
+                <div
+                  class="ordernums border_r500 font18 bgff6400 colorffffff ellipsis"
+                  v-if="ordernums4"
+                >{{ordernums4}}</div>
               </div>
               <div class="imgname font24">配送中</div>
             </router-link>
@@ -198,6 +213,14 @@ export default {
   name: 'userInfo',
   data () {
     return {
+      // 未完成订单数量
+      ordernums1: 0,
+      // 未受理订单数量
+      ordernums2: 0,
+      // 待配送订单数量
+      ordernums3: 0,
+      // 配送中订单数量
+      ordernums4: 0
     }
   },
   computed: {
@@ -239,9 +262,51 @@ export default {
           this.$store.commit('setMoneyDetail', res.data.moneyDetail)
           sessionStorage.setItem('jyyf_token', res.data.token)
           this.$axios.defaults.headers.common.Authorization = res.data.token
+          // 查询未完成订单数量
+          this.getOrdernums('-1')
+          // 查询未受理订单数量
+          this.getOrdernums('0')
+          // 查询待配送订单数量
+          this.getOrdernums('10')
+          // 查询配送中订单数量
+          this.getOrdernums('11')
         } else {
           this.$toast({
             message: '登陆失败，请重新登陆！',
+            type: 'fail'
+          })
+        }
+      }).catch(error => {
+        throw error
+      })
+    },
+    // 查询未支付订单数量
+    getOrdernums (status) {
+      let data = new FormData()
+      let requestData = {
+        status: status,
+        page: '1',
+        pageSize: '20',
+        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+        flag: 'wemember'
+      }
+      requestData = JSON.stringify(requestData)
+      data.append('requestData', requestData)
+      this.$axios.post('api/order/getOrder', data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          if (status === '-1') {
+            this.ordernums1 = res.data.totalSize
+          } else if (status === '0') {
+            this.ordernums2 = res.data.totalSize
+          } else if (status === '10') {
+            this.ordernums3 = res.data.totalSize
+          } else if (status === '11') {
+            this.ordernums4 = res.data.totalSize
+          }
+        } else {
+          this.$toast({
+            message: res.msg,
             type: 'fail'
           })
         }

@@ -10,6 +10,16 @@
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
     <div class="order_main bgffffff">
+      <!--<van-tabs v-model="tabactive">-->
+        <!--<van-tab-->
+          <!--class=""-->
+          <!--:swipeable="true"-->
+          <!--v-for="(item, index) in ordernav"-->
+          <!--:key="index"-->
+          <!--:title="item.stausdescribe"-->
+          <!--title-active-color="#ff6400">-->
+        <!--</van-tab>-->
+      <!--</van-tabs>-->
       <!-- 订单分类 start -->
       <div class="order_nav bgffffff">
         <ul>
@@ -33,14 +43,14 @@
               <router-link :to="{name: 'orderdetail', query:{tradeno: item.tradeno}}" v-for="(item, index) in orderList" :key="index" tag="div" class="order_item bgffffff">
                 <div class="order_item_desc">
                   <div>订单编号：{{item.tradeno}}</div>
-                  <div class="font24">应付：<span class="colorfa2a2a">{{(item.actualmoney + item.freight).toFixed(2)}}</span></div>
+                  <div class="font24">订单金额：<span class="colorfa2a2a">{{((item.actualmoney + item.freight) || 0).toFixed(2)}}</span></div>
                   <div class="font24 color666666">{{item.Recordtime}}</div>
                 </div>
                 <div class="order_item_status">
                   <div class="font24 colorf84242">{{item.stausdescribe}}</div>
                   <div class="item_btn">
                     <div class="pay_btn border_r4 bgff6400 colorffffff borderff6400" v-if="item.payflag">
-                      <div @click="againPay(item.tradeno)">付款</div>
+                      <div @click="againPay(item)">付款</div>
                     </div>
                     <div class="cancel_btn border_r4 bgffffff color666666 borderc7c7c7" v-if="item.cancelflag">
                       <cancel-btn :tradeno="item.tradeno" @onRefresh="onRefresh"></cancel-btn>
@@ -76,6 +86,7 @@ export default {
   name: 'orderList',
   data () {
     return {
+      tabactive: '0',
       // 是否处在加载状态
       loading: false,
       // 是否已加载完成
@@ -208,9 +219,9 @@ export default {
       })
     },
     // 再支付
-    againPay (tradeno) {
+    againPay (order) {
       window.event.stopPropagation()
-      this.$router.push({name: 'againPay', query: {tradeno: tradeno}})
+      this.$router.push({name: 'againPay', query: {tradeno: order.tradeno, group: order.ordertype, groupno: order.groupno}})
     }
   },
   watch: {},
@@ -230,5 +241,10 @@ export default {
 @import "static/css/userInfo.css";
 .orderlist {
   position: relative;
+}
+.van-tab {
+  height: .66rem;
+  padding: 0 .2rem;
+  border-bottom: .02rem solid #ffffff;
 }
 </style>

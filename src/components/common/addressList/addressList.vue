@@ -1,13 +1,5 @@
 <template>
   <div class="container bgeeeeee">
-    <!-- 头部 start -->
-    <my-header>
-      <template v-slot:backs>
-        <i class="el-icon-arrow-left"></i>
-      </template>
-      <template v-slot:header>我的地址</template>
-    </my-header>
-    <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
     <div class="userinfo_main bgffffff" v-if="addressFlag">
       <div class="addresslist">
@@ -152,6 +144,12 @@ import loading from '@/components/common/loading/loading'
 
 export default {
   name: 'addressList',
+  props: {
+    // 订单总额 来自填写订单
+    Totalmoney () {
+      return this.$route.params.Totalmoney
+    }
+  },
   data () {
     return {
       // 列表页显示开关
@@ -177,11 +175,7 @@ export default {
       // 收货人电话
       contactNumber: '',
       // 加载中动画
-      isShowLoading: true,
-      // 商品id
-      goodsid: this.$route.params.goodsid,
-      // otc
-      otc: this.$route.params.otc
+      isShowLoading: true
     }
   },
   computed: {
@@ -195,10 +189,6 @@ export default {
     // 是否来自填写订单
     editorderFlag () {
       return this.$route.params.froms === 'editorder'
-    },
-    // 订单总额 来自填写订单
-    Totalmoney () {
-      return this.$route.params.Totalmoney
     },
     // 区范围介绍
     areaDesc () {
@@ -230,11 +220,7 @@ export default {
         let res = result.data
         if (res.code === 200) {
           this.isShowLoading = false
-          if (this.editorderFlag) {
-            this.addressList = res.data
-          } else {
-            this.addressList = res.data.filter(item => item.addressMark === '1')
-          }
+          this.addressList = res.data
         } else {
           this.$toast({
             message: res.msg,
@@ -412,8 +398,6 @@ export default {
         requestData = {
           address: address,
           totalmoney: this.Totalmoney,
-          otc: this.otc,
-          goodsid: this.goodsid,
           // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
           flag: 'wemember'
         }
@@ -463,7 +447,7 @@ export default {
 </script>
 
 <style scoped>
-@import "static/css/userInfo.css";
+@import "static/css/addressList.css";
 .addresslist {
   position: relative;
 }

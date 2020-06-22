@@ -52,15 +52,12 @@
                         <div class="goods_item_price goods_item_prices" v-if="item.promotemode === 0 || item.promotemode === 2 || item.promotemode === 3 || item.promotemode === 8">
                           <div class="ellipsis font32 font_blod colorf84242">￥{{item.saleprice}}</div>
                         </div>
-                        <div class="goods_item_price goods_item_prices" v-if="item.promotemode === 1 || item.promotemode === 7">
+                        <div class="goods_item_price goods_item_prices" v-if="item.promotemode === 1 ||
+                        item.promotemode === 6 || item.promotemode === 7">
                           <div class="ellipsis font32 font_blod colorf84242">￥{{item.promotevalue}}</div>
                           <del class="ellipsis font26 color999999">￥{{item.saleprice}}</del>
                         </div>
-                        <div class="goods_item_price goods_item_prices" v-if="item.promotemode === 6">
-                          <div class="ellipsis font32 font_blod colorf84242">￥{{item.groupprice}}</div>
-                          <del class="ellipsis font26 color999999">￥{{item.saleprice}}</del>
-                        </div>
-                        <div class="goods_item_cart" v-if="item.Promotemode !== 7">
+                        <div class="goods_item_cart" v-if="item.promotemode !== 6 && item.promotemode !== 8">
                           <addcart :goodsid="item.goodsid">
                             <img src="static/img/gwc.png">
                           </addcart>
@@ -254,7 +251,7 @@ export default {
     // 商品详情
     goodsdetail (goodsdetail) {
       this.$store.commit('setGoodsdetail', goodsdetail)
-      this.$router.push({name: 'goodsdetail', query: {goodsid: goodsdetail.goodsid}})
+      this.$router.push({name: 'goodsdetail', query: {goodsid: goodsdetail.goodsid, goodsname: goodsdetail.cusgoodsname}})
     }
   },
   watch: {

@@ -35,7 +35,7 @@
             <li v-for="(item, index) in goodsList" :key="index">
               <div class="goods_item bgffffff ellipsis">
                 <div class="goods_item_img">
-                  <img :src="(item.picture1 ? (imgurl + 'image/' + item.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))">
+                  <img v-lazy="(item.picture1) ? IMGURL + 'image/' + item.picture1.replace('.', '-zip-300.') : ''">
                 </div>
                 <div class="goods_item_cont">
                   <div class="goods_item_name ellipsis font26">{{item.goodsname}}</div>
@@ -72,6 +72,14 @@
         </div>
       </div>
       <!-- 订单信息 end -->
+      <!-- 已支付金额 start -->
+      <div class="order_sectionss bgffffff">
+        <div class="">已支付</div>
+        <div class="color999999">
+          <span class="colorf84242">￥{{(order.havepaymoney || 0).toFixed(2)}}</span>
+        </div>
+      </div>
+      <!-- 已支付金额 end -->
       <!-- 积分抵扣 start -->
       <div class="order_sectionss bgffffff" v-if="paymodeList.filter(item => item.paymodeid === 5).length">
         <div class="">积分抵扣</div>
@@ -93,11 +101,11 @@
         <div class="color999999">
           <span class="colorf84242" v-if="smallmoney >= 0">
             <span class="font26">使用零钱</span>
-            ￥{{smallmoney.toFixed(2)}}
+            ￥{{(smallmoney || 0).toFixed(2)}}
           </span>
           <span class="colorf84242" v-if="smallmoney < 0">
             <span class="font26">补缴零钱</span>
-            ￥{{(Math.abs(smallmoney)).toFixed(2)}}
+            ￥{{(Math.abs(smallmoney) || 0).toFixed(2)}}
           </span>
         </div>
       </div>
@@ -128,12 +136,13 @@
     <!-- 订单内容 end -->
     <!-- 支付按钮 start -->
     <div class="again_order_money bgffffff">
-      <div class="order_money_totalMoney font24 ellipsis">实付：<span class="colorf84242 font34">￥{{(paymoney - smallmoney).toFixed(2)}}</span></div>
+      <div class="order_money_totalMoney font24 ellipsis">待支付：<span class="colorf84242 font34">￥{{paymoney.toFixed(2)}}</span></div>
       <div class="pay colorffffff bgff6400">
         <pay-btn
           :paymodeid="paymodeid"
           :scoreFlag="scoreFlag"
           :tradeno="tradeno"
+          :froms="'againpay'"
         >立即支付</pay-btn>
       </div>
     </div>
@@ -156,7 +165,7 @@ export default {
       // 订单商品列表
       goodsList: '',
       // 图片路径
-      imgurl: this.IMGURL,
+      IMGURL: this.IMGURL,
       // 计算付款金额
       paymoney: 0,
       // 积分使用开关
@@ -170,7 +179,7 @@ export default {
   computed: {
     // 支付方式列表
     paymodeList () {
-      return this.$store.state.order.paymodeList
+      return this.$store.state.order.paymodeList || []
     },
     // 积分
     score () {
@@ -212,15 +221,7 @@ export default {
         let res = result.data
         if (res.code === 200) {
           this.orderdetail = res.data
-          this.paymoney = res.data.shouldmoney
           this.goodsList = res.data.OrderDetail
-          let _this = this
-          // 页面加载时计算实付金额
-          this.orderdetail.PayDetail.forEach((item) => {
-            if (item.paymodeid === 4 || item.paymodeid === 5) {
-              _this.paymoney -= item.paymoney
-            }
-          })
         } else {
           this.$toast({
             message: res.msg,
@@ -245,8 +246,12 @@ export default {
           this.$store.commit('setOrder', res.data)
           this.$store.commit('setFreightmoney', {freightmoney: res.data.freightmoney})
           this.order = res.data
-          // 页面加载时请求积分
-          this.getScore()
+          this.paymoney = res.data.canPayMoney
+          // 存在积分抵扣支付方式时
+          if (this.paymodeList.filter(item => item.paymodeid === 5).length) {
+            // 页面加载时请求积分
+            this.getScore()
+          }
         } else {
           this.$toast({
             message: res.msg,

@@ -60,7 +60,7 @@
                 name="password"
                 v-model="password"
                 maxlength="4"
-                onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^0-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
                 placeholder="请输入四位支付密码">
             </div>
           </div>
@@ -79,7 +79,7 @@
                 name="password1"
                 v-model="password1"
                 maxlength="4"
-                onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^0-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
                 placeholder="请再次输入四位支付密码">
             </div>
           </div>

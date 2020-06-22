@@ -35,7 +35,7 @@
             <li v-for="(item, index) in goodsList" :key="index" class="goods_li">
               <div class="goods_item bgffffff ellipsis">
                 <div class="goods_item_img">
-                  <img :src="(item.picture1 ? (imgurl + 'image/' + item.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))">
+                  <img v-lazy="(item.picture1) ? IMGURL + 'image/' + item.picture1.replace('.', '-zip-300.') : ''">
                 </div>
                 <div class="goods_item_cont">
                   <div class="goods_item_name ellipsis font26">{{item.goodsname}}</div>
@@ -60,28 +60,28 @@
       <div class="order_section bgffffff">
         <div class="paydesc">
           <div class="font24">商品金额</div>
-          <div class="font24 color666666">￥{{(orderdetail.shouldmoney - orderdetail.freight).toFixed(2)}}</div>
+          <div class="font24 color666666">￥{{((orderdetail.shouldmoney - orderdetail.freight) || 0).toFixed(2)}}</div>
         </div>
         <div class="paydesc">
           <div class="font24">服务费</div>
-          <div class="font24 color666666">+￥{{orderdetail.freight.toFixed(2)}}</div>
+          <div class="font24 color666666">+￥{{(orderdetail.freight || 0).toFixed(2)}}</div>
         </div>
         <div class="paydesc" v-for="(item, index) in orderdetail.PayDetail" :key="index" v-if="item.paymodeid === 5">
           <div class="font24">积分抵扣</div>
-          <div class="font24 color666666">-￥{{item.paymoney.toFixed(2)}}</div>
+          <div class="font24 color666666">-￥{{(item.paymoney || 0).toFixed(2)}}</div>
         </div>
         <div class="paydesc"  v-for="(item, index) in orderdetail.PayDetail" :key="index" v-if="item.paymodeid === 4">
           <div class="font24">优惠券</div>
-          <div class="font24 color666666">-￥{{item.paymoney.toFixed(2)}}</div>
+          <div class="font24 color666666">-￥{{(item.paymoney || 0).toFixed(2)}}</div>
         </div>
         <div class="paydesc"  v-for="(item, index) in orderdetail.PayDetail" :key="index" v-if="item.paymodeid === 10">
           <div class="font24">零钱</div>
-          <div class="font24 color666666" v-if="item.paymoney >= 0">-￥{{item.paymoney.toFixed(2)}}</div>
-          <div class="font24 color666666" v-if="item.paymoney < 0">+￥{{(Math.abs(item.paymoney)).toFixed(2)}}</div>
+          <div class="font24 color666666" v-if="item.paymoney >= 0">-￥{{(item.paymoney || 0).toFixed(2)}}</div>
+          <div class="font24 color666666" v-if="item.paymoney < 0">+￥{{(Math.abs(item.paymoney) || 0).toFixed(2)}}</div>
         </div>
         <div class="paydesc">
-          <div>实付金额</div>
-          <div class="colorf84242 font_blod">￥{{paymoney.toFixed(2)}}</div>
+          <div>订单金额</div>
+          <div class="colorf84242 font_blod">￥{{(paymoney || 0).toFixed(2)}}</div>
         </div>
         <div class="item_btn" v-if="orderdetail.payflag || orderdetail.cancelflag || orderdetail.deleflag">
           <div class="pay_btn border_r4 bgff6400 colorffffff borderff6400" v-if="orderdetail.payflag">
@@ -161,7 +161,7 @@ export default {
       // 订单商品列表
       goodsList: '',
       // 图片路径
-      imgurl: this.IMGURL,
+      IMGURL: this.IMGURL,
       // 计算付款金额
       paymoney: 0
     }
@@ -209,7 +209,7 @@ export default {
     },
     // 再支付
     againPay () {
-      this.$router.push({name: 'againPay', query: {tradeno: this.tradeno}})
+      this.$router.push({name: 'againPay', query: {tradeno: this.tradeno, group: this.orderdetail.ordertype, groupno: this.orderdetail.groupno}})
     }
   },
   watch: {},

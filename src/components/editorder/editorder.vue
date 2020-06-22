@@ -9,7 +9,7 @@
     </my-header>
     <!-- 头部 end -->
     <!-- 订单 start -->
-    <div class="order_main">
+    <div class="order_main" v-if="!addressListFlag">
       <!-- 订单内容 start -->
       <div class="order_cont">
         <!-- 收货地址 start -->
@@ -35,7 +35,7 @@
             共
             <span class="colorf84242 font30"> {{order.gdsCount}} </span>
             种商品，商品总价：
-            <span class="colorf84242 font30">￥{{order.totalMoney.toFixed(2)}}</span>&nbsp;
+            <span class="colorf84242 font30">￥{{(order.totalMoney || 0).toFixed(2)}}</span>&nbsp;
             <span class="colorf84242 font26" v-if="address">{{freightmoney.message}}</span>
           </div>
         </div>
@@ -54,7 +54,7 @@
         <div class="order_section bgffffff" v-if="paymodeList.filter(item => item.paymodeid === 5).length">
           <div class="">积分抵扣</div>
           <div class="color999999">
-            <span class="colorf84242">￥{{(score.Money).toFixed(2)}}</span>&nbsp;
+            <span class="colorf84242">￥{{(score.Money || 0).toFixed(2)}}</span>&nbsp;
             抵扣
             <span class="colorf84242">{{score.useScore}}</span>
             分
@@ -104,7 +104,7 @@
         <div class="order_section_usernote bgffffff">
           <div class="order_desc">
             <div class="font24">商品金额</div>
-            <div class="font24 color999999">￥{{Totalmoney.toFixed(2)}}</div>
+            <div class="font24 color999999">￥{{(Totalmoney || 0).toFixed(2)}}</div>
           </div>
           <div class="order_desc" v-if="freightmoney.freightmoney">
             <div class="font24">配送服务费</div>
@@ -120,8 +120,8 @@
           </div>
           <div class="order_desc" v-if="smallmoney">
             <div class="font24">零钱</div>
-            <div class="font24 color999999" v-if="smallmoney >= 0">-￥{{smallmoney.toFixed(2)}}</div>
-            <div class="font24 color999999" v-if="smallmoney < 0">+￥{{(Math.abs(smallmoney)).toFixed(2)}}</div>
+            <div class="font24 color999999" v-if="smallmoney >= 0">-￥{{(smallmoney || 0).toFixed(2)}}</div>
+            <div class="font24 color999999" v-if="smallmoney < 0">+￥{{(Math.abs(smallmoney) || 0).toFixed(2)}}</div>
           </div>
         </div>
         <!-- 结算信息 end -->
@@ -129,24 +129,31 @@
       <!-- 订单内容 end -->
       <!-- 结算金额 start -->
       <div class="order_money bgffffff">
-        <div class="order_money_totalMoney font24 ellipsis">实付：<span class="colorf84242 font34">￥{{(payMoney - smallmoney).toFixed(2)}}</span></div>
+        <div class="order_money_totalMoney font24 ellipsis">实付：<span class="colorf84242 font34">￥{{((payMoney - smallmoney) || 0).toFixed(2)}}</span></div>
         <div class="pay colorffffff bgff6400">
           <pay-btn
             :paymodeid="paymodeid"
             :scoreFlag="scoreFlag"
             :usernote="usernote"
+            :froms="'editorder'"
           >立即支付</pay-btn>
         </div>
       </div>
       <!-- 结算金额 end -->
     </div>
     <!-- 订单 end -->
+    <!-- 地址 start -->
+    <div class="order_main" v-if="addressListFlag">
+      <address-list></address-list>
+    </div>
+    <!-- 地址 end -->
   </div>
 </template>
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
 import payBtn from '@/components/common/payBtn/payBtn'
+import addressList from '@/components/common/addressList/addressList'
 
 export default {
   name: 'editorder',
@@ -163,13 +170,15 @@ export default {
       // 订单备注
       usernote: '',
       // 优惠券优惠金额
-      dicountMoney: ''
+      dicountMoney: '',
+      // 地址显示开关
+      addressListFlag: false
     }
   },
   computed: {
     // 支付方式列表
     paymodeList () {
-      return this.$store.state.order.paymodeList
+      return this.$store.state.order.paymodeList || []
     },
     // 订单总金额
     Totalmoney () {
@@ -217,7 +226,8 @@ export default {
   },
   components: {
     MyHeader,
-    payBtn
+    payBtn,
+    addressList
   },
   methods: {
     // 请求可用积分
@@ -249,12 +259,14 @@ export default {
         {
           name: 'addressList',
           params: {
-            header_tit: '我的地址',
             froms: 'editorder',
-            Totalmoney: this.Totalmoney
+            Totalmoney: this.Totalmoney,
+            goodsid: this.$route.query.goodsid,
+            otc: this.$route.query.otc
           }
         }
       )
+      // this.addressListFlag = true
     },
     // 去优惠券列表
     tickList () {
@@ -289,8 +301,11 @@ export default {
   beforeCreate () {
   },
   created () {
-    // 页面加载时请求积分
-    this.getScore()
+    // 存在积分抵扣支付方式时
+    if (this.paymodeList.filter(item => item.paymodeid === 5).length) {
+      // 页面加载时请求积分
+      this.getScore()
+    }
   },
   beforeMount () {
   },

@@ -107,6 +107,32 @@ export default {
         return true
       }
       return false
+    },
+    // msgType
+    msgType () {
+      let str = this.$route.query.msgType || ''
+      if (str && (str.indexOf('=') === str.length - 1)) {
+        str = str.substr(0, str.length - 1)
+      }
+      return str
+    },
+    // card_id
+    card_id () {
+      return this.$route.query.card_id || ''
+    },
+    // encrypt_code
+    encrypt_code () {
+      let str = this.$route.query.encrypt_code || ''
+      str = encodeURIComponent(str)
+      return str
+    },
+    // openid
+    openid () {
+      return this.$route.query.openid || ''
+    },
+    // wechatIDget
+    wechatIDget () {
+      return this.$route.query.dianpu || ''
     }
   },
   methods: {
@@ -222,6 +248,11 @@ export default {
         this.btnFlag = false
         let data = new FormData()
         let requestData = {
+          msgType: this.msgType,
+          card_id: this.card_id,
+          encrypt_code: this.encrypt_code,
+          openid: this.openid,
+          wechatIDget: this.wechatIDget,
           wechatID: this.$store.state.wechatID,
           wexinID: this.$store.state.openid,
           mobile: this.mobile,
@@ -235,10 +266,20 @@ export default {
           this.btnFlag = true
           let res = result.data
           if (res.code === 200) {
+            // 卡包执行
+            if (this.card_id && this.encrypt_code) {
+              this.$toast({
+                message: '激活成功！',
+                type: 'success'
+              })
+              sessionStorage.removeItem('jyyf_openid')
+              this.$router.push('/?dianpu=' + this.wechatIDget)
+            }
             this.$toast({
               message: '注册成功!',
               type: 'success'
             })
+            // 设置用户信息
             this.setUserInfo()
           } else {
             this.$toast({
@@ -269,6 +310,33 @@ export default {
           this.$axios.defaults.headers.common.Authorization = res.data.token
           let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
           this.$router.push(url)
+        } else {
+          this.$toast({
+            message: '登陆失败，请重新登陆！',
+            type: 'fail'
+          })
+        }
+      }).catch(error => {
+        throw error
+      })
+    },
+    // 卡包设置用户信息
+    cardSetUserInfo () {
+      let data = new FormData()
+      let requestData = {
+        wechatID: this.wechatIDget,
+        wexinID: this.openid
+      }
+      requestData = JSON.stringify(requestData)
+      data.append('requestData', requestData)
+      this.$axios.post('system/customlogin/login', data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          this.$store.commit('setUserInfo', res.data)
+          this.$store.commit('setMoneyDetail', res.data.moneyDetail)
+          sessionStorage.setItem('jyyf_token', res.data.token)
+          this.$axios.defaults.headers.common.Authorization = res.data.token
+          this.$router.push('/')
         } else {
           this.$toast({
             message: '登陆失败，请重新登陆！',
