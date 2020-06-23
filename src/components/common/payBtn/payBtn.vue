@@ -278,6 +278,7 @@ export default {
     sendpay () {
       let data = new FormData()
       let requestData = {
+        totalmoney: this.order.totalMoney,
         ordertype: this.group,
         otc: this.order.otc,
         isotc: this.order.isotc,

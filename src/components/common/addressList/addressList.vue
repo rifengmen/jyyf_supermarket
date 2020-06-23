@@ -1,5 +1,5 @@
 <template>
-  <div class="container bgeeeeee">
+  <div class="address_main bgffffff">
     <!-- 内容部分盒子 start -->
     <div class="userinfo_main bgffffff" v-if="addressFlag">
       <div class="addresslist">
@@ -145,9 +145,33 @@ import loading from '@/components/common/loading/loading'
 export default {
   name: 'addressList',
   props: {
+    // froms,调用的父组件
+    froms: {
+      type: String,
+      default: function () {
+        return ''
+      }
+    },
     // 订单总额 来自填写订单
-    Totalmoney () {
-      return this.$route.params.Totalmoney
+    Totalmoney: {
+      type: Number,
+      default: function () {
+        return 0
+      }
+    },
+    // froms,调用的父组件
+    goodsid: {
+      type: String,
+      default: function () {
+        return ''
+      }
+    },
+    // froms,调用的父组件
+    otc: {
+      type: String,
+      default: function () {
+        return ''
+      }
     }
   },
   data () {
@@ -186,10 +210,6 @@ export default {
       }
       return false
     },
-    // 是否来自填写订单
-    editorderFlag () {
-      return this.$route.params.froms === 'editorder'
-    },
     // 区范围介绍
     areaDesc () {
       if (this.sheetList.length) {
@@ -220,7 +240,11 @@ export default {
         let res = result.data
         if (res.code === 200) {
           this.isShowLoading = false
-          this.addressList = res.data
+          if (this.froms === 'editorder') {
+            this.addressList = res.data
+          } else {
+            this.addressList = res.data.filter(item => item.addressMark === '1')
+          }
         } else {
           this.$toast({
             message: res.msg,
@@ -392,7 +416,7 @@ export default {
     },
     // 去填写订单
     editorder (address) {
-      if (this.editorderFlag) {
+      if (this.froms === 'editorder') {
         let data = new FormData()
         let requestData
         requestData = {
@@ -408,7 +432,7 @@ export default {
           if (res.code === 200) {
             this.$store.commit('setAddress', address)
             this.$store.commit('setFreightmoney', res.data)
-            this.$router.back()
+            this.$emit('addressList')
           } else {
             this.$toast({
               message: res.msg,

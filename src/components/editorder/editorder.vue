@@ -9,7 +9,7 @@
     </my-header>
     <!-- 头部 end -->
     <!-- 订单 start -->
-    <div class="order_main" v-if="!addressListFlag">
+    <div class="order_main" v-if="!addressListFlag && !tickListFlag">
       <!-- 订单内容 start -->
       <div class="order_cont">
         <!-- 收货地址 start -->
@@ -144,16 +144,34 @@
     <!-- 订单 end -->
     <!-- 地址 start -->
     <div class="order_main" v-if="addressListFlag">
-      <address-list></address-list>
+      <addresslist
+        :froms="'editorder'"
+        :Totalmoney="Totalmoney"
+        :goodsid="goodsid"
+        :otc="otc"
+        @addressList="addressList"
+      ></addresslist>
     </div>
     <!-- 地址 end -->
+    <!-- 优惠券 start -->
+    <div class="order_main" v-if="tickListFlag">
+      <ticklist
+        :froms="'editorder'"
+        :payMoney="payMoney"
+        :Totalmoney="Totalmoney"
+        :addressid="addressid"
+        @setTickListFlag="setTickListFlag"
+      ></ticklist>
+    </div>
+    <!-- 优惠券 end -->
   </div>
 </template>
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
 import payBtn from '@/components/common/payBtn/payBtn'
-import addressList from '@/components/common/addressList/addressList'
+import addresslist from '@/components/common/addressList/addressList'
+import ticklist from '@/components/common/tickList/tickList'
 
 export default {
   name: 'editorder',
@@ -161,8 +179,6 @@ export default {
     return {
       // 临时订单信息
       order: this.$store.state.order,
-      // 收货地址
-      address: this.$store.state.address,
       // 积分使用开关
       scoreFlag: false,
       // 支付方式
@@ -172,10 +188,20 @@ export default {
       // 优惠券优惠金额
       dicountMoney: '',
       // 地址显示开关
-      addressListFlag: false
+      addressListFlag: false,
+      // otc
+      otc: this.$route.query.otc,
+      // goodsid
+      goodsid: this.$route.query.goodsid,
+      // 优惠券列表显示开关
+      tickListFlag: false
     }
   },
   computed: {
+    // 收货地址
+    address () {
+      return this.$store.state.address
+    },
     // 支付方式列表
     paymodeList () {
       return this.$store.state.order.paymodeList || []
@@ -227,7 +253,8 @@ export default {
   components: {
     MyHeader,
     payBtn,
-    addressList
+    addresslist,
+    ticklist
   },
   methods: {
     // 请求可用积分
@@ -255,18 +282,7 @@ export default {
     },
     // 去地址列表
     addressList () {
-      this.$router.push(
-        {
-          name: 'addressList',
-          params: {
-            froms: 'editorder',
-            Totalmoney: this.Totalmoney,
-            goodsid: this.$route.query.goodsid,
-            otc: this.$route.query.otc
-          }
-        }
-      )
-      // this.addressListFlag = true
+      this.addressListFlag = !this.addressListFlag
     },
     // 去优惠券列表
     tickList () {
@@ -278,29 +294,36 @@ export default {
         return false
       }
       this.$store.commit('setTick', '')
-      this.$router.push(
-        {
-          name: 'tickList',
-          params: {
-            header_tit: '优惠券',
-            froms: 'editorder',
-            payMoney: this.payMoney,
-            Totalmoney: this.Totalmoney,
-            addressid: this.addressid
-          }
-        }
-      )
+      this.setTickListFlag()
+    },
+    // 优惠券列表显示隐藏
+    setTickListFlag () {
+      this.tickListFlag = !this.tickListFlag
     },
     // 是否使用积分
     setScoreflag () {
       this.scoreFlag = !this.scoreFlag
+    },
+    // 清除旧的订单信息
+    delOrderDes () {
+      this.$store.commit('setScore', '')
+      this.$store.commit('setAddress', '')
+      this.$store.commit('setFreightmoney', '')
+      this.$store.commit('setTick', '')
     }
   },
   watch: {
+    payMoney (oval, nval) {
+      if (!this.scoreFlag) {
+        this.getScore()
+      }
+    }
   },
   beforeCreate () {
   },
   created () {
+    // 清除旧的订单信息
+    this.delOrderDes()
     // 存在积分抵扣支付方式时
     if (this.paymodeList.filter(item => item.paymodeid === 5).length) {
       // 页面加载时请求积分

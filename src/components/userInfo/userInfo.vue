@@ -37,7 +37,7 @@
                 <div class="font22">积分</div>
               </router-link>
               <li class="card_des_item bgd9d9d9"></li>
-              <router-link :to="{name: 'tickList', params:{header_tit: '优惠券', froms: 'userinfo'}}" tag="li" class="card_des_item font24">
+              <router-link :to="{name: 'tickList', params:{header_tit: '优惠券'}}" tag="li" class="card_des_item font24">
                 <div class="font32">{{moneyDetail.couponAmount || 0}}</div>
                 <div class="font22">券数量</div>
               </router-link>
@@ -129,7 +129,7 @@
             <!--</router-link>-->
             <!-- 购物评价 end -->
             <!-- 我的资料 start -->
-            <router-link :to="{name: 'userDetail', params:{header_tit: '我的资料'}}" tag="li"  class="cont_item">
+            <router-link :to="{name: 'userDetail'}" tag="li"  class="cont_item">
               <div class="imgbox">
                 <img src="static/img/user_wdzl.png">
               </div>
@@ -137,7 +137,7 @@
             </router-link>
             <!-- 我的资料 end -->
             <!-- 我的地址 start -->
-            <router-link :to="{name: 'addressList', params:{header_tit: '我的地址'}}" tag="li"  class="cont_item">
+            <router-link :to="{name: 'addressList'}" tag="li"  class="cont_item">
               <div class="imgbox">
                 <img src="static/img/user_wddz.png">
               </div>
@@ -145,7 +145,7 @@
             </router-link>
             <!-- 我的地址 end -->
             <!-- 支付密码 start -->
-            <router-link :to="{name: 'payPassword', params:{header_tit: '支付密码', msg_status: 1}}" tag="li"  class="cont_item">
+            <router-link :to="{name: 'payPassword', params:{msg_status: 1}}" tag="li"  class="cont_item">
               <div class="imgbox">
                 <img src="static/img/user_zfmm.png">
               </div>
@@ -236,10 +236,6 @@ export default {
     headimgurl () {
       return this.$store.state.headimgurl
     }
-    // ...mapState({
-    //   // 用户信息 把 `this.userInfo` 映射为 `this.$store.state.userInfo`
-    //   userInfo: 'userInfo'
-    // })
   },
   components: {
     WechatConfig,
@@ -286,7 +282,7 @@ export default {
       let requestData = {
         status: status,
         page: '1',
-        pageSize: '20',
+        pageSize: '100',
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }

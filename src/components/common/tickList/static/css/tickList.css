@@ -1,0 +1,12 @@
+.tick_main {
+  width: 100%;
+  height: 100%;
+}
+/* 内容部分盒子 start */
+.userinfo_main {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+/* 内容部分盒子 end */
