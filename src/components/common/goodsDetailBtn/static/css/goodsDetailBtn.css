@@ -1,0 +1,28 @@
+.btns_cont {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+.btns {
+  width: calc(100% - 2.74rem);
+  height: 100%;
+  padding-right: .24rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.goods_btn {
+  width: 100%;
+  height: .7rem;
+  line-height: .7rem;
+}
+.goods_btn:first-child {
+  border-bottom-left-radius: 5rem;
+  border-top-left-radius: 5rem;
+}
+.goods_btn:last-child {
+  border-bottom-right-radius: 5rem;
+  border-top-right-radius: 5rem;
+}
+

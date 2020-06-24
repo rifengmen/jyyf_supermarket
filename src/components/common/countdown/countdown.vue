@@ -49,6 +49,11 @@ export default {
         this.hours = this.checkTime(h)
         this.minutes = this.checkTime(m)
         this.second = this.checkTime(s)
+        if (this.hours <= 0 && this.minutes <= 0 && this.second <= 0) {
+          this.hours = '00'
+          this.minutes = '00'
+          this.second = '00'
+        }
       }
     },
     // 一位时间加零

@@ -37,13 +37,13 @@
               <del class="font20 colorffc06e">￥{{goodsdetail.saleprice}}</del>
             </div>
           </div>
-          <div class="countdown" v-if="goodsdetail.startstate === 1 && goodsdetail.promotemode !== 0">
+          <div class="countdown" v-if="goodsdetail.startstate === 1 && goodsdetail.promotemode !== 0 && goodsdetail.promoteend">
             <div class="font20 colorffffff">距结束还剩:</div>
             <div class="countdown_cont">
               <countdown :times="goodsdetail.promoteend"></countdown>
             </div>
           </div>
-          <div class="countdown" v-if="goodsdetail.startstate === 0 && goodsdetail.promotemode !== 0">
+          <div class="countdown" v-if="goodsdetail.startstate === 0 && goodsdetail.promotemode !== 0 && goodsdetail.promoteend">
             <div class="font20 colorffffff">距开始还剩：</div>
             <div class="countdown_cont">
               <countdown :times="goodsdetail.promotestart"></countdown>
@@ -85,88 +85,34 @@
         <div class="addcart goods_btn tc colorffffff bgffae89" v-if="goodsdetail.promotemode !== 6 && goodsdetail.promotemode !== 8">
           <addcart :goodsid="goodsdetail.goodsid" :froms="'goodsdetail'">加购物车</addcart>
         </div>
+        <div class="pay goods_btn tc colorffffff bgff6400"  v-if="goodsdetail.promotemode !== 6 && goodsdetail.promotemode !== 8">
+          <addorder :goods="goodsdetail" :goodsdetail="true">立即购买</addorder>
+        </div>
         <!-- 拼团按钮--hhk--start-->
-        <div class="goods_btn tc colorffffff bgff6400" v-if="goodsdetail.promotemode === 6 && !groupno">
-          <add-group :goodsid="goodsdetail.goodsid">发起拼团</add-group>
-        </div>
-        <div class="goods_btn tc colorffffff bgffae89"  v-if="goodsdetail.promotemode === 6 && !groupno">
-          <div @click="setShowGroup">参与拼团</div>
-        </div>
-        <div class="goods_btn tc color333333 bgeeeeee ellipsis" v-if="groupno">
-          拼团号：{{groupno}}
-        </div>
-        <div class="goods_btn tc colorffffff bgff6400" v-if="groupno" >
-          <div @click="groupDetail">拼团详情</div>
+        <div class="btns_cont" v-if="goodsdetail.promotemode === 6">
+          <group
+            :goodsdetail="goodsdetail"
+            :groupno="groupno"
+            :joinno="joinno"
+            :groupdetail="groupdetail"
+          ></group>
         </div>
         <!-- 拼团按钮--hhk--end-->
         <!-- 砍价按钮--hhk--start-->
-        <div class="goods_btn tc colorffffff bgff6400" v-if="goodsdetail.promotemode === 8 && !bargainno || flag === 0">
-          <div @click="addBargain">发起砍价</div>
-        </div>
-        <div class="goods_btn tc colorffffff bgff6400" v-if="goodsdetail.promotemode === 8 && !bargainno || flag === 0">
-          <div @click="setShowBargain">参与砍价</div>
-        </div>
-        <div class="goods_btn tc color333333 bgeeeeee ellipsis" v-if="bargainno && flag === 1">
-          砍价号：{{bargainno}}
-        </div>
-        <div class="goods_btn tc colorffffff bgff6400" v-if="bargainno &&  flag === 1" >
-          <div @click="bargainDetail">砍价详情</div>
-        </div>
-        <div class="pay goods_btn tc colorffffff bgff6400"  v-if="pay === 1 && flag === 1">
-          <addorder :goods="goodsdetail" :goodsdetail="true" :pay="1">立即购买</addorder>
+        <div class="btns_cont" v-if="goodsdetail.promotemode === 8">
+          <bargain
+            :goodsdetail="goodsdetail"
+            :bargainno="bargainno"
+            :joinno="joinno"
+            :pay="pay"
+            :flag="flag"
+            @getBargainNo="getBargainNo"
+          ></bargain>
         </div>
         <!-- 砍价按钮--hhk--end-->
-        <div class="pay goods_btn tc colorffffff bgff6400"  v-if="!bargainno && !groupno">
-          <addorder :goods="goodsdetail" :goodsdetail="true">立即购买</addorder>
-        </div>
       </div>
     </div>
     <!-- 购物车 end -->
-    <!-- 参团弹框 start -->
-    <van-dialog
-      v-model="showGroup"
-      title="请输入团号"
-      :closeOnClickOverlay="true"
-      :style="'height: 30%;'"
-      @confirm="checkJoinGroup"
-    >
-      <van-field v-model="joinno" type="digit" placeholder="请输入团号" />
-    </van-dialog>
-    <!-- 参团弹框 end -->
-    <!-- 拼团详情弹窗-->
-    <van-dialog
-      v-model="showGroupDetail"
-      title="拼团详情"
-      :showConfirmButton="false"
-      :closeOnClickOverlay="true"
-      :style="'height: 30%;'"
-    >
-      <div v-for="(item, index) in groupdetail.temlist" :key="index">{{item.userid}}</div>
-    </van-dialog>
-    <!-- 砍价详情弹窗-->
-    <van-dialog
-      v-model="showBargainDetail"
-      title="砍价详情"
-      :showConfirmButton="false"
-      :closeOnClickOverlay="true"
-      :style="'height: 30%;'"
-      @close="closeBargainDetail"
-    >
-      <div v-for="(item, index) in bargaindetail" :key="index">
-        <van-grid-item icon="photo-o" text="" />{{item.userid}}
-      </div>
-    </van-dialog>
-    <!-- 参与砍价弹框 start -->
-    <van-dialog
-      v-model="showBargain"
-      title="请输入砍价号"
-      :closeOnClickOverlay="true"
-      :style="'height: 30%;'"
-      @confirm="joinBargain"
-    >
-      <van-field v-model="joinno" type="digit" placeholder="请输入砍价号" />
-    </van-dialog>
-    <!-- 参与砍价弹框 end -->
   </div>
 </template>
 
@@ -175,7 +121,8 @@ import WechatConfig from '@/components/common/wechatConfig/wechatConfig'
 import countdown from '@/components/common/countdown/countdown'
 import addcart from '@/components/common/addcart/addcart'
 import addorder from '@/components/common/addorder/addorder'
-import addGroup from '@/components/common/addGroup/addGroup'
+import group from '@/components/common/goodsDetailBtn/group'
+import bargain from '@/components/common/goodsDetailBtn/bargain'
 
 export default {
   name: 'goodsdetail',
@@ -201,22 +148,12 @@ export default {
       goodsNavFlag: false,
       // 拼团的团号
       groupno: '',
-      // 参与拼团弹框
-      showGroup: false,
       // 参团号
       joinno: '',
-      // 展示拼团详情
-      showGroupDetail: false,
-      // 拼团详情
-      groupdetail: '',
       // 砍价号
       bargainno: '',
-      // 砍价详情
-      bargaindetail: '',
-      // 展示砍价详情
-      showBargainDetail: false,
-      // 参与砍价
-      showBargain: false,
+      // 拼团详情
+      groupdetail: [],
       // 商品数量
       amount: 1,
       // 砍价支付状态
@@ -272,7 +209,8 @@ export default {
     countdown,
     addcart,
     addorder,
-    addGroup
+    group,
+    bargain
   },
   methods: {
     // 页码指示器
@@ -320,7 +258,7 @@ export default {
         throw error
       })
     },
-    // 获取拼团groupno
+    // 获取拼团信息
     getGroupNo () {
       let data = new FormData()
       let requestData = {
@@ -335,6 +273,7 @@ export default {
         let res = result.data
         if (res.code === 200) {
           this.groupno = res.data.groupno
+          this.groupdetail = res.data.temlist
         }
       }).catch(error => {
         throw error
@@ -365,215 +304,6 @@ export default {
     // 导航按钮显示
     setGoodsNav () {
       this.goodsNavFlag = !this.goodsNavFlag
-    },
-    // 显示拼团输入框
-    setShowGroup () {
-      this.joinno = ''
-      this.showGroup = true
-    },
-    // 显示砍价输入框
-    setShowBargain () {
-      this.joinno = ''
-      this.showBargain = true
-    },
-    // 查看拼团详情
-    groupDetail () {
-      let data = new FormData()
-      let requestData = {
-        goodsid: this.goodsid.toString(),
-        amount: this.amount,
-        otc: 'group',
-        isotc: 'group',
-        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
-        flag: 'wemember'
-      }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/goods/groupIncrease', data).then(result => {
-        let res = result.data
-        if (res.code === 200) {
-          this.showGroupDetail = true
-          this.groupdetail = res.data
-        } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
-        }
-      }).catch(error => {
-        throw error
-      })
-    },
-    // 填写团号验证
-    checkJoinGroup () {
-      if (this.joinno) {
-        let data = new FormData()
-        let requestData = {
-          goodsid: this.goodsid.toString(),
-          joinno: this.joinno,
-          // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
-          flag: 'wemember'
-        }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
-        this.$axios.post('api/goods/getGroupInfo', data).then(result => {
-          let res = result.data
-          if (res.code === 200) {
-            // 拼团
-            this.joinGroup(res.data)
-          } else {
-            this.$toast({
-              message: res.msg,
-              type: 'fail'
-            })
-          }
-        }).catch(error => {
-          throw error
-        })
-      }
-    },
-    // 参与拼团
-    joinGroup (group) {
-      let data = new FormData()
-      let requestData = {
-        goodsid: this.goodsid.toString(),
-        amount: this.amount,
-        otc: 'group',
-        isotc: 'group',
-        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
-        flag: 'wemember'
-      }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('invest/microFlow/buyEnd', data).then(result => {
-        let res = result.data
-        if (res.code === 200) {
-          this.$store.commit('setOrder', res.data)
-          this.$router.push({name: 'editorder', query: {goodsid: this.goodsid.toString(), group: 2, groupno: this.joinno}})
-        } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
-        }
-      }).catch(error => {
-        throw error
-      })
-    },
-    // 新增砍价
-    addBargain () {
-      let data = new FormData()
-      let requestData = {
-        goodsid: this.goodsid.toString(),
-        amount: this.amount,
-        saleprice: this.goodsdetail.saleprice,
-        discountvalue: this.goodsdetail.discountvalue,
-        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
-        flag: 'wemember'
-      }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/goods/hackAdd', data).then(result => {
-        let res = result.data
-        if (res.code === 200) {
-          this.$toast({
-            message: '发起成功，快去邀人砍价0×0',
-            type: 'success'
-          })
-          this.getBargainNo()
-        } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
-        }
-      }).catch(error => {
-        throw error
-      })
-    },
-    // 参与砍价
-    joinBargain (group) {
-      let data = new FormData()
-      let requestData = {
-        goodsid: this.goodsid.toString(),
-        amount: this.amount,
-        groupno: this.joinno,
-        saleprice: this.goodsdetail.saleprice,
-        discountvalue: this.goodsdetail.discountvalue,
-        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
-        flag: 'wemember'
-      }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/goods/hackIncrease', data).then(result => {
-        let res = result.data
-        if (res.code === 200) {
-          this.$toast({
-            message: '参与成功',
-            type: 'success'
-          })
-        } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
-        }
-      }).catch(error => {
-        throw error
-      })
-    },
-    // 砍价详情
-    bargainDetail () {
-      let data = new FormData()
-      let requestData = {
-        goodsid: this.goodsid.toString(),
-        amount: 1,
-        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
-        flag: 'wemember'
-      }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/goods/generateHackBill', data).then(result => {
-        let res = result.data
-        if (res.code === 200) {
-          this.bargaindetail = res.data.list
-          this.showBargainDetail = true
-        }
-      }).catch(error => {
-        throw error
-      })
-    },
-    // 填写砍价号验证
-    checkJoinBargain () {
-      if (this.joinno) {
-        let data = new FormData()
-        let requestData = {
-          goodsid: this.goodsid.toString(),
-          joinno: this.joinno,
-          // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
-          flag: 'wemember'
-        }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
-        this.$axios.post('api/goods/generateHackBill', data).then(result => {
-          let res = result.data
-          if (res.code === 200) {
-            // 拼团
-            this.joinBargain(res.data)
-          } else {
-            this.$toast({
-              message: res.msg,
-              type: 'fail'
-            })
-          }
-        }).catch(error => {
-          throw error
-        })
-      }
-    },
-    // 关闭砍价详情窗口
-    closeBargainDetail () {
-      this.getBargainNo()
     }
   },
   watch: {},

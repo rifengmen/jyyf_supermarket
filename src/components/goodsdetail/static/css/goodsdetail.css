@@ -123,6 +123,9 @@
   height: .3rem;
   line-height: .3rem;
 }
+.btns_cont {
+  width: 100%;
+}
 .btns {
   width: calc(100% - 2.74rem);
   height: 100%;

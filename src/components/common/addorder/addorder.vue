@@ -39,6 +39,12 @@ export default {
       default: function () {
         return 0
       }
+    },
+    bargainno: {
+      type: String,
+      default: function () {
+        return ''
+      }
     }
   },
   data () {
@@ -105,8 +111,8 @@ export default {
         requestData.goodsid = this.goods.goodsid.toString()
       } else if (otc === 'hack' && pay === 1) { // 砍价成功的立即购买
         requestData.otc = 'hack'
-        requestData.isotc = 'otc'
-        requestData.pay = this.pay
+        requestData.isotc = 'hack'
+        requestData.groupno = this.bargainno
         requestData.goodsid = this.goods.goodsid.toString()
       }
       let data = new FormData()

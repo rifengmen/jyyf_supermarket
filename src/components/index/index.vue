@@ -243,6 +243,7 @@ export default {
     loading
   },
   methods: {
+    // 获取banner列表
     getBanner () {
       let data = new FormData()
       let requestData = {
