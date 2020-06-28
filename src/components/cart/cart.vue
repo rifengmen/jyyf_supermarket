@@ -1,10 +1,5 @@
 ﻿<template>
     <div class="container bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
-      <!-- 头部 start -->
-      <!--<my-header>-->
-        <!--<template v-slot:header>购物车</template>-->
-      <!--</my-header>-->
-      <!-- 头部 end -->
       <!-- 购物车列表 start -->
       <div class="cart_cont">
         <!-- 加载中动画 start -->
@@ -15,14 +10,6 @@
             <ul ref="cartlist">
               <!-- 商品简介 start -->
               <li class="goods_li" v-for="(item, index) in cartList" :key="index">
-                <!--<div class="goods_input bgffffff">-->
-                  <!--<van-checkbox-->
-                    <!--v-model="item.addorder"-->
-                    <!--icon-size=".28rem"-->
-                    <!--checked-color="#ff6400"-->
-                    <!--@change="addorder(item.no)">-->
-                  <!--</van-checkbox>-->
-                <!--</div>-->
                 <div class="goods_input bgffffff" @click="addorder(item.no)">
                   <input class="checkbox" type="checkbox" name="goods" v-model="item.addorder">
                 </div>
@@ -284,10 +271,8 @@ export default {
         if (this.cartList[i].addorder) {
           let _money
           no.push(this.cartList[i].no)
-          if (this.cartList[i].promotevalue) {
+          if (this.cartList[i].promotemode) {
             _money = parseInt(this.cartList[i].amount) * parseFloat(this.cartList[i].promotevalue)
-          } else if (this.cartList[i].groupprice) {
-            _money = parseInt(this.cartList[i].amount) * parseFloat(this.cartList[i].groupprice)
           } else {
             _money = parseInt(this.cartList[i].amount) * parseFloat(this.cartList[i].saleprice)
           }

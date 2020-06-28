@@ -36,7 +36,9 @@
         :closeOnClickOverlay="true"
         :style="'height: 30%;'"
       >
-        <div v-for="(item, index) in groupdetail" :key="index">{{item.userid}}</div>
+        <div v-for="(item, index) in groupdetail" :key="index">
+          {{item.nickname + item.mobile}}
+        </div>
       </van-dialog>
       <!-- 拼团详情弹窗 end-->
     </div>

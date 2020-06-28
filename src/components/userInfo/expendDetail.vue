@@ -18,7 +18,7 @@
             <!-- 商品简介 start -->
             <li v-for="(item, index) in expendDetail.detailsList" :key="index">
               <div class="goods_item bgffffff ellipsis">
-                  <div class="goods_item_name font26">{{item.Productname}}</div>
+                  <div class="goods_item_name font26">{{item.Productname}}{{item.Productname}}</div>
                   <!--<router-link :to="{name: 'addComment', params: {goods: item}}" tag="div" class="goods_item_name comment tc font24 colorff7e42">去评价</router-link>-->
                   <div class="goods_item_price">
                     <div class="font30 font_blod colorf84242">￥{{item.Paidprice}}</div>
@@ -69,13 +69,13 @@ export default {
   data () {
     return {
       // 流水号
-      Flowno: this.$route.params.Flowno,
+      Flowno: this.$route.query.Flowno,
       // 店铺名称
-      deptname: this.$route.params.deptname,
+      deptname: this.$route.query.deptname,
       // 店铺编码
-      Deptcode: this.$route.params.Deptcode,
+      Deptcode: this.$route.query.Deptcode,
       // 时间
-      saletime: this.$route.params.saletime,
+      saletime: this.$route.query.saletime,
       // 消费记录详情
       expendDetail: ''
     }
@@ -138,6 +138,7 @@ export default {
   .goods_item_name {
     width: 2.5rem;
     height: unset;
+    white-space: pre-wrap;
   }
   .comment {
     width: 1rem;
@@ -149,5 +150,7 @@ export default {
   }
   .goods_item_editnum {
     width: 1rem;
+    display: flex;
+    justify-content: flex-end;
   }
 </style>

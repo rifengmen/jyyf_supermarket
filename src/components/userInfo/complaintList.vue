@@ -26,7 +26,6 @@
             finished-text="没有更多了"
             @load="onLoad">
             <router-link :to="{name: 'complaintDetail', params: {id: item.id}}" tag="div" v-for="(item, index) in complaintList" :key="index" class="complaint_item bgffffff">
-              <div class="bgffae43 border_r500"></div>
               <div class="complaint_title ellipsis">{{item.content}}</div>
               <div class="font22 color999999 tr">{{item.addtime}}</div>
             </router-link>

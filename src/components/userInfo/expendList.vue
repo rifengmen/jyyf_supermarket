@@ -17,7 +17,7 @@
         <!-- 零钱列表 start -->
         <div class="score_list" v-if="expendList.length">
           <ul>
-            <router-link :to="{name: 'expendDetail', params: {Flowno: item.flowno, Deptcode: item.deptcode, saletime: item.saletime, deptname: item.deptname}}" tag="li" class="score_item" v-for="(item, index) in expendList" :key="index">
+            <router-link :to="{name: 'expendDetail', query: {Flowno: item.flowno, Deptcode: item.deptcode, saletime: item.saletime, deptname: item.deptname}}" tag="li" class="score_item" v-for="(item, index) in expendList" :key="index">
               <div>
                 <div class="ellipsis">{{item.deptname}}</div>
                 <div class="font24 color999999">{{item.saletime}}</div>

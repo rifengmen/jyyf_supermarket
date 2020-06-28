@@ -123,7 +123,6 @@ export default {
     // encrypt_code
     encrypt_code () {
       let str = this.$route.query.encrypt_code || ''
-      str = encodeURIComponent(str)
       return str
     },
     // openid

@@ -24,7 +24,7 @@
             @load="onLoad">
             <div v-for="(item, index) in noticeList" :key="index">
               <router-link :to="{name: 'noticedetail', query: {id: item.id}}" tag="div" class="message_item bgffffff">
-                <div class="bgffae43 border_r500"></div>
+                <div class="message_tab bgffae43 border_r500"></div>
                 <div class="message_title ellipsis">{{item.title}}</div>
                 <div class="font22 color999999">{{item.pubdate}}</div>
               </router-link>

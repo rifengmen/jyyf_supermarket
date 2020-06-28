@@ -29,7 +29,7 @@
   justify-content: flex-start;
   align-items: center;
 }
-.message_item > div:first-child {
+.message_item > .message_tab {
   width: .12rem;
   height: .12rem;
   margin-right: .2rem;

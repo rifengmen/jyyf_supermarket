@@ -1,8 +1,8 @@
 <template>
   <div class="container bgeeeeee">
     <!-- 头部 start -->
-    <my-header :froms="'addComment'">
-      <template v-slot:addComment>
+    <my-header>
+      <template v-slot:backs>
         <i class="el-icon-arrow-left"></i>
       </template>
       <template v-slot:header>评价商品</template>
@@ -87,6 +87,13 @@ export default {
         })
         return false
       }
+      if (this.comment.length > 140) {
+        this.$toast({
+          message: '已超过140个字符！',
+          type: 'fail'
+        })
+        return false
+      }
       let data = new FormData()
       let requestData = {
         gdsid: this.goods.Gdscode,
@@ -103,7 +110,8 @@ export default {
             message: '提交成功!',
             type: 'success'
           })
-          this.$router.push({name: 'commentList'})
+          this.$router.back()
+          // this.$router.push({name: 'commentList'})
         } else {
           this.$toast({
             message: res.msg,

@@ -27,7 +27,7 @@
         @close="closeBargainDetail"
       >
         <div v-for="(item, index) in bargaindetail" :key="index">
-          <van-grid-item icon="photo-o" text="" />{{item.userid}}
+          {{item.nickname + item.mobile}}
         </div>
       </van-dialog>
       <!-- 参与砍价弹框 start -->

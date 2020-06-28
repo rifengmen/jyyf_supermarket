@@ -436,11 +436,6 @@ input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
   justify-content: space-between;
   align-items: center;
 }
-.complaint_item > div:first-child {
-  width: .12rem;
-  height: .12rem;
-  margin-right: .2rem;
-}
 .complaint_title {
   width: 4.4rem;
 }

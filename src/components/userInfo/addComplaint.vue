@@ -77,6 +77,13 @@ export default {
         })
         return false
       }
+      if (this.complaint.length > 140) {
+        this.$toast({
+          message: '已超过140个字符！',
+          type: 'fail'
+        })
+        return false
+      }
       let data = new FormData()
       let requestData = {
         Content: this.complaint
@@ -90,7 +97,7 @@ export default {
             message: '提交成功!',
             type: 'success'
           })
-          this.$router.push({name: 'complaintList'})
+          this.$router.back()
         } else {
           this.$toast({
             message: res.msg,
