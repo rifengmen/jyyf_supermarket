@@ -90,8 +90,6 @@ export default {
       offset: 100,
       // 分类编码
       classcode: '',
-      // 搜索关键词
-      keyword: this.$store.getters.getKeyword,
       // 搜索结果
       goodsList: [],
       // 当前页码
@@ -107,6 +105,10 @@ export default {
     }
   },
   computed: {
+    // 搜索关键字
+    keyword () {
+      return this.$store.state.keyword
+    }
   },
   components: {
     WechatConfig,
