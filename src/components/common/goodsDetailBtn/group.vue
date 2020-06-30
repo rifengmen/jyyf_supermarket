@@ -22,10 +22,12 @@
         v-model="showGroup"
         title="请输入团号"
         :closeOnClickOverlay="true"
-        :style="'height: 30%;'"
+        :style="'height: 25%;'"
         @confirm="checkJoinGroup"
       >
-        <van-field v-model="joinno" type="digit" placeholder="请输入团号" />
+        <van-cell-group>
+          <van-field v-model="joinno" type="digit" placeholder="请输入团号" />
+        </van-cell-group>
       </van-dialog>
       <!-- 参团弹框 end -->
       <!-- 拼团详情弹窗 start-->
@@ -34,10 +36,15 @@
         title="拼团详情"
         :showConfirmButton="false"
         :closeOnClickOverlay="true"
-        :style="'height: 30%;'"
+        :style="'height: 35%;overflow-y: scroll'"
       >
-        <div v-for="(item, index) in groupdetail" :key="index">
-          {{item.nickname + item.mobile}}
+        <div class="itemdetail bgeeeeee">
+          <div>昵称</div>
+          <div class="tc">电话</div>
+        </div>
+        <div v-for="(item, index) in groupdetail" :key="index" :class="{itemdetail: true, bgeeeeee: index%2 === 1}">
+          <div class="ellipsis">{{(item.nickname.length === 11) ? (item.nickname.slice(0, 3) + '****' + item.nickname.slice(6, -1)) : item.nickname}}</div>
+          <div class="tr">{{item.mobile.slice(0, 3) + '****' + item.mobile.slice(6, -1)}}</div>
         </div>
       </van-dialog>
       <!-- 拼团详情弹窗 end-->

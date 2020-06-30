@@ -25,4 +25,21 @@
   border-bottom-right-radius: 5rem;
   border-top-right-radius: 5rem;
 }
-
+.itemdetail {
+  width: calc(100% - .24rem);
+  height: .8rem;
+  line-height: .8rem;
+  padding: 0 .12rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.itemdetail > div {
+  width: 100%;
+}
+img.item_tag {
+  position: absolute;
+  top: .2rem;
+  right: .2rem;
+  width: 50%;
+}

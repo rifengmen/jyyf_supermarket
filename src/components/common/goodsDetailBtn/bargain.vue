@@ -17,30 +17,43 @@
           <addorder :goods="goodsdetail" :goodsdetail="true" :pay="pay" :bargainno="bargainno">立即购买</addorder>
         </div>
       </div>
-      <!-- 砍价详情弹窗-->
+      <!-- 参与砍价弹框 start -->
+      <van-dialog
+        v-model="showBargain"
+        title="请输入砍价号"
+        class="font32"
+        :closeOnClickOverlay="true"
+        :style="'height: 25%;'"
+        @confirm="joinBargain"
+      >
+        <van-cell-group>
+          <van-field v-model="joinno" type="digit" placeholder="请输入砍价号" />
+        </van-cell-group>
+      </van-dialog>
+      <!-- 参与砍价弹框 end -->
+      <!-- 砍价详情弹窗 start -->
       <van-dialog
         v-model="showBargainDetail"
         title="砍价详情"
         :showConfirmButton="false"
         :closeOnClickOverlay="true"
-        :style="'height: 30%;'"
+        :style="'height: 35%;overflow-y: scroll'"
         @close="closeBargainDetail"
       >
-        <div v-for="(item, index) in bargaindetail" :key="index">
-          {{item.nickname + item.mobile}}
+        <div class="itemdetail bgeeeeee">
+          <div>昵称</div>
+          <div class="tc">电话</div>
         </div>
+        <div v-for="(item, index) in bargaindetail" :key="index" :class="{itemdetail: true, bgeeeeee: index%2 === 1}">
+          <div class="ellipsis">{{(item.nickname.length === 11) ? (item.nickname.slice(0, 3) + '****' + item.nickname.slice(6, -1)) : item.nickname}}</div>
+          <div class="tr">{{item.mobile.slice(0, 3) + '****' + item.mobile.slice(6, -1)}}</div>
+        </div>
+        <img
+          v-if="!bargainno || (pay === 1 && flag === 1)"
+          src="static/img/bargainsuccess.png"
+          class="item_tag">
       </van-dialog>
-      <!-- 参与砍价弹框 start -->
-      <van-dialog
-        v-model="showBargain"
-        title="请输入砍价号"
-        :closeOnClickOverlay="true"
-        :style="'height: 30%;'"
-        @confirm="joinBargain"
-      >
-        <van-field v-model="joinno" type="digit" placeholder="请输入砍价号" />
-      </van-dialog>
-      <!-- 参与砍价弹框 end -->
+      <!-- 砍价详情弹窗 end -->
     </div>
 </template>
 

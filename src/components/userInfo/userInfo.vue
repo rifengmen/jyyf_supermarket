@@ -158,8 +158,8 @@
                 <img src="static/img/user_message.png">
                 <div
                   class="agenums border_r500 font18 bgff6400 colorffffff ellipsis"
-                  v-if="2"
-                >{{4999}}</div>
+                  v-if="messagenums"
+                >{{messagenums}}</div>
               </div>
               <div class="imgname font24">我的消息</div>
             </router-link>
@@ -224,7 +224,9 @@ export default {
       // 待配送订单数量
       ordernums3: 0,
       // 配送中订单数量
-      ordernums4: 0
+      ordernums4: 0,
+      // 我的消息未读条数
+      messagenums: 0
     }
   },
   computed: {
@@ -262,14 +264,6 @@ export default {
           this.$store.commit('setMoneyDetail', res.data.moneyDetail)
           sessionStorage.setItem('jyyf_token', res.data.token)
           this.$axios.defaults.headers.common.Authorization = res.data.token
-          // 查询未完成订单数量
-          this.getOrdernums('-1')
-          // 查询未受理订单数量
-          this.getOrdernums('0')
-          // 查询待配送订单数量
-          this.getOrdernums('10')
-          // 查询配送中订单数量
-          this.getOrdernums('11')
         } else {
           this.$toast({
             message: '登陆失败，请重新登陆！',
@@ -313,6 +307,30 @@ export default {
       }).catch(error => {
         throw error
       })
+    },
+    // 获取我的消息
+    getMessageList () {
+      let data = new FormData()
+      let requestData = {
+        messageFlag: '1',
+        Page: 1,
+        pageSize: 20
+      }
+      requestData = JSON.stringify(requestData)
+      data.append('requestData', requestData)
+      this.$axios.post('info/InformationController/listmessage', data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          this.messagenums = res.data.content[0].mscount
+        } else {
+          this.$toast({
+            message: res.msg,
+            type: 'fail'
+          })
+        }
+      }).catch(error => {
+        throw error
+      })
     }
   },
   watch: {
@@ -320,6 +338,16 @@ export default {
   created () {
     // 设置用户信息
     this.setUserInfo()
+    // 查询未读消息条数
+    this.getMessageList()
+    // 查询未完成订单数量
+    this.getOrdernums('-1')
+    // 查询未受理订单数量
+    this.getOrdernums('0')
+    // 查询待配送订单数量
+    this.getOrdernums('10')
+    // 查询配送中订单数量
+    this.getOrdernums('11')
   }
 }
 </script>
