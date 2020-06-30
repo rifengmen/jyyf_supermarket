@@ -1037,4 +1037,13 @@ input.el-input__inner::placeholder {
 }
 /* 修改vant默认样式 end */
 /* 公共样式 end */
-
+/* 视频播放样式 start */
+.video-player > .video-js.vjs-fluid {
+  padding-top: 100%;
+}
+.video-js .vjs-big-play-button{
+  top: 50%!important;
+  left: 50%!important;
+  transform: translateX(-50%) translateY(-50%)!important;
+}
+/* 视频播放样式 end */

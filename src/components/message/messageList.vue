@@ -24,7 +24,7 @@
               @load="onLoad">
               <div v-for="(item, index) in messageList" :key="index">
                 <router-link :to="{name: 'messagedetail', query: {id: item.id}}" tag="div" class="message_item bgffffff">
-                  <div class="message_tab bgffae43 border_r500"></div>
+                  <div class="message_tab bgffae43 border_r500" v-if="!item.flag"></div>
                   <div class="message_title ellipsis">{{item.title}}</div>
                   <div class="font22 color999999">{{item.addtime}}</div>
                 </router-link>

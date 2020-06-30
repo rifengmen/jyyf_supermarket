@@ -62,7 +62,7 @@
               <div class="imgbox">
                 <img src="static/img/order_-1.png">
                 <div
-                  class="ordernums border_r500 font18 bgff6400 colorffffff ellipsis"
+                  class="agenums border_r500 font18 bgff6400 colorffffff ellipsis"
                   v-if="ordernums1"
                 >{{ordernums1}}</div>
               </div>
@@ -74,7 +74,7 @@
               <div class="imgbox">
                 <img src="static/img/order_0.png">
                 <div
-                  class="ordernums border_r500 font18 bgff6400 colorffffff ellipsis"
+                  class="agenums border_r500 font18 bgff6400 colorffffff ellipsis"
                   v-if="ordernums2"
                 >{{ordernums2}}</div>
               </div>
@@ -86,7 +86,7 @@
               <div class="imgbox">
                 <img src="static/img/order_10.png">
                 <div
-                  class="ordernums border_r500 font18 bgff6400 colorffffff ellipsis"
+                  class="agenums border_r500 font18 bgff6400 colorffffff ellipsis"
                   v-if="ordernums3"
                 >{{ordernums3}}</div>
               </div>
@@ -98,7 +98,7 @@
               <div class="imgbox">
                 <img src="static/img/order_11.png">
                 <div
-                  class="ordernums border_r500 font18 bgff6400 colorffffff ellipsis"
+                  class="agenums border_r500 font18 bgff6400 colorffffff ellipsis"
                   v-if="ordernums4"
                 >{{ordernums4}}</div>
               </div>
@@ -156,6 +156,10 @@
             <router-link :to="{name: 'messageList'}" tag="li"  class="cont_item">
               <div class="imgbox">
                 <img src="static/img/user_message.png">
+                <div
+                  class="agenums border_r500 font18 bgff6400 colorffffff ellipsis"
+                  v-if="2"
+                >{{4999}}</div>
               </div>
               <div class="imgname font24">我的消息</div>
             </router-link>

@@ -17,11 +17,11 @@
               <img src="static/img/search.png" class="fl">
               <form action="javascript:return true;" class="search_form">
                 <input
+                  ref="searchInput"
                   type="search"
                   v-model="keyword"
                   placeholder="请输入您要搜索的商品"
                   class="colorff6400 fl font30"
-                  autofocus="autofocus"
                   @keypress="sendSearch"
                 />
               </form>
@@ -72,21 +72,29 @@ export default {
         requestData = JSON.stringify(requestData)
         data.append('requestData', requestData)
         this.$axios.post('api/goods/searchGoodsRecord', data).then(result => {
-          // let res = result.data
-          // if (res.code === 200) {
-          //   this.$store.commit('setKeyword', this.keyword)
-          //   if (this.keyword !== '') {
-          //     this.$router.push('/searchList')
-          //   }
-          // }
+          let res = result.data
+          if (res.code === 200) {
+            this.$store.commit('setKeyword', this.keyword)
+            if (this.keyword !== '') {
+              this.$router.push('/searchList')
+            }
+          } else {
+            this.$toast({
+              message: res.msg,
+              type: 'fail'
+            })
+          }
         }).catch(error => {
           throw error
         })
-        this.$store.commit('setKeyword', this.keyword)
-        if (this.keyword !== '') {
-          this.$router.push('/searchList')
-        }
       }
+    },
+    // 输入框获取焦点
+    setFocus () {
+      this.$refs.searchInput.focus()
+      // this.$once('hook:mounted', () => {
+      //   this.$refs.searchInput.focus()
+      // })
     },
     // 返回上一页
     backs () {
@@ -102,6 +110,8 @@ export default {
   beforeMount () {
   },
   mounted () {
+    // 输入框获取焦点
+    this.setFocus()
   }
 }
 </script>

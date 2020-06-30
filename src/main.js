@@ -12,6 +12,8 @@ import Vant from 'vant'
 import 'vant/lib/index.css'
 import 'normalize.css'
 import Lazyload from 'vue-lazyload'
+import VideoPlayer from 'vue-video-player'
+import 'video.js/dist/video-js.css'
 
 Vue.config.productionTip = false
 // 这里写上自己的基础url
@@ -23,6 +25,7 @@ Vue.prototype.$qs = qs
 Vue.prototype.IMGURL = 'http://www.spzlk.cn:8000/wemember/'
 Vue.use(ElementUI)
 Vue.use(Vant)
+Vue.use(VideoPlayer)
 Vue.use(Lazyload, {
   preLoad: 0.5,
   error: 'static/img/goods.png',
