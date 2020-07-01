@@ -46,6 +46,12 @@
 }
 .itemdetail > div {
   width: 100%;
+  /*display: flex;*/
+  /*justify-content: flex-start;*/
+}
+.itemdetail_tag {
+  /*display: block;*/
+  padding: .02rem .06rem;
 }
 img.item_tag {
   position: absolute;

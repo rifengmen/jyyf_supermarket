@@ -47,8 +47,8 @@
           <div class="tc">电话</div>
         </div>
         <div v-for="(item, index) in bargaindetail" :key="index" :class="{itemdetail: true, bgeeeeee: index%2 === 1}">
-          <div class="ellipsis">{{(item.nickname.length === 11) ? (item.nickname.slice(0, 3) + '****' + item.nickname.slice(7, item.nickname.length)) : item.nickname}}</div>
-          <div class="tr">{{item.mobile.slice(0, 3) + '****' + item.mobile.slice(7, item.mobile.length)}}</div>
+          <div class="ellipsis font24"><span class="itemdetail_tag font18 colorffffff bgff6400 border_r8">{{!index ? '发起人' : '砍价人'}}</span>{{(item.nickname.length === 11) ? (item.nickname.slice(0, 3) + '****' + item.nickname.slice(7, item.nickname.length)) : item.nickname}}</div>
+          <div class="tr font24">{{item.mobile.slice(0, 3) + '****' + item.mobile.slice(7, item.mobile.length)}}</div>
         </div>
         <img
           v-if="!bargainno || (pay === 1 && flag === 1)"

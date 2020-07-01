@@ -64,6 +64,8 @@
         </div>
         <div class="goods_desc_name">
           <div class="goods_name">{{goodsdetail.cusgoodsname}}</div>
+          <div class="goods_name colorff6400 font24" v-if="goodsdetail.promotemode === 6">【{{goodsdetail.topamount}}人成团】</div>
+          <div class="goods_name colorff6400 font24" v-if="goodsdetail.promotemode === 8">【{{goodsdetail.topamount}}人砍价】</div>
           <div class="goods_name colorfa2a2a font24">{{goodsdetail.remark}}</div>
         </div>
       </div>
