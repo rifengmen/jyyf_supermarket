@@ -4,16 +4,18 @@
         <div class="goods_btn tc colorffffff bgff6400" v-if="!bargainno || flag === 0">
           <div @click="addBargain">发起砍价</div>
         </div>
-        <div class="goods_btn tc colorffffff bgff6400" v-if="!bargainno || flag === 0">
+        <div class="goods_btn tc colorffffff bgffae89" v-if="!bargainno || flag === 0">
           <div @click="setShowBargain">参与砍价</div>
         </div>
-        <div class="goods_btn tc color333333 bgeeeeee ellipsis" v-if="bargainno && flag === 1">
-          砍价号：{{bargainno}}
+        <div class="goods_btn tc color333333 bgeeeeee ellipsis" v-if="bargainno && flag === 1 && !pay">砍价号： {{bargainno}}</div>
+        <div class="goods_btn tc color333333 bgeeeeee ellipsis" v-if="bargainno && pay === 1 && flag === 1">
+          <div class="font26">砍价号：</div>
+          <div class="font26">{{bargainno}}</div>
         </div>
         <div class="goods_btn tc colorffffff bgff6400" v-if="bargainno && flag === 1" >
           <div @click="bargainDetail">砍价详情</div>
         </div>
-        <div class="pay goods_btn tc colorffffff bgff6400"  v-if="!bargainno || (pay === 1 && flag === 1)">
+        <div class="pay goods_btn tc colorffffff bgff6400"  v-if="!bargainno || (bargainno && pay === 1 && flag === 1)">
           <addorder :goods="goodsdetail" :goodsdetail="true" :pay="pay" :bargainno="bargainno">立即购买</addorder>
         </div>
       </div>
@@ -45,8 +47,8 @@
           <div class="tc">电话</div>
         </div>
         <div v-for="(item, index) in bargaindetail" :key="index" :class="{itemdetail: true, bgeeeeee: index%2 === 1}">
-          <div class="ellipsis">{{(item.nickname.length === 11) ? (item.nickname.slice(0, 3) + '****' + item.nickname.slice(6, -1)) : item.nickname}}</div>
-          <div class="tr">{{item.mobile.slice(0, 3) + '****' + item.mobile.slice(6, -1)}}</div>
+          <div class="ellipsis">{{(item.nickname.length === 11) ? (item.nickname.slice(0, 3) + '****' + item.nickname.slice(7, item.nickname.length)) : item.nickname}}</div>
+          <div class="tr">{{item.mobile.slice(0, 3) + '****' + item.mobile.slice(7, item.mobile.length)}}</div>
         </div>
         <img
           v-if="!bargainno || (pay === 1 && flag === 1)"
@@ -84,7 +86,7 @@ export default {
         return ''
       }
     },
-    // 砍价支付状态
+    // 砍价完成状态，0：砍价中；1：可发起砍价
     pay: {
       type: Number,
       default: function () {

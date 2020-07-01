@@ -321,7 +321,9 @@ export default {
       this.$axios.post('info/InformationController/listmessage', data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.messagenums = res.data.content[0].mscount
+          if (res.data.content && res.data.content.length) {
+            this.messagenums = res.data.content[0].mscount
+          }
         } else {
           this.$toast({
             message: res.msg,

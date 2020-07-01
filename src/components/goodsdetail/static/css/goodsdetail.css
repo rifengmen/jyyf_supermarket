@@ -82,6 +82,7 @@
   width: calc(100% - .48rem);
   padding: 0 .24rem;
   margin-top: .2rem;
+  line-height: 1.5;
 }
 /* 商品介绍 end */
 /* 购物车 start */

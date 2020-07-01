@@ -422,6 +422,8 @@ export default {
         requestData = {
           address: address,
           totalmoney: this.Totalmoney,
+          goodsid: this.$route.query.goodsid,
+          otc: this.$route.query.otc,
           // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
           flag: 'wemember'
         }

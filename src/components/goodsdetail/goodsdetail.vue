@@ -63,8 +63,8 @@
           </div>
         </div>
         <div class="goods_desc_name">
-          <div class="goods_name ellipsis">{{goodsdetail.cusgoodsname}}</div>
-          <div class="goods_name colorfa2a2a font24 ellipsis">{{goodsdetail.remark}}</div>
+          <div class="goods_name">{{goodsdetail.cusgoodsname}}</div>
+          <div class="goods_name colorfa2a2a font24">{{goodsdetail.remark}}</div>
         </div>
       </div>
     </div>
@@ -171,7 +171,7 @@ export default {
       // 砍价支付状态
       pay: 0,
       // 是否是砍价发起人，即购买人
-      flag: '',
+      flag: 0,
       // 商品视频简介
       playerOptions: {
         // playbackRates: [0.7, 1.0, 1.5, 2.0], // 播放速度
@@ -310,8 +310,10 @@ export default {
       this.$axios.post('api/goods/groupIncrease', data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.groupno = res.data.groupno
-          this.groupdetail = res.data.temlist
+          if (res.data) {
+            this.groupno = res.data.groupno
+            this.groupdetail = res.data.temlist
+          }
         }
       }).catch(error => {
         throw error
@@ -331,9 +333,11 @@ export default {
       this.$axios.post('api/goods/generateHackBill', data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.bargainno = res.data.list[0].groupno
-          this.pay = res.data.pay
-          this.flag = res.data.flag
+          if (res.data && res.data.list.length) {
+            this.bargainno = res.data.list[0].groupno
+            this.pay = res.data.pay
+            this.flag = res.data.flag
+          }
         }
       }).catch(error => {
         throw error

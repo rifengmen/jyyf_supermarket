@@ -43,8 +43,8 @@
           <div class="tc">电话</div>
         </div>
         <div v-for="(item, index) in groupdetail" :key="index" :class="{itemdetail: true, bgeeeeee: index%2 === 1}">
-          <div class="ellipsis">{{(item.nickname.length === 11) ? (item.nickname.slice(0, 3) + '****' + item.nickname.slice(6, -1)) : item.nickname}}</div>
-          <div class="tr">{{item.mobile.slice(0, 3) + '****' + item.mobile.slice(6, -1)}}</div>
+          <div class="ellipsis">{{(item.nickname.length === 11) ? (item.nickname.slice(0, 3) + '****' + item.nickname.slice(7, item.nickname.length)) : item.nickname}}</div>
+          <div class="tr">{{item.mobile.slice(0, 3) + '****' + item.mobile.slice(7, item.mobile.length)}}</div>
         </div>
       </van-dialog>
       <!-- 拼团详情弹窗 end-->
