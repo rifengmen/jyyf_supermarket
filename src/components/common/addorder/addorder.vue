@@ -93,6 +93,7 @@ export default {
     // 设置临时订单
     setOrder (no, otc, pay) {
       let requestData = {
+        no: this.no,
         otc: '',
         isotc: '',
         amount: this.amount,

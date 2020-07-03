@@ -282,9 +282,9 @@ export default {
         ordertype: this.group,
         otc: this.order.otc,
         isotc: this.order.isotc,
-        goodsid: this.$route.query.goodsid,
+        goodsid: this.$route.query.goodsid || '',
         groupno: this.$route.query.groupno,
-        amount: this.amount,
+        amount: this.amount || 1,
         Sendid: this.address.addressid,
         Usernote: this.usernote,
         paylist: this.paylist,
@@ -361,7 +361,7 @@ export default {
     // 微信支付
     onBridgeReady (wechatstr, tradeno) {
       let _this = this
-      WeixinJSBridge.invoke(
+      window.WeixinJSBridge.invoke(
         'getBrandWCPayRequest',
         {
           // 公众号名称，由商户传入

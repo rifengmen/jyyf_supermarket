@@ -142,7 +142,7 @@ export default {
     // 微信支付
     onBridgeReady (wechatstr) {
       let _this = this
-      WeixinJSBridge.invoke(
+      window.WeixinJSBridge.invoke(
         'getBrandWCPayRequest',
         {
           // 公众号名称，由商户传入

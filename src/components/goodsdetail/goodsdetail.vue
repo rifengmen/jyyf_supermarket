@@ -312,7 +312,7 @@ export default {
       this.$axios.post('api/goods/groupIncrease', data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          if (res.data) {
+          if (res.data && res.data.temlist.length) {
             this.groupno = res.data.groupno
             this.groupdetail = res.data.temlist
           }
