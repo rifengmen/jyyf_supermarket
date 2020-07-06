@@ -9,11 +9,11 @@
     </my-header>
     <!-- 头部 end -->
     <!-- 订单 start -->
-    <div class="order_main" v-if="!addressListFlag && !tickListFlag">
+    <div class="order_main " v-if="!addressListFlag && !tickListFlag">
       <!-- 订单内容 start -->
       <div class="order_cont">
         <!-- 收货地址 start -->
-        <div class="order_section bgffffff" @click="addressList" v-if="address">
+        <div class="order_section bgffffff" @click="setAddressListFlag" v-if="address">
           <div class="address_item_desc">
             <div class="address_item_user font_blod ellipsis">
               <div>{{address.contactPerson}}</div>
@@ -27,7 +27,7 @@
             </div>
           </div>
         </div>
-        <div class="order_section bgffffff" @click="addressList" v-else>请选择收货地址</div>
+        <div class="order_section bgffffff" @click="setAddressListFlag" v-else>请选择收货地址</div>
         <!-- 收货地址 end -->
         <!-- 配送服务费 start -->
         <div class="order_section bgffffff">
@@ -36,7 +36,7 @@
             <span class="colorf84242 font30"> {{order.gdsCount}} </span>
             种商品，商品总价：
             <span class="colorf84242 font30">￥{{(order.totalMoney || 0).toFixed(2)}}</span>&nbsp;
-            <span class="colorf84242 font26" v-if="address">{{freightmoney.message}}</span>
+            <span class="colorf84242 font24" v-if="address">{{freightmoney.message}}</span>
           </div>
         </div>
         <!-- 配送服务费 end -->
@@ -44,7 +44,7 @@
         <div class="order_section bgffffff" @click="tickList" v-if="paymodeList.filter(item => item.paymodeid === 4).length">
           <div class="">优惠券</div>
           <div class="colorf84242" v-if="tick.dicountMoney">￥{{tick.dicountMoney}}</div>
-          <div class="color999999" v-else>请选择优惠券</div>
+          <div class="color999999 font24" v-else>选择地址后可选优惠券</div>
           <div>
             <i class="el-icon-arrow-right"></i>
           </div>
@@ -53,7 +53,7 @@
         <!-- 积分抵扣 start -->
         <div class="order_section bgffffff" v-if="paymodeList.filter(item => item.paymodeid === 5).length">
           <div class="">积分抵扣</div>
-          <div class="color999999">
+          <div class="color999999 font24">
             <span class="colorf84242">￥{{(score.Money || 0).toFixed(2)}}</span>&nbsp;
             抵扣
             <span class="colorf84242">{{score.useScore}}</span>
@@ -143,18 +143,18 @@
     </div>
     <!-- 订单 end -->
     <!-- 地址 start -->
-    <div class="order_main" v-if="addressListFlag">
+    <div class="order_main order_main_list" v-if="addressListFlag" @click="setListFlag">
       <addresslist
         :froms="'editorder'"
         :Totalmoney="Totalmoney"
         :goodsid="goodsid"
         :otc="otc"
-        @addressList="addressList"
+        @setAddressListFlag="setAddressListFlag"
       ></addresslist>
     </div>
     <!-- 地址 end -->
     <!-- 优惠券 start -->
-    <div class="order_main" v-if="tickListFlag">
+    <div class="order_main order_main_list" v-if="tickListFlag" @click="setListFlag">
       <ticklist
         :froms="'editorder'"
         :payMoney="payMoney"
@@ -281,7 +281,7 @@ export default {
       })
     },
     // 去地址列表
-    addressList () {
+    setAddressListFlag () {
       this.addressListFlag = !this.addressListFlag
     },
     // 去优惠券列表
@@ -310,6 +310,11 @@ export default {
       this.$store.commit('setAddress', '')
       this.$store.commit('setFreightmoney', '')
       this.$store.commit('setTick', '')
+    },
+    // 地址列表、优惠券列表显示隐藏
+    setListFlag () {
+      this.addressListFlag = false
+      this.tickListFlag = false
     }
   },
   watch: {

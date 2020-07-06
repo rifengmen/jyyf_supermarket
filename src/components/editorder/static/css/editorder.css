@@ -3,6 +3,13 @@
   height: calc(100% - .9rem - 1px);
   overflow: hidden;
 }
+.order_main_list {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: calc(.9rem + 1px);
+  background-color: rgba(0,0,0,.4);
+}
 .order_cont {
   width: 100%;
   height: calc(100% - .88rem);

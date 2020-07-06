@@ -434,7 +434,7 @@ export default {
           if (res.code === 200) {
             this.$store.commit('setAddress', address)
             this.$store.commit('setFreightmoney', res.data)
-            this.$emit('addressList')
+            this.$emit('setAddressListFlag')
           } else {
             this.$toast({
               message: res.msg,
