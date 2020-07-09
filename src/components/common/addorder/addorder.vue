@@ -100,7 +100,7 @@ export default {
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      if (!otc && no) {
+      if (!otc && no) { // 商品详情页立即购买
         requestData.no = no
       } else if (otc === 'group') { // 拼团的立即购买
         requestData.otc = 'group'

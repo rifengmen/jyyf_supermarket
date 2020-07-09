@@ -47,7 +47,7 @@
           <div class="tc">电话</div>
         </div>
         <div v-for="(item, index) in bargaindetail" :key="index" :class="{itemdetail: true, bgeeeeee: index%2 === 1}">
-          <div class="ellipsis font24"><span class="itemdetail_tag font18 colorffffff bgff6400 border_r8">{{!index ? '发起人' : '砍价人'}}</span>{{(item.nickname.length === 11) ? (item.nickname.slice(0, 3) + '****' + item.nickname.slice(7, item.nickname.length)) : item.nickname}}</div>
+          <div class="ellipsis font24"><span class="itemdetail_tag font18 colorffffff bgff6400 border_r8">{{item.flag ? '发起人' : '砍价人'}}</span>{{(item.nickname.length === 11) ? (item.nickname.slice(0, 3) + '****' + item.nickname.slice(7, item.nickname.length)) : item.nickname}}</div>
           <div class="tr font24">{{item.mobile.slice(0, 3) + '****' + item.mobile.slice(7, item.mobile.length)}}</div>
         </div>
         <img
@@ -173,7 +173,7 @@ export default {
         let res = result.data
         if (res.code === 200) {
           this.$toast({
-            message: '参与成功',
+            message: '砍价成功!',
             type: 'success'
           })
         } else {
@@ -199,8 +199,8 @@ export default {
       data.append('requestData', requestData)
       this.$axios.post('api/goods/generateHackBill', data).then(result => {
         let res = result.data
-        if (res.code === 200) {
-          this.bargaindetail = res.data.list
+        if (res.code === 200 && res.data.list.length) {
+          this.bargaindetail = res.data.list.reverse()
           this.showBargainDetail = true
         }
       }).catch(error => {

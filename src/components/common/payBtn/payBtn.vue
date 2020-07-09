@@ -89,8 +89,6 @@ export default {
       showKeyboard: false,
       // 支付密码
       Cpassword: '',
-      // 收货地址
-      address: this.$store.state.address,
       // 支付方式列表
       paylist: [],
       // 会员卡号
@@ -100,6 +98,10 @@ export default {
     }
   },
   computed: {
+    // 收货地址
+    address () {
+      return this.$store.state.address
+    },
     // 临时订单信息
     order () {
       return this.$store.state.order
