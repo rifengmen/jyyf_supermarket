@@ -292,6 +292,7 @@ export default {
     },
     // 新建地址
     editAddress () {
+      window.event.stopPropagation()
       this.addressFlag = false
     },
     // 请求片列表

@@ -7,7 +7,15 @@
   position: fixed;
   top: 0;
   left: 0;
+  width: 100%;
   padding-top: calc(.9rem + 1px);
+}
+.order_main_list .headerback {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(.9rem + 1px);
   background-color: rgba(0,0,0,.4);
 }
 .order_cont {
