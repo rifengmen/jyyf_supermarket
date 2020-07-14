@@ -12,6 +12,7 @@ import wx from 'weixin-js-sdk'
 import WechatConfig from '@/components/common/wechatConfig/wechatConfig'
 
 export default {
+  name: 'author',
   data () {
     return {
       // 店铺ID

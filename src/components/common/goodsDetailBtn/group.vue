@@ -119,7 +119,7 @@ export default {
         let res = result.data
         if (res.code === 200) {
           this.$store.commit('setOrder', res.data)
-          this.$router.push({name: 'editorder', query: {goodsid: this.goodsdetail.goodsid.toString(), group: 1, otc: 'group'}})
+          this.$router.push({name: 'editorder', query: {goodsid: this.goodsdetail.goodsid.toString(), ordertype: 1, otc: 'group'}})
         } else {
           this.$toast({
             message: res.msg,
@@ -184,7 +184,7 @@ export default {
         let res = result.data
         if (res.code === 200) {
           this.$store.commit('setOrder', res.data)
-          this.$router.push({name: 'editorder', query: {goodsid: this.goodsdetail.goodsid.toString(), group: 2, groupno: this.joinno, otc: 'group'}})
+          this.$router.push({name: 'editorder', query: {goodsid: this.goodsdetail.goodsid.toString(), ordertype: 2, groupno: this.joinno, otc: 'group'}})
         } else {
           this.$toast({
             message: res.msg,

@@ -48,7 +48,7 @@
                 </div>
                 <div class="order_item_status">
                   <div class="font24 colorf84242">{{item.stausdescribe}}</div>
-                  <div class="item_btn">
+                  <div class="item_btn" v-if="item.payflag || item.cancelflag || item.deleflag">
                     <div class="pay_btn border_r4 bgff6400 colorffffff borderff6400" v-if="item.payflag">
                       <div @click="againPay(item)">付款</div>
                     </div>
@@ -59,6 +59,7 @@
                       <del-btn :tradeno="item.tradeno" @onRefresh="onRefresh"></del-btn>
                     </div>
                   </div>
+                  <div v-else-if="item.pickoutcode" class="font26 colorff6400">取货码：{{item.pickoutcode}}</div>
                 </div>
               </router-link>
             </van-list>

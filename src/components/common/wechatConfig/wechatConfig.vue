@@ -50,7 +50,7 @@ export default {
         this.shareConfig.desc = this.goodsdetail.cusgoodsname + this.goodsdetail.remark
       }
       if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
-        this.curPageUrl = this.baseURL + '/author'
+        this.curPageUrl = this.baseURL + sessionStorage.getItem('jyyf_beforeLoginUrl')
       } else if (/(Android|Windows)/i.test(navigator.userAgent)) {
         this.curPageUrl = window.location.href
       } else {

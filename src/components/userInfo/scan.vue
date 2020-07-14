@@ -12,7 +12,7 @@
       <!-- 用户资料部分 start -->
       <div class="user_detail">
         <div class="user_section">
-          <div>拣配人员</div>
+          <div>操作人员</div>
           <div class="user_desc bgffffff">
             <input type="text" v-model="userInfo.mobile" class="tr" disabled>
           </div>
@@ -20,14 +20,14 @@
         <div class="user_section">
           <div>拣配类型</div>
           <div class="user_desc bgffffff border_r500">
-            <input type="text" value="拣货" class="tr" disabled v-if="userInfo.role === 1">
-            <input type="text" value="配送" class="tr" disabled v-if="userInfo.role === 2">
+            <input type="text" value="拣货" class="tr" disabled v-if="userInfo.role.indexOf(1) >= 0">
+            <input type="text" value="配送" class="tr" disabled v-if="userInfo.role.indexOf(2) >= 0">
           </div>
         </div>
         <div class="user_section">
-          <div>订单号</div>
+          <div></div>
           <div class="user_desc bgffffff border_r500">
-            <input type="text" v-model="tradeno" class="tr" placeholder="请输入订单号或者点击右侧扫一扫">
+            <input type="text" v-model="tradeno" class="tr" placeholder="订单号、取货码或点击右侧扫一扫">
             <!-- 扫一扫按钮 start -->
             <div class="scan" @click="scanTradeno">
               <img src="static/img/scan.png">
@@ -85,15 +85,21 @@ export default {
           phone: this.userInfo.mobile,
           tradeno: this.tradeno,
           // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
-          flag: 'wemember'
+          flag: 'generalMerchandise'
         }
         requestData = JSON.stringify(requestData)
         data.append('requestData', requestData)
         this.$axios.post('api/order/pickOrder', data).then(result => {
           let res = result.data
           if (res.code === 200) {
+            let message
+            if (this.userInfo.role === 1) {
+              message = '拣货成功!'
+            } else if (this.userInfo.role === 2) {
+              message = '配送成功!'
+            }
             this.$toast({
-              message: '拣配成功!',
+              message: message,
               type: 'success'
             })
           } else {

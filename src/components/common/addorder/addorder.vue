@@ -130,7 +130,7 @@ export default {
           } else if (otc === 'hack' && pay === 0) {
             this.$router.push({name: 'editorder', query: {goodsid: this.goods.goodsid.toString(), otc: 'hack'}})
           } else if (otc === 'hack' && pay === 1) {
-            this.$router.push({name: 'editorder', query: {goodsid: this.goods.goodsid.toString(), otc: 'hack', groupno: this.bargainno, group: 3}})
+            this.$router.push({name: 'editorder', query: {goodsid: this.goods.goodsid.toString(), otc: 'hack', groupno: this.bargainno, ordertype: 3}})
           }
         } else {
           this.$toast({

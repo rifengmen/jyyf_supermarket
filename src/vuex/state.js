@@ -6,14 +6,17 @@ const state = {
   appid: 'wx700e813e33fcebec',
   // appid: '',
   // 用户openid
-  openid: 'oWBPAv2kv3TxjGHCGVeWQqZfGhqw',
-  // openid: 'oWBPAv82A3OaXxPa6neaWv09g90A',
+  // openid: 'oWBPAv2kv3TxjGHCGVeWQqZfGhqw',
+  openid: 'oWBPAv82A3OaXxPa6neaWv09g90A',
   // openid: 'oWBPAv1-db9Sy3F26H9bZUcId9_g',
   // openid: 'oWBPAvz0mRjmzCRLGXLgfhhRjz7I',
   // openid: '',
   // 基础路径
   baseURL: 'https://www.spzlk.cn',
   // baseURL: '',
+  // 路由开关
+  isRouter: true,
+  // isRouter: false,
   // 用户头像
   headimgurl: '',
   // 用户信息

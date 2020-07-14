@@ -122,9 +122,9 @@ export default {
     cart () {
       return this.$store.state.cart
     },
-    // 拼团标识,1: 发起拼团，2：参与拼团
-    group () {
-      return this.$route.query.group || 0
+    // 订单类型标识,1: 发起拼团，2：参与拼团，3：砍价订单
+    ordertype () {
+      return this.$route.query.ordertype || 0
     },
     // 团号
     groupno () {
@@ -281,7 +281,7 @@ export default {
       let data = new FormData()
       let requestData = {
         totalmoney: this.order.totalMoney,
-        ordertype: this.group,
+        ordertype: this.ordertype,
         otc: this.order.otc,
         isotc: this.order.isotc,
         goodsid: this.$route.query.goodsid || '',

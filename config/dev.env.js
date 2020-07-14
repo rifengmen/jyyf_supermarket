@@ -4,6 +4,7 @@ const prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
+  ROUTER_BASE: '"/supermarket"',
   API_ROOT: '"http://192.168.29.118:8083/"' // 开发环境服务器地址
   // API_ROOT: '"https://www.spzlk.cn/phptest/"' // 开发环境服务器地址
 })

@@ -7,6 +7,7 @@ const orderdetail = () => import(/* webpackChunkName: 'userInfo' */ '@/component
 const againPay = () => import(/* webpackChunkName: 'userInfo' */ '@/components/userInfo/againPay')
 const userDetail = () => import(/* webpackChunkName: 'userInfo' */ '@/components/userInfo/userDetail')
 const scan = () => import(/* webpackChunkName: 'userInfo' */ '@/components/userInfo/scan')
+const pick = () => import(/* webpackChunkName: 'userInfo' */ '@/components/userInfo/pick')
 const scoreList = () => import(/* webpackChunkName: 'userInfo' */ '@/components/userInfo/scoreList')
 const cardMoneyList = () => import(/* webpackChunkName: 'userInfo' */ '@/components/userInfo/cardMoneyList')
 const looseChangeList = () => import(/* webpackChunkName: 'userInfo' */ '@/components/userInfo/looseChangeList')
@@ -38,6 +39,8 @@ export default [
   {path: '/userDetail', name: 'userDetail', component: userDetail},
   // 会员中心-拣配确认
   {path: '/scan', name: 'scan', component: scan},
+  // 会员中心-取货核销
+  {path: '/pick', name: 'pick', component: pick},
   // 会员中心-积分变化
   {path: '/scoreList', name: 'scoreList', component: scoreList},
   // 会员中心-卡值变化

@@ -106,6 +106,10 @@
           <div>订单编号</div>
           <div class="font24 color666666">{{orderdetail.tradeno}}</div>
         </div>
+        <div class="orderdesc" v-if="orderdetail.pickoutcode">
+          <div>取货码</div>
+          <div class="font24 colorff6400">{{orderdetail.pickoutcode}}</div>
+        </div>
         <div class="orderdesc">
           <div>下单时间</div>
           <div class="font24 color666666">{{orderdetail.Recordtime}}</div>
@@ -180,7 +184,9 @@ export default {
     getOrderdetail () {
       let data = new FormData()
       let requestData = {
-        tradeno: this.tradeno
+        tradeno: this.tradeno,
+        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+        flag: 'wemember'
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)

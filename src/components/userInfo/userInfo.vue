@@ -189,13 +189,21 @@
             <!--</router-link>-->
             <!-- 会员解绑 end -->
             <!-- 拣配确认 start -->
-            <router-link :to="{name: 'scan', params:{header_tit: '拣配确认'}}" tag="li"  class="cont_item" v-if="userInfo.role">
+            <router-link :to="{name: 'scan', params:{header_tit: '拣配确认'}}" tag="li"  class="cont_item"  v-if="userInfo.role && (userInfo.role.indexOf(1) >= 0 || userInfo.role.indexOf(2) >= 0)">
               <div class="imgbox">
                 <img src="static/img/user_jpqr.png">
               </div>
               <div class="imgname font24">拣配确认</div>
             </router-link>
             <!-- 拣配确认 end -->
+            <!-- 取货 start -->
+            <router-link :to="{name: 'pick'}" tag="li"  class="cont_item" v-if="userInfo.role && (userInfo.role.indexOf(3) >= 0)">
+              <div class="imgbox">
+                <img src="static/img/user_jpqr.png">
+              </div>
+              <div class="imgname font24">取货</div>
+            </router-link>
+            <!-- 取货 end -->
           </ul>
         </li>
         <!-- 常用功能 end -->
