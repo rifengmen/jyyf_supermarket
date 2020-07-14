@@ -23,7 +23,6 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 Vue.prototype.$axios = axios
 Vue.prototype.$qs = qs
 Vue.prototype.IMGURL = 'http://www.spzlk.cn:8000/wemember/'
-Vue.prototype.routerBase = process.env.ROUTER_BASE
 Vue.use(ElementUI)
 Vue.use(Vant)
 Vue.use(VideoPlayer)

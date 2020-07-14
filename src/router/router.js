@@ -9,10 +9,9 @@ import userInfo from './userInfo'
 import other from './other'
 
 Vue.use(Router)
-console.log(this, '路由')
+
 const router = new Router({
   mode: 'history',
-  base: Vue.routerBase,
   // 超市测试
   // base: '/testSupermarket',
   // 超市生产
@@ -33,7 +32,7 @@ const router = new Router({
     // 其他模块
     ...other
   ]
-})
+}).bind()
 
 //  使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
 // router.beforeEach((to, from, next) => {

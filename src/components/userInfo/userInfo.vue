@@ -321,7 +321,7 @@ export default {
       let data = new FormData()
       let requestData = {
         messageFlag: '1',
-        Page: 1,
+        page: 1,
         pageSize: 20
       }
       requestData = JSON.stringify(requestData)

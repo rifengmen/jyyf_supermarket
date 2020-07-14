@@ -115,7 +115,7 @@ export default {
       let data = new FormData()
       let requestData = {
         startDate: this.date,
-        Page: this.page,
+        page: this.page,
         pageSize: this.pageSize
       }
       requestData = JSON.stringify(requestData)

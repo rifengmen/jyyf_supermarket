@@ -62,7 +62,7 @@ export default {
       requestData = {
         Cardnum: this.$store.state.userInfo.memcode,
         Startday: this.date,
-        Page: 1,
+        page: 1,
         pageSize: 20
       }
       requestData = JSON.stringify(requestData)

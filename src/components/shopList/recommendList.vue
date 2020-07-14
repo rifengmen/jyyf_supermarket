@@ -133,7 +133,7 @@ export default {
       let data = new FormData()
       let requestData = {
         Id: this.recommendid,
-        Page: this.page,
+        page: this.page,
         pageSize: this.pageSize,
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
