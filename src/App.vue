@@ -162,6 +162,7 @@ export default {
         sessionStorage.setItem('jyyf_openid', openid)
         this.$store.commit('setOpenid', openid)
         this.openid = openid
+        this.isRouter = true
         this.$router.push(url)
       }
     },
@@ -186,6 +187,7 @@ export default {
           let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
           this.$router.push(url)
         } else if (res.code === 20) {
+          this.isRouter = true
           this.$router.push('/register')
         } else if (res.code === 30) {
           // 验证卡包
