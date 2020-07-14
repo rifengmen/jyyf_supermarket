@@ -85,7 +85,7 @@ export default {
           phone: this.userInfo.mobile,
           tradeno: this.tradeno,
           // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
-          flag: 'generalMerchandise'
+          flag: 'wemember'
         }
         requestData = JSON.stringify(requestData)
         data.append('requestData', requestData)
@@ -93,9 +93,9 @@ export default {
           let res = result.data
           if (res.code === 200) {
             let message
-            if (this.userInfo.role === 1) {
+            if (this.userInfo.role.indexOf(1) >= 0) {
               message = '拣货成功!'
-            } else if (this.userInfo.role === 2) {
+            } else if (this.userInfo.role.indexOf(2) >= 0) {
               message = '配送成功!'
             }
             this.$toast({
