@@ -322,7 +322,10 @@ export default {
   watch: {
     payMoney (oval, nval) {
       if (!this.scoreFlag) {
-        this.getScore()
+        if (this.paymodeList.filter(item => item.paymodeid === 5).length) {
+          // 页面加载时请求积分
+          this.getScore()
+        }
       }
     }
   },
