@@ -25,7 +25,6 @@
         title="请输入砍价号"
         class="font32"
         :closeOnClickOverlay="true"
-        :style="'height: 25%;'"
         @confirm="joinBargain"
       >
         <van-cell-group>

@@ -22,7 +22,6 @@
         v-model="showGroup"
         title="请输入团号"
         :closeOnClickOverlay="true"
-        :style="'height: 25%;'"
         @confirm="checkJoinGroup"
       >
         <van-cell-group>
