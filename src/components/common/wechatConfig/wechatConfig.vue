@@ -44,11 +44,6 @@ export default {
   methods: {
     // 获取微信凭证
     getWXConfig () {
-      if (this.goodsid) {
-        this.shareConfig.link = this.$store.state.baseURL + '/goodsdetail?dianpu=' + this.$store.state.wechatID + '&goodsid=' + this.goodsdetail.goodsid + '&goodsname=' + this.goodsdetail.cusgoodsname
-        this.shareConfig.imgUrl = this.IMGURL + 'image/' + this.goodsdetail.picture1
-        this.shareConfig.desc = this.goodsdetail.cusgoodsname + this.goodsdetail.remark
-      }
       if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
         this.curPageUrl = this.baseURL + sessionStorage.getItem('jyyf_beforeLoginUrl')
       } else if (/(Android|Windows)/i.test(navigator.userAgent)) {
