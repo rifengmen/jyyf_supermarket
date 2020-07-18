@@ -37,7 +37,7 @@ export default [
   {path: '/againPay', name: 'againPay', component: againPay},
   // 会员中心-我的资料
   {path: '/userDetail', name: 'userDetail', component: userDetail},
-  // 会员中心-拣配确认
+  // 会员中心-扫一扫
   {path: '/scan', name: 'scan', component: scan},
   // 会员中心-取货核销
   {path: '/pick', name: 'pick', component: pick},

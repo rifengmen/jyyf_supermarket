@@ -188,16 +188,24 @@
             <!--<div class="imgname font24">会员解绑</div>-->
             <!--</router-link>-->
             <!-- 会员解绑 end -->
-            <!-- 拣配确认 start -->
-            <router-link :to="{name: 'scan', params:{header_tit: '拣配确认'}}" tag="li"  class="cont_item"  v-if="userInfo.role && (userInfo.role.indexOf(1) >= 0 || userInfo.role.indexOf(2) >= 0)">
+            <!-- 拣货 start -->
+            <router-link :to="{name: 'scan', params:{header_tit: '拣货', role: '1'}}" tag="li"  class="cont_item"  v-if="userInfo.role && (userInfo.role.indexOf(1) >= 0)">
               <div class="imgbox">
                 <img src="static/img/user_jpqr.png">
               </div>
-              <div class="imgname font24">拣配确认</div>
+              <div class="imgname font24">拣货</div>
             </router-link>
-            <!-- 拣配确认 end -->
+            <!-- 拣货 end -->
+            <!-- 配送 start -->
+            <router-link :to="{name: 'scan', params:{header_tit: '配送', role: '2'}}" tag="li"  class="cont_item"  v-if="userInfo.role && (userInfo.role.indexOf(2) >= 0)">
+              <div class="imgbox">
+                <img src="static/img/user_jpqr.png">
+              </div>
+              <div class="imgname font24">配送</div>
+            </router-link>
+            <!-- 配送 end -->
             <!-- 取货 start -->
-            <router-link :to="{name: 'pick'}" tag="li"  class="cont_item" v-if="userInfo.role && (userInfo.role.indexOf(3) >= 0)">
+            <router-link :to="{name: 'scan', params:{header_tit: '取货', role: '3'}}" tag="li"  class="cont_item" v-if="userInfo.role && (userInfo.role.indexOf(3) >= 0)">
               <div class="imgbox">
                 <img src="static/img/user_jpqr.png">
               </div>

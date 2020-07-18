@@ -5,8 +5,9 @@
       <template v-slot:userinfo>
         <i class="el-icon-arrow-left"></i>
       </template>
-      <template v-slot:header>拣配确认</template>
+      <template v-slot:header>{{$route.params.header_tit}}</template>
     </my-header>
+    <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
     <div class="order_main bgffffff">
       <!-- 用户资料部分 start -->
@@ -18,16 +19,15 @@
           </div>
         </div>
         <div class="user_section">
-          <div>拣配类型</div>
+          <div></div>
           <div class="user_desc bgffffff border_r500">
-            <input type="text" value="拣货" class="tr" disabled v-if="userInfo.role.indexOf(1) >= 0">
-            <input type="text" value="配送" class="tr" disabled v-if="userInfo.role.indexOf(2) >= 0">
+            <input type="text" v-model="$route.params.header_tit" class="tr" disabled>
           </div>
         </div>
         <div class="user_section">
           <div></div>
           <div class="user_desc bgffffff border_r500">
-            <input type="text" v-model="tradeno" class="tr" placeholder="订单号、取货码或点击右侧扫一扫">
+            <input type="text" v-model="tradeno" class="tr" placeholder="输入订单号、取货码或点击右侧扫描条形码">
             <!-- 扫一扫按钮 start -->
             <div class="scan" @click="scanTradeno">
               <img src="static/img/scan.png">
@@ -57,7 +57,7 @@ import MyHeader from '@/components/common/header/myheader'
 import wx from 'weixin-js-sdk'
 
 export default {
-  name: 'scan',
+  name: 'scan1',
   data () {
     return {
       // 订单编号
@@ -81,7 +81,7 @@ export default {
       if (this.tradeno) {
         let data = new FormData()
         let requestData = {
-          role: this.userInfo.role,
+          role: this.$route.params.role,
           phone: this.userInfo.mobile,
           tradeno: this.tradeno,
           // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
@@ -92,14 +92,8 @@ export default {
         this.$axios.post('api/order/pickOrder', data).then(result => {
           let res = result.data
           if (res.code === 200) {
-            let message
-            if (this.userInfo.role.indexOf(1) >= 0) {
-              message = '拣货成功!'
-            } else if (this.userInfo.role.indexOf(2) >= 0) {
-              message = '配送成功!'
-            }
             this.$toast({
-              message: message,
+              message: res.msg,
               type: 'success'
             })
           } else {

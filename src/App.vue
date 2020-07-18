@@ -308,6 +308,13 @@ export default {
   created () {
     // 获取wechatID
     this.getWechatID()
+  },
+  mounted: function () {
+    // 浏览器关闭时清除缓存
+    window.addEventListener('beforeunload', () => {
+      sessionStorage.removeItem('jyyf_token')
+      sessionStorage.removeItem('jyyf_openid')
+    })
   }
 }
 </script>
