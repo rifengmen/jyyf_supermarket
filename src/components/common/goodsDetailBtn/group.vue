@@ -4,13 +4,13 @@
         <div class="goods_btn tc colorffffff bgff6400" v-if="!groupno">
           <div @click="addGroup">发起拼团</div>
         </div>
-        <div class="goods_btn tc colorffffff bgffae89"  v-if="!groupno">
+        <div class="goods_btn tc colorffffff bgf7bb1f"  v-if="!groupno">
           <div @click="setShowGroup">参与拼团</div>
         </div>
         <div class="goods_btn tc color333333 bgeeeeee ellipsis" v-if="groupno">
           拼团号：{{groupno}}
         </div>
-        <div class="goods_btn tc colorffffff bgffae89" v-if="groupno" >
+        <div class="goods_btn tc colorffffff bgff6400" v-if="groupno" >
           <div @click="groupDetail">拼团详情</div>
         </div>
         <div class="pay goods_btn tc colorffffff bgff6400"  v-if="!groupno">

@@ -94,7 +94,7 @@
         </router-link>
       </div>
       <div class="btns">
-        <div class="addcart goods_btn tc colorffffff bgffae89" v-if="goodsdetail.promotemode !== 6 && goodsdetail.promotemode !== 8">
+        <div class="addcart goods_btn tc colorffffff bgf7bb1f" v-if="goodsdetail.promotemode !== 6 && goodsdetail.promotemode !== 8">
           <addcart :goodsid="goodsdetail.goodsid" :froms="'goodsdetail'">加购物车</addcart>
         </div>
         <div class="pay goods_btn tc colorffffff bgff6400"  v-if="goodsdetail.promotemode !== 6 && goodsdetail.promotemode !== 8">

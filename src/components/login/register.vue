@@ -103,7 +103,7 @@ export default {
   computed: {
     // 验证手机号码格式是否正确
     flag () {
-      if (this.mobile && /^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9]|19[0-9])\d{8}$/.test(this.mobile)) {
+      if (this.mobile && /^(13[0-9]|14[0-9]|15[0-9]|16[0-9]|17[0-9]|18[0-9]|19[0-9])\d{8}$/.test(this.mobile)) {
         return true
       }
       return false

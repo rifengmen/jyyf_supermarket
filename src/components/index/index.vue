@@ -402,17 +402,22 @@ export default {
       }).catch(error => {
         throw error
       })
+    },
+    initData () {
+      if (this.$store.state.userInfo.token) {
+        // 设置用户信息
+        // this.setUserInfo()
+        // 获取banner列表
+        this.getBanner()
+        // 获取通知信息
+        this.getNotice()
+        // 获取推荐
+        this.getRecommend()
+      }
     }
   },
   created () {
-    // 设置用户信息
-    // this.setUserInfo()
-    // 获取banner列表
-    this.getBanner()
-    // 获取通知信息
-    this.getNotice()
-    // 获取推荐
-    this.getRecommend()
+    this.initData()
   },
   mounted () {
   }

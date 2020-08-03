@@ -4,7 +4,7 @@
         <div class="goods_btn tc colorffffff bgff6400" v-if="!bargainno || flag === 0">
           <div @click="addBargain">发起砍价</div>
         </div>
-        <div class="goods_btn tc colorffffff bgffae89" v-if="!bargainno || flag === 0">
+        <div class="goods_btn tc colorffffff bgf7bb1f" v-if="!bargainno || flag === 0">
           <div @click="setShowBargain">参与砍价</div>
         </div>
         <div class="goods_btn tc color333333 bgeeeeee ellipsis" v-if="bargainno && flag === 1 && !pay">砍价号： {{bargainno}}</div>
@@ -12,7 +12,7 @@
           <div class="font26">砍价号：</div>
           <div class="font26">{{bargainno}}</div>
         </div>
-        <div class="goods_btn tc colorffffff bgffae89" v-if="bargainno && flag === 1" >
+        <div class="goods_btn tc colorffffff bgff6400" v-if="bargainno && flag === 1" >
           <div @click="bargainDetail">砍价详情</div>
         </div>
         <div class="pay goods_btn tc colorffffff bgff6400"  v-if="!bargainno || (bargainno && pay === 1 && flag === 1)">

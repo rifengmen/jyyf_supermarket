@@ -18,7 +18,7 @@
             <!-- 商品简介 start -->
             <li v-for="(item, index) in expendDetail.detailsList" :key="index">
               <div class="goods_item bgffffff ellipsis">
-                  <div class="goods_item_name font26">{{item.Productname}}{{item.Productname}}</div>
+                  <div class="goods_item_name font26">{{item.Productname}}</div>
                   <!--<router-link :to="{name: 'addComment', params: {goods: item}}" tag="div" class="goods_item_name comment tc font24 colorff7e42">去评价</router-link>-->
                   <div class="goods_item_price">
                     <div class="font30 font_blod colorf84242">￥{{item.Paidprice}}</div>
