@@ -111,7 +111,7 @@ export default {
   },
   mounted () {
     // 输入框获取焦点
-    this.setFocus()
+    // this.setFocus()
   }
 }
 </script>

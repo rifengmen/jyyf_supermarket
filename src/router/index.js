@@ -2,5 +2,5 @@ const index = () => import(/* webpackChunkName: 'index' */ '@/components/index/i
 
 export default [
   // 首页
-  {path: '/', component: index, name: 'index'}
+  {path: '/', component: index, name: 'index', meta: {keepAlive: true}}
 ]

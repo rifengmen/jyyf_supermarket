@@ -104,19 +104,7 @@ export default {
       // 滚动条与底部距离小于 offset 时触发load事件
       offset: 100,
       // 商品分类
-      classify: [
-        {
-          optionname: '推荐',
-          optionvalue: '-2',
-          optionsearch: null,
-          referLabel: null,
-          referValue: null,
-          classcode: null,
-          salercode: null,
-          salername: null,
-          classname: null
-        }
-      ],
+      classify: [],
       // 全部
       all: {
         optionname: '全部',
@@ -232,6 +220,19 @@ export default {
     },
     // 获取商品分类
     getClassify () {
+      this.classify = [
+        {
+          optionname: '推荐',
+          optionvalue: '-2',
+          optionsearch: null,
+          referLabel: null,
+          referValue: null,
+          classcode: null,
+          salercode: null,
+          salername: null,
+          classname: null
+        }
+      ]
       let data = new FormData()
       let requestData = {
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
@@ -257,6 +258,21 @@ export default {
     }
   },
   watch: {
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.$store.commit('removeExcludeComponent', 'classify')
+      next()
+    })
+  },
+  beforeRouteLeave (to, from, next) {
+    let reg = /goodsdetail/
+    if (reg.test(to.name)) {
+      this.$store.commit('removeExcludeComponent', 'classify')
+    } else {
+      this.$store.commit('addExcludeComponent', 'classify')
+    }
+    next()
   },
   beforeCreate () {
   },

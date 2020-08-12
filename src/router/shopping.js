@@ -11,11 +11,11 @@ export default [
   // 搜索页
   {path: '/search', component: search, name: 'search'},
   // 搜索结果页
-  {path: '/searchList', component: searchList, name: 'searchList'},
+  {path: '/searchList', component: searchList, name: 'searchList', meta: {keepAlive: true}},
   // 推荐列表
   {path: '/recommendList', component: recommendList, name: 'recommendList'},
   // 分类
-  {path: '/classify', name: 'classify', component: classify},
+  {path: '/classify', name: 'classify', component: classify, meta: {keepAlive: true}},
   // 分类列表
   {path: '/classList', name: 'classList', component: classList},
   // 商品详情

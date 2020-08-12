@@ -189,6 +189,21 @@ export default {
   },
   watch: {
   },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.$store.commit('removeExcludeComponent', 'searchList')
+      next()
+    })
+  },
+  beforeRouteLeave (to, from, next) {
+    let reg = /goodsdetail/
+    if (reg.test(to.name)) {
+      this.$store.commit('removeExcludeComponent', 'searchList')
+    } else {
+      this.$store.commit('addExcludeComponent', 'searchList')
+    }
+    next()
+  },
   beforeCreate () {
   },
   created () {

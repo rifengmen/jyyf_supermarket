@@ -69,14 +69,14 @@
           <div class="font20">积分抽奖</div>
         </router-link>
         <!-- 积分抽奖 end -->
-        <!-- 我的订单 start -->
-        <router-link :to="{name: 'orderList', query: {billstatus: '-2'}}" tag="div" class="index_common_item">
+        <!-- 扫码购 start-->
+        <router-link :to="{name: 'saomagou'}" tag="div" class="index_common_item">
           <div class="index_common_img">
-            <img src="static/img/wddd.png">
+            <img src="static/img/smg.png">
           </div>
-          <div class="font20">我的订单</div>
+          <div class="font20">扫码购</div>
         </router-link>
-        <!-- 我的订单 end -->
+        <!-- 扫码购 end-->
       </div>
       <!-- 常用功能 end -->
       <!-- 通知 start -->
@@ -403,6 +403,7 @@ export default {
         throw error
       })
     },
+    // 初始化发送请求
     initData () {
       if (this.$store.state.userInfo.token) {
         // 设置用户信息
@@ -416,10 +417,16 @@ export default {
       }
     }
   },
+  beforeCreate () {},
   created () {
+    // 初始化发送请求
     this.initData()
   },
-  mounted () {
+  beforeMount () {},
+  mounted () {},
+  activated () {
+    // 初始化发送请求
+    this.initData()
   }
 }
 </script>

@@ -125,10 +125,6 @@ export default {
             // 扫码后获取结果参数赋值给Input
             let result = res.resultStr
             if (result.indexOf(',') >= 0) {
-              _this.$toast({
-                message: '扫描成功!',
-                type: 'success'
-              })
               let str1 = result.split(',')
               // 订单号码
               _this.tradeno = str1[1]

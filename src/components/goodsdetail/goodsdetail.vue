@@ -515,6 +515,21 @@ export default {
     }
   },
   watch: {},
+  beforeRouteLeave (to, from, next) {
+    let toReg = /classify/
+    let toReg2 = /searchList/
+    if (!toReg.test(to.name)) {
+      this.$store.commit('addExcludeComponent', 'classify')
+    } else if (toReg.test(to.name)) {
+      this.$store.commit('removeExcludeComponent', 'classify')
+    }
+    if (!toReg2.test(to.name)) {
+      this.$store.commit('addExcludeComponent', 'searchList')
+    } else if (toReg2.test(to.name)) {
+      this.$store.commit('removeExcludeComponent', 'searchList')
+    }
+    next()
+  },
   beforeCreate () {
   },
   created () {

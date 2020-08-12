@@ -4,7 +4,10 @@
     <wechat-config>
     </wechat-config>
     <!-- 获取微信凭证 end -->
-    <router-view v-if="isRouter"/>
+    <keep-alive :excloude="excludeComponents">
+      <router-view v-if="$route.meta.keepAlive && isRouter"/>
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive && isRouter"/>
   </div>
 </template>
 
@@ -44,6 +47,10 @@ export default {
     // baseURL
     baseURL () {
       return this.$store.state.baseURL
+    },
+    // 缓存组件
+    excludeComponents () {
+      return this.$store.state.excludeComponents
     }
   },
   components: {

@@ -30,7 +30,7 @@ export default [
   // 会员中心-优惠券
   {path: '/tickList', name: 'tickList', component: tickList},
   // 会员中心-我的订单
-  {path: '/orderList', name: 'orderList', component: orderList},
+  {path: '/orderList', name: 'orderList', component: orderList, meta: {keepAlive: true}},
   // 会员中心-订单详情
   {path: '/orderdetail', name: 'orderdetail', component: orderdetail},
   // 会员中心-再支付

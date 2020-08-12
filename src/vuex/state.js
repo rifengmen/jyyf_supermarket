@@ -55,7 +55,13 @@ const state = {
   // 临时订单优惠券信息
   tick: '',
   // 商品详情，用作分享商品
-  goodsdetail: ''
+  goodsdetail: '',
+  // 扫码购店铺信息
+  shopInfo: '',
+  // 扫码购物车
+  saomacar: [],
+  // 缓存的组件
+  excludeComponents: []
 }
 
 export default state

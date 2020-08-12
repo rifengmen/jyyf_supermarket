@@ -7,6 +7,7 @@ import shopping from './shopping'
 import message from './message'
 import userInfo from './userInfo'
 import other from './other'
+import saomagou from './saomagou'
 
 Vue.use(Router)
 
@@ -30,7 +31,9 @@ const router = new Router({
     // 会员中心模块
     ...userInfo,
     // 其他模块
-    ...other
+    ...other,
+    // 扫码购模块
+    ...saomagou
   ]
 })
 

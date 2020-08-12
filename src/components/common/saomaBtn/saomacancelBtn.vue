@@ -4,9 +4,16 @@
 
 <script>
 export default {
-  name: 'cancelBtn',
+  name: 'saomacancelBtn',
   props: {
-    tradeno: {
+    flowno: {
+      type: String,
+      // require: true,
+      default: function () {
+        return ''
+      }
+    },
+    deptcode: {
       type: String,
       // require: true,
       default: function () {
@@ -25,21 +32,22 @@ export default {
       e.stopPropagation()
       let data = new FormData()
       let requestData = {
-        tradeno: this.tradeno
+        flowno: this.flowno,
+        deptcode: this.deptcode
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
       this.$dialog.confirm({
         message: '确认取消订单吗？'
       }).then(() => {
-        this.$axios.post('api/order/cancleOrder', data).then(result => {
+        this.$axios.post('invest/microFlow/cancelSaleOrder', data).then(result => {
           let res = result.data
           if (res.code === 200) {
             this.$toast({
               message: '取消成功！',
               type: 'success'
             })
-            if (this.$route.name === 'orderList') {
+            if (this.$route.name === 'saomaorderList') {
               this.$emit('onRefresh')
               return false
             }

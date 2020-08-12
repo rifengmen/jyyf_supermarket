@@ -43,7 +43,7 @@ export default {
               this.$emit('onRefresh')
               return false
             }
-            this.$router.push({name: 'orderList', query: {billstatus: '-2'}})
+            this.$router.back()
           } else {
             this.$toast({
               message: res.msg,

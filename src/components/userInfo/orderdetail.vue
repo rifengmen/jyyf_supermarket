@@ -149,7 +149,6 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
-import nodata from '@/components/common/nodata/nodata'
 import payBtn from '@/components/common/payBtn/payBtn'
 import delBtn from '@/components/common/delBtn/delBtn'
 import cancelBtn from '@/components/common/cancelBtn/cancelBtn'
@@ -174,7 +173,6 @@ export default {
   },
   components: {
     MyHeader,
-    nodata,
     payBtn,
     delBtn,
     cancelBtn
