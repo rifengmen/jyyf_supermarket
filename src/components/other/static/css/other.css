@@ -2,10 +2,6 @@
 .other_main {
   width: 100%;
   min-height: 100%;
-  /*height: calc(100% - 1.1rem - 1px);*/
-  /*margin-top: .2rem;*/
-  /*overflow: hidden;*/
-  /*overflow-y: scroll;*/
 }
 .other_cont {
   padding-top: .2rem;
@@ -26,8 +22,6 @@
 }
 .lottery_score {
   width: 100%;
-  /*height: calc(100% - 1.5rem);*/
-  /*padding-top: .3rem;*/
   display: flex;
   justify-content: flex-start;
   flex-flow: column;

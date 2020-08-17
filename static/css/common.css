@@ -39,10 +39,6 @@ input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
   font-size: .28rem;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
 }
-/*i {*/
-  /*font-size: .40rem!important;*/
-  /*font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif*/
-/*}*/
 /* 字体尺寸 start */
 .font8 {
   font-size: .8rem;
@@ -437,12 +433,6 @@ input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
 .footer_cart.router-link-exact-active > div:first-child {
   background-image: url('../img/cartactive.png');
 }
-/*.footer_message > div:first-child{*/
-  /*background-image: url('../img/message.png');*/
-/*}*/
-/*.footer_message.router-link-exact-active > div:first-child {*/
-  /*background-image: url('../img/messageactive.png');*/
-/*}*/
 .footer_userinfo > div:first-child{
   background-image: url('../img/userinfo.png');
 }
@@ -1065,3 +1055,83 @@ input.el-input__inner::placeholder {
   transform: translateX(-50%) translateY(-50%)!important;
 }
 /* 视频播放样式 end */
+/* 抽奖样式 start */
+#turnBox {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+  background-image: url("../img/turntableBgc.jpg");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#turnBox .turnBtn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 1.3rem;
+  overflow: hidden;
+  z-index: 3;
+}
+#turnBox #turnUlBox {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 5.2rem;
+  height: 5.2rem;
+  z-index: 1;
+  background-image: url("../img/turnboxbg.png");
+  background-size: 100% 100%;
+  padding: .3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#turnBox #turnUl {
+  position: absolute;
+  width: 4.5rem;
+  height: 4.5rem;
+  overflow: hidden;
+}
+#turnBox #turnUltext {
+  position: absolute;
+  width: 4.5rem;
+  height: 4.5rem;
+  overflow: hidden;
+}
+#turnBox #turnUltext li {
+  position: absolute;
+  box-sizing: border-box;
+  font-size: .26rem;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding-top: .1rem;
+  line-height: 20px;
+  transform-origin: 50% 50%;
+  text-align: center;
+}
+#turnBox #turnUl li {
+  box-sizing: border-box;
+  padding-top: .4rem;
+  font-size: .26rem;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 50%;
+  transform-origin: 0 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* 抽奖样式 end */

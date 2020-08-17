@@ -26,6 +26,7 @@ Vue.prototype.IMGURL = process.env.VUE_APP_IMG_BASEURL
 Vue.use(ElementUI)
 Vue.use(Vant)
 Vue.use(VideoPlayer)
+// 设置图片懒加载
 Vue.use(Lazyload, {
   preLoad: 0.5,
   error: 'static/img/goods.png',

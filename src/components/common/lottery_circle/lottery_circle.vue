@@ -26,12 +26,14 @@
 export default {
   name: 'lottery_circle',
   props: {
+    // 奖项设置
     activeObj: {
       type: Object,
       default: function () {
         return {}
       }
     },
+    // 用户积分
     totalCent: {
       type: Number,
       default: function () {
@@ -82,11 +84,6 @@ export default {
   },
   components: {},
   methods: {
-    // 抽奖测试
-    // startPlay () {
-    //   // 调抽奖
-    //   this.startBtn(this.prize)
-    // },
     // 点击开始,请求接口抽奖
     startPlay () {
       if (this.flag) {
@@ -181,5 +178,4 @@ export default {
 </script>
 
 <style scoped>
-  @import "static/css/lottery_circle.css";
 </style>
