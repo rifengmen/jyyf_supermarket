@@ -109,6 +109,7 @@ export default {
             // 调抽奖
             this.startBtn(this.prize)
           } else {
+            this.flag = true
             this.$toast({
               message: res.msg,
               type: 'fail'
