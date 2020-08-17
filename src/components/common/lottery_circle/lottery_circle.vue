@@ -121,15 +121,15 @@ export default {
     },
     // 开始转动,通过奖项级别进行匹配:id
     async startBtn (val) {
-      const self = this
-      self.activeObj.prizeList.forEach((i, d) => {
+      let _this = this
+      _this.activeObj.prizeList.forEach((i, d) => {
         if (i.prizeno === val.prizeno) {
-          self.pIndex = d
+          _this.pIndex = d
         }
       })
       // 拿到相应的角度调旋转接口
-      self.startrotate(self.activeObj.prizeList[self.pIndex].angletext, () => {
-        self.fulfillHandle(self.activeObj.prizeList[self.pIndex])
+      _this.startrotate(_this.activeObj.prizeList[_this.pIndex].angletext, () => {
+        _this.fulfillHandle(_this.activeObj.prizeList[_this.pIndex])
       })
     },
     // 开始旋转 angle角度  complete回调成功函数
