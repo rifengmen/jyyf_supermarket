@@ -1,5 +1,5 @@
 <template>
-  <div class="container_pt110 bgeeeeee">
+  <div class="container_pt90 bgeeeeee">
     <!-- 头部 start -->
     <my-header>
       <template v-slot:backs>

@@ -1,7 +1,6 @@
 .order_main {
   width: 100%;
-  height: calc(100% - .9rem - 1px);
-  overflow: hidden;
+  min-height: calc(100% - .2rem);
 }
 .order_main_list {
   position: fixed;
@@ -20,9 +19,8 @@
 }
 .order_cont {
   width: 100%;
-  height: calc(100% - .88rem);
-  overflow: hidden;
-  overflow-y: scroll;
+  height: 100%;
+  padding-bottom: 1.08rem;
 }
 .order_section {
   width: calc(100% - .48rem);
@@ -55,6 +53,10 @@
   align-items: center;
 }
 .order_money {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
   height: .88rem;
   display: flex;

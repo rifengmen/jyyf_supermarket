@@ -360,9 +360,7 @@
 /* 订单详情样式 start */
 .order_cont {
   width: 100%;
-  height: calc(100% - .9rem - 1px);
-  overflow: hidden;
-  overflow-y: scroll;
+  min-height: calc(100% - .2rem);
 }
 .orderdetail_section {
   width: 100%;

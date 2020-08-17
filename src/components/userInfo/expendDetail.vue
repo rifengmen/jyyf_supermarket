@@ -1,5 +1,5 @@
 <template>
-  <div class="container_pt110 bgeeeeee">
+  <div class="container_pt90 bgeeeeee">
     <!-- 头部 start -->
     <my-header>
       <template v-slot:backs>
@@ -9,7 +9,7 @@
     </my-header>
     <!-- 头部 end -->
     <!-- 订单内容 start -->
-    <div class="order_cont" v-if="expendDetail">
+    <div class="order_cont bgeeeeee" v-if="expendDetail">
       <!-- 订单商品 start -->
       <div class="order_sections bgffffff">
         <div class="order_goods">

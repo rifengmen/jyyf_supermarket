@@ -1,5 +1,5 @@
 <template>
-  <div class="container_pt110 bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
+  <div class="container_pt90 bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
     <!-- 头部 start -->
     <my-header>
       <template v-slot:backs>
@@ -11,7 +11,7 @@
     <!-- 订单 start -->
     <div class="order_main " v-if="!addressListFlag && !tickListFlag">
       <!-- 订单内容 start -->
-      <div class="order_cont">
+      <div class="order_cont bgeeeeee">
         <!-- 收货地址 start -->
         <div class="order_section bgffffff" @click="setAddressListFlag" v-if="address">
           <div class="address_item_desc">
