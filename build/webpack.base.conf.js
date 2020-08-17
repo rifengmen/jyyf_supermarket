@@ -4,10 +4,6 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 
-// 构造出共享进程池，在进程池中包含5个子进程
-const HappyPack = require('happypack')
-const HappyPackThreadPool = HappyPack.ThreadPool({size:5})
-
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
@@ -47,18 +43,13 @@ module.exports = {
       ...(config.dev.useEslint ? [createLintingRule()] : []),
       {
         test: /\.vue$/,
-        // loader: 'vue-loader',
-        use: ['happypack/loader?id=vue'],
-        // options: vueLoaderConfig
+        loader: 'vue-loader',
+        options: vueLoaderConfig
       },
       {
         test: /\.js$/,
-        // loader: 'babel-loader',
-        // 将对.js 文件的处理转交给 id 为 babel 的HappyPack实例,单线程转化为多线程处理
-        use:['happypack/loader?id=babel'],
-        include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')],
-        // 排除第三方插件
-        exclude:path.resolve(__dirname,'node_modules'),
+        loader: 'babel-loader',
+        include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -86,27 +77,6 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new HappyPack({
-      // 用唯一的标识符id，来代表当前的HappyPack是用来处理一类特定的文件
-      id:'vue',
-      loaders:[
-        {
-          loader:'vue-loader',
-          options: vueLoaderConfig
-        }
-      ],
-      threadPool: HappyPackThreadPool,
-    }),
-
-    new HappyPack({
-      // 用唯一的标识符id，来代表当前的HappyPack是用来处理一类特定的文件
-      id:'babel',
-      // 如何处理.js文件，用法和Loader配置中一样
-      loaders:['babel-loader?cacheDirectory'],
-      threadPool: HappyPackThreadPool,
-    }),
-  ],
   node: {
     // prevent webpack from injecting useless setImmediate polyfill because Vue
     // source contains it (although only uses it if it's native).
