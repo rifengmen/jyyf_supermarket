@@ -5,11 +5,11 @@ const noticedetail = () => import(/* webpackChunkName: 'message' */ '@/component
 
 export default [
   // 消息中心
-  {path: '/messageList', name: 'messageList', component: messageList},
+  {path: '/messageList', name: 'messageList', component: messageList, meta: {keepAlive: true}},
   // 消息详情
   {path: '/messagedetail', name: 'messagedetail', component: messagedetail},
   // 通知中心
-  {path: '/noticeList', name: 'noticeList', component: noticeList},
+  {path: '/noticeList', name: 'noticeList', component: noticeList, meta: {keepAlive: true}},
   // 通知详情
   {path: '/noticedetail', name: 'noticedetail', component: noticedetail}
 ]

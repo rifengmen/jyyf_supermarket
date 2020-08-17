@@ -8,7 +8,7 @@ export default [
   // 其他-电子码
   {path: '/mycode', name: 'mycode', component: mycode},
   // 其他-在线充值
-  {path: '/recharge', name: 'recharge', component: recharge},
+  {path: '/recharge', name: 'recharge', component: recharge, meta: {keepAlive: true}},
   // 其他-充值支付
   {path: '/rechargePay', name: 'rechargePay', component: rechargePay},
   // 其他-积分抽奖

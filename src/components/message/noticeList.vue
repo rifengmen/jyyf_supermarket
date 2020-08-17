@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="container bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
+  <div class="container_pt110 bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
     <!-- 头部 start -->
     <my-header>
       <template v-slot:backs>
@@ -140,15 +140,32 @@ export default {
       })
     }
   },
+  watch: {},
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.$store.commit('removeExcludeComponent', 'noticeList')
+      next()
+    })
+  },
+  beforeRouteLeave (to, from, next) {
+    let reg = /noticedetail/
+    if (reg.test(to.name)) {
+      this.$store.commit('removeExcludeComponent', 'noticeList')
+    } else {
+      this.$store.commit('addExcludeComponent', 'noticeList')
+    }
+    next()
+  },
+  beforeCreate () {},
   created () {
     this.onLoad()
-  }
+  },
+  beforeMount () {},
+  mounted () {}
 }
 </script>
 
 <style scoped>
 @import "static/css/message.css";
-.cont_main {
-  position: relative;
-}
+
 </style>

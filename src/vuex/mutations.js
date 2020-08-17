@@ -27,6 +27,10 @@ const mutations = {
   setUserInfo (state, data) {
     state.userInfo = data
   },
+  // 设置登陆用户会员等级
+  setMemType (state, data) {
+    state.mem_type = data
+  },
   // 设置卡片信息
   setMoneyDetail (state, data) {
     state.moneyDetail = JSON.parse(data)

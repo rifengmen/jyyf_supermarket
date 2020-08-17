@@ -1,5 +1,5 @@
 <template>
-  <div class="container bgeeeeee">
+  <div class="container_pt110 bgeeeeee">
     <!-- 头部 start -->
     <my-header :froms="'userinfo'">
       <template v-slot:userinfo>
@@ -175,7 +175,6 @@ export default {
         let res = result.data
         if (res.code === 200) {
           this.$store.commit('setUserInfo', res.data)
-          this.$store.commit('setMoneyDetail', res.data.moneyDetail)
           sessionStorage.setItem('jyyf_token', res.data.token)
           this.$axios.defaults.headers.common.Authorization = res.data.token
         }

@@ -13,7 +13,7 @@
 /* 我的地址 start */
 .addresslist {
   width: calc(100% - .48rem);
-  height: calc(100% - 1.6rem);
+  height: calc(100vh - 2.7rem);
   padding: 0 .24rem;
 }
 .address_cont {

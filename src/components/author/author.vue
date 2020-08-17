@@ -171,7 +171,6 @@ export default {
         // res.code 200：正确；20：注册；30：加入卡包；40：激活卡包；500：报错
         if (res.code === 200) {
           this.$store.commit('setUserInfo', res.data)
-          this.$store.commit('setMoneyDetail', res.data.moneyDetail)
           sessionStorage.setItem('jyyf_token', res.data.token)
           this.$axios.defaults.headers.common.Authorization = res.data.token
           let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')

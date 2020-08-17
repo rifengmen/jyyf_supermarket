@@ -17,6 +17,17 @@ const router = new Router({
   // base: '/testSupermarket',
   // 超市生产
   // base: '/supermarket',
+  // 记忆列表页位置
+  scrollBehavior (to, from, savePosition) {
+    // to 要进入的目标路由对象，到哪儿去
+    // from 要离开的路由对象，哪儿来的
+    // 记录滚动条的坐标，点击后退时记录值{x:*, y:*}
+    if (savePosition) {
+      return savePosition
+    } else {
+      return {x: 0, y: 0}
+    }
+  },
   routes: [
     // 微信授权模块
     ...author,

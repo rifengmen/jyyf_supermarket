@@ -22,7 +22,7 @@ axios.defaults.baseURL = process.env.API_ROOT
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 Vue.prototype.$axios = axios
 Vue.prototype.$qs = qs
-Vue.prototype.IMGURL = 'http://www.spzlk.cn:8000/wemember/'
+Vue.prototype.IMGURL = process.env.VUE_APP_IMG_BASEURL
 Vue.use(ElementUI)
 Vue.use(Vant)
 Vue.use(VideoPlayer)

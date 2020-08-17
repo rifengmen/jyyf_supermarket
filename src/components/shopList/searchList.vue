@@ -1,20 +1,25 @@
 <template>
-  <div class="container bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
+  <div class="container_pt110 bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
     <!-- 获取微信凭证 start -->
     <wechat-config>
     </wechat-config>
     <!-- 获取微信凭证 end -->
     <!-- 搜索 start -->
-    <div class="search_cont">
-      <router-link :to="{name: 'search'}" tag="div" class="search border_r6 bgffffff">
-        <div class="search_input fl">
+    <div class="search_cont bgeeeeee">
+      <div class="search">
+        <!-- 返回 start -->
+        <router-link :to="{name: 'index'}" tag="div" class="search_backs">
+          <i class="el-icon-arrow-left font40"></i>
+        </router-link>
+        <!-- 返回 end -->
+        <div tag="div" class="search_input bgffffff border_r6 fl" @click="backs">
           <img src="static/img/search.png" class="fl">
           <input type="text" v-model="keyword" placeholder="请输入您要搜索的商品" class="colorff6400 fl font30"/>
         </div>
-      </router-link>
+      </div>
     </div>
     <!-- 搜索 end -->
-    <div class="search_list">
+    <div class="shop_list">
       <!-- 加载中动画 start -->
       <loading v-if="isShowLoading"></loading>
       <!-- 加载中动画 end -->
@@ -58,19 +63,15 @@
       </div>
       <!-- 商品列表 end -->
       <!-- 无信息提示 start -->
-      <nodata v-else></nodata>
+      <nodata v-else class="bgeeeeee"></nodata>
       <!-- 无信息提示 end -->
     </div>
-    <!-- 底部导航 start -->
-    <my-footer></my-footer>
-    <!-- 底部导航 end -->
   </div>
 </template>
 
 <script>
 import WechatConfig from '@/components/common/wechatConfig/wechatConfig'
 import loading from '@/components/common/loading/loading'
-import MyFooter from '@/components/common/footer/myfooter'
 import addcart from '@/components/common/addcart/addcart'
 import nodata from '@/components/common/nodata/nodata'
 
@@ -112,7 +113,6 @@ export default {
   },
   components: {
     WechatConfig,
-    MyFooter,
     loading,
     addcart,
     nodata
@@ -185,6 +185,10 @@ export default {
     goodsdetail (goodsdetail) {
       this.$store.commit('setGoodsdetail', goodsdetail)
       this.$router.push({name: 'goodsdetail', query: {goodsid: goodsdetail.goodsid, goodsname: goodsdetail.cusgoodsname}})
+    },
+    // 返回上一页
+    backs () {
+      this.$router.back()
     }
   },
   watch: {
@@ -216,8 +220,5 @@ export default {
 }
 </script>
 <style scoped>
-@import "static/css/search.css";
-.search_list {
-  position: relative;
-}
+@import "../shopList/static/css/shopList.css";
 </style>

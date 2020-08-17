@@ -1,5 +1,5 @@
 <template>
-  <div class="container bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
+  <div class="container_pt110 bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
     <!-- 头部 start -->
     <my-header>
       <template v-slot:backs>
@@ -9,7 +9,7 @@
     </my-header>
     <!-- 头部 end -->
     <!-- 内容盒子 start -->
-    <div class="recommend_list">
+    <div class="shop_list">
       <!-- 加载中动画 start -->
       <loading v-if="isShowLoading"></loading>
       <!-- 加载中动画 end -->
@@ -53,7 +53,7 @@
       </div>
       <!-- 商品列表 end -->
       <!-- 无信息提示 start -->
-      <nodata v-else></nodata>
+      <nodata v-else class="bgeeeeee"></nodata>
       <!-- 无信息提示 end -->
     </div>
     <!-- 内容盒子 end -->
@@ -181,6 +181,21 @@ export default {
     }
   },
   watch: {},
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.$store.commit('removeExcludeComponent', 'classList')
+      next()
+    })
+  },
+  beforeRouteLeave (to, from, next) {
+    let reg = /goodsdetail/
+    if (reg.test(to.name)) {
+      this.$store.commit('removeExcludeComponent', 'classList')
+    } else {
+      this.$store.commit('addExcludeComponent', 'classList')
+    }
+    next()
+  },
   beforeCreate () {
   },
   created () {
@@ -194,8 +209,5 @@ export default {
 </script>
 
 <style scoped>
-@import 'static/css/recommendList.css';
-.recommend_list {
-  position: relative;
-}
+@import 'static/css/shopList.css';
 </style>

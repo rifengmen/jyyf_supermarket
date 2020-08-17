@@ -1,10 +1,14 @@
 /* 内容部分盒子 start */
 .other_main {
   width: 100%;
-  height: calc(100% - 1.1rem - 1px);
-  margin-top: .2rem;
-  overflow: hidden;
-  overflow-y: scroll;
+  min-height: 100%;
+  /*height: calc(100% - 1.1rem - 1px);*/
+  /*margin-top: .2rem;*/
+  /*overflow: hidden;*/
+  /*overflow-y: scroll;*/
+}
+.other_cont {
+  padding-top: .2rem;
 }
 /* 内容部分盒子 end */
 /* 积分抽奖 start */
@@ -44,13 +48,8 @@
   padding: 0 .24rem;
   border-bottom: .02rem solid #f4f4f4;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
-}
-.lottery_item > div:first-child {
-  width: .12rem;
-  height: .12rem;
-  margin-right: .2rem;
 }
 .lottery_title {
   width: 4.7rem;

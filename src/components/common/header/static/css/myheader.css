@@ -9,5 +9,9 @@
   justify-content: space-between;
   align-items: center;
   letter-spacing: 2px;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 /* 用户信息 end */

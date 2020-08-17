@@ -1,5 +1,5 @@
 <template>
-  <div class="container bgeeeeee">
+  <div class="container_pt110 bgeeeeee">
     <!-- 头部 start -->
     <my-header>
       <template v-slot:backs>
@@ -9,7 +9,7 @@
     </my-header>
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
-    <div class="userinfo_main">
+    <div class="userinfo_main bgffffff">
       <addresslist></addresslist>
     </div>
     <!-- 内容部分盒子 end -->

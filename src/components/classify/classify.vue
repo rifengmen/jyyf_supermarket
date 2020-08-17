@@ -1,11 +1,11 @@
 ﻿<template>
-    <div class="container bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
+    <div class="container_pt110 bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
       <!-- 获取微信凭证 start -->
       <wechat-config>
       </wechat-config>
       <!-- 获取微信凭证 end -->
       <!-- 搜索 start -->
-      <router-link :to="{name: 'search'}" tag="div" class="search_cont">
+      <router-link :to="{name: 'search'}" tag="div" class="search_cont bgeeeeee">
         <div class="search border_r6 bgffffff">
           <div class="search_input fl">
             <img src="static/img/search.png" class="fl">
@@ -18,7 +18,7 @@
       <!-- 分类内容 start -->
       <div class="classify">
         <!-- 分类导航 start -->
-        <div class="classify_nav">
+        <div class="classify_nav bgeeeeee">
           <ul>
             <li :class="{tc: true, active: index === classifyActive, bgffffff:  index === classifyActive}" @click="addActive(index)" v-if="classify.length" v-for="(item, index) in classify" :key="index" :optionvalue="item.optionvalue">
               <div>{{item.optionname}}</div>
@@ -71,7 +71,7 @@
           </div>
           <!-- 分类列表 end -->
           <!-- 无信息提示 start -->
-          <nodata v-else></nodata>
+          <nodata v-else class="bgeeeeee"></nodata>
           <!-- 无信息提示 end -->
         </div>
       </div>
@@ -289,8 +289,4 @@ export default {
 
 <style scoped>
 @import "static/css/classify.css";
-.classify_cont {
-  position: relative;
-  overflow: auto;
-}
 </style>

@@ -1,33 +1,31 @@
 ﻿<template>
-    <div class="container bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
+    <div class="container_pt110 bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
       <!-- 获取微信凭证 start -->
       <wechat-config>
       </wechat-config>
       <!-- 获取微信凭证 end -->
       <!-- 搜索 start -->
-      <div class="search_main">
-        <div class="search_cont">
+      <div class="search_cont">
+        <div class="search">
           <!-- 返回 start -->
           <div class="search_backs" @click="backs">
             <i class="el-icon-arrow-left font40"></i>
           </div>
           <!-- 返回 end -->
-          <div class="search border_r6 bgffffff">
-            <div class="search_input fl">
-              <img src="static/img/search.png" class="fl">
-              <form action="javascript:return true;" class="search_form">
-                <input
-                  ref="searchInput"
-                  type="search"
-                  v-model="keyword"
-                  placeholder="请输入您要搜索的商品"
-                  class="colorff6400 fl font30"
-                  @keypress="sendSearch"
-                />
-              </form>
-            </div>
-            <!--<div class="search_btn border_r500 font28 tc fr bgff6400 colorffffff" @click="sendSearch">搜索</div>-->
+          <div class="search_input border_r6 bgffffff fl">
+            <img src="static/img/search.png" class="fl">
+            <form action="javascript:return true;" class="search_form">
+              <input
+                ref="searchInput"
+                type="search"
+                v-model="keyword"
+                placeholder="请输入您要搜索的商品"
+                class="colorff6400 fl font30"
+                @keypress="sendSearch"
+              />
+            </form>
           </div>
+          <!--<div class="search_btn border_r6 font28 tc fr bgff6400 colorffffff" @click="sendSearch">搜索</div>-->
         </div>
       </div>
       <!-- 搜索 end -->
@@ -117,5 +115,5 @@ export default {
 </script>
 
 <style scoped>
-@import "static/css/search.css";
+@import "../shopList/static/css/shopList.css";
 </style>

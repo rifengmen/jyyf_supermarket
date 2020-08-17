@@ -48,7 +48,7 @@ export default [
   // 会员中心-零钱变化
   {path: '/looseChangeList', name: 'looseChangeList', component: looseChangeList},
   // 会员中心-消费记录
-  {path: '/expendList', name: 'expendList', component: expendList},
+  {path: '/expendList', name: 'expendList', component: expendList, meta: {keepAlive: true}},
   // 会员中心-记录详情
   {path: '/expendDetail', name: 'expendDetail', component: expendDetail},
   // 会员中心-购物评价

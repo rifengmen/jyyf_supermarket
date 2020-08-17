@@ -1,5 +1,5 @@
 <template>
-  <div class="container bgeeeeee">
+  <div class="container_pt110 bgeeeeee">
     <!-- 头部 start -->
     <my-header>
       <template v-slot:backs>
@@ -104,10 +104,13 @@ export default {
           // 微信支付
           if (res.data.beecloud) {
             let beecloud = res.data.beecloud
-            if (beecloud.paymentchannel === 4) {
+            if (beecloud.paymentchannel === 3) { // 银联商务结算
+              alert('银联商务结算' + JSON.stringify(beecloud.unifiedPayStr.payUrl))
+              window.location.href = beecloud.unifiedPayStr.payUrl
+            } else if (beecloud.paymentchannel === 4) { // 太米结算
               sessionStorage.removeItem('jyyf_openid')
               window.location.href = beecloud.tmPayStr.payUrl
-            } else if (beecloud.paymentchannel === 2) {
+            } else if (beecloud.paymentchannel === 2) { // 微信官方结算
               let vm = this
               let wechatstr = res.data.beecloud.wechatPayStr
               if (typeof WeixinJSBridge === 'undefined') {

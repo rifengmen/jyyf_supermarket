@@ -1,5 +1,5 @@
 <template>
-  <div class="container bgeeeeee">
+  <div class="container_pt110 bgeeeeee">
     <!-- 头部 start -->
     <my-header>
       <template v-slot:backs>
@@ -217,6 +217,16 @@ export default {
     }
   },
   watch: {},
+  beforeRouteLeave (to, from, next) {
+    let toReg = /orderList/
+    let toReg2 = /again/
+    if (!toReg.test(to.name) && !toReg2.test(to.name)) {
+      this.$store.commit('addExcludeComponent', 'orderList')
+    } else if (toReg.test(to.name) || toReg2.test(to.name)) {
+      this.$store.commit('removeExcludeComponent', 'orderList')
+    }
+    next()
+  },
   beforeCreate () {
   },
   created () {

@@ -1,5 +1,5 @@
 <template>
-  <div class="container bgeeeeee">
+  <div class="container_pt110 bgeeeeee">
     <!-- 头部 start -->
     <my-header @setStartdate="setStartdate" :addFlag="'dateFlag'">
       <template v-slot:backs>
@@ -108,6 +108,21 @@ export default {
     }
   },
   watch: {},
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.$store.commit('removeExcludeComponent', 'expendList')
+      next()
+    })
+  },
+  beforeRouteLeave (to, from, next) {
+    let reg = /expendDetail/
+    if (reg.test(to.name)) {
+      this.$store.commit('removeExcludeComponent', 'expendList')
+    } else {
+      this.$store.commit('addExcludeComponent', 'expendList')
+    }
+    next()
+  },
   beforeCreate () {
   },
   created () {
@@ -123,7 +138,5 @@ export default {
 
 <style scoped>
 @import "static/css/userInfo.css";
-.userinfo_main {
-  position: relative;
-}
+
 </style>

@@ -101,6 +101,23 @@ export default {
     MyFooter
   },
   methods: {
+    // 获取用户会员卡信息
+    getMyInfo () {
+      let data = new FormData()
+      let requestData = {
+      }
+      requestData = JSON.stringify(requestData)
+      data.append('requestData', requestData)
+      this.$axios.post('system/customlogin/getMyInfo', data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          this.$store.commit('setMemType', res.data.mem_type)
+          this.$store.commit('setMoneyDetail', res.data.moneyDetail)
+        }
+      }).catch(error => {
+        throw error
+      })
+    },
     // 获取电子会员卡
     getOnlineVip () {
       let data = new FormData()
@@ -167,6 +184,8 @@ export default {
   beforeCreate () {
   },
   created () {
+    // 获取用户会员卡信息
+    this.getMyInfo()
     // 获取电子会员
     this.getOnlineVip()
   },

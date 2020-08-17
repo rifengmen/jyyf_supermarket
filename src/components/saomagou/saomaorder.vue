@@ -1,5 +1,5 @@
 <template>
-  <div class="container bgeeeeee">
+  <div class="container_pt110 bgeeeeee">
     <!-- 头部 start -->
     <my-header>
       <template v-slot:backs>
@@ -24,7 +24,7 @@
       </div>
       <div class="orderdesc">
         <div>订单金额</div>
-        <div class="font24 color666666">{{totalmoney}}</div>
+        <div class="font24 color666666" v-if="saomaorderDetail">{{saomaorderDetail.totalMoney}}</div>
       </div>
     </div>
     <!-- 订单信息 end -->
@@ -53,7 +53,7 @@
     <!-- 支付方式 end -->
     <!-- 支付 start -->
     <div class="order_money bgffffff">
-      <div class="order_money_totalMoney font24 ellipsis">实付：<span class="colorf84242 font34">￥{{totalmoney}}</span></div>
+      <div class="order_money_totalMoney font24 ellipsis">实付：<span class="colorf84242 font34" v-if="saomaorderDetail">￥{{saomaorderDetail.totalMoney}}</span></div>
       <div class="pay colorffffff bgff6400" @click="isSetPasswordShow">立即支付</div>
     </div>
     <!-- 支付 end -->
@@ -95,10 +95,10 @@ export default {
       // 店铺信息
       deptcode: this.$route.query.deptcode,
       deptname: this.$route.query.deptname,
-      // 订单金额
-      totalmoney: parseInt(this.$route.query.totalmoney).toFixed(2),
       // 流水号
       flowno: this.$route.query.flowno,
+      // 订单详情
+      saomaorderDetail: '',
       // 支付方式列表
       paymodeList: [],
       // 支付信息
@@ -128,6 +128,29 @@ export default {
     },
     onDelete () {
       this.payPassword = this.payPassword.slice(0, this.payPassword.length - 1)
+    },
+    // 获取订单详情
+    getSaomaorderDetail () {
+      let data = new FormData()
+      let requestData = {
+        flowno: this.flowno,
+        deptcode: this.deptcode
+      }
+      requestData = JSON.stringify(requestData)
+      data.append('requestData', requestData)
+      this.$axios.post('invest/microFlow/listMicroFlowDtl', data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          this.saomaorderDetail = res.data
+        } else {
+          this.$toast({
+            message: res.msg,
+            type: 'fail'
+          })
+        }
+      }).catch(error => {
+        throw error
+      })
     },
     // 获取支付方式列表
     getPaymodeList () {
@@ -164,7 +187,7 @@ export default {
     // 设置支付信息
     setPaylist () {
       // 支付金额
-      let paymoney = this.totalmoney
+      let paymoney = this.saomaorderDetail.totalMoney
       // console.log(paymoney, '支付金额')
       // 支付列表下标
       let index = 0
@@ -292,6 +315,8 @@ export default {
   beforeCreate () {
   },
   created () {
+    // 获取订单详情
+    this.getSaomaorderDetail()
     // 获取支付方式列表
     this.getPaymodeList()
   },

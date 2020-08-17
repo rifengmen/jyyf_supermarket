@@ -4,10 +4,10 @@
     <wechat-config>
     </wechat-config>
     <!-- 获取微信凭证 end -->
-    <keep-alive :excloude="excludeComponents">
-      <router-view v-if="$route.meta.keepAlive && isRouter"/>
+    <keep-alive :exclude="excludeComponents">
+      <router-view v-if="$route.meta.keepAlive && isRouter"></router-view>
     </keep-alive>
-    <router-view v-if="!$route.meta.keepAlive && isRouter"/>
+    <router-view v-if="!$route.meta.keepAlive && isRouter"></router-view>
   </div>
 </template>
 
@@ -187,7 +187,6 @@ export default {
         // res.code 200：正确；20：注册；30：加入卡包；40：激活卡包；500：报错
         if (res.code === 200) {
           this.$store.commit('setUserInfo', res.data)
-          this.$store.commit('setMoneyDetail', res.data.moneyDetail)
           sessionStorage.setItem('jyyf_token', res.data.token)
           this.$axios.defaults.headers.common.Authorization = res.data.token
           this.isRouter = true

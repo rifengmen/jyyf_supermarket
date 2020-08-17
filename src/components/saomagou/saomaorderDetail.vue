@@ -1,5 +1,5 @@
 <template>
-  <div class="container bgeeeeee">
+  <div class="container_pt110 bgeeeeee">
     <!-- 头部 start -->
     <my-header>
       <template v-slot:backs>
@@ -50,7 +50,7 @@
         <div class="item_btn" v-if="saomaorderDetail.payFLag || saomaorderDetail.cancelFlag">
           <div class="pay_btn border_r4 bgff6400 colorffffff borderff6400" v-if="saomaorderDetail.payFLag">
             <router-link
-              :to="{name: 'saomaorder', query: {flowno: flowno, totalmoney: saomaorderDetail.totalMoney, deptcode: saomaorderDetail.shopCode, deptname: saomaorderDetail.shopName}}"
+              :to="{name: 'saomaorder', query: {flowno: flowno, deptcode: saomaorderDetail.shopCode, deptname: saomaorderDetail.shopName}}"
               tag="div"
             >付款</router-link>
           </div>
@@ -150,6 +150,16 @@ export default {
     }
   },
   watch: {},
+  beforeRouteLeave (to, from, next) {
+    let toReg = /saomaorderList/
+    let toReg2 = /saomaorder/
+    if (!toReg.test(to.name) && !toReg2.test(to.name)) {
+      this.$store.commit('addExcludeComponent', 'saomaorderList')
+    } else if (toReg.test(to.name) || toReg2.test(to.name)) {
+      this.$store.commit('removeExcludeComponent', 'saomaorderList')
+    }
+    next()
+  },
   beforeCreate () {
   },
   created () {

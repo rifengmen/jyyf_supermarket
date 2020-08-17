@@ -21,6 +21,8 @@ const state = {
   headimgurl: '',
   // 用户信息
   userInfo: {},
+  // 用户会员等级
+  mem_type: '',
   // 卡片信息
   moneyDetail: '',
   // 促销类型

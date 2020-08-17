@@ -515,9 +515,12 @@ export default {
     }
   },
   watch: {},
+  // 返回列表页需要缓存，去其他页面不需要缓存
   beforeRouteLeave (to, from, next) {
     let toReg = /classify/
     let toReg2 = /searchList/
+    let toReg3 = /recommendList/
+    let toReg4 = /classList/
     if (!toReg.test(to.name)) {
       this.$store.commit('addExcludeComponent', 'classify')
     } else if (toReg.test(to.name)) {
@@ -527,6 +530,16 @@ export default {
       this.$store.commit('addExcludeComponent', 'searchList')
     } else if (toReg2.test(to.name)) {
       this.$store.commit('removeExcludeComponent', 'searchList')
+    }
+    if (!toReg3.test(to.name)) {
+      this.$store.commit('addExcludeComponent', 'recommendList')
+    } else if (toReg3.test(to.name)) {
+      this.$store.commit('removeExcludeComponent', 'recommendList')
+    }
+    if (!toReg4.test(to.name)) {
+      this.$store.commit('addExcludeComponent', 'classList')
+    } else if (toReg4.test(to.name)) {
+      this.$store.commit('removeExcludeComponent', 'classList')
     }
     next()
   },

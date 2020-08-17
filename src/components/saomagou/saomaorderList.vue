@@ -1,5 +1,5 @@
 <template>
-  <div class="container bgeeeeee">
+  <div class="container_pt110 bgeeeeee">
     <!-- 头部 start -->
     <my-header @setStartdate="setStartdate" :addFlag="'dateFlag'">
       <template v-slot:backs>
@@ -33,7 +33,7 @@
                 <div class="item_btn" v-if="item.payFLag || item.cancelFlag">
                   <div class="pay_btn border_r4 bgff6400 colorffffff borderff6400" v-if="item.payFLag">
                     <router-link
-                      :to="{name: 'saomaorder', query: {flowno: item.flowno, totalmoney: item.totalMoney, deptcode: item.shopCode, deptname: item.shopName}}"
+                      :to="{name: 'saomaorder', query: {flowno: item.flowno, deptcode: item.shopCode, deptname: item.shopName}}"
                       tag="div"
                     >付款</router-link>
                   </div>
@@ -179,6 +179,22 @@ export default {
     }
   },
   watch: {},
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.$store.commit('removeExcludeComponent', 'saomaorderList')
+      next()
+    })
+  },
+  beforeRouteLeave (to, from, next) {
+    let reg = /saomaorderDetail/
+    let reg2 = /saomaorder/
+    if (reg.test(to.name) || reg2.test(to.name)) {
+      this.$store.commit('removeExcludeComponent', 'saomaorderList')
+    } else {
+      this.$store.commit('addExcludeComponent', 'saomaorderList')
+    }
+    next()
+  },
   beforeCreate () {
   },
   created () {
@@ -194,7 +210,4 @@ export default {
 
 <style scoped>
 @import 'static/css/saomagou.css';
-.orderlist {
-  position: relative;
-}
 </style>

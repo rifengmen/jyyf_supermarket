@@ -1,5 +1,5 @@
 <template>
-  <div class="container bgeeeeee">
+  <div class="container_pt110 bgeeeeee">
     <!-- 头部 start -->
     <my-header>
       <template v-slot:backs>
@@ -214,7 +214,7 @@ export default {
         if (res.code === 200) {
           this.flowno = res.data.flowno
           this.$store.commit('clearSaomacar')
-          this.$router.push({name: 'saomaorder', query: {flowno: this.flowno, totalmoney: this.totalmoney, deptcode: this.shopInfo.deptcode, deptname: this.shopInfo.deptname}})
+          this.$router.push({name: 'saomaorder', query: {flowno: this.flowno, deptcode: this.shopInfo.deptcode, deptname: this.shopInfo.deptname}})
         } else {
           this.$toast({
             message: res.msg,

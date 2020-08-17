@@ -10,7 +10,7 @@
         <div class="card_name">
           <div class="card_img bgffffff border_r500">
             <img :src="headimgurl || 'static/img/userimg.png'" class="border_r500">
-            <div class="vip_desc colorffffff bge7cb92 border_r500 font24">v{{userInfo.mem_type || 0}}</div>
+            <div class="vip_desc colorffffff bge7cb92 border_r500 font24">v{{mem_type || 0}}</div>
           </div>
           <div class="card_num tl">
             <div>{{userInfo.memname}}</div>
@@ -21,7 +21,7 @@
     </div>
     <!-- card end -->
     <!-- 功能部分 start -->
-    <div class="user_cont userinfo_cont">
+    <div class="user_cont user_conts">
       <ul class="">
         <!-- 我的钱包 start -->
         <li class="user_item border_r10 bgffffff">
@@ -250,6 +250,10 @@ export default {
     userInfo () {
       return this.$store.state.userInfo
     },
+    // 用户会员等级
+    mem_type () {
+      return this.$store.state.mem_type
+    },
     // 卡片信息
     moneyDetail () {
       return this.$store.state.moneyDetail
@@ -277,7 +281,6 @@ export default {
         let res = result.data
         if (res.code === 200) {
           this.$store.commit('setUserInfo', res.data)
-          this.$store.commit('setMoneyDetail', res.data.moneyDetail)
           sessionStorage.setItem('jyyf_token', res.data.token)
           this.$axios.defaults.headers.common.Authorization = res.data.token
         } else {
@@ -285,6 +288,23 @@ export default {
             message: '登陆失败，请重新登陆！',
             type: 'fail'
           })
+        }
+      }).catch(error => {
+        throw error
+      })
+    },
+    // 获取用户会员卡信息
+    getMyInfo () {
+      let data = new FormData()
+      let requestData = {
+      }
+      requestData = JSON.stringify(requestData)
+      data.append('requestData', requestData)
+      this.$axios.post('system/customlogin/getMyInfo', data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          this.$store.commit('setMemType', res.data.mem_type)
+          this.$store.commit('setMoneyDetail', res.data.moneyDetail)
         }
       }).catch(error => {
         throw error
@@ -356,6 +376,8 @@ export default {
   created () {
     // 设置用户信息
     this.setUserInfo()
+    // 获取用户会员卡信息
+    this.getMyInfo()
     // 查询未读消息条数
     this.getMessageList()
     // 查询未完成订单数量

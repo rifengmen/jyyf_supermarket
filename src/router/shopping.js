@@ -1,5 +1,5 @@
-const search = () => import(/* webpackChunkName: 'shopping' */ '@/components/search/search')
-const searchList = () => import(/* webpackChunkName: 'shopping' */ '@/components/search/searchList')
+const search = () => import(/* webpackChunkName: 'shopping' */ '@/components/shopList/search')
+const searchList = () => import(/* webpackChunkName: 'shopping' */ '@/components/shopList/searchList')
 const recommendList = () => import(/* webpackChunkName: 'shopping' */ '@/components/shopList/recommendList')
 const classify = () => import(/* webpackChunkName: 'shopping' */ '@/components/classify/classify')
 const goodsdetail = () => import(/* webpackChunkName: 'shopping' */ '@/components/goodsdetail/goodsdetail')
@@ -13,11 +13,11 @@ export default [
   // 搜索结果页
   {path: '/searchList', component: searchList, name: 'searchList', meta: {keepAlive: true}},
   // 推荐列表
-  {path: '/recommendList', component: recommendList, name: 'recommendList'},
+  {path: '/recommendList', component: recommendList, name: 'recommendList', meta: {keepAlive: true}},
   // 分类
   {path: '/classify', name: 'classify', component: classify, meta: {keepAlive: true}},
   // 分类列表
-  {path: '/classList', name: 'classList', component: classList},
+  {path: '/classList', name: 'classList', component: classList, meta: {keepAlive: true}},
   // 商品详情
   {path: '/goodsdetail', component: goodsdetail, name: 'goodsdetail'},
   // 购物车

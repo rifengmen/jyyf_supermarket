@@ -1,5 +1,5 @@
 ﻿<template>
-    <div class="container bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
+    <div class="container_pt110 bgeeeeee" v-title :data-title="$store.state.userInfo.deptname">
       <!-- 头部 start -->
       <my-header>
         <template v-slot:backs>
@@ -23,11 +23,11 @@
               finished-text="没有更多了"
               @load="onLoad">
               <div v-for="(item, index) in messageList" :key="index">
-                <router-link :to="{name: 'messagedetail', query: {id: item.id}}" tag="div" class="message_item bgffffff">
+                <div @click="toMessagedetail(item.id)" class="message_item bgffffff">
                   <div class="message_tab bgffae43 border_r500" v-if="!item.flag"></div>
                   <div class="message_title ellipsis">{{item.title}}</div>
                   <div class="font22 color999999">{{item.addtime}}</div>
-                </router-link>
+                </div>
               </div>
             </van-list>
           </van-pull-refresh>
@@ -138,17 +138,42 @@ export default {
       }).catch(error => {
         throw error
       })
+    },
+    // 去详情页
+    toMessagedetail (id) {
+      this.messageList.forEach((val, index) => {
+        if (val.id === id) {
+          val.flag = 1
+        }
+      })
+      this.$router.push({name: 'messagedetail', query: {id: id}})
     }
   },
+  watch: {},
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.$store.commit('removeExcludeComponent', 'messageList')
+      next()
+    })
+  },
+  beforeRouteLeave (to, from, next) {
+    let reg = /messagedetail/
+    if (reg.test(to.name)) {
+      this.$store.commit('removeExcludeComponent', 'messageList')
+    } else {
+      this.$store.commit('addExcludeComponent', 'messageList')
+    }
+    next()
+  },
+  beforeCreate () {},
   created () {
     this.onLoad()
-  }
+  },
+  beforeMount () {},
+  mounted () {}
 }
 </script>
 
 <style scoped>
 @import "static/css/message.css";
-.cont_main {
-  position: relative;
-}
 </style>

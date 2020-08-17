@@ -1,5 +1,5 @@
 <template>
-  <div class="container bgeeeeee">
+  <div class="container_pt110 bgeeeeee">
     <!-- 头部 start -->
     <my-header>
       <template v-slot:backs>
@@ -10,25 +10,27 @@
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
     <div class="userinfo_main bgffffff">
-      <!-- 评论区 start -->
-      <div class="tick_list">
-        <div class="comment_desc tc color666666 font32">{{complaintDetail.addtime}}</div>
-        <div class="">{{complaintDetail.content}}</div>
-        <!--<div class="comment_img">-->
-        <!--<el-upload-->
-        <!--action=""-->
-        <!--multiple-->
-        <!--list-type="picture-card"-->
-        <!--:on-preview="handlePictureCardPreview"-->
-        <!--:on-remove="handleRemove">-->
-        <!--<i class="el-icon-plus"></i>-->
-        <!--</el-upload>-->
-        <!--<el-dialog :visible.sync="dialogVisible">-->
-        <!--<img width="100%" :src="dialogImageUrl" alt="">-->
-        <!--</el-dialog>-->
-        <!--</div>-->
+      <div class="userinfo_cont">
+        <!-- 评论区 start -->
+        <div class="tick_list">
+          <div class="comment_desc tc color666666 font32">{{complaintDetail.addtime}}</div>
+          <div class="">{{complaintDetail.content}}</div>
+          <!--<div class="comment_img">-->
+          <!--<el-upload-->
+          <!--action=""-->
+          <!--multiple-->
+          <!--list-type="picture-card"-->
+          <!--:on-preview="handlePictureCardPreview"-->
+          <!--:on-remove="handleRemove">-->
+          <!--<i class="el-icon-plus"></i>-->
+          <!--</el-upload>-->
+          <!--<el-dialog :visible.sync="dialogVisible">-->
+          <!--<img width="100%" :src="dialogImageUrl" alt="">-->
+          <!--</el-dialog>-->
+          <!--</div>-->
+        </div>
+        <!-- 评论区 end -->
       </div>
-      <!-- 评论区 end -->
     </div>
     <!-- 内容部分盒子 end -->
   </div>

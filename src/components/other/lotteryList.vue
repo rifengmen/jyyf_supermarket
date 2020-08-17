@@ -1,5 +1,5 @@
 <template>
-  <div class="container bgeeeeee">
+  <div class="container_pt110 bgeeeeee">
     <!-- 头部 start -->
     <my-header @setStartdate="setStartdate" :addFlag="'dateFlag'">
       <template v-slot:backs>
@@ -23,7 +23,6 @@
             finished-text="没有更多了"
             @load="onLoad">
             <div class="lottery_item bgffffff" v-for="(item, index) in lotteryList" :key="index">
-              <div class="bgff6400 border_r500"></div>
               <div class="lottery_title">
                 <div class="ellipsis">{{item.prizeCent}}</div>
                 <div class="font24 color999999">{{item.prizeDate}}</div>

@@ -16,7 +16,7 @@ export default [
   // 扫码购填写订单
   {path: '/saomaorder', name: 'saomaorder', component: saomaorder},
   // 扫码购订单列表
-  {path: '/saomaorderList', name: 'saomaorderList', component: saomaorderList},
+  {path: '/saomaorderList', name: 'saomaorderList', component: saomaorderList, meta: {keepAlive: true}},
   // 扫码购订单详情
   {path: '/saomaorderDetail', name: 'saomaorderDetail', component: saomaorderDetail},
   // 扫码购出场码

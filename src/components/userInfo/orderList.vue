@@ -1,5 +1,5 @@
 <template>
-  <div class="container bgeeeeee">
+  <div class="container_pt90 bgeeeeee">
     <!-- 头部 start -->
     <my-header>
       <template v-slot:backs>
@@ -10,16 +10,6 @@
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
     <div class="order_main bgffffff">
-      <!--<van-tabs v-model="tabactive">-->
-        <!--<van-tab-->
-          <!--class=""-->
-          <!--:swipeable="true"-->
-          <!--v-for="(item, index) in ordernav"-->
-          <!--:key="index"-->
-          <!--:title="item.stausdescribe"-->
-          <!--title-active-color="#ff6400">-->
-        <!--</van-tab>-->
-      <!--</van-tabs>-->
       <!-- 订单分类 start -->
       <div class="order_nav bgffffff">
         <ul>
@@ -226,6 +216,22 @@ export default {
     }
   },
   watch: {},
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.$store.commit('removeExcludeComponent', 'orderList')
+      next()
+    })
+  },
+  beforeRouteLeave (to, from, next) {
+    let reg = /orderdetail/
+    let reg2 = /again/
+    if (reg.test(to.name) || reg2.test(to.name)) {
+      this.$store.commit('removeExcludeComponent', 'orderList')
+    } else {
+      this.$store.commit('addExcludeComponent', 'orderList')
+    }
+    next()
+  },
   beforeCreate () {
   },
   created () {
@@ -240,12 +246,11 @@ export default {
 
 <style scoped>
 @import "static/css/userInfo.css";
-.orderlist {
-  position: relative;
+.order_main {
+  min-height: calc(100% - .68rem);
+  padding-top: .68rem;
 }
-.van-tab {
-  height: .66rem;
-  padding: 0 .2rem;
-  border-bottom: .02rem solid #ffffff;
+.loading {
+  height: calc(100vh - 1.58rem);
 }
 </style>
