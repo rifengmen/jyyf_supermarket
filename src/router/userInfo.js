@@ -58,7 +58,7 @@ export default [
   // 会员中心-添加评价
   {path: '/addComment', name: 'addComment', component: addComment},
   // 会员中心-投诉建议
-  {path: '/complaintList', name: 'complaintList', component: complaintList},
+  {path: '/complaintList', name: 'complaintList', component: complaintList, meta: {keepAlive: true}},
   // 会员中心-投诉详情
   {path: '/complaintDetail', name: 'complaintDetail', component: complaintDetail},
   // 会员中心-添加投诉

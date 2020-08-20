@@ -108,7 +108,7 @@ export default {
         if (res.code === 200) {
           this.isShowLoading = false
           // 无数据时
-          if (!res.data.totalSize) {
+          if (!res.data.rowCount) {
             this.finished = true
           }
           if (res.data.content && res.data.content.length) {
@@ -139,6 +139,21 @@ export default {
     }
   },
   watch: {},
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.$store.commit('removeExcludeComponent', 'complaintList')
+      next()
+    })
+  },
+  beforeRouteLeave (to, from, next) {
+    let reg = /complaintDetail/
+    if (reg.test(to.name)) {
+      this.$store.commit('removeExcludeComponent', 'complaintList')
+    } else {
+      this.$store.commit('addExcludeComponent', 'complaintList')
+    }
+    next()
+  },
   beforeCreate () {
   },
   created () {
@@ -153,7 +168,4 @@ export default {
 
 <style scoped>
 @import "static/css/userInfo.css";
-.userinfo_main {
-  position: relative;
-}
 </style>
