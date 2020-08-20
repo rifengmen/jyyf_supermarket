@@ -33,7 +33,7 @@
             finished-text="没有更多了"
             @load="onLoad">
             <div v-for="(item, index) in goodsList" :key="index" class="goods_li">
-              <dic class="goods_item bgffffff ellipsis" @click="goodsdetail(item)">
+              <div class="goods_item bgffffff ellipsis" @click="goodsdetail(item)">
                 <div class="goods_item_img">
                   <img :src="(item.picture1 ? (imgurl + 'image/' + item.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))">
                   <div v-if="item.promotemode !== 0" class="goods_age ellipsis font24 font_normal colorffffff">{{item.modenote}}</div>
@@ -56,7 +56,7 @@
                     </div>
                   </div>
                 </div>
-              </dic>
+              </div>
             </div>
           </van-list>
         </van-pull-refresh>
