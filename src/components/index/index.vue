@@ -366,7 +366,6 @@ export default {
             message: '签到成功，' + res.msg,
             type: 'success'
           })
-          this.setUserInfo()
         } else {
           this.$toast({
             message: res.msg,
@@ -377,42 +376,22 @@ export default {
         throw error
       })
     },
-    // 设置用户信息
-    setUserInfo () {
-      let data = new FormData()
-      let requestData = {
-        wechatID: this.$store.state.wechatID,
-        wexinID: this.$store.state.openid
-      }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/customlogin/login', data).then(result => {
-        let res = result.data
-        if (res.code === 200) {
-          this.$store.commit('setUserInfo', res.data)
-          sessionStorage.setItem('jyyf_token', res.data.token)
-          this.$axios.defaults.headers.common.Authorization = res.data.token
-        } else {
-          this.$toast({
-            message: '登陆失败，请重新登陆！',
-            type: 'fail'
-          })
-        }
-      }).catch(error => {
-        throw error
-      })
+    // 清空扫码购状态
+    clearSaomagou () {
+      this.$store.commit('clearSaomacar')
+      this.$store.commit('clearShopInfo')
     },
     // 初始化发送请求
     initData () {
       if (this.$store.state.userInfo.token) {
-        // 设置用户信息
-        // this.setUserInfo()
         // 获取banner列表
         this.getBanner()
         // 获取通知信息
         this.getNotice()
         // 获取推荐
         this.getRecommend()
+        // 清空扫码购状态
+        this.clearSaomagou()
       }
     }
   },
