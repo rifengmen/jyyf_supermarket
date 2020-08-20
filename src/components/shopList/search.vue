@@ -115,5 +115,5 @@ export default {
 </script>
 
 <style scoped>
-@import "../shopList/static/css/shopList.css";
+@import "static/css/shopList.css";
 </style>

@@ -34,7 +34,7 @@
 .lotterylist {
   width: 100%;
   height: 100%;
-  overflow: auto;
+  /*overflow: auto;*/
 }
 .lottery_item {
   width: calc(100% - .48rem);
