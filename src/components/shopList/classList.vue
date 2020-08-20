@@ -14,7 +14,7 @@
       <loading v-if="isShowLoading"></loading>
       <!-- 加载中动画 end -->
       <!-- 商品列表 start -->
-      <div class="goods_list" v-if="goodsList.length">
+      <div class="goods_list bgeeeeee" v-if="goodsList.length">
         <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
           <van-list
             v-model="loading"
