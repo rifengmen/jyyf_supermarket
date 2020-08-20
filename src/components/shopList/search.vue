@@ -14,7 +14,7 @@
           <!-- 返回 end -->
           <div class="search_input border_r6 bgffffff fl">
             <img src="static/img/search.png" class="fl">
-            <form action="javascript:return true;" class="search_form">
+            <form action="javascript: true;" class="search_form">
               <input
                 ref="searchInput"
                 type="search"
