@@ -174,7 +174,4 @@ export default {
 
 <style scoped>
 @import "static/css/other.css";
-.other_main {
-  /*position: relative;*/
-}
 </style>
