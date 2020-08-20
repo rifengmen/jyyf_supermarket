@@ -143,7 +143,7 @@
     </div>
     <!-- 订单 end -->
     <!-- 地址 start -->
-    <div class="order_main order_main_list" v-if="addressListFlag">
+    <div class="order_main order_main_list bgffffff" v-if="addressListFlag">
       <div class="headerback fl" @click="setListFlag"></div>
       <addresslist
         :froms="'editorder'"
@@ -155,7 +155,7 @@
     </div>
     <!-- 地址 end -->
     <!-- 优惠券 start -->
-    <div class="order_main order_main_list" v-if="tickListFlag">
+    <div class="order_main order_main_list bgffffff" v-if="tickListFlag">
       <div class="headerback fl" @click="setListFlag"></div>
       <ticklist
         :froms="'editorder'"

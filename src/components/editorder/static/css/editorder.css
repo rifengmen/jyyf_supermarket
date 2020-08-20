@@ -8,6 +8,7 @@
   left: 0;
   width: 100%;
   padding-top: calc(.9rem + 1px);
+  z-index: 999999;
 }
 .order_main_list .headerback {
   position: fixed;
@@ -78,3 +79,13 @@
   justify-content: center;
   align-items: center;
 }
+/* 地址列表样式修改 start */
+.address_main {
+  padding-top: .2rem;
+}
+/* 地址列表样式修改 end */
+/* 优惠券样式修改 start */
+.tick_main {
+  padding-top: .2rem;
+}
+/* 优惠券样式修改 end */
