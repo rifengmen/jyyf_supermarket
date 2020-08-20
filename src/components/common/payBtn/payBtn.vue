@@ -309,10 +309,8 @@ export default {
           if (res.data.beecloud) {
             let beecloud = res.data.beecloud
             if (beecloud.paymentchannel === 3) { // 银联商务结算
-              alert('银联商务结算' + JSON.stringify(beecloud.unifiedPayStr.payUrl))
               window.location.href = beecloud.unifiedPayStr.payUrl
             } else if (beecloud.paymentchannel === 4) { // 太米结算
-              sessionStorage.removeItem('jyyf_openid')
               window.location.href = beecloud.tmPayStr.payUrl
             } else if (beecloud.paymentchannel === 2) { // 微信官方结算
               let vm = this

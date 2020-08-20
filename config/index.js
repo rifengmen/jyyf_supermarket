@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       // '/api': {
-      //   target: 'http://spzlk.cn:8000/wemember/',//设置你调用的接口域名和端口号 别忘了加http
+      //   target: 'http://spzlk.cn:8000/wemember/',// 设置你调用的接口域名和端口号 别忘了加http
       //   changeOrigin: true,
         // secure: false, // 解决https的问题
         // pathRewrite: {

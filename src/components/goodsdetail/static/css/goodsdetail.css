@@ -4,7 +4,7 @@
   /*height: calc(100% - .9rem);*/
   overflow: hidden;
   overflow-y: scroll;
-  margin-bottom: 0.9rem;
+  padding-bottom: 1.2rem;
 }
 .goods_img {
   width: 100%;
