@@ -283,7 +283,7 @@
 /* 再支付 start */
 .again_order_cont {
   width: 100%;
-  height: calc(100% - 1.78rem - 1px);
+  height: calc(100vh - 1.78rem - 1px);
   overflow: hidden;
   overflow-y: scroll;
 }

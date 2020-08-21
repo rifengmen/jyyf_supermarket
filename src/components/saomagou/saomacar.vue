@@ -12,7 +12,7 @@
     <div class="car_cont">
       <div class="carlist">
         <!-- 购物车列表 start -->
-        <div class="goodslist">
+        <div class="goodslist bgeeeeee">
           <ul ref="cartlist" v-if="saomacar.length">
             <!-- 商品简介 start -->
             <li class="goods_li" v-for="(item, index) in saomacar" :key="index">

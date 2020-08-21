@@ -1,6 +1,6 @@
 .order_main {
   width: 100%;
-  min-height: calc(100% - .2rem);
+  min-height: 100%;
 }
 .order_main_list {
   position: fixed;
@@ -20,8 +20,8 @@
 }
 .order_cont {
   width: 100%;
-  height: 100%;
-  padding-bottom: 1.08rem;
+  height: calc(100vh - 1.78rem);
+  overflow-y: scroll;
 }
 .order_section {
   width: calc(100% - .48rem);
@@ -43,6 +43,9 @@
   flex-flow: column;
   overflow: hidden;
 }
+.order_section_usernote:last-child {
+  margin-bottom: .2rem;
+}
 .editorder_usernote {
   margin-top: .2rem;
 }
@@ -54,10 +57,6 @@
   align-items: center;
 }
 .order_money {
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
   width: 100%;
   height: .88rem;
   display: flex;

@@ -99,18 +99,20 @@
 .carlist {
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  padding-bottom: 1.72rem;
 }
 .goodslist {
   width: 100%;
-  height: calc(100% - 1.72rem);
-  overflow-y: scroll;
+  height: 100%;
 }
 .goods_li {
   height: 1.2rem;
 }
 .goods_item {
   height: 1.2rem;
+}
+.goods_item:last-child {
+  margin-bottom: unset;
 }
 .goods_item_cont {
   width: 100%;

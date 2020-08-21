@@ -1,5 +1,5 @@
 <template>
-  <div class="container_pt110 bgeeeeee">
+  <div class="container_pt90 bgeeeeee">
     <!-- 头部 start -->
     <my-header>
       <template v-slot:backs>
@@ -24,7 +24,7 @@
       </div>
       <div class="orderdesc">
         <div>订单金额</div>
-        <div class="font24 color666666" v-if="saomaorderDetail">{{saomaorderDetail.totalMoney}}</div>
+        <div class="font24 color666666" v-if="saomaorderDetail">{{(saomaorderDetail.totalMoney).toFixed(2)}}</div>
       </div>
     </div>
     <!-- 订单信息 end -->
@@ -53,7 +53,7 @@
     <!-- 支付方式 end -->
     <!-- 支付 start -->
     <div class="order_money bgffffff">
-      <div class="order_money_totalMoney font24 ellipsis">实付：<span class="colorf84242 font34" v-if="saomaorderDetail">￥{{saomaorderDetail.totalMoney}}</span></div>
+      <div class="order_money_totalMoney font24 ellipsis">实付：<span class="colorf84242 font34" v-if="saomaorderDetail">￥{{(saomaorderDetail.totalMoney).toFixed(2)}}</span></div>
       <div class="pay colorffffff bgff6400" @click="isSetPasswordShow">立即支付</div>
     </div>
     <!-- 支付 end -->
@@ -179,6 +179,8 @@ export default {
     isSetPasswordShow () {
       if (this.paymodeid === '3') {
         this.passwordShow = true
+        this.showKeyboard = true
+        this.payPassword = ''
         return false
       }
       // 设置支付信息
