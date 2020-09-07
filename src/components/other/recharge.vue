@@ -77,7 +77,9 @@ export default {
       // 充值卡号
       cardno: '',
       // 确认卡号
-      cardnos: ''
+      cardnos: '',
+      // 充值类型,add:打折;pay满赠
+      moneyType: ''
     }
   },
   computed: {
@@ -106,6 +108,7 @@ export default {
         if (res.code === 200) {
           this.$store.commit('setMemType', res.data.mem_type)
           this.$store.commit('setMoneyDetail', res.data.moneyDetail)
+          this.moneyType = res.data.modeType
         }
       }).catch(error => {
         throw error
@@ -167,7 +170,7 @@ export default {
       let requestData = {
         card_no: this.cardno,
         toMoney: this.money,
-        moneyType: 'add'
+        moneyType: this.moneyType
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
