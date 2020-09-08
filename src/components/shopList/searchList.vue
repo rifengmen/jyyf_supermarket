@@ -79,6 +79,8 @@ export default {
   name: 'searchList',
   data () {
     return {
+      // 搜索关键字
+      keyword: this.$route.query.keyword,
       // 图片路径
       imgurl: this.IMGURL,
       // 是否处在加载状态
@@ -105,12 +107,7 @@ export default {
       isShowLoading: true
     }
   },
-  computed: {
-    // 搜索关键字
-    keyword () {
-      return this.$store.state.keyword
-    }
-  },
+  computed: {},
   components: {
     WechatConfig,
     loading,

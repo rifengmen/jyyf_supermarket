@@ -43,7 +43,7 @@ export default {
   data () {
     return {
       // 搜索关键词
-      keyword: this.$store.state.keyword
+      keyword: ''
     }
   },
   computed: {
@@ -72,9 +72,9 @@ export default {
         this.$axios.post('api/goods/searchGoodsRecord', data).then(result => {
           let res = result.data
           if (res.code === 200) {
-            this.$store.commit('setKeyword', this.keyword)
+            // this.$store.commit('setKeyword', this.keyword)
             if (this.keyword !== '') {
-              this.$router.push('/searchList')
+              this.$router.push('/searchList?keyword=' + this.keyword)
             }
           } else {
             this.$toast({
@@ -100,6 +100,21 @@ export default {
     }
   },
   watch: {
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.$store.commit('removeExcludeComponent', 'search')
+      next()
+    })
+  },
+  beforeRouteLeave (to, from, next) {
+    let reg = /searchList/
+    if (reg.test(to.name)) {
+      this.$store.commit('removeExcludeComponent', 'search')
+    } else {
+      this.$store.commit('addExcludeComponent', 'search')
+    }
+    next()
   },
   beforeCreate () {
   },

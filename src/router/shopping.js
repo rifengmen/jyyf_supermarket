@@ -9,7 +9,7 @@ const editorder = () => import(/* webpackChunkName: 'shopping' */ '@/components/
 
 export default [
   // 搜索页
-  {path: '/search', component: search, name: 'search'},
+  {path: '/search', component: search, name: 'search', meta: {keepAlive: true}},
   // 搜索结果页
   {path: '/searchList', component: searchList, name: 'searchList', meta: {keepAlive: true}},
   // 推荐列表

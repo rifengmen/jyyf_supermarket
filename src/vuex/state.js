@@ -25,6 +25,8 @@ const state = {
   mem_type: '',
   // 卡片信息
   moneyDetail: '',
+  // 充值类型
+  moneyType: '',
   // 促销类型
   Promotemode: {
     0: '正常',

@@ -108,7 +108,8 @@ export default {
         if (res.code === 200) {
           this.$store.commit('setMemType', res.data.mem_type)
           this.$store.commit('setMoneyDetail', res.data.moneyDetail)
-          this.moneyType = res.data.modeType
+          this.$store.commit('setMoneyType', res.data.moneyType)
+          this.moneyType = res.data.moneyType
         }
       }).catch(error => {
         throw error

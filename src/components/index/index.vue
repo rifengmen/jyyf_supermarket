@@ -11,7 +11,7 @@
         <div class="search border_r6">
           <div class="search_input fl">
             <img src="static/img/search.png" class="fl">
-            <input type="text" v-model="keyword" placeholder="请输入商品信息" class="fl colorff6400"/>
+            <input type="text" placeholder="请输入商品信息" class="fl colorff6400"/>
           </div>
         </div>
       </router-link>
@@ -231,10 +231,6 @@ export default {
     // 用户信息
     userInfo () {
       return this.$store.state.userInfo
-    },
-    // 搜索关键字
-    keyword () {
-      return this.$store.state.keyword
     }
   },
   components: {

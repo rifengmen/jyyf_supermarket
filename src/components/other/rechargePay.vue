@@ -28,7 +28,7 @@
           </div>
           <div class="section_input">
             <div class="section_inputall border_r6">
-              <input type="text" name="" v-model="payData.paymoney" disabled>
+              <input type="text" name="" v-model="payData.presentmoney" disabled>
             </div>
           </div>
         </div>
@@ -38,7 +38,7 @@
           </div>
           <div class="section_input">
             <div class="section_inputall border_r6">
-              <input type="text" name="" v-model="payData.presentmoney" disabled>
+              <input type="text" name="" v-model="payData.paymoney" disabled>
             </div>
           </div>
         </div>
@@ -79,7 +79,12 @@ export default {
       channel: 'WX_JSAPI'
     }
   },
-  computed: {},
+  computed: {
+    // 充值类型
+    moneyType () {
+      return this.$store.state.moneyType
+    }
+  },
   components: {
     MyHeader
   },
@@ -88,6 +93,7 @@ export default {
     sendPay () {
       let data = new FormData()
       let requestData = {
+        moneyType: this.moneyType,
         card_no: this.payData.card_no,
         paymodeid: this.payData.Paymodelist[0].paymodeid,
         paymoney: this.payData.paymoney,

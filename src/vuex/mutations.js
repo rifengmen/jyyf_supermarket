@@ -35,6 +35,10 @@ const mutations = {
   setMoneyDetail (state, data) {
     state.moneyDetail = JSON.parse(data)
   },
+  // 设置充值类型
+  setMoneyType (state, data) {
+    state.moneyType = data
+  },
   // 设置搜索关键字
   setKeyword (state, data) {
     state.keyword = data

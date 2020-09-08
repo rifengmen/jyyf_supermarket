@@ -9,7 +9,7 @@
         <div class="search border_r6 bgffffff">
           <div class="search_input fl">
             <img src="static/img/search.png" class="fl">
-            <input type="text" v-model="keyword" placeholder="请输入您要搜索的商品" class="fl colorff6400"/>
+            <input type="text" placeholder="请输入您要搜索的商品" class="fl colorff6400"/>
           </div>
           <!--<div class="search_btn border_r500 font28 tc fr bgff6400 colorffffff">搜索</div>-->
         </div>
@@ -134,10 +134,6 @@ export default {
     }
   },
   computed: {
-    // 搜索关键字
-    keyword () {
-      return this.$store.state.keyword
-    },
     classcode () {
       if (this.classify.length) {
         return this.classify[this.classifyActive].optionvalue
