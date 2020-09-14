@@ -113,32 +113,32 @@ export default {
     },
     // 扫一扫
     scanTradeno () {
-      if (this.scanFlag) {
-        this.scanFlag = false
-        let _this = this
-        wx.scanQRCode({
-          // 默认为0，扫描结果由微信处理，1则直接返回扫描结果
-          needResult: 1,
-          scanType: ['barCode'], // 可以指定扫二维码还是一维码，默认二者都有
-          desc: 'scanQRCode desc',
-          success: function (res) {
-            // 扫码后获取结果参数赋值给Input
-            let result = res.resultStr
-            if (result.indexOf(',') >= 0) {
-              let str1 = result.split(',')
-              // 订单号码
-              _this.tradeno = str1[1]
-              _this.scanFlag = true
-              _this.sendTradeno()
-            } else {
-              _this.$toast({
-                message: '请对准条形码扫码!',
-                type: 'fail'
-              })
-            }
+      // if (this.scanFlag) {
+      // }
+      this.scanFlag = false
+      let _this = this
+      wx.scanQRCode({
+        // 默认为0，扫描结果由微信处理，1则直接返回扫描结果
+        needResult: 1,
+        scanType: ['barCode'], // 可以指定扫二维码还是一维码，默认二者都有
+        desc: 'scanQRCode desc',
+        success: function (res) {
+          // 扫码后获取结果参数赋值给Input
+          let result = res.resultStr
+          if (result.indexOf(',') >= 0) {
+            let str1 = result.split(',')
+            // 订单号码
+            _this.tradeno = str1[1]
+            _this.scanFlag = true
+            _this.sendTradeno()
+          } else {
+            _this.$toast({
+              message: '请对准条形码扫码!',
+              type: 'fail'
+            })
           }
-        })
-      }
+        }
+      })
     }
   },
   watch: {},

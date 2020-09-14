@@ -5,7 +5,7 @@
       <div class="online_cont bgffffff border_r8">
         <div class="online_tit tc font32 colorffffff">出场码</div>
         <div class="online_bar online_img">
-          <img :src="saomabar !== 'static/img/goods.png' ? imgurl + saomabar : saomabar">
+          <img :src="saomabar !== 'static/img/goods.png' ? imgurl + saomabar : saomabar" @error="setSrc">
         </div>
         <div class="online_age">
           <img src="static/img/code_phone.png">
@@ -82,10 +82,15 @@ export default {
   components: {
     MyHeader
   },
+  inject: ['reload'],
   methods: {
     // 切换出场码和详情
     toggleFlag () {
       this.flag = !this.flag
+      if (!this.flag && !this.saomaorderDetail) {
+        // 获取订单详情
+        this.getSaomaorderDetail()
+      }
     },
     // 获取订单详情
     getSaomaorderDetail () {
@@ -111,6 +116,10 @@ export default {
         throw error
       })
     },
+    // 设置图片路径
+    setSrc () {
+      this.reload()
+    },
     // 关闭出场码
     closeBar () {
       this.$router.back()
@@ -120,8 +129,6 @@ export default {
   beforeCreate () {
   },
   created () {
-    // 获取订单详情
-    this.getSaomaorderDetail()
   },
   beforeMount () {
   },

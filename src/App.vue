@@ -56,7 +56,19 @@ export default {
   components: {
     WechatConfig
   },
+  provide () {
+    return {
+      reload: this.reload
+    }
+  },
   methods: {
+    // 页面重载的方法
+    reload () {
+      this.isRouter = false
+      this.$nextTick(() => {
+        this.isRouter = true
+      })
+    },
     // 获取wechatID
     getWechatID () {
       // 路由开关
