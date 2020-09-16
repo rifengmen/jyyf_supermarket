@@ -272,9 +272,9 @@ export default {
           let _money
           no.push(this.cartList[i].no)
           if (this.cartList[i].promotemode) {
-            _money = parseInt(this.cartList[i].amount) * parseFloat(this.cartList[i].promotevalue)
+            _money = parseFloat(this.cartList[i].amount) * parseFloat(this.cartList[i].promotevalue)
           } else {
-            _money = parseInt(this.cartList[i].amount) * parseFloat(this.cartList[i].saleprice)
+            _money = parseFloat(this.cartList[i].amount) * parseFloat(this.cartList[i].saleprice)
           }
           money += _money
         }

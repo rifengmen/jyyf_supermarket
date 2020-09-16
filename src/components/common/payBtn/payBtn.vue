@@ -411,7 +411,7 @@ export default {
             let numsList = this.cart.map(item => item.amount)
             let nums = 0
             numsList.forEach(item => {
-              nums += parseInt(item)
+              nums += parseFloat(item)
             })
             this.$store.commit('setCartnums', nums)
           } else {

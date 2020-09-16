@@ -27,8 +27,8 @@
                   <div class="goods_item_name ellipsis font26">{{item.goodsName}}</div>
                   <div class="goods_item_editnum">
                     <div class="goods_item_price goods_item_prices">
-                      <div class="ellipsis font30 font_blod colorf84242">￥{{item.actualPrice}}</div>
-                      <del class="ellipsis font24 color999999" v-if="item.actualPrice !== item.salePrice">￥{{item.salePrice}}</del>
+                      <div class="ellipsis font30 font_blod colorf84242">￥{{(item.actualPrice).toFixed(2)}}</div>
+                      <del class="ellipsis font24 color999999" v-if="item.actualPrice !== item.salePrice">￥{{(item.salePrice).toFixed(2)}}</del>
                     </div>
                     <div class="font30 color999999">x <span class="">{{item.saleAmount}}</span></div>
                   </div>
@@ -70,27 +70,19 @@
           <div>下单时间</div>
           <div class="font24 color666666">{{saomaorderDetail.saletime}}</div>
         </div>
-        <div class="orderdesc" v-for="(item, index) in saomaorderDetail.PayDetail" :key="index" v-if="saomaorderDetail.paystate === 1 && item.paymodeid === 3">
+        <div class="orderdesc" v-if="!saomaorderDetail.payFLag && saomaorderDetail.payList[0].payModeName === '会员卡储值支付'">
           <div>付款方式</div>
           <div class="pay_img tl color666666">
             <img src="static/img/card.png">&nbsp;储值卡
           </div>
-          <div class="pay_img color666666" v-if="saomaorderDetail.paymoney === 0">无</div>
+          <div class="pay_img color666666" v-if="saomaorderDetail.payMoney === 0">无</div>
         </div>
-        <div class="orderdesc" v-for="(item, index) in saomaorderDetail.PayDetail" :key="index" v-if="saomaorderDetail.paystate === 1 && item.paymodeid === 7">
+        <div class="orderdesc" v-if="!saomaorderDetail.payFLag && saomaorderDetail.payList[0].payModeName === '微信'">
           <div>付款方式</div>
           <div class="pay_img tl color666666">
             <img src="static/img/wechat.png">&nbsp;微信
           </div>
-          <div class="pay_img color666666" v-if="saomaorderDetail.paymoney === 0">无</div>
-        </div>
-        <div class="orderdesc" v-for="(item, index) in saomaorderDetail.PayDetail" :key="index" v-if="saomaorderDetail.paystate === 1">
-          <div>付款方式</div>
-          <div class="pay_img color666666">无</div>
-        </div>
-        <div class="orderdesc" v-if="saomaorderDetail.paystate === 1">
-          <div>付款时间</div>
-          <div class="font24 color666666">{{saomaorderDetail.paydate}}</div>
+          <div class="pay_img color666666" v-if="saomaorderDetail.payMoney === 0">无</div>
         </div>
       </div>
       <!-- 订单信息 end -->

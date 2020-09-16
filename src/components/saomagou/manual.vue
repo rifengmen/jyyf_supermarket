@@ -31,7 +31,7 @@
         <div class="goodsInfo_name font32">{{goodsInfo.productName}}</div>
         <div class="">{{goodsInfo.barcode}}</div>
         <div class="font32 font_blod colorf84242">￥{{goodsInfo.actualSaleMoney}}</div>
-        <del class="font26 color999999" v-if="goodsInfo.actualSaleMoney !== goodsInfo.salePrice">￥{{goodsInfo.salePrice}}</del>
+        <del class="font26 color999999" v-if="goodsInfo.actualSaleMoney !== goodsInfo.saleMoney">￥{{goodsInfo.saleMoney}}</del>
       </div>
     </van-dialog>
     <!-- 商品信息弹框 end-->

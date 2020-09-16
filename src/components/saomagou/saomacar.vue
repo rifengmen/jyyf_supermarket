@@ -22,10 +22,11 @@
                   <div class="goods_item_editnum">
                     <div class="goods_item_price">
                       <div class="ellipsis font32 font_blod colorf84242">￥{{item.actualSaleMoney}}</div>
-                      <del class="ellipsis font26 color999999" v-if="item.actualSaleMoney !== item.salePrice">￥{{item.salePrice}}</del>
+                      <del class="ellipsis font26 color999999" v-if="item.actualSaleMoney !== item.saleMoney">￥{{item.saleMoney}}</del>
                     </div>
                     <div class="goods_num">
-                      <div class="goods_num_input tc color999999 font30">×{{item.quantity}}</div>
+                      <div class="goods_num_input tc color999999 font30" v-if="item.scalageFlag">×1</div>
+                      <div class="goods_num_input tc color999999 font30" v-else>×{{item.quantity}}</div>
                     </div>
                   </div>
                 </div>
@@ -70,7 +71,7 @@
         <div class="goodsInfo_name font32">{{goodsInfo.productName}}</div>
         <div class="">{{goodsInfo.barcode}}</div>
         <div class="font32 font_blod colorf84242">￥{{goodsInfo.actualSaleMoney}}</div>
-        <del class="font26 color999999" v-if="goodsInfo.actualSaleMoney !== goodsInfo.salePrice">￥{{goodsInfo.salePrice}}</del>
+        <del class="font26 color999999" v-if="goodsInfo.actualSaleMoney !== goodsInfo.saleMoney">￥{{goodsInfo.saleMoney}}</del>
       </div>
     </van-dialog>
     <!-- 商品信息弹框 end-->
@@ -188,7 +189,8 @@ export default {
       let money = 0
       this.saomacar.forEach((val, index) => {
         let _money
-        _money = parseInt(val.quantity) * parseFloat(val.actualSaleMoney)
+        // _money = parseFloat(val.quantity) * parseFloat(val.actualPrice)
+        _money = parseFloat(val.actualSaleMoney)
         money += _money
       })
       this.totalmoney = money.toFixed(2)
