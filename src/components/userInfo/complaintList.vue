@@ -112,14 +112,14 @@ export default {
         if (res.code === 200) {
           this.isShowLoading = false
           // 无数据时
-          if (!res.data.content.length) {
+          if (!res.data.rowCount) {
             this.finished = true
           }
           if (res.data.content && res.data.content.length) {
             let currentpage = this.page
             let total = Math.ceil(res.data.rowCount / this.pageSize)
             // 页码不足或者最后一页不足的情况
-            if (currentpage > total || res.data.content.length < this.pageSize) {
+            if (currentpage >= total || res.data.content.length < this.pageSize) {
               this.finished = true
             }
             // 刷新
@@ -172,4 +172,7 @@ export default {
 
 <style scoped>
 @import "static/css/userInfo.css";
+.nodata {
+  height: calc(100vh - 1.1rem);
+}
 </style>

@@ -155,7 +155,7 @@ export default {
             let currentpage = this.page
             let total = Math.ceil(res.data.totalSize / this.pageSize)
             // 页码不足或者最后一页不足的情况
-            if (currentpage > total || res.data.content.length < this.pageSize) {
+            if (currentpage >= total || res.data.content.length < this.pageSize) {
               // 页码不足的情况
               this.finished = true
             }

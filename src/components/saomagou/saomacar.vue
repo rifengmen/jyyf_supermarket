@@ -66,12 +66,19 @@
     </div>
     <!-- 购物车 end -->
     <!-- 商品信息弹框 start-->
-    <van-dialog v-model="goodsInfoFlag" @confirm="addSaomacar" title="商品信息" show-cancel-button>
+    <van-dialog v-model="goodsInfoFlag" title="商品信息" :show-confirm-button="false">
       <div class="goodsInfo_cont">
         <div class="goodsInfo_name font32">{{goodsInfo.productName}}</div>
         <div class="">{{goodsInfo.barcode}}</div>
         <div class="font32 font_blod colorf84242">￥{{goodsInfo.actualSaleMoney}}</div>
         <del class="font26 color999999" v-if="goodsInfo.actualSaleMoney !== goodsInfo.saleMoney">￥{{goodsInfo.saleMoney}}</del>
+      </div>
+      <div class="scan_btn">
+        <div class="btn color999999 bgffffff borderc7c7c7 border_r500" @click="addBack">加入返回</div>
+        <div class="btn colorffffff bgff6400 borderff6400 border_r500" @click="addGoOn">加入继续</div>
+      </div>
+      <div class="closed font40" @click="closed">
+        <van-icon name="close" />
       </div>
     </van-dialog>
     <!-- 商品信息弹框 end-->
@@ -178,11 +185,37 @@ export default {
         })
       }
     },
+    // 加入返回
+    addBack () {
+      let self = this
+      // 添加商品到购物车
+      self.addSaomacar()
+      // 关闭弹框
+      self.closed()
+    },
+    // 加入继续
+    addGoOn () {
+      let self = this
+      // 添加商品到购物车
+      self.addSaomacar('goOn')
+      // 关闭弹框
+      self.closed()
+    },
+    // 关闭弹框
+    closed () {
+      let self = this
+      self.goodsInfoFlag = false
+    },
     // 添加商品到购物车
-    addSaomacar () {
-      this.$store.commit('addSaomacar', this.goodsInfo)
+    addSaomacar (e) {
+      let self = this
+      self.$store.commit('addSaomacar', self.goodsInfo)
       // 计算商品总价
-      this.setTotalmoney()
+      self.setTotalmoney()
+      if (e) {
+        // 扫一扫
+        self.scangoodscode()
+      }
     },
     // 计算商品总价
     setTotalmoney () {
@@ -248,5 +281,7 @@ export default {
 
 <style scoped>
 @import 'static/css/saomagou.css';
-
+.nodata {
+  height: calc(100vh - 1.72rem - 1.1rem);
+}
 </style>

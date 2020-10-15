@@ -216,15 +216,4 @@ export default {
 </script>
 
 <style scoped>
-.wechatConfig {
-  /*display: none;*/
-}
-.scan_btn {
-  width: 100%;
-  height: 100%;
-}
-.scan_btn img {
-  width: 100%;
-  height: 100%;
-}
 </style>

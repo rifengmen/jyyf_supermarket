@@ -677,7 +677,7 @@ export default {
   beforeCreate () {},
   created () {
     // 设置用户信息
-    this.setUserInfo()
+    // this.setUserInfo()
     if (this.userInfo.typeflag) {
       // 初始化发送请求
       this.initData()

@@ -184,17 +184,6 @@
   justify-content: center;
   align-items: center;
 }
-.goodsInfo_cont {
-  padding: 0 .24rem;
-}
-.goodsInfo_cont > div {
-  margin-bottom: .2rem;
-}
-.goodsInfo_name {
-  width: 100%;
-  line-height: 1.5;
-  white-space: pre-wrap;
-}
 /* 扫码购物车样式 end */
 /* 手动输入条形码样式 start */
 .manual_cont {
@@ -250,6 +239,44 @@
   width: 100%;
 }
 /* 手动输入条形码样式 end */
+/* 商品信息弹框样式 start */
+.goodsInfo_cont {
+  padding: 0 .24rem;
+}
+.goodsInfo_cont > div {
+  margin-bottom: .2rem;
+}
+.goodsInfo_name {
+  width: 100%;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+.scan_btn {
+  width: calc(100% - .48rem);
+  height: 1.2rem;
+  padding: 0 .24rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.scan_btn .btn {
+  width: 1.8rem;
+  height: .40rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.closed {
+  position: absolute;
+  top: .24rem;
+  right: .24rem;
+  width: .60rem;
+  height: .6rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* 商品信息弹框样式 end */
 /* 结算页样式 start */
 .order_section {
   width: calc(100% - .48rem);

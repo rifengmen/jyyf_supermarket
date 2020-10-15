@@ -54,7 +54,7 @@ export default {
     MyHeader
   },
   methods: {
-    // 获取评价详情
+    // 获取投诉建议详情
     getComplaintDetail () {
       let data = new FormData()
       let requestData = {
