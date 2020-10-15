@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div class="container bgeeeeee" v-title :data-title="goodsname">
     <!-- 商品介绍 start -->
     <div class="goods_cont bgeeeeee">

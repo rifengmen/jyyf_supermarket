@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div class="container_pt110 bgeeeeee">
     <!-- 头部 start -->
     <my-header>
@@ -55,6 +55,8 @@ export default {
   name: 'addComplaint',
   data () {
     return {
+      // 投诉标识
+      evaluateflag: this.$route.query.evaluateflag,
       // 评价内容
       complaint: '',
       // 评价图片
@@ -86,7 +88,8 @@ export default {
       }
       let data = new FormData()
       let requestData = {
-        Content: this.complaint
+        Content: this.complaint,
+        flag: this.evaluateflag
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)

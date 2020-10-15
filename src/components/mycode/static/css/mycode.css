@@ -1,7 +1,8 @@
 /* 电子会员 start */
 .online {
   width: 100%;
-  height: calc(100% - 1rem - 1px);
+  /*height: calc(100% - 1rem - 1px);*/
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;

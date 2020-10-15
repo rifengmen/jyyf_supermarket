@@ -29,22 +29,22 @@
             <ul>
               <router-link :to="{name: 'cardMoneyList'}" tag="li" class="card_des_item font24">
                 <div class="font32">{{moneyDetail.moneyBal || 0}}</div>
-                <div class="font22">卡值</div>
+                <div class="font22 card_des_item_name"><img src="static/img/user_cardmoney.png">卡值</div>
               </router-link>
               <li class="card_des_item bgd9d9d9"></li>
               <router-link :to="{name: 'scoreList'}" tag="li" class="card_des_item font24">
                 <div class="font32">{{moneyDetail.totalCent || 0}}</div>
-                <div class="font22">积分</div>
+                <div class="font22 card_des_item_name"><img src="static/img/user_score.png">积分</div>
               </router-link>
               <li class="card_des_item bgd9d9d9"></li>
-              <router-link :to="{name: 'tickList', params:{header_tit: '优惠券'}}" tag="li" class="card_des_item font24">
+              <router-link :to="{name: 'tickList', query:{header_tit: '电子券'}}" tag="li" class="card_des_item font24">
                 <div class="font32">{{moneyDetail.couponAmount || 0}}</div>
-                <div class="font22">券数量</div>
+                <div class="font22 card_des_item_name"><img src="static/img/user_coupons.png">券数量</div>
               </router-link>
               <li class="card_des_item bgd9d9d9"></li>
               <router-link :to="{name: 'looseChangeList'}" tag="li" class="card_des_item font24">
                 <div class="font32">{{moneyDetail.smallMoneyBal || 0}}</div>
-                <div class="font22">零钱</div>
+                <div class="font22 card_des_item_name"><img src="static/img/user_smallmoney.png">零钱</div>
               </router-link>
             </ul>
           </div>
@@ -164,14 +164,31 @@
               <div class="imgname font24">我的消息</div>
             </router-link>
             <!-- 我的消息 end -->
-            <!-- 投诉建议 start -->
-            <router-link :to="{name: 'complaintList', params:{froms: 'userinfo'}}" tag="li"  class="cont_item">
+            <!-- 我要投诉 start -->
+            <router-link :to="{name: 'complaintList', query:{froms: 'userinfo', evaluateflag: 0}}" tag="li"
+                         class="cont_item">
               <div class="imgbox">
                 <img src="static/img/user_tsjy.png">
               </div>
-              <div class="imgname font24">投诉建议</div>
+              <div class="imgname font24">我要投诉</div>
             </router-link>
-            <!-- 投诉建议 end -->
+            <!-- 我要投诉 end -->
+            <!-- 商品建议 start -->
+            <router-link :to="{name: 'complaintList', query:{froms: 'userinfo', evaluateflag: 1}}" tag="li" class="cont_item">
+              <div class="imgbox">
+                <img src="static/img/user_goodsuggest.png">
+              </div>
+              <div class="imgname font24">商品建议</div>
+            </router-link>
+            <!-- 商品建议 end -->
+<!--            &lt;!&ndash; 商品建议 start &ndash;&gt;-->
+<!--            <router-link :to="{name: 'commentList', params:{froms: 'userinfo'}}" tag="li"  class="cont_item">-->
+<!--              <div class="imgbox">-->
+<!--                <img src="static/img/user_comment.png">-->
+<!--              </div>-->
+<!--              <div class="imgname font24">购物评价</div>-->
+<!--            </router-link>-->
+<!--            &lt;!&ndash; 商品建议 end &ndash;&gt;-->
             <!-- 消费记录 start -->
             <router-link :to="{name: 'expendList'}" tag="li"  class="cont_item">
               <div class="imgbox">

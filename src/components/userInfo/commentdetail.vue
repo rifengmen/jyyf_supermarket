@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div class="container_pt110 bgeeeeee">
     <!-- 头部 start -->
     <my-header>
@@ -14,7 +14,7 @@
       <div class="order_section bgffffff">
         <div class="orderdesc">
           <div>商品名称</div>
-          <div class="color666666">{{123}}</div>
+          <div class="color666666">{{gdsname}}</div>
         </div>
       </div>
       <!-- 商品信息 end -->
@@ -22,19 +22,6 @@
       <div class="comment_cont">
         <div class="comment_desc">
         </div>
-        <!--<div class="comment_img">-->
-        <!--<el-upload-->
-        <!--action=""-->
-        <!--multiple-->
-        <!--list-type="picture-card"-->
-        <!--:on-preview="handlePictureCardPreview"-->
-        <!--:on-remove="handleRemove">-->
-        <!--<i class="el-icon-plus"></i>-->
-        <!--</el-upload>-->
-        <!--<el-dialog :visible.sync="dialogVisible">-->
-        <!--<img width="100%" :src="dialogImageUrl" alt="">-->
-        <!--</el-dialog>-->
-        <!--</div>-->
       </div>
       <!-- 评论区 end -->
     </div>
@@ -50,7 +37,9 @@ export default {
   data () {
     return {
       // 评价详情
-      commentdetail: ''
+      commentdetail: '',
+      // 商品名称
+      gdsname: this.$route.query.gdsname
     }
   },
   computed: {},
@@ -85,7 +74,7 @@ export default {
   },
   created () {
     // 页面加载时获取评价详情
-    this.getCommentDetail()
+    // this.getCommentDetail()
   },
   beforeMount () {
   },

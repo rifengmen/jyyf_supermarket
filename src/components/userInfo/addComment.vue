@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div class="container_pt110 bgeeeeee">
     <!-- 头部 start -->
     <my-header>
@@ -14,7 +14,7 @@
       <div class="order_section bgffffff">
         <div class="orderdesc">
           <div>商品名称</div>
-          <div class="color666666">{{goods.Productname}}</div>
+          <div class="color666666">{{goods.Productname ? goods.Productname : goods.gdsname}}</div>
         </div>
       </div>
       <!-- 商品信息 end -->
@@ -64,7 +64,7 @@ export default {
   data () {
     return {
       // 商品信息
-      goods: this.$route.params.goods,
+      goods: this.$route.query.goods,
       // 评价内容
       comment: '',
       // 评价图片
@@ -96,7 +96,7 @@ export default {
       }
       let data = new FormData()
       let requestData = {
-        gdsid: this.goods.Gdscode,
+        gdsid: this.goods.Gdscode ? this.goods.Gdscode : this.goods.gdscode,
         content: this.comment,
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'

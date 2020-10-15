@@ -62,6 +62,13 @@ export default {
       default: function () {
         return ''
       }
+    },
+    // 投诉标识
+    evaluateflag: {
+      type: Number,
+      default: function () {
+        return 0
+      }
     }
   },
   data () {
@@ -108,7 +115,7 @@ export default {
     },
     // 去添加投诉建议
     addComplaint () {
-      this.$router.push({name: 'addComplaint'})
+      this.$router.push({name: 'addComplaint', query: {evaluateflag: this.evaluateflag}})
     }
   },
   created () {

@@ -1,11 +1,14 @@
-<template>
-  <div class="container bgeeeeee">
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+  <div class="container_pt110 bgeeeeee">
     <!-- 头部 start -->
-    <my-header :froms="'userinfo'" @setStartdate="setStartdate" :addFlag="'dateFlag'">
-      <template v-slot:userinfo>
+    <my-header :addFlag="'dateFlag'" @setStartdate="setStartdate" >
+      <template v-slot:backs>
         <i class="el-icon-arrow-left"></i>
       </template>
       <template v-slot:header>购物评价</template>
+      <template v-slot:addComplaint>
+        <i class="el-icon-circle-plus"></i>
+      </template>
     </my-header>
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
@@ -13,6 +16,22 @@
       <!-- 加载中动画 start -->
       <loading v-if="isShowLoading"></loading>
       <!-- 下拉刷新动画 end -->
+      <!-- 购物列表 start -->
+      <div class="complaint_list" v-if="commentList.length">
+        <div class="score_list">
+          <ul>
+            <div tag="li" v-for="(item, index) in commentList" :key="index">
+              <router-link :to="{name: 'addComment', query: {goods: item}}" class="score_item color000000">
+                {{item.gdsname}}
+              </router-link>
+            </div>
+          </ul>
+        </div>
+      </div>
+      <!-- 购物列表 end -->
+      <!-- 无信息提示 start -->
+      <nodata v-else></nodata>
+      <!-- 无信息提示 end -->
     </div>
     <!-- 内容部分盒子 end -->
   </div>
@@ -27,12 +46,28 @@ export default {
   name: 'commentList',
   data () {
     return {
+      // 是否处在加载状态
+      loading: false,
+      // 是否已加载完成
+      finished: false,
+      // 下拉刷新
+      refreshing: false,
+      // 滚动条与底部距离小于 offset 时触发load事件
+      offset: 100,
       // 评价记录列表
-      commentList: '',
+      commentList: [],
       // 查询开始时间
       startdate: '',
       // 加载中动画
-      isShowLoading: true
+      isShowLoading: true,
+      // 当前页码
+      page: 0,
+      // 每页显示条数
+      pageSize: 15,
+      // 目前总共多少条
+      totalSize: '',
+      // 目前总共多少页
+      totalPages: ''
     }
   },
   computed: {
@@ -54,6 +89,21 @@ export default {
     loading
   },
   methods: {
+    onLoad () {
+      this.page++
+      this.getCommentList()
+    },
+    onRefresh () {
+      this.isShowLoading = true
+      // 清空列表数据
+      this.finished = false
+      // 重新加载数据
+      // 将 loading 设置为 true，表示处于加载状态
+      this.loading = true
+      this.page = 0
+      this.commentList = []
+      this.onLoad()
+    },
     // 获取评价记录列表
     getCommentList () {
       this.isShowLoading = true
@@ -62,16 +112,17 @@ export default {
       requestData = {
         Cardnum: this.$store.state.userInfo.memcode,
         Startday: this.date,
-        page: 1,
-        pageSize: 20
+        page: this.page,
+        pageSize: this.pageSize
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
-      this.$axios.post('mem/member/listMemberConsumGdscode', data).then(result => {
+      this.$axios.post('mem/member/listShopEvaluation', data).then(result => {
         let res = result.data
         if (res.code === 200) {
           this.isShowLoading = false
-          this.commentList = res.data
+          this.loading = false
+          this.commentList = JSON.parse(res.data)
         } else {
           this.$toast({
             message: res.msg,
@@ -89,11 +140,26 @@ export default {
     }
   },
   watch: {},
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.$store.commit('removeExcludeComponent', 'commentList')
+      next()
+    })
+  },
+  beforeRouteLeave (to, from, next) {
+    let reg = /commentList/
+    if (reg.test(to.name)) {
+      this.$store.commit('removeExcludeComponent', 'commentList')
+    } else {
+      this.$store.commit('addExcludeComponent', 'commentList')
+    }
+    next()
+  },
   beforeCreate () {
   },
   created () {
     // 获取评价记录列表
-    this.getCommentList()
+    this.onLoad()
   },
   beforeMount () {
   },
@@ -103,5 +169,13 @@ export default {
 </script>
 
 <style scoped>
-
+.score_item {
+  width: calc(100% - .48rem);
+  min-height: 1.6rem;
+  padding: 0 .24rem;
+  border-bottom: 1px solid #f4f4f4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 </style>

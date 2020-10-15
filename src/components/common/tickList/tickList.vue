@@ -9,40 +9,33 @@
         <!-- 优惠券列表 start -->
         <div class="tick_main" v-if="tickList.length">
           <ul>
-            <li class="tick_item border_r6 colorffffff" v-for="(item, index) in tickList" :key="index">
-              <!-- 折抵金额 start -->
-              <div class="tick_item_money" @click="editorder(item)">
-                <div class="font40 font_blod tc" v-if="item.tickettype === 1">
-                  ￥
-                  <span class="font80">{{item.usemoney}}</span>
+            <li class="tick_item border_r6 colorffffff" v-for="(item, index) in tickList" :key="index" @click="toTicketInfo(index)">
+              <div class="tick_item_head">
+                <div class="tick_item_head_left">
+                  <div class="font40 font_blod tc" v-if="item.tickettype !== 2">
+                    ￥
+                    <span class="font80">{{item.usemoney}}</span>
+                  </div>
+                  <div class="font40 font_blod tc" v-if="item.tickettype === 2">
+                    折
+                    <span class="font80">{{item.usemoney * 10}}</span>
+                  </div>
+                  <div>
+                    <div class="font26 tc">{{item.tickname}}</div>
+                    <div class="font26 tc">满{{item.minsalemoney}}元使用</div>
+                  </div>
                 </div>
-                <div class="font40 font_blod tc" v-if="item.tickettype === 2">
-                  折
-                  <span class="font80">{{item.usemoney * 10}}</span>
+                <div class="tick_item_head_btn font26 bgf7bb1f border_r500" v-if="froms === 'index'">
+                  立即领取
                 </div>
-                <div class="font26 tc">{{item.tickname}}</div>
-                <div class="font26 tc">满{{item.minsalemoney}}元使用</div>
               </div>
-              <!-- 折抵金额 end -->
-              <!-- 时间 start -->
-              <div class="tick_item_time">
-                <div class="tick_item_desc" @click="editorder(item)">
-                  <div class="font22">截止日期</div>
-                  <div class="font22">{{item.enddate}}</div>
-                  <div class="font22">每月禁用日：{{item.notuseday === '' ? '无' : item.notuseday}}</div>
-                  <!--<div class="font22">已领/可领总数：</div>-->
-                  <!--<div class="font22">使用说明：</div>-->
-                </div>
-                <!-- 领取 start -->
-                <div class="tick_item_get" v-if="froms === 'index'" @click="getTick(item)">
-                  <div class="font34">立</div>
-                  <div class="font34">即</div>
-                  <div class="font34">领</div>
-                  <div class="font34">用</div>
-                </div>
-                <!-- 领取 end -->
+              <div class="tick_item_foot color000000">
+                <div class="font28 font_blod">使用规则</div>
+                <ol>
+                  <li><div class="font26 color999999" v-if="item.dealflagdescrible">{{item.dealflagdescrible}}</div></li>
+                  <li><div class="font26 color999999">使用时间：{{item.startdate}}——{{item.enddate}}</div></li>
+                </ol>
               </div>
-              <!-- 时间 end -->
             </li>
           </ul>
         </div>
@@ -163,32 +156,6 @@ export default {
         this.getList(data, url)
       }
     },
-    // 领取优惠券
-    getTick (item) {
-      let data = new FormData()
-      let requestData
-      requestData = {
-        tickid: item.tickid
-      }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('mem/member/panicCoupon', data).then(result => {
-        let res = result.data
-        if (res.code === 200) {
-          this.$toast({
-            message: res.msg,
-            type: 'success'
-          })
-        } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
-        }
-      }).catch(error => {
-        throw error
-      })
-    },
     // 去填写订单
     editorder (tick) {
       if (this.froms === 'editorder') {
@@ -218,6 +185,13 @@ export default {
         }).catch(error => {
           throw error
         })
+      }
+    },
+    // 跳转优惠券详情
+    toTicketInfo (index) {
+      console.log(this.tickList[index].tickid)
+      if (this.froms === 'index') {
+        this.$router.push({name: 'ticketdetail', query: {tickid: this.tickList[index].tickid}})
       }
     }
   },

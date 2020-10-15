@@ -1,11 +1,11 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div class="container_pt110 bgeeeeee">
     <!-- 头部 start -->
     <my-header>
       <template v-slot:backs>
         <i class="el-icon-arrow-left"></i>
       </template>
-      <template v-slot:header>{{$route.params.header_tit}}</template>
+      <template v-slot:header>{{$route.query.header_tit}}</template>
     </my-header>
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
@@ -30,7 +30,7 @@ export default {
   },
   computed: {
     froms () {
-      return this.$route.params.froms || 'userinfo'
+      return this.$route.query.froms || 'userinfo'
     }
   },
   components: {

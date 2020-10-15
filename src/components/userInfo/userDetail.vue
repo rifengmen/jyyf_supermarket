@@ -1,8 +1,8 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div class="container_pt110 bgeeeeee">
     <!-- 头部 start -->
-    <my-header :froms="'userinfo'">
-      <template v-slot:userinfo>
+    <my-header>
+      <template v-slot:backs>
         <i class="el-icon-arrow-left"></i>
       </template>
       <template v-slot:header>我的资料</template>

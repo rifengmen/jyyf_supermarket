@@ -1,11 +1,12 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div class="container_pt110 bgeeeeee">
     <!-- 头部 start -->
-    <my-header :froms="'userinfo'" :addFlag="'complaint'">
-      <template v-slot:userinfo>
+    <my-header :addFlag="'complaint'" :evaluateflag="evaluateflag">
+      <template v-slot:backs>
         <i class="el-icon-arrow-left"></i>
       </template>
-      <template v-slot:header>投诉建议</template>
+      <template v-slot:header v-if="evaluateflag">商品建议</template>
+      <template v-slot:header v-else>我要投诉</template>
       <template v-slot:addComplaint>
         <i class="el-icon-circle-plus"></i>
       </template>
@@ -69,7 +70,9 @@ export default {
       // 目前总共多少页
       totalPages: '',
       // 加载中动画
-      isShowLoading: true
+      isShowLoading: true,
+      // 业务标识
+      evaluateflag: parseFloat(this.$route.query.evaluateflag)
     }
   },
   computed: {},
@@ -81,7 +84,7 @@ export default {
   methods: {
     onLoad () {
       this.page++
-      this.getComplaintList()
+      this.getComplaintList(this.evaluateflag)
     },
     onRefresh () {
       this.isShowLoading = true
@@ -95,11 +98,12 @@ export default {
       this.onLoad()
     },
     // 获取商品列表公共方法
-    getComplaintList () {
+    getComplaintList (flag) {
       let data = new FormData()
       let requestData = {
         page: this.page,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
+        flag: flag
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
@@ -108,7 +112,7 @@ export default {
         if (res.code === 200) {
           this.isShowLoading = false
           // 无数据时
-          if (!res.data.rowCount) {
+          if (!res.data.content.length) {
             this.finished = true
           }
           if (res.data.content && res.data.content.length) {

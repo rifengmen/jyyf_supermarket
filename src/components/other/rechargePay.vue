@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div class="container_pt110 bgeeeeee">
     <!-- 头部 start -->
     <my-header>
@@ -111,7 +111,6 @@ export default {
           if (res.data.beecloud) {
             let beecloud = res.data.beecloud
             if (beecloud.paymentchannel === 3) { // 银联商务结算
-              alert('银联商务结算' + JSON.stringify(beecloud.unifiedPayStr.payUrl))
               window.location.href = beecloud.unifiedPayStr.payUrl
             } else if (beecloud.paymentchannel === 4) { // 太米结算
               sessionStorage.removeItem('jyyf_openid')

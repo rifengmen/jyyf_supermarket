@@ -1,5 +1,13 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div class="container">
+    <!-- 头部 start -->
+    <my-header v-if="!userInfo.typeflag">
+      <template v-slot:backs>
+        <i class="el-icon-arrow-left"></i>
+      </template>
+      <template v-slot:header>电子会员</template>
+    </my-header>
+    <!-- 头部 end -->
     <!-- 电子会员 start -->
     <div class="online bg373947">
       <div class="online_cont bgffffff border_r8">
@@ -57,12 +65,13 @@
     />
     <!-- 数字键盘 end -->
     <!-- 底部导航 start -->
-    <my-footer></my-footer>
+    <my-footer v-if="userInfo.typeflag"></my-footer>
     <!-- 底部导航 end -->
   </div>
 </template>
 
 <script>
+import MyHeader from '@/components/common/header/myheader'
 import MyFooter from '@/components/common/footer/myfooter'
 
 export default {
@@ -88,6 +97,10 @@ export default {
     }
   },
   computed: {
+    // 用户信息
+    userInfo () {
+      return this.$store.state.userInfo
+    },
     // 积分
     score () {
       return this.$store.state.moneyDetail.totalCent
@@ -98,6 +111,7 @@ export default {
     }
   },
   components: {
+    MyHeader,
     MyFooter
   },
   methods: {

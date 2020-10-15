@@ -5,6 +5,9 @@
   padding-bottom: 1rem;
   overflow: auto;
 }
+.index_main2 {
+  margin-top: -0.7rem;
+}
 /* 轮播图 start */
 .banner {
   width: 100%;
@@ -33,15 +36,33 @@
 /* 常用功能 start */
 .index_common {
   width: calc(100% - .48rem);
-  height: 1.3rem;
+  height: 1.48rem;
   margin: 0 auto;
   padding: .2rem 0;
   display: flex;
-  justify-content: space-around;
+  justify-content: start;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.index_common2 {
+  width: calc(100% - .48rem);
+  height: 3rem;
+  margin: 0 auto;
+  padding: .2rem 0;
+  display: flex;
+  justify-content: start;
+  flex-wrap: wrap;
   align-items: center;
 }
 .index_common_item {
   width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+}
+.index_common_item2 {
+  width: 25%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -231,4 +252,131 @@
 }
 /* 推荐三 end */
 /* 推荐模块 end */
+/* card start */
+.userinfo {
+  width: 100%;
+  height: 2.7rem;
+}
+.card {
+  width: 100%;
+  height: calc(100% - .5rem);
+  display: flex;
+  justify-content: space-between;
+  flex-flow: column;
+  align-items: center;
+  padding: .3rem 0 .2rem 0;
+}
+/* card end */
+/* 会员功能部分 start */
+.user_cont {
+  width: calc(100% - .48rem);
+  /*height: calc(100vh - 3.7rem - 1px);*/
+  margin: 0 auto;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+.user_cont > ul {
+  width: 100%;
+  height: auto;
+  margin-bottom: .2rem;
+  /*padding: .1rem 0;*/
+}
+.user_item {
+  width: 100%;
+  min-height: 1rem;
+  margin-bottom: .2rem;
+}
+.user_item .user_item_tit {
+  width: calc(100% - .48rem);
+  height: .8rem;
+  margin: 0 auto;
+  line-height: .8rem;
+  border-bottom: .02rem solid #f4f4f4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.user_item ul {
+  width: 100%;
+  padding: .2rem 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-flow: wrap;
+}
+.cont_item {
+  width: 25%;
+  height: 1.4rem;
+  display: flex;
+  justify-content: space-around;
+  flex-flow: column;
+  align-items: center;
+  margin-bottom: .2rem;
+}
+.cont_order {
+  width: 20%;
+}
+.cont_item .imgbox {
+  width: .8rem;
+  height: .8rem;
+  overflow: hidden;
+  position: relative;
+}
+.cont_item .imgbox img {
+  width: 100%;
+  height: 100%;
+}
+.agenums {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: .3rem;
+  height: .3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* 会员功能部分 end */
 
+
+.user_cont2 {
+  width: calc(100% - .48rem);
+  margin: 0 auto;
+  padding: .2rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.user_cont2_items {
+  width: 30%;
+  height: 2.6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.user_cont2_item {
+  width: 100%;
+  height: 1.2rem;
+  font-size: .20rem;
+  display: flex;
+  background-color: white;
+  justify-content: center;
+  align-items: center;
+}
+.user_cont2_item img{
+  width: 0.64rem;
+  height: 0.64rem;
+}
+.user_cont2_item2 {
+  width: 33%;
+  height: 2.6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.user_cont2_item2 img{
+  width: 1.48rem;
+  height: 1.48rem;
+}
