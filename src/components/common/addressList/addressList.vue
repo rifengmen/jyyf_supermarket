@@ -30,7 +30,7 @@
             </ul>
           </div>
           <!-- 无信息提示 start -->
-          <nodata v-else></nodata>
+          <nodata v-else class="bgeeeeee"></nodata>
           <!-- 无信息提示 end -->
         </div>
         <!-- 地址列表 end -->

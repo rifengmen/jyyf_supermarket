@@ -61,7 +61,7 @@
           </div>
         </div>
         <!-- 无信息提示 start -->
-        <nodata v-else></nodata>
+        <nodata v-else class="bgeeeeee"></nodata>
         <!-- 无信息提示 end -->
       </div>
       <!-- 购物车列表 end -->

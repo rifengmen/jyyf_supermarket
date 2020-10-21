@@ -34,7 +34,7 @@
       </div>
       <!-- 分类列表 end -->
       <!-- 无信息提示 start -->
-      <nodata v-else></nodata>
+      <nodata v-else class="bgeeeeee"></nodata>
       <!-- 无信息提示 end -->
     </div>
     <!-- 内容部分盒子 end -->
@@ -174,4 +174,7 @@ export default {
 
 <style scoped>
 @import "static/css/other.css";
+.nodata {
+  height: calc(100vh - 1.1rem);
+}
 </style>

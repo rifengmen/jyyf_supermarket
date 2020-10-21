@@ -35,7 +35,7 @@
       </div>
       <!-- 零钱列表 end -->
       <!-- 无信息提示 start -->
-      <nodata v-else></nodata>
+      <nodata v-else class="bgeeeeee"></nodata>
       <!-- 无信息提示 end -->
     </div>
     <!-- 内容部分盒子 end -->

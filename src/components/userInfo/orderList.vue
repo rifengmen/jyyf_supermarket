@@ -57,7 +57,7 @@
         </div>
         <!-- 订单列表 end -->
         <!-- 无信息提示 start -->
-        <nodata v-else></nodata>
+        <nodata v-else class="bgeeeeee"></nodata>
         <!-- 无信息提示 end -->
       </div>
     </div>

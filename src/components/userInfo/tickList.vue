@@ -9,7 +9,7 @@
     </my-header>
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
-    <div class="userinfo_main bgffffff">
+    <div class="userinfo_main">
       <ticklist
         :froms="froms"
       ></ticklist>

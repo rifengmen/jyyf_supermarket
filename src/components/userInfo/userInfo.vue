@@ -180,14 +180,14 @@
               <div class="imgname font24">商品建议</div>
             </router-link>
             <!-- 商品建议 end -->
-<!--            &lt;!&ndash; 商品建议 start &ndash;&gt;-->
-<!--            <router-link :to="{name: 'commentList', params:{froms: 'userinfo'}}" tag="li"  class="cont_item">-->
-<!--              <div class="imgbox">-->
-<!--                <img src="static/img/user_comment.png">-->
-<!--              </div>-->
-<!--              <div class="imgname font24">购物评价</div>-->
-<!--            </router-link>-->
-<!--            &lt;!&ndash; 商品建议 end &ndash;&gt;-->
+            <!-- 购物评价 start -->
+            <router-link :to="{name: 'commentList', params:{froms: 'userinfo'}}" tag="li"  class="cont_item">
+              <div class="imgbox">
+                <img src="static/img/user_gwpj.png">
+              </div>
+              <div class="imgname font24">购物评价</div>
+            </router-link>
+            <!-- 购物评价 end -->
             <!-- 消费记录 start -->
             <router-link :to="{name: 'expendList'}" tag="li"  class="cont_item">
               <div class="imgbox">

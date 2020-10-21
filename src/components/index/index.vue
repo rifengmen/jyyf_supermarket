@@ -72,12 +72,12 @@
           </router-link>
           <!-- 积分抽奖 end -->
           <!-- 扫码购 start-->
-          <router-link :to="{name: 'saomagou'}" tag="div" class="index_common_item" v-if="userInfo.smgMode">
+          <div class="index_common_item" @click="toSaoMaGou">
             <div class="index_common_img">
               <img src="static/img/smg.png">
             </div>
             <div class="font20">扫码购</div>
-          </router-link>
+          </div>
           <!-- 扫码购 end-->
         </div>
         <!-- 常用功能 end -->
@@ -183,10 +183,6 @@
     <!-- 开通商城 end -->
     <!-- 未开通商城 start -->
     <div class="index_cont bgeeeeee" v-else>
-      <!-- 获取微信凭证 start -->
-      <wechat-config>
-      </wechat-config>
-      <!-- 获取微信凭证 end -->
       <!-- card start -->
       <div class="userinfo colorffffff">
         <div class="card">
@@ -280,12 +276,6 @@
           </router-link>
           <!-- 积分抽奖 end -->
           <!-- 扫码购 start-->
-<!--          <router-link :to="{name: 'saomagou'}" tag="div" class="index_common_item2">-->
-<!--            <div class="index_common_img">-->
-<!--              <img src="static/img/smg.png">-->
-<!--            </div>-->
-<!--            <div class="font20">扫码购</div>-->
-<!--          </router-link>-->
           <div class="index_common_item2" @click="toSaoMaGou">
             <div class="index_common_img">
               <img src="static/img/smg.png">
@@ -332,7 +322,7 @@
           <div class="user_cont2_items color666666">
             <router-link :to="{name: 'expendList'}" tag="div" class="user_cont2_item">
               <img src="static/img/user_shoprecord.png">
-              购买记录
+              消费记录
             </router-link>
             <router-link :to="{name: 'commentList'}" tag="div" class="user_cont2_item">
               <img src="static/img/user_shopevaluate.png">
@@ -677,7 +667,7 @@ export default {
   beforeCreate () {},
   created () {
     // 设置用户信息
-    // this.setUserInfo()
+    this.setUserInfo()
     if (this.userInfo.typeflag) {
       // 初始化发送请求
       this.initData()

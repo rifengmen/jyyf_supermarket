@@ -1,7 +1,7 @@
 <template>
   <div class="tick_main">
     <!-- 内容部分盒子 start -->
-    <div class="userinfo_main bgffffff">
+    <div class="userinfo_main">
       <div class="tick_cont">
         <!-- 加载中动画 start -->
         <loading v-if="isShowLoading"></loading>
@@ -41,7 +41,7 @@
         </div>
         <!-- 优惠券列表 end -->
         <!-- 无信息提示 start -->
-        <nodata v-else></nodata>
+        <nodata v-else class="bgeeeeee"></nodata>
         <!-- 无信息提示 end -->
       </div>
     </div>
