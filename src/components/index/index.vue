@@ -1,11 +1,11 @@
 <template>
   <div class="container bgeeeeee" v-title :data-title="userInfo.deptname">
+    <!-- 获取微信凭证 start -->
+    <wechat-config>
+    </wechat-config>
+    <!-- 获取微信凭证 end -->
     <!-- 开通商城 start -->
     <div class="index_cont bgeeeeee" v-if="userInfo.typeflag">
-      <!-- 获取微信凭证 start -->
-      <wechat-config>
-      </wechat-config>
-      <!-- 获取微信凭证 end -->
       <!-- 轮播图 start -->
       <div class="banner">
         <!-- 搜索 start -->

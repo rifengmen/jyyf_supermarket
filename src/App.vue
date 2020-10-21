@@ -166,6 +166,11 @@ export default {
             // 设置用户信息
             this.setUserInfo()
           }
+        } else {
+          this.$toast({
+            message: res.msg,
+            type: 'fail'
+          })
         }
       }).catch(error => {
         throw error

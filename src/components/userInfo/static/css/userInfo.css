@@ -396,6 +396,9 @@ input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
   width: 100%;
   margin-bottom: .2rem;
 }
+.comment_content{
+  line-height: 1.5;
+}
 .comment_img {
   width: 100%;
   height: auto;

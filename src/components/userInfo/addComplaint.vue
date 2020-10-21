@@ -5,7 +5,8 @@
       <template v-slot:backs>
         <i class="el-icon-arrow-left"></i>
       </template>
-      <template v-slot:header>填写投诉</template>
+      <template v-slot:header v-if="evaluateflag === 1">填写建议</template>
+      <template v-slot:header v-else>填写投诉</template>
     </my-header>
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->

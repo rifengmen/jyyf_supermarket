@@ -5,7 +5,7 @@
       <template v-slot:backs>
         <i class="el-icon-arrow-left"></i>
       </template>
-      <template v-slot:header v-if="evaluateflag">商品建议</template>
+      <template v-slot:header v-if="evaluateflag === 1">商品建议</template>
       <template v-slot:header v-else>我要投诉</template>
       <template v-slot:addComplaint>
         <i class="el-icon-circle-plus"></i>
@@ -26,7 +26,7 @@
             :offset="offset"
             finished-text="没有更多了"
             @load="onLoad">
-            <router-link :to="{name: 'complaintDetail', params: {id: item.id}}" tag="div" v-for="(item, index) in complaintList" :key="index" class="complaint_item bgffffff">
+            <router-link :to="{name: 'complaintDetail', query: {id: item.id, evaluateflag: evaluateflag}}" tag="div" v-for="(item, index) in complaintList" :key="index" class="complaint_item bgffffff">
               <div class="complaint_title ellipsis">{{item.content}}</div>
               <div class="font22 color999999 tr">{{item.addtime}}</div>
             </router-link>

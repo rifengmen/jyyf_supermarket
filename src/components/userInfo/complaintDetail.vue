@@ -5,7 +5,8 @@
       <template v-slot:backs>
         <i class="el-icon-arrow-left"></i>
       </template>
-      <template v-slot:header>投诉详情</template>
+      <template v-slot:header v-if="evaluateflag">建议详情</template>
+      <template v-slot:header v-else>投诉详情</template>
     </my-header>
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
@@ -14,7 +15,7 @@
         <!-- 评论区 start -->
         <div class="tick_list">
           <div class="comment_desc tc color666666 font32">{{complaintDetail.addtime}}</div>
-          <div class="">{{complaintDetail.content}}</div>
+          <div class="comment_content">{{complaintDetail.content}}</div>
           <!--<div class="comment_img">-->
           <!--<el-upload-->
           <!--action=""-->
@@ -28,6 +29,10 @@
           <!--<img width="100%" :src="dialogImageUrl" alt="">-->
           <!--</el-dialog>-->
           <!--</div>-->
+          <div class="colorf58d37 font32" style="margin-top: 40px">回复信息</div>
+          <div class="comment_desc tc color666666 font32" v-if="complaintDetail.retime">{{complaintDetail.retime}}</div>
+          <div class="comment_content" v-if="complaintDetail.reContent">{{complaintDetail.reContent}}</div>
+          <div class="comment_desc tc color666666 font32" v-else >暂无回复信息</div>
         </div>
         <!-- 评论区 end -->
       </div>
@@ -46,7 +51,9 @@ export default {
       // 投诉建议详情
       complaintDetail: '',
       // 投诉id
-      id: this.$route.params.id
+      id: this.$route.query.id,
+      // 标识业务
+      evaluateflag: parseFloat(this.$route.query.evaluateflag)
     }
   },
   computed: {},

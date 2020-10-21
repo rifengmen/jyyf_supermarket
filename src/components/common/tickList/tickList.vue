@@ -25,7 +25,7 @@
                     <div class="font26 tc">满{{item.minsalemoney}}元使用</div>
                   </div>
                 </div>
-                <div class="tick_item_head_btn font26 bgf7bb1f border_r500" v-if="froms === 'index'">
+                <div class="tick_item_head_btn font26 bgf7bb1f border_r500" v-if="froms === 'index'" @click="getTick(item)">
                   立即领取
                 </div>
               </div>
@@ -156,6 +156,35 @@ export default {
         this.getList(data, url)
       }
     },
+    // 领取优惠券
+    getTick (item) {
+      // console.log(item)
+      // 阻止冒泡
+      window.event.stopPropagation()
+      let data = new FormData()
+      let requestData
+      requestData = {
+        tickid: item.tickid
+      }
+      requestData = JSON.stringify(requestData)
+      data.append('requestData', requestData)
+      this.$axios.post('mem/member/panicCoupon', data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          this.$toast({
+            message: res.msg,
+            type: 'success'
+          })
+        } else {
+          this.$toast({
+            message: res.msg,
+            type: 'fail'
+          })
+        }
+      }).catch(error => {
+        throw error
+      })
+    },
     // 去填写订单
     editorder (tick) {
       if (this.froms === 'editorder') {
@@ -189,7 +218,7 @@ export default {
     },
     // 跳转优惠券详情
     toTicketInfo (index) {
-      console.log(this.tickList[index].tickid)
+      // console.log(this.tickList[index].tickid)
       if (this.froms === 'index') {
         this.$router.push({name: 'ticketdetail', query: {tickid: this.tickList[index].tickid}})
       }

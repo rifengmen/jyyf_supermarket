@@ -165,8 +165,7 @@
             </router-link>
             <!-- 我的消息 end -->
             <!-- 我要投诉 start -->
-            <router-link :to="{name: 'complaintList', query:{froms: 'userinfo', evaluateflag: 0}}" tag="li"
-                         class="cont_item">
+            <router-link :to="{name: 'complaintList', query:{froms: 'userinfo', evaluateflag: 0}}" tag="li" class="cont_item">
               <div class="imgbox">
                 <img src="static/img/user_tsjy.png">
               </div>

@@ -88,7 +88,7 @@ export default {
             wx.updateAppMessageShareData({
               title: _this.shareConfig.title,
               desc: _this.shareConfig.desc,
-              link: _this.shareConfig.link,
+              link: _this.shareConfig.link.replace('&code=', ''),
               imgUrl: _this.shareConfig.imgUrl,
               trigger: function (res) {
                 // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
@@ -107,7 +107,7 @@ export default {
             // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容
             wx.updateTimelineShareData({
               title: _this.shareConfig.title,
-              link: _this.shareConfig.link,
+              link: _this.shareConfig.link.replace('&code=', ''),
               imgUrl: _this.shareConfig.imgUrl,
               trigger: function (res) {
                 // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
@@ -127,7 +127,7 @@ export default {
             wx.onMenuShareAppMessage({
               title: _this.shareConfig.title,
               desc: _this.shareConfig.desc,
-              link: _this.shareConfig.link,
+              link: _this.shareConfig.link.replace('&code=', ''),
               imgUrl: _this.shareConfig.imgUrl,
               trigger: function (res) {
                 // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
@@ -146,7 +146,7 @@ export default {
             // 监听“分享到朋友圈”按钮点击、自定义分享内容及分享结果接口
             wx.onMenuShareTimeline({
               title: _this.shareConfig.title,
-              link: _this.shareConfig.link,
+              link: _this.shareConfig.link.replace('&code=', ''),
               imgUrl: _this.shareConfig.imgUrl,
               trigger: function (res) {
                 // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
@@ -166,7 +166,7 @@ export default {
             wx.onMenuShareWeibo({
               title: _this.shareConfig.title,
               desc: _this.shareConfig.desc,
-              link: _this.shareConfig.link,
+              link: _this.shareConfig.link.replace('&code=', ''),
               imgUrl: _this.shareConfig.imgUrl,
               trigger: function (res) {
                 // alert('用户点击分享到微博')
