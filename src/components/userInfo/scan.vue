@@ -113,8 +113,6 @@ export default {
     },
     // 扫一扫
     scanTradeno () {
-      // if (this.scanFlag) {
-      // }
       this.scanFlag = false
       let _this = this
       wx.scanQRCode({

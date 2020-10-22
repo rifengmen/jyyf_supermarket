@@ -77,6 +77,7 @@ export default {
       }
       let baseURL = window.location.href.slice(0, window.location.href.lastIndexOf('/'))
       this.$store.commit('setBaseURL', baseURL)
+      console.log(this.$route, 'wechatID')
       let beforeLoginUrl = sessionStorage.getItem('jyyf_beforeLoginUrl')
       // https://www.spzlk.cn/login.php?dianpu=2；微会员
       // https://www.spzlk.cn/testSupermarket/?dianpu=2;超市测试
@@ -108,6 +109,7 @@ export default {
         let res = result.data
         if (res.code === 200) {
           this.$store.commit('setAppid', res.data.appid)
+          console.log(this.$route, 'appid')
           let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
           if (url.indexOf('&') >= 0 && url.indexOf('msgType=') >= 0) {
             url = url.split('&')[1] || ''
@@ -126,6 +128,7 @@ export default {
     },
     // 非静默授权，第一次有弹框
     getCode () {
+      console.log(this.$route, 'code')
       let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
       const REDIRECT_URI = encodeURIComponent(this.baseURL + url)
       const URL = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + this.appid + '&redirect_uri=' + REDIRECT_URI + '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
@@ -157,6 +160,7 @@ export default {
           this.$store.commit('setOpenid', res.data.openid)
           this.openid = res.data.openid
           this.$store.commit('setHeadimgurl', res.data.headimgurl)
+          console.log(this.$route, 'openid')
           let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
           let msgType = url.split('&')[1].split('=')[1]
           if (msgType === 'activate') {
@@ -178,6 +182,7 @@ export default {
     },
     // 卡包注册
     toRegister () {
+      console.log(this.$route, 'toRegister')
       let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
       let toPath = url.slice(1, 9)
       if (toPath === 'register') {

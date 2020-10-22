@@ -578,10 +578,6 @@ export default {
           sessionStorage.setItem('jyyf_token', res.data.token)
           this.$axios.defaults.headers.common.Authorization = res.data.token
         } else {
-          this.$toast({
-            message: '登陆失败，请重新登陆！',
-            type: 'fail'
-          })
         }
       }).catch(error => {
         throw error

@@ -96,12 +96,16 @@ export default {
               },
               success: function (res) {
                 // alert('已分享')
+                console.log('success_res', res)
+                // alert('success_res' + JSON.stringify(res))
               },
               cancel: function (res) {
                 alert('已取消')
               },
               fail: function (res) {
                 // alert(JSON.stringify(res))
+                console.log('fail_res', res)
+                // alert('fail_res' + JSON.stringify(res))
               }
             })
             // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容
@@ -184,6 +188,8 @@ export default {
                 // alert(JSON.stringify(res))
               }
             })
+            console.log('_this.shareConfig', _this.shareConfig)
+            // alert('_this.shareConfig' + JSON.stringify(_this.shareConfig))
           })
           wx.error((res) => {
           })

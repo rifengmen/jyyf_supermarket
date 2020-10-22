@@ -14,7 +14,7 @@ Vue.use(Router)
 const router = new Router({
   mode: 'history',
   // 超市测试
-  // base: '/testSupermarket',
+  base: '/testSupermarket',
   // 超市生产
   // base: '/supermarket',
   // 记忆列表页位置
@@ -66,8 +66,8 @@ router.beforeEach((to, from, next) => {
   let jyyfopenid = sessionStorage.getItem('jyyf_openid')
   if (!jyyfopenid) {
     let urlPath = to.fullPath
-    urlPath = urlPath.replace(/%5Cu003d/g, '=')
-    urlPath = urlPath.replace(/%5Cu0026/g, '&')
+    // urlPath = urlPath.replace(/%5Cu003d/g, '=')
+    // urlPath = urlPath.replace(/%5Cu0026/g, '&')
     // 保存用户进入的url
     sessionStorage.setItem('jyyf_beforeLoginUrl', urlPath)
   }

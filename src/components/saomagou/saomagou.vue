@@ -47,7 +47,7 @@
       <!-- 底部导航 end-->
     </div>
     <!-- 切换门店弹框 start -->
-    <van-dialog v-model="shopListFlag" @confirm="setDeptcode" title="附件门店" show-cancel-button>
+    <van-dialog v-model="shopListFlag" @confirm="setDeptcode" title="附近门店" show-cancel-button>
       <div class="shopList">
         <van-radio-group v-model="deptcode">
           <van-radio :name="item.deptcode" v-for="(item, index) in shopList" :key="index" class="van_radio">{{item.deptname}}</van-radio>
