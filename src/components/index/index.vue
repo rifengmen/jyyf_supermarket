@@ -562,6 +562,10 @@ export default {
       this.$store.commit('clearSaomacar')
       this.$store.commit('clearShopInfo')
     },
+    // 设置页面title
+    setTitle (title) {
+      document.title = title
+    },
     // 设置用户信息
     setUserInfo () {
       let data = new FormData()
@@ -640,6 +644,8 @@ export default {
     // 初始化发送请求
     initData () {
       if (this.$store.state.userInfo.token) {
+        // 设置页面title
+        this.setTitle(this.userInfo.deptname)
         // 获取banner列表
         this.getBanner()
         // 获取通知信息
@@ -653,6 +659,8 @@ export default {
     // 初始化发送请求2
     initData2 () {
       if (this.$store.state.userInfo.token) {
+        // 设置页面title
+        this.setTitle(this.userInfo.deptname)
         // 获取用户会员卡信息
         this.getMyInfo()
         // 获取我的消息

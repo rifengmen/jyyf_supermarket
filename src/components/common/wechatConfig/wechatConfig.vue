@@ -78,8 +78,7 @@ export default {
               'updateAppMessageShareData',
               'updateTimelineShareData',
               'onMenuShareAppMessage',
-              'onMenuShareTimeline',
-              'onMenuShareWeibo'
+              'onMenuShareTimeline'
             ]
           })
           wx.ready(() => {
@@ -95,101 +94,44 @@ export default {
                 // alert('用户点击分享给朋友')
               },
               success: function (res) {
-                // alert('已分享')
                 console.log('success_res', res)
-                // alert('success_res' + JSON.stringify(res))
+                if (_this.baseURL === 'https://member.spzlk.cn/supermarket') {
+                  alert('success_res' + JSON.stringify(res))
+                }
               },
               cancel: function (res) {
-                alert('已取消')
               },
               fail: function (res) {
-                // alert(JSON.stringify(res))
                 console.log('fail_res', res)
-                // alert('fail_res' + JSON.stringify(res))
+                if (_this.baseURL === 'https://member.spzlk.cn/supermarket') {
+                  alert('fail_res' + JSON.stringify(res))
+                }
               }
             })
             // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容
             wx.updateTimelineShareData({
               title: _this.shareConfig.title,
               link: _this.shareConfig.link.replace('&code=', ''),
-              imgUrl: _this.shareConfig.imgUrl,
-              trigger: function (res) {
-                // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
-                // alert('用户点击分享到朋友圈')
-              },
-              success: function (res) {
-                // alert('已分享')
-              },
-              cancel: function (res) {
-                alert('已取消')
-              },
-              fail: function (res) {
-                // alert(JSON.stringify(res))
-              }
+              imgUrl: _this.shareConfig.imgUrl
             })
             // 监听“分享给朋友”，按钮点击、自定义分享内容及分享结果接口
             wx.onMenuShareAppMessage({
               title: _this.shareConfig.title,
               desc: _this.shareConfig.desc,
               link: _this.shareConfig.link.replace('&code=', ''),
-              imgUrl: _this.shareConfig.imgUrl,
-              trigger: function (res) {
-                // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
-                // alert('用户点击发送给朋友')
-              },
-              success: function (res) {
-                // alert('已分享')
-              },
-              cancel: function (res) {
-                alert('已取消')
-              },
-              fail: function (res) {
-                // alert(JSON.stringify(res))
-              }
+              imgUrl: _this.shareConfig.imgUrl
             })
             // 监听“分享到朋友圈”按钮点击、自定义分享内容及分享结果接口
             wx.onMenuShareTimeline({
               title: _this.shareConfig.title,
               link: _this.shareConfig.link.replace('&code=', ''),
-              imgUrl: _this.shareConfig.imgUrl,
-              trigger: function (res) {
-                // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
-                // alert('用户点击发送给朋友')
-              },
-              success: function (res) {
-                // alert('已分享')
-              },
-              cancel: function (res) {
-                alert('已取消')
-              },
-              fail: function (res) {
-                // alert(JSON.stringify(res))
-              }
-            })
-            // 监听“分享到微博”按钮点击、自定义分享内容及分享结果接口
-            wx.onMenuShareWeibo({
-              title: _this.shareConfig.title,
-              desc: _this.shareConfig.desc,
-              link: _this.shareConfig.link.replace('&code=', ''),
-              imgUrl: _this.shareConfig.imgUrl,
-              trigger: function (res) {
-                // alert('用户点击分享到微博')
-              },
-              complete: function (res) {
-                alert(JSON.stringify(res))
-              },
-              success: function (res) {
-                // alert('已分享')
-              },
-              cancel: function (res) {
-                alert('已取消')
-              },
-              fail: function (res) {
-                // alert(JSON.stringify(res))
-              }
+              imgUrl: _this.shareConfig.imgUrl
             })
             console.log('_this.shareConfig', _this.shareConfig)
-            // alert('_this.shareConfig' + JSON.stringify(_this.shareConfig))
+            console.log('_this.baseURL', _this.baseURL)
+            if (_this.baseURL === 'https://member.spzlk.cn/supermarket') {
+              alert('_this.shareConfig' + JSON.stringify(_this.shareConfig))
+            }
           })
           wx.error((res) => {
           })

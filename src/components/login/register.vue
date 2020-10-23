@@ -271,8 +271,10 @@ export default {
                 message: '激活成功！',
                 type: 'success'
               })
-              sessionStorage.removeItem('jyyf_openid')
-              this.$router.push('/?dianpu=' + this.wechatIDget)
+              // sessionStorage.removeItem('jyyf_openid')
+              // this.$router.push('/?dianpu=' + this.wechatIDget)
+              // 卡包设置用户信息
+              this.cardSetUserInfo()
             }
             this.$toast({
               message: '注册成功!',

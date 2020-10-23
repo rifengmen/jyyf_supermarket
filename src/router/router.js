@@ -13,8 +13,8 @@ Vue.use(Router)
 
 const router = new Router({
   mode: 'history',
-  // 超市测试
-  base: '/testSupermarket',
+  // 超市测试(暂时停用)
+  // base: '/testSupermarket',
   // 超市生产
   // base: '/supermarket',
   // 记忆列表页位置

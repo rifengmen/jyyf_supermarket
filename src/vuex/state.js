@@ -15,8 +15,8 @@ const state = {
   // openid: 'ouG8UwjRuZFkhiyowhH8pqBXVJIE', // LCHLG
   // openid: '',
   // 基础路径
-  // baseURL: 'https://www.spzlk.cn',
-  baseURL: 'http://192.168.1.25:8083/',
+  baseURL: 'https://www.spzlk.cn',
+  // baseURL: 'http://192.168.1.25:8083/',
   // baseURL: '',
   // 路由开关
   isRouter: true,

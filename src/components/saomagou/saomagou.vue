@@ -198,6 +198,8 @@ export default {
             if (!isGet) {
               this.$store.commit('setShopInfo', res.data.list[0])
               this.deptcode = res.data.list[0].deptcode
+              // 设置页面title
+              this.setTitle(res.data.list[0].deptname)
             }
             this.shopList = res.data.list
             if (isGet) {
@@ -230,16 +232,11 @@ export default {
     setDeptcode () {
       let shopInfo = this.shopList.filter(item => item.deptcode === this.deptcode)[0]
       this.$store.commit('setShopInfo', shopInfo)
+      // 设置页面title
+      this.setTitle(shopInfo.deptname)
     },
     // 去订单列表页面
     toSaomaorderList () {
-      // if (!this.shopInfo.deptcode) {
-      //   this.$toast({
-      //     message: '请选择店铺！',
-      //     type: 'fail'
-      //   })
-      //   return false
-      // }
       this.$router.push({name: 'saomaorderList'})
     },
     // 去出场码页面
@@ -270,6 +267,10 @@ export default {
       }).catch(error => {
         throw error
       })
+    },
+    // 设置页面title
+    setTitle (title) {
+      document.title = title
     }
   },
   beforeCreate () {
