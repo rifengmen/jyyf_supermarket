@@ -270,7 +270,7 @@ export default {
     },
     // 设置页面title
     setTitle (title) {
-      document.title = title
+      document.title = title || this.$store.state.userInfo.deptname
     }
   },
   beforeCreate () {

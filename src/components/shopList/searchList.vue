@@ -218,4 +218,7 @@ export default {
 </script>
 <style scoped>
 @import "static/css/shopList.css";
+  .nodata {
+    height: calc(100vh - 1.1rem);
+  }
 </style>

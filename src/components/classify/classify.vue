@@ -285,4 +285,7 @@ export default {
 
 <style scoped>
 @import "static/css/classify.css";
+  .nodata {
+    height: calc(100vh - 2.1rem);
+  }
 </style>

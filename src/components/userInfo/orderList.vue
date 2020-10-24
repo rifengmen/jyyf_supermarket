@@ -57,7 +57,7 @@
         </div>
         <!-- 订单列表 end -->
         <!-- 无信息提示 start -->
-        <nodata v-else class="bgeeeeee"></nodata>
+        <nodata v-else class=""></nodata>
         <!-- 无信息提示 end -->
       </div>
     </div>
@@ -251,6 +251,9 @@ export default {
   padding-top: .68rem;
 }
 .loading {
+  height: calc(100vh - 1.58rem);
+}
+.nodata {
   height: calc(100vh - 1.58rem);
 }
 </style>
