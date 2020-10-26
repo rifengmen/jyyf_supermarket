@@ -1,7 +1,7 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div class="container_pt110 bgeeeeee">
     <!-- 头部 start -->
-    <my-header :addFlag="'dateFlag'" @setStartdate="setStartdate" >
+    <my-header @setStartdate="setStartdate" :addFlag="'dateFlag'">
       <template v-slot:backs>
         <i class="el-icon-arrow-left"></i>
       </template>
@@ -89,21 +89,6 @@ export default {
     loading
   },
   methods: {
-    onLoad () {
-      this.page++
-      this.getCommentList()
-    },
-    onRefresh () {
-      this.isShowLoading = true
-      // 清空列表数据
-      this.finished = false
-      // 重新加载数据
-      // 将 loading 设置为 true，表示处于加载状态
-      this.loading = true
-      this.page = 0
-      this.commentList = []
-      this.onLoad()
-    },
     // 获取评价记录列表
     getCommentList () {
       this.isShowLoading = true
@@ -136,7 +121,8 @@ export default {
     // 设置查询开始时间
     setStartdate (data) {
       this.startdate = data
-      this.getScoreList()
+      // 获取评价记录列表
+      this.getCommentList()
     }
   },
   watch: {},
@@ -159,7 +145,7 @@ export default {
   },
   created () {
     // 获取评价记录列表
-    this.onLoad()
+    this.getCommentList()
   },
   beforeMount () {
   },

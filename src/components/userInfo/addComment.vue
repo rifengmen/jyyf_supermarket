@@ -146,4 +146,7 @@ export default {
 
 <style scoped>
 @import "static/css/userInfo.css";
+  .order_section {
+    margin-top: unset;
+  }
 </style>

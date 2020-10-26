@@ -285,6 +285,13 @@ export default {
   },
   watch: {
   },
+  beforeRouteEnter (to, from, next) {
+    let ExcludeComponent = ['classify', 'searchList', 'recommendList', 'classList']
+    next(vm => {
+      vm.$store.commit('addExcludeComponent', ExcludeComponent)
+      next()
+    })
+  },
   beforeCreate () {
   },
   created () {

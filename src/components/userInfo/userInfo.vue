@@ -120,14 +120,6 @@
         <li class="user_item border_r10 bgffffff">
           <div class="user_item_tit font32">常用功能</div>
           <ul class="color666666">
-            <!-- 购物评价 start -->
-            <!--<router-link :to="{name: 'commentList'}" tag="li"  class="cont_item">-->
-            <!--<div class="imgbox">-->
-            <!--<img src="static/img/user_gwpj.png">-->
-            <!--</div>-->
-            <!--<div class="imgname font24">购物评价</div>-->
-            <!--</router-link>-->
-            <!-- 购物评价 end -->
             <!-- 我的资料 start -->
             <router-link :to="{name: 'userDetail'}" tag="li"  class="cont_item">
               <div class="imgbox">
@@ -181,7 +173,7 @@
             </router-link>
             <!-- 商品建议 end -->
             <!-- 购物评价 start -->
-            <router-link :to="{name: 'commentList', params:{froms: 'userinfo'}}" tag="li"  class="cont_item">
+            <router-link :to="{name: 'commentList'}" tag="li"  class="cont_item">
               <div class="imgbox">
                 <img src="static/img/user_gwpj.png">
               </div>
@@ -388,6 +380,13 @@ export default {
     }
   },
   watch: {
+  },
+  beforeRouteEnter (to, from, next) {
+    let ExcludeComponent = ['classify', 'searchList', 'recommendList', 'classList']
+    next(vm => {
+      vm.$store.commit('addExcludeComponent', ExcludeComponent)
+      next()
+    })
   },
   created () {
     // 设置用户信息

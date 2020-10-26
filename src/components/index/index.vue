@@ -566,27 +566,6 @@ export default {
     setTitle (title) {
       document.title = title
     },
-    // 设置用户信息
-    setUserInfo () {
-      let data = new FormData()
-      let requestData = {
-        wechatID: this.$store.state.wechatID,
-        wexinID: this.$store.state.openid
-      }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/customlogin/login', data).then(result => {
-        let res = result.data
-        if (res.code === 200) {
-          this.$store.commit('setUserInfo', res.data)
-          sessionStorage.setItem('jyyf_token', res.data.token)
-          this.$axios.defaults.headers.common.Authorization = res.data.token
-        } else {
-        }
-      }).catch(error => {
-        throw error
-      })
-    },
     // 获取用户会员卡信息
     getMyInfo () {
       let data = new FormData()
@@ -666,6 +645,27 @@ export default {
         // 获取我的消息
         this.getMessageList()
       }
+    },
+    // 设置用户信息
+    setUserInfo () {
+      let data = new FormData()
+      let requestData = {
+        wechatID: this.$store.state.wechatID,
+        wexinID: this.$store.state.openid
+      }
+      requestData = JSON.stringify(requestData)
+      data.append('requestData', requestData)
+      this.$axios.post('system/customlogin/login', data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          this.$store.commit('setUserInfo', res.data)
+          sessionStorage.setItem('jyyf_token', res.data.token)
+          this.$axios.defaults.headers.common.Authorization = res.data.token
+        } else {
+        }
+      }).catch(error => {
+        throw error
+      })
     }
   },
   beforeCreate () {},

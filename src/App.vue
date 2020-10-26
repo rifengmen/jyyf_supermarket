@@ -79,9 +79,6 @@ export default {
       this.$store.commit('setBaseURL', baseURL)
       console.log(this.$route, 'wechatID')
       let beforeLoginUrl = sessionStorage.getItem('jyyf_beforeLoginUrl')
-      // https://www.spzlk.cn/login.php?dianpu=2；微会员
-      // https://www.spzlk.cn/testSupermarket/?dianpu=2;超市测试
-      // https://www.spzlk.cn/supermarket/?dianpu=2;超市
       let id = beforeLoginUrl.split('=')[1]
       let str
       if (id.indexOf('&') >= 0) {

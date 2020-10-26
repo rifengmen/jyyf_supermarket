@@ -54,6 +54,8 @@ export default [
   {path: '/expendList', name: 'expendList', component: expendList, meta: {keepAlive: true}},
   // 会员中心-记录详情
   {path: '/expendDetail', name: 'expendDetail', component: expendDetail},
+  // 会员中心-购物评价
+  {path: '/commentList', name: 'commentList', component: commentList, meta: {keepAlive: true}},
   // 会员中心-评价详情
   {path: '/commentdetail', name: 'commentdetail', component: commentdetail},
   // 会员中心-添加评价
@@ -62,8 +64,6 @@ export default [
   {path: '/complaintList', name: 'complaintList', component: complaintList, meta: {keepAlive: true}},
   // 会员中心-投诉详情
   {path: '/complaintDetail', name: 'complaintDetail', component: complaintDetail},
-  // 会员中心-购物评价
-  {path: '/commentList', name: 'commentList', component: commentList, meta: {keepAlive: true}},
   // 会员中心-添加投诉
   {path: '/addComplaint', name: 'addComplaint', component: addComplaint}
 ]
