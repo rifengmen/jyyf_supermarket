@@ -95,17 +95,11 @@ export default {
               },
               success: function (res) {
                 console.log('success_res', res)
-                if (_this.baseURL === 'https://member.spzlk.cn/supermarket') {
-                  alert('success_res' + JSON.stringify(res))
-                }
               },
               cancel: function (res) {
               },
               fail: function (res) {
                 console.log('fail_res', res)
-                if (_this.baseURL === 'https://member.spzlk.cn/supermarket') {
-                  alert('fail_res' + JSON.stringify(res))
-                }
               }
             })
             // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容
@@ -129,9 +123,6 @@ export default {
             })
             console.log('_this.shareConfig', _this.shareConfig)
             console.log('_this.baseURL', _this.baseURL)
-            if (_this.baseURL === 'https://member.spzlk.cn/supermarket') {
-              alert('_this.shareConfig' + JSON.stringify(_this.shareConfig))
-            }
           })
           wx.error((res) => {
           })

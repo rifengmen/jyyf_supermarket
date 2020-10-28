@@ -29,10 +29,9 @@
           <div class="font28 font_blod">券码</div>
           <div class="font26 color999999">{{ticketInfo.tickid}}</div>
           <div class="font28 font_blod">有效期</div>
-          <div class="font26 color999999">{{ticketInfo.startdate}}--{{ticketInfo.enddate}}</div>
+          <div class="font26 color999999">{{ticketInfo.startdate}} —— {{ticketInfo.enddate}}</div>
           <div class="font28 font_blod">使用规则</div>
-          <div class="font26 color999999" v-if="ticketInfo.dealflagdescrible">{{ticketInfo.dealflagdescrible}}</div>
-          <div class="font26 color999999">使用时间：{{ticketInfo.startdate}}--{{ticketInfo.enddate}}</div>
+          <div class="font26 color999999">{{ticketInfo.dealflagdescription}}</div>
         </div>
         <div class="tick_detail_btn bgffae43 colorffffff font30 border_r10" @click="getTick">立即领取</div>
       </div>

@@ -9,16 +9,16 @@
     </my-header>
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
-    <div class="other_main lottery_main bge42739">
-      <!--<div class="tc color666666">功能开发中，敬请期待...</div>-->
+    <div class="other_main lottery_main" :style="{backgroundImage: 'url(' + (bgUrl ? IMGURL + 'image/' + bgUrl : './static/img/turntableBgc.png') + ')', backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat'}">
       <div class="lottery_list">
         <lottery-circle
           :activeObj="activeObj"
           :totalCent="totalCent"
+          :turnUrl="turnUrl"
           @getTotalCent="getTotalCent"
           @getResult="getResult"></lottery-circle>
       </div>
-      <div class="score_desc bge42739">
+      <div class="score_desc">
         <div class="lottery_score">
           <p class="font34 tc colorffffff" >剩余积分: {{totalCent}}</p>
           <p class="tc colorffffff">每{{activeObj.prizeUseCent}}积分可抽奖一次</p>
@@ -42,6 +42,14 @@ export default {
   name: 'lottery',
   data () {
     return {
+      // 图片路径
+      IMGURL: this.IMGURL,
+      // 背景图路径
+      bgUrl: '',
+      // 转盘图路径
+      turnUrl: '',
+      // 背景颜色
+      bgColor: '',
       // 用户积分
       totalCent: 0,
       // 奖项设置
@@ -84,6 +92,8 @@ export default {
         let res = result.data
         if (res.code === 200) {
           this.activeObj = res.data
+          this.bgUrl = res.data.bgUrl
+          this.turnUrl = res.data.turnUrl
         } else {
           this.$toast({
             message: res.msg,

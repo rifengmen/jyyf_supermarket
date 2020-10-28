@@ -9,6 +9,9 @@
 /* 内容部分盒子 end */
 /* 积分抽奖 start */
 .lottery_main {
+  width: 100%;
+  height: calc(100vh - 1.1rem);
+  min-height: unset;
   overflow-y: hidden;
 }
 .lottery_list {

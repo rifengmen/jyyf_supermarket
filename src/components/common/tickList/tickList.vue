@@ -9,8 +9,8 @@
         <!-- 优惠券列表 start -->
         <div class="tick_main" v-if="tickList.length">
           <ul>
-            <li class="tick_item border_r6 colorffffff" v-for="(item, index) in tickList" :key="index" @click="toTicketInfo(index)">
-              <div class="tick_item_head">
+            <li class="tick_item border_r20 colorffffff bgfef7ed" v-for="(item, index) in tickList" :key="index" @click="toTicketInfo(index)" :style="{backgroundImage: 'url(' + IMGURL + 'image/' + item.bgurl + ')', backgroundSize: 'cover'}">
+              <div :class="{tick_item_head: true, tick_head_bg: (item.bgurl ? false : true)}">
                 <div class="tick_item_head_left">
                   <div class="font40 font_blod tc" v-if="item.tickettype !== 2">
                     ￥
@@ -25,16 +25,12 @@
                     <div class="font26 tc">满{{item.minsalemoney}}元使用</div>
                   </div>
                 </div>
-                <div class="tick_item_head_btn font26 bgf7bb1f border_r500" v-if="froms === 'index'" @click="getTick(item)">
-                  立即领取
-                </div>
+                <div class="tick_item_head_btn font26 bgf7bb1f border_r500" v-if="froms === 'index'" @click="getTick(item)">立即领取</div>
+                <div class="tick_item_head_btn font26 bgf7bb1f border_r500" v-if="froms === 'editorder'" @click="editorder(item)">立即使用</div>
               </div>
               <div class="tick_item_foot color000000">
-                <div class="font28 font_blod">使用规则</div>
-                <ol>
-                  <li><div class="font26 color999999" v-if="item.dealflagdescrible">{{item.dealflagdescrible}}</div></li>
-                  <li><div class="font26 color999999">使用时间：{{item.startdate}}——{{item.enddate}}</div></li>
-                </ol>
+                <div class="font26 color999999 ellipsis">使用规则：{{item.dealflagdescrible}}</div>
+                <div class="font26 color999999 ellipsis">使用时间：{{item.startdate}} —— {{item.enddate}}</div>
               </div>
             </li>
           </ul>
@@ -87,6 +83,8 @@ export default {
   },
   data () {
     return {
+      // 图片路径
+      IMGURL: this.IMGURL,
       // 优惠券列表
       tickList: {},
       // 加载中动画
@@ -107,7 +105,15 @@ export default {
         let res = result.data
         if (res.code === 200) {
           this.isShowLoading = false
-          this.tickList = res.data
+          this.tickList = res.data.reverse()
+          this.tickList.forEach(item => {
+            if (item.dealflagdescription) {
+              item.dealflagdescrible = item.dealflagdescription
+            }
+            if (item.bgurl === '0') {
+              item.bgurl = ''
+            }
+          })
         } else {
           this.$toast({
             message: res.msg,

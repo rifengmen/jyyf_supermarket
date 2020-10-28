@@ -1,11 +1,12 @@
 <template>
   <div id="turnBox">
-    <div id="turnUlBox">
-      <ul id="turnUl" class="border_r500">
+    <div id="turnUlBox" class="border_r500" :style="{backgroundImage: 'url(' + (turnUrl ? IMGURL + 'image/' + turnUrl : './static/img/turnboxbg.png') + ')',}">
+      <ul id="turnUlborder" class="border_r500">
         <li
           v-for="(item,index) in prizeData"
           :key="index"
-          :style="{webkitTransform: 'rotate(' + -item.angle + 'deg) skewY(' + item.skew + 'deg)', backgroundColor: bgcolor[index%4]}">
+          :style="{webkitTransform: 'rotate(' + -item.angle + 'deg)'}"
+          class="borderffffff">
         </li>
       </ul>
       <ul id="turnUltext" class="border_r500">
@@ -13,8 +14,8 @@
           v-for="(item,index) in prizeData"
           :key="index"
           :style="{webkitTransform: 'rotate(' + -item.angletext + 'deg)'}"
-          class="colore52b39">
-          <div v-html="autoWrap(item.prizename)"></div>
+          class="colorffffff">
+          <div class="prizename">{{item.prizename}}</div>
         </li>
       </ul>
     </div>
@@ -26,6 +27,20 @@
 export default {
   name: 'lottery_circle',
   props: {
+    // 背景图路径
+    bgUrl: {
+      type: String,
+      default: function () {
+        return ''
+      }
+    },
+    // 转盘图路径
+    turnUrl: {
+      type: String,
+      default: function () {
+        return ''
+      }
+    },
     // 奖项设置
     activeObj: {
       type: Object,
@@ -43,6 +58,8 @@ export default {
   },
   data () {
     return {
+      // 图片路径
+      IMGURL: this.IMGURL,
       // 中奖物品的下标
       pIndex: 0,
       // 旋转圈数基数
@@ -55,8 +72,6 @@ export default {
       oTurntable: '',
       // 0 图片 1 汉字
       type: 0,
-      // 圆盘各奖项背景色
-      bgcolor: ['#f9cd56', '#ffffff', '#fee8ad', '#ffffff'],
       // 抽奖开关，防止重复点击
       flag: true,
       // 中奖信息
@@ -137,7 +152,7 @@ export default {
     startrotate (angle, complete) {
       // 相应的角度 + 满圈 只是在原角度多转了几圈 360 * 6
       let rotate = 2160 * (this.rotNum + 1) + angle
-      this.oTurntable.style.transform = 'rotate(' + rotate + 'deg)'
+      this.oTurnUlborder.style.transform = 'rotate(' + rotate + 'deg)'
       this.oTurntabletext.style.transform = 'rotate(' + rotate + 'deg)'
       clearTimeout(this.timer)
       // 设置5秒后停止旋转,处理接口返回的数据
@@ -169,10 +184,10 @@ export default {
   beforeMount () {
   },
   mounted () {
-    this.oTurntable = document.querySelector('#turnUl')
+    this.oTurnUlborder = document.querySelector('#turnUlborder')
     this.oTurntabletext = document.querySelector('#turnUltext')
     // 过度中属性用时5s
-    this.oTurntable.style.webkitTransition = 'transform ' + this.time / 1000 + 's ease'
+    this.oTurnUlborder.style.webkitTransition = 'transform ' + this.time / 1000 + 's ease'
     this.oTurntabletext.style.webkitTransition = 'transform ' + this.time / 1000 + 's ease'
   }
 }
