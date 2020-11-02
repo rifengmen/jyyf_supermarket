@@ -118,6 +118,11 @@ export default {
             }
           }
           this.getCode()
+        } else {
+          this.$toast({
+            message: res.msg,
+            type: 'fail'
+          })
         }
       }).catch(error => {
         throw error
@@ -158,15 +163,8 @@ export default {
           this.openid = res.data.openid
           this.$store.commit('setHeadimgurl', res.data.headimgurl)
           console.log(this.$route, 'openid')
-          let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
-          let msgType = url.split('&')[1].split('=')[1]
-          if (msgType === 'activate') {
-            // 卡包过来直接去注册
-            this.toRegister()
-          } else {
-            // 设置用户信息
-            this.setUserInfo()
-          }
+          // 设置用户信息
+          this.setUserInfo()
         } else {
           this.$toast({
             message: res.msg,
