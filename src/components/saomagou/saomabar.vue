@@ -56,6 +56,7 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'saomabar',
@@ -86,43 +87,39 @@ export default {
   methods: {
     // 切换出场码和详情
     toggleFlag () {
-      this.flag = !this.flag
-      if (!this.flag && !this.saomaorderDetail) {
+      let self = this
+      self.flag = !self.flag
+      if (!self.flag && !self.saomaorderDetail) {
         // 获取订单详情
-        this.getSaomaorderDetail()
+        self.getSaomaorderDetail()
       }
     },
     // 获取订单详情
     getSaomaorderDetail () {
-      let data = new FormData()
-      let requestData = {
-        flowno: this.flowno,
-        deptcode: this.deptcode
+      let self = this
+      let data = {
+        flowno: self.flowno,
+        deptcode: self.deptcode
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('invest/microFlow/listMicroFlowDtl', data).then(result => {
+      self.$api.invest.listMicroFlowDtl(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.saomaorderDetail = res.data
-          this.goodsList = res.data.gdscodeList
+          self.saomaorderDetail = res.data
+          self.goodsList = res.data.gdscodeList
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 设置图片路径
     setSrc () {
-      this.reload()
+      let self = this
+      self.reload()
     },
     // 关闭出场码
     closeBar () {
-      this.$router.back()
+      let self = this
+      self.$router.push({name: 'saomagou'})
     }
   },
   watch: {},

@@ -9,24 +9,25 @@
     </my-header>
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
-    <div class="other_main lottery_main" :style="{backgroundImage: 'url(' + (bgUrl ? IMGURL + 'image/' + bgUrl : './static/img/turntableBgc.png') + ')', backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat'}">
-      <div class="lottery_list">
-        <lottery-circle
-          :activeObj="activeObj"
-          :totalCent="totalCent"
-          :turnUrl="turnUrl"
-          @getTotalCent="getTotalCent"
-          @getResult="getResult"></lottery-circle>
-      </div>
-      <div class="score_desc">
-        <div class="lottery_score">
-          <p class="font34 tc colorffffff" >剩余积分: {{totalCent}}</p>
-          <p class="tc colorffffff">每{{activeObj.prizeUseCent}}积分可抽奖一次</p>
+    <div class="other_main">
+      <!-- 加载中动画 start -->
+      <loading v-if="isShowLoading"></loading>
+      <!-- 加载中动画 end -->
+      <div class="lottery_main" :style="{backgroundImage: 'url(' + (isturnbg ? IMGURL + 'image/' + bgUrl : './static/img/lotteryBgUrl.png') + ')', backgroundSize: '100%', backgroundRepeat: 'no-repeat'}">
+        <div class="prizeUseCent">
+          <router-link :to="{name: 'scoreList'}" class="myscore colorff6400 bgffffff font24 tc" tag="div">我的积分</router-link>
+          <div class="use_cent colorff6400 bgffffff border_r500 tc">{{activeObj.prizeUseCent}}积分可抽奖一次</div>
+          <router-link :to="{name: 'lotteryList'}" class="mylotterylist colorff6400 bgffffff font24 tc" tag="div">中奖记录</router-link>
         </div>
-        <div class="btn_box scan_section">
-          <!-- 确认按钮 start -->
-          <router-link :to="{name: 'lotteryList'}" class="send_btn border_r6 borderff7e42 bgff7e42 colorffffff font32 font_normal" tag="div">我的中奖纪录</router-link>
-          <!-- 确认按钮 end -->
+        <div class="lottery">
+          <lottery-circle
+            :activeObj="activeObj"
+            :totalCent="totalCent"
+            :isturnbg="isturnbg"
+            :turnUrl="turnUrl"
+            :btnUrl="btnUrl"
+            @getTotalCent="getTotalCent"
+            @getResult="getResult"></lottery-circle>
         </div>
       </div>
     </div>
@@ -36,6 +37,7 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
+import loading from '@/components/common/loading/loading'
 import LotteryCircle from '@/components/common/lottery_circle/lottery_circle'
 
 export default {
@@ -44,12 +46,16 @@ export default {
     return {
       // 图片路径
       IMGURL: this.IMGURL,
+      // 加载中动画
+      isShowLoading: true,
+      // 自定义抽奖图开关
+      isturnbg: 0,
       // 背景图路径
       bgUrl: '',
       // 转盘图路径
       turnUrl: '',
-      // 背景颜色
-      bgColor: '',
+      // 抽奖按钮图路径
+      btnUrl: '',
       // 用户积分
       totalCent: 0,
       // 奖项设置
@@ -78,11 +84,13 @@ export default {
   },
   components: {
     MyHeader,
+    loading,
     LotteryCircle
   },
   methods: {
     // 获取奖项信息
     getActiveObj () {
+      this.isShowLoading = true
       let data = new FormData()
       let requestData = {
       }
@@ -91,9 +99,12 @@ export default {
       this.$axios.post('system/prize/getPrizeList', data).then(result => {
         let res = result.data
         if (res.code === 200) {
+          this.isShowLoading = false
           this.activeObj = res.data
+          this.isturnbg = parseFloat(res.data.isturnbg)
           this.bgUrl = res.data.bgUrl
           this.turnUrl = res.data.turnUrl
+          this.btnUrl = res.data.prize_btnurl
         } else {
           this.$toast({
             message: res.msg,
@@ -130,7 +141,7 @@ export default {
     // 中奖
     getResult (prize) {
       // 刷新积分
-      this.getTotalCent()
+      // this.getTotalCent()
       // 抽奖成功弹窗
       this.$toast({
         message: prize.prizename,
@@ -145,7 +156,7 @@ export default {
     // 页面加载时获取奖项信息
     this.getActiveObj()
     // 获取积分
-    this.getTotalCent()
+    // this.getTotalCent()
   },
   beforeMount () {
   },
@@ -155,14 +166,14 @@ export default {
 </script>
 
 <style scoped>
-@import "static/css/other.css";
-.scan_section {
-  margin: 0 auto;
-}
-.btn_box {
-  padding-top: 0;
-}
-.send_btn {
-  margin-bottom: .2rem;
-}
+  @import "static/css/other.css";
+  .scan_section {
+    margin: 0 auto;
+  }
+  .btn_box {
+    padding-top: 0;
+  }
+  .send_btn {
+    margin-bottom: .2rem;
+  }
 </style>

@@ -33,13 +33,12 @@
           <ul class="goodsList">
             <!-- 商品简介 start -->
             <li v-for="(item, index) in goodsList" :key="index" class="goods_li">
-              <div class="goods_item bgffffff ellipsis">
+              <div class="goods_item bgffffff">
                 <div class="goods_item_img">
                   <img v-lazy="(item.picture1) ? IMGURL + 'image/' + item.picture1.replace('.', '-zip-300.') : ''">
                 </div>
                 <div class="goods_item_cont">
-                  <div class="goods_item_name ellipsis font26">{{item.goodsname}}</div>
-                  <div class="goods_item_name ellipsis font24 colorfa2a2a"></div>
+                  <div class="goods_item_name ellipsis2 font26">{{item.goodsname}}</div>
                   <div class="goods_item_editnum">
                     <div class="goods_item_price">
                       <div class="font30 font_blod colorf84242">￥{{item.price}}</div>

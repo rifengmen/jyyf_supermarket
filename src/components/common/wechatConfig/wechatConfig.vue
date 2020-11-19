@@ -75,6 +75,7 @@ export default {
               'addCard',
               'openCard',
               'scanQRCode',
+              'getLocation',
               'updateAppMessageShareData',
               'updateTimelineShareData',
               'onMenuShareAppMessage',

@@ -98,8 +98,15 @@
         <!-- 通知 end -->
         <!-- 推荐模块 start -->
         <div class="recommend_cont" v-if="recommendList.length" v-for="(item, index) in recommendList" :key="index">
-          <!-- 推荐一 start -->
-          <div class="recommend1" v-if="item.showway === 1">
+          <!-- 标题 start-->
+          <div v-if="item.showway === 1">
+            <!-- 标题3 start -->
+            <router-link :to="{name: 'recommendList', query: {recommendid: item.Id, recommendName: item.storecategoryname}}" tag="div" class="recommend3_tit border_r6 ellipsis" v-if="item.storecategorydescription === ''">
+              <div class="font_blod colorfa2a2a font_recommend">-&nbsp;</div>
+              <div class="recommend3_tits colorfa2a2a font_recommend">{{item.storecategoryname}}</div>
+              <div class="font_blod colorfa2a2a font_recommend">&nbsp;-</div>
+            </router-link>
+            <!-- 标题3 end -->
             <!-- 标题1 start -->
             <router-link :to="{name: 'recommendList', query: {recommendid: item.Id, recommendName: item.storecategoryname}}" tag="div" class="recommend1_tit bgffffff border_r6 ellipsis" v-if="item.storecategorydescription !== ''">
               <div class="recommend1_tit_img">
@@ -109,69 +116,39 @@
               <div class="font24 font_normal color666666">{{item.storecategorydescription}}</div>
             </router-link>
             <!-- 标题1 end -->
-            <!-- 标题2 start -->
-            <router-link :to="{name: 'recommendList', query: {recommendid: item.Id, recommendName: item.storecategoryname}}" tag="div" class="recommend3_tit border_r6 ellipsis" v-if="item.storecategorydescription === ''">
-              <div class="font_blod colorfa2a2a font_recommend">-&nbsp;</div>
-              <div class="recommend3_tits colorfa2a2a font_recommend">{{item.storecategoryname}}</div>
-              <div class="font_blod colorfa2a2a font_recommend">&nbsp;-</div>
-            </router-link>
-            <!-- 标题2 end -->
-            <!-- 内容列表 start -->
-            <div class="recommend1_list" v-if="item.gdscodelist.length">
-              <div @click="goodsdetail(goods)" class="recommend1_item bgffffff border_r6" v-for="(goods, index) in item.gdscodelist" :key="index">
-                <div class="recommend1_item_img border_r6">
-                  <img v-lazy="(goods.picture1) ? IMGURL + 'image/' + goods.picture1.replace('.', '-zip-300.') : ''" class="border_r6">
-                  <div v-if="goods.promotemode !== 0" class="goods_age ellipsis font24 font_normal colorffffff">{{goods.modenote}}</div>
-                </div>
-                <div class="recommend1_name ellipsis font24">{{goods.cusgoodsname}}</div>
-                <div class="recommend1_price" v-if="goods.promotemode === 0 || goods.promotemode === 2 || goods.promotemode === 3 || goods.promotemode === 8">
-                  <div class="font24 font_blod colorf84242">￥{{goods.saleprice}}</div>
-                </div>
-                <div class="recommend1_price" v-if="goods.promotemode === 1 || goods.promotemode === 6 || goods.promotemode === 7">
-                  <div class="font24 font_blod colorf84242">￥{{goods.promotevalue}}</div>
-                  <del class="font20 color999999">￥{{goods.saleprice}}</del>
-                </div>
-                <div class="recommend1_item_btn tc colorffffff bgff6400 border_r4">购买</div>
-              </div>
-            </div>
-            <!-- 内容列表 end -->
           </div>
-          <!-- 推荐一 end -->
-          <!-- 推荐二 start -->
-          <div class="recommend2 border_r6" v-if="item.showway === 2">
-            <!-- 标题2 start -->
+          <div v-if="item.showway === 2">
+            <!-- 标题3 start -->
             <router-link :to="{name: 'recommendList', query: {recommendid: item.Id, recommendName: item.storecategoryname}}" tag="div" class="recommend3_tit border_r6 ellipsis">
               <div class="font_blod colorfa2a2a font_recommend">-&nbsp;</div>
               <div class="recommend3_tits colorfa2a2a font_recommend">{{item.storecategoryname}}</div>
               <div class="font_blod colorfa2a2a font_recommend">&nbsp;-</div>
             </router-link>
-            <!-- 标题2 end -->
-            <!-- 标题 start -->
+            <!-- 标题3 end -->
+            <!-- 标题2 start -->
             <router-link :to="{name: 'recommendList', query: {recommendid: item.Id, recommendName: item.storecategoryname}}" tag="div" class="recommend2_img bgffffff">
               <img v-lazy="IMGURL + 'image/' + item.ico">
             </router-link>
-            <!-- 标题 end -->
-            <!-- 内容列表 start -->
-            <div class="recommend1_list" v-if="item.gdscodelist.length">
-              <div @click="goodsdetail(goods)" class="recommend1_item bgffffff border_r6" v-for="(goods, index) in item.gdscodelist" :key="index">
-                <div class="recommend1_item_img border_r6">
-                  <img v-lazy="(goods.picture1) ? IMGURL + 'image/' + goods.picture1.replace('.', '-zip-300.') : ''" class="border_r6">
-                  <div v-if="goods.promotemode !== 0" class="goods_age ellipsis font24 font_normal colorffffff">{{goods.modenote}}</div>
-                </div>
-                <div class="recommend1_name ellipsis font24">{{goods.cusgoodsname}}</div>
-                <div class="recommend1_price" v-if="goods.promotemode === 0 || goods.promotemode === 2 || goods.promotemode === 3 || goods.promotemode === 8">
-                  <div class="font24 font_blod colorf84242">￥{{goods.saleprice}}</div>
-                </div>
-                <div class="recommend1_price" v-if="goods.promotemode === 1 || goods.promotemode === 6 || goods.promotemode === 7">
-                  <div class="font24 font_blod colorf84242">￥{{goods.promotevalue}}</div>
-                  <del class="font20 color999999">￥{{goods.saleprice}}</del>
-                </div>
-                <div class="recommend1_item_btn tc colorffffff bgff6400 border_r4">购买</div>
-              </div>
-            </div>
-            <!-- 内容列表 end -->
+            <!-- 标题2 end -->
           </div>
-          <!-- 推荐二 end -->
+          <!-- 标题 end -->
+          <!-- 商品列表 start -->
+          <div class="recommend_list" v-if="item.gdscodelist.length">
+            <div @click="goodsdetail(goods)" class="recommend_item bgffffff border_r6" v-for="(goods, index) in item.gdscodelist" :key="index">
+              <div class="recommend_item_img border_r6">
+                <img v-lazy="(goods.picture1) ? IMGURL + 'image/' + goods.picture1.replace('.', '-zip-300.') : ''" class="border_r6">
+                <div v-if="goods.promotemode !== 0" class="goods_age ellipsis font24 font_normal colorffffff">{{goods.modenote}}</div>
+              </div>
+              <div class="recommend_name ellipsis2 font24">{{goods.cusgoodsname}}</div>
+              <div class="recommend_price">
+                <div class="font24 font_blod colorf84242" v-if="goods.promotevalue">￥{{goods.promotevalue}}</div>
+                <div class="font24 font_blod colorf84242" v-else>￥{{goods.saleprice}}</div>
+                <del class="font20 color999999" v-if="goods.promotevalue && goods.promotevalue !== goods.saleprice">￥{{goods.saleprice}}</del>
+              </div>
+              <div class="recommend_item_btn tc colorffffff bgff6400 border_r4">购买</div>
+            </div>
+          </div>
+          <!-- 商品列表 end -->
         </div>
         <!-- 推荐模块 end -->
       </div>
@@ -355,6 +332,7 @@
 import WechatConfig from '@/components/common/wechatConfig/wechatConfig'
 import MyFooter from '@/components/common/footer/myfooter'
 import loading from '@/components/common/loading/loading'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'index',
@@ -426,141 +404,108 @@ export default {
   methods: {
     // 获取banner列表
     getBanner () {
-      let data = new FormData()
-      let requestData = {
+      let self = this
+      let data = {
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/slide/listShopHomeSlide', data).then(result => {
+      self.$api.system.listShopHomeSlide(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.bannerlist = res.data
+          self.bannerlist = res.data
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 获取banner跳转链接
     getLinkForSlide (Sort) {
-      let data = new FormData()
-      let requestData = {
+      let self = this
+      let data = {
         ImageID: Sort
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/slide/getLinkForSlide', data).then(result => {
+      self.$api.system.getLinkForSlide(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.bannerType.forEach(item => {
+          self.bannerType.forEach(item => {
             if (item.linktype === res.data.linktype) {
               // banner跳转类型,0:无，2：分类，3：推荐，4：公告，5：充值，6：积分抽奖，7：领券
               if (res.data.linktype === 2) {
-                this.$router.push({name: item.name, query: {classcode: res.data.linkcode, classname: res.data.linkname}})
+                self.$router.push({name: item.name, query: {classcode: res.data.linkcode, classname: res.data.linkname}})
               } else if (res.data.linktype === 3) {
-                this.$router.push({name: item.name, query: {recommendid: res.data.linkcode, recommendName: res.data.linkname}})
+                self.$router.push({name: item.name, query: {recommendid: res.data.linkcode, recommendName: res.data.linkname}})
               } else if (res.data.linktype === 4) {
-                this.$router.push({name: item.name, query: {id: res.data.linkcode}})
+                self.$router.push({name: item.name, query: {id: res.data.linkcode}})
               } else if (res.data.linktype === 5) {
-                this.$router.push({name: item.name})
+                self.$router.push({name: item.name})
               } else if (res.data.linktype === 6) {
-                this.$router.push({name: item.name})
+                self.$router.push({name: item.name})
               } else if (res.data.linktype === 7) {
-                this.$router.push({name: item.name, params: {header_tit: '领券中心', froms: 'index'}})
+                self.$router.push({name: item.name, params: {header_tit: '领券中心', froms: 'index'}})
               }
             }
           })
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 获取通知信息
     getNotice () {
-      let data = new FormData()
-      let requestData = {
+      let self = this
+      let data = {
         listtype: '2',
         page: 1,
         pageSize: 10
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('info/InformationController/listNotice', data).then(result => {
+      self.$api.info.listNotice(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.noticelist = res.data.content
+          self.noticelist = res.data.content
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 获取推荐
     getRecommend () {
-      let data = new FormData()
-      let requestData = {
+      let self = this
+      let data = {
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/goods/listThemeAndGdscode', data).then(result => {
+      self.$api.api.listThemeAndGdscode(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.isShowLoading = false
-          this.recommendList = res.data
+          self.isShowLoading = false
+          self.recommendList = res.data
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 商品详情
     goodsdetail (goodsdetail) {
-      this.$store.commit('setGoodsdetail', goodsdetail)
-      this.$router.push({name: 'goodsdetail', query: {goodsid: goodsdetail.goodsid, goodsname: goodsdetail.cusgoodsname}})
+      let self = this
+      self.$store.commit('setGoodsdetail', goodsdetail)
+      self.$router.push({name: 'goodsdetail', query: {goodsid: goodsdetail.goodsid, goodsname: goodsdetail.cusgoodsname}})
     },
     // 签到
     sendSign () {
-      let data = new FormData()
-      let requestData = {}
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('pay/bill/member/signInCentChange', data).then(result => {
+      let self = this
+      let data = {}
+      self.$api.pay.signInCentChange(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$toast({
-            message: '签到成功，' + res.msg,
-            type: 'success'
-          })
+          tip('签到成功，' + res.msg)
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 清空扫码购状态
     clearSaomagou () {
-      this.$store.commit('clearSaomacar')
-      this.$store.commit('clearShopInfo')
+      let self = this
+      self.$store.commit('clearSaomacar')
+      self.$store.commit('clearShopInfo')
     },
     // 设置页面title
     setTitle (title) {
@@ -568,123 +513,109 @@ export default {
     },
     // 获取用户会员卡信息
     getMyInfo () {
-      let data = new FormData()
-      let requestData = {
-      }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/customlogin/getMyInfo', data).then(result => {
+      let self = this
+      let data = {}
+      self.$api.system.getMyInfo(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$store.commit('setMemType', res.data.mem_type)
-          this.$store.commit('setMoneyDetail', res.data.moneyDetail)
+          self.$store.commit('setMemType', res.data.mem_type)
+          self.$store.commit('setMoneyDetail', res.data.moneyDetail)
+        } else {
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 获取我的消息
     getMessageList () {
-      let data = new FormData()
-      let requestData = {
+      let self = this
+      let data = {
         messageFlag: '1',
         page: 1,
-        pageSize: 20
+        pageSize: 100
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('info/InformationController/listmessage', data).then(result => {
+      self.$api.info.listmessage(data).then(result => {
         let res = result.data
         if (res.code === 200) {
           if (res.data.content && res.data.content.length) {
-            this.messagenums = res.data.content[0].mscount
+            self.messagenums = res.data.content[0].mscount
           }
-        } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 去扫码购
     toSaoMaGou () {
-      if (!this.userInfo.smgMode) {
-        this.$toast({
-          message: '扫码购未开通！',
-          type: 'fail'
-        })
+      let self = this
+      if (!self.userInfo.smgMode) {
+        tip('扫码购未开通！')
         return
       }
-      this.$router.push({name: 'saomagou'})
+      self.$router.push({name: 'saomagou'})
     },
     // 初始化发送请求
     initData () {
-      if (this.$store.state.userInfo.token) {
+      let self = this
+      if (self.$store.state.userInfo.token) {
         // 设置页面title
-        this.setTitle(this.userInfo.deptname)
+        self.setTitle(self.userInfo.deptname)
         // 获取banner列表
-        this.getBanner()
+        self.getBanner()
         // 获取通知信息
-        this.getNotice()
+        self.getNotice()
         // 获取推荐
-        this.getRecommend()
+        self.getRecommend()
         // 清空扫码购状态
-        this.clearSaomagou()
+        self.clearSaomagou()
       }
     },
     // 初始化发送请求2
     initData2 () {
-      if (this.$store.state.userInfo.token) {
+      let self = this
+      if (self.$store.state.userInfo.token) {
         // 设置页面title
-        this.setTitle(this.userInfo.deptname)
+        self.setTitle(self.userInfo.deptname)
         // 获取用户会员卡信息
-        this.getMyInfo()
+        self.getMyInfo()
         // 获取我的消息
-        this.getMessageList()
+        self.getMessageList()
       }
     },
     // 设置用户信息
     setUserInfo () {
-      let data = new FormData()
-      let requestData = {
-        wechatID: this.$store.state.wechatID,
-        wexinID: this.$store.state.openid
+      let self = this
+      let data = {
+        wechatID: self.$store.state.wechatID,
+        wexinID: self.$store.state.openid
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/customlogin/login', data).then(result => {
+      self.$api.system.login(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$store.commit('setUserInfo', res.data)
-          sessionStorage.setItem('jyyf_token', res.data.token)
-          this.$axios.defaults.headers.common.Authorization = res.data.token
-        } else {
+          self.$store.commit('setUserInfo', res.data)
+          self.$store.commit('setToken', res.data.token)
         }
-      }).catch(error => {
-        throw error
       })
     }
   },
   beforeCreate () {},
   created () {
+    let self = this
     // 设置用户信息
-    this.setUserInfo()
-    if (this.userInfo.typeflag) {
+    self.setUserInfo()
+    if (self.userInfo.typeflag) {
       // 初始化发送请求
-      this.initData()
+      self.initData()
     } else {
       // 初始化发送请求2
-      this.initData2()
+      self.initData2()
     }
   },
   beforeMount () {},
   mounted () {},
   activated () {
-    // 初始化发送请求
-    this.initData()
+    let self = this
+    if (self.userInfo) {
+      // 初始化发送请求
+      self.initData()
+    }
   }
 }
 </script>

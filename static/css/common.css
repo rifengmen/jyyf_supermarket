@@ -129,7 +129,6 @@ input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
   font-family: YouSheBiaoTiHei;
 }
 /* 字体尺寸 end */
-
 /* 字体粗细 start */
 .font_lighter {
   font-weight: lighter;
@@ -147,7 +146,6 @@ input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
   font-weight: normal;
 }
 /* 字体粗细 end */
-
 /* 字体颜色 start */
 .color000000 {
   color: #000000;
@@ -198,7 +196,6 @@ input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
   color: #ffc06e;
 }
 /* 字体颜色 end */
-
 /* 背景颜色 start */
 .bgffffff {
   background-color: #ffffff;
@@ -261,14 +258,6 @@ input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
   background-color: #fef7ed;
 }
 /* 背景颜色 end */
-/* 背景图 start */
-.bgturntableBgc {
-  background-image: url("../img/turntableBgc.png");
-}
-.bgturnboxbg {
-  background-image: url("../img/turnboxbg.png");
-}
-/* 背景图 end */
 /* 边框 start */
 .borderffffff {
   border: 1px solid #ffffff;
@@ -330,15 +319,20 @@ input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
   border-radius: 5rem;
 }
 /* 圆角 end */
-
-/* 单行文本溢出隐藏 start */
+/* 文本溢出隐藏 start */
 .ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-/* 单行文本溢出隐藏 end */
-
+.ellipsis2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+/* 文本溢出隐藏 end */
 /* 布局方式 start */
 .fl {
   float: left;
@@ -623,6 +617,11 @@ input[type=checkbox]:checked:after {
   text-align: center;
   line-height: .24rem;
 }
+.goods_input .delbtn {
+  width: .3rem;
+  height: .3rem;
+  line-height: .3rem;
+}
 .goods_item {
   width: calc(100% - .48rem);
   height: 2.2rem;
@@ -637,14 +636,15 @@ input[type=checkbox]:checked:after {
   height: 1.8rem;
   overflow: hidden;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .goods_item_img img {
   width: 100%;
-  height: 100%;
 }
 .goods_item_cont {
   width: calc(100% - 2rem);
-  height: 1.8rem;
   margin-left: .2rem;
   display: flex;
   justify-content: space-between;
@@ -652,8 +652,12 @@ input[type=checkbox]:checked:after {
 }
 .goods_item_name {
   width: 100%;
-  height: .4rem;
-  line-height: .4rem;
+  max-height: 1rem;
+  line-height: 1.5;
+}
+.goods_item_name:first-child {
+  max-height: 1.6rem;
+  margin-bottom: .1rem;
 }
 .goods_item_price {
   width: 56%;
@@ -675,9 +679,32 @@ input[type=checkbox]:checked:after {
   justify-content: space-between;
   align-items: flex-end;
 }
-.goods_item_cart {
-  width: .6rem;
-  height: .6rem;
+.goods_item_editnum .goods_num {
+  width: 1.76rem;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.goods_item_editnum .goods_num_btn {
+  width: .4rem;
+  height: .4rem;
+  line-height: .4rem;
+}
+.goods_item_editnum .goods_num_input {
+  width: .7rem;
+  height: .4rem;
+  line-height: .4rem;
+  margin: 0 .1rem;
+}
+.goods_item_editnum .goods_num_input input {
+  width: 100%;
+  margin: unset;
+  padding: unset;
+}
+.goods_item_editnum .goods_item_cart {
+  width: .5rem;
+  height: .5rem;
   overflow: hidden;
 }
 /* 商品列表 end */
@@ -1144,36 +1171,25 @@ input.el-input__inner::placeholder {
   justify-content: center;
   align-items: center;
 }
-#turnBox .turnBtn {
+#turnBox .turnUlBox {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
-  width: 1.3rem;
-  overflow: hidden;
-  z-index: 3;
-}
-#turnBox #turnUlBox {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  width: 5.2rem;
-  height: 5.2rem;
+  width: 4.9rem;
+  height: 4.9rem;
   z-index: 1;
-  background-size: 100% 100%;
-  padding: .3rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-#turnBox #turnUlborder {
+#turnBox .turnUlborder {
   position: absolute;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
-#turnBox #turnUlborder li {
+#turnBox .turnUlborder li {
   position: absolute;
   top: -50%;
   left: 50%;
@@ -1181,27 +1197,51 @@ input.el-input__inner::placeholder {
   height: 100%;
   transform-origin: left bottom
 }
-#turnBox #turnUltext {
+#turnBox .turnUltext {
   position: absolute;
-  width: 4.5rem;
-  height: 4.5rem;
+  width: 4.7rem;
+  height: 4.7rem;
   overflow: hidden;
 }
-#turnBox #turnUltext li {
+#turnBox .turnUltext li {
   position: absolute;
   box-sizing: border-box;
-  font-size: .26rem;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  padding-top: .1rem;
   line-height: 20px;
+  padding: .1rem;
   transform-origin: 50% 50%;
   text-align: center;
 }
-#turnBox #turnUltext .prizename {
+#turnBox .turnUltext .prizename {
   width: 50%;
   margin: 0 auto;
+}
+#turnBox .turnUltext2 .prizename {
+  padding-top: .4rem;
+}
+#turnBox .turnUltext img {
+  width: .9rem;
+  margin: .1rem auto;
+}
+#turnBox .turnUlbg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-image: url('../img/lotteryTurnUrl.png');
+  background-size: 100% 100%;
+}
+#turnBox .turnBtn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 1.3rem;
+  height: 1.3rem;
+  overflow: hidden;
+  z-index: 3;
 }
 /* 抽奖样式 end */

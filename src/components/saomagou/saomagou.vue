@@ -66,6 +66,7 @@
 
 <script>
 import wx from 'weixin-js-sdk'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'saomagou',
@@ -105,180 +106,161 @@ export default {
   },
   methods: {
     // 获取用户地址信息
+    wxGetLocation (isGet) {
+      let self = this
+      // 获取定位
+      wx.ready(() => {
+        wx.getLocation({
+          type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+          success: function (res) {
+            self.lat = res.latitude // 纬度，浮点数，范围为90 ~ -90
+            self.lng = res.longitude // 经度，浮点数，范围为180 ~ -180。
+            if (isGet || !self.shopInfo) {
+              self.getShopList(isGet)
+            }
+          },
+          fail: function (res) {
+            // alert(JSON.stringify(res))
+          },
+          cancel: function (res) {
+            tip('已取消')
+          }
+        })
+      })
+      // // 测试数据
+      // self.lat = 37.858363
+      // self.lng = 112.581113
+      // if (isGet || !self.shopInfo) {
+      //   self.getShopList(isGet)
+      // }
+    },
+    // 获取用户地址信息
     getAddressInfo (isGet) {
+      let self = this
       if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
-        this.curPageUrl = this.baseURL + sessionStorage.getItem('jyyf_beforeLoginUrl')
+        self.curPageUrl = self.baseURL + sessionStorage.getItem('jyyf_beforeLoginUrl')
       } else if (/(Android|Windows)/i.test(navigator.userAgent)) {
-        this.curPageUrl = window.location.href
+        self.curPageUrl = window.location.href
       }
-      let data = new FormData()
-      let requestData = {
-        wechatID: this.$store.state.wechatID,
-        curPageUrl: this.curPageUrl
+      let data = {
+        wechatID: self.$store.state.wechatID,
+        curPageUrl: self.curPageUrl
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/payment/getWXConfig', data).then(result => {
+      self.$api.api.getWXConfig(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.wxstr = res.data
-          let _this = this
+          self.wxstr = res.data
           wx.config({
             // debug: true,
             debug: false,
-            appId: _this.wxstr.appid,
-            timestamp: _this.wxstr.timestamp,
-            nonceStr: _this.wxstr.noncestr,
-            signature: _this.wxstr.signure,
+            appId: self.wxstr.appid,
+            timestamp: self.wxstr.timestamp,
+            nonceStr: self.wxstr.noncestr,
+            signature: self.wxstr.signure,
             // 所有要调用的 API 都要加到这个列表中
             jsApiList: [
-              'getLocation'
+              'addCard',
+              'openCard',
+              'scanQRCode',
+              'getLocation',
+              'updateAppMessageShareData',
+              'updateTimelineShareData',
+              'onMenuShareAppMessage',
+              'onMenuShareTimeline'
             ]
           })
-          wx.ready(() => {
-            // 获取定位
-            wx.getLocation({
-              type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-              success: function (res) {
-                _this.lat = res.latitude // 纬度，浮点数，范围为90 ~ -90
-                _this.lng = res.longitude // 经度，浮点数，范围为180 ~ -180。
-                if (isGet || !_this.shopInfo) {
-                  _this.getShopList(isGet)
-                }
-              },
-              fail: function (res) {
-                // alert(JSON.stringify(res))
-              },
-              cancel: function (res) {
-                _this.$toast({
-                  message: '已取消！',
-                  type: 'fail'
-                })
-              }
-            })
-          })
-          wx.error((res) => {
-          })
-        } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          // 微信api注册
+          self.wxGetLocation(isGet)
         }
-      }).catch(error => {
-        throw error
       })
-      // // 测试数据
-      // this.lat = 37.858363
-      // this.lng = 112.581113
-      // if (isGet || !this.shopInfo) {
-      //   this.getShopList(isGet)
-      // }
     },
     // 获取附近店铺信息
     getShopList (isGet) {
-      let data = new FormData()
-      let requestData = {
-        Latitude: this.lat,
-        Longitude: this.lng
+      let self = this
+      let data = {
+        Latitude: self.lat,
+        Longitude: self.lng
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/dept/listDeptInfo', data).then(result => {
+      self.$api.system.listDeptInfo(data).then(result => {
         let res = result.data
         if (res.code === 200) {
           // 如果没有店铺
           if (!res.data.list.length) {
-            this.$toast({
-              message: '附近暂无扫码购店铺!',
-              type: 'fail'
-            })
+            tip('附近暂无扫码购店铺')
           } else if (res.data.list.length >= 1) { // 如果有多家店铺
             // 点击店铺获取附近店铺时不默认赋值
             if (!isGet) {
-              this.$store.commit('setShopInfo', res.data.list[0])
-              this.deptcode = res.data.list[0].deptcode
+              self.$store.commit('setShopInfo', res.data.list[0])
+              self.deptcode = res.data.list[0].deptcode
               // 设置页面title
-              this.setTitle(res.data.list[0].deptname)
+              self.setTitle(res.data.list[0].deptname)
             }
-            this.shopList = res.data.list
+            self.shopList = res.data.list
             if (isGet) {
-              this.shopListFlag = true
+              self.shopListFlag = true
             }
           }
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 是否显示门店列表
     isSetShopListFlag () {
-      if (this.saomacar.length) {
-        this.$toast({
-          message: '购物车存在商品，如需切换门店请退出重进！',
-          type: 'fail',
-          duration: 3000
-        })
+      let self = this
+      if (self.saomacar.length) {
+        tip('购物车存在商品，如需切换门店请退出重进！')
         return false
       }
-      this.getAddressInfo(true)
+      // 获取用户地址信息
+      self.getAddressInfo(true)
     },
     // 设置购物门店
     setDeptcode () {
-      let shopInfo = this.shopList.filter(item => item.deptcode === this.deptcode)[0]
-      this.$store.commit('setShopInfo', shopInfo)
+      let self = this
+      let shopInfo = self.shopList.filter(item => item.deptcode === self.deptcode)[0]
+      self.$store.commit('setShopInfo', shopInfo)
       // 设置页面title
-      this.setTitle(shopInfo.deptname)
+      self.setTitle(shopInfo.deptname)
     },
     // 去订单列表页面
     toSaomaorderList () {
-      this.$router.push({name: 'saomaorderList'})
+      let self = this
+      self.$router.push({name: 'saomaorderList'})
     },
     // 去出场码页面
     toSaomaobar () {
-      if (!this.shopInfo.deptcode) {
-        this.$toast({
-          message: '请选择店铺！',
-          type: 'fail'
-        })
+      let self = this
+      if (!self.shopInfo.deptcode) {
+        tip('请选择门店')
         return false
       }
-      let data = new FormData()
-      let requestData = {
-        deptcode: this.shopInfo.deptcode
+      let data = {
+        deptcode: self.shopInfo.deptcode
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('invest/microFlow/getFlowno', data).then(result => {
+      self.$api.invest.getFlowno(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$router.push({name: 'saomabar', query: {saomabar: res.data.barimg, flowno: res.data.orderInfo.flowno}})
+          self.$router.push({name: 'saomabar', query: {saomabar: res.data.barimg, flowno: res.data.orderInfo.flowno}})
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 设置页面title
     setTitle (title) {
-      document.title = title || this.$store.state.userInfo.deptname
+      let self = this
+      document.title = title || self.$store.state.userInfo.deptname
     }
   },
   beforeCreate () {
   },
   created () {
+    let self = this
     // 不存在店铺信息时请求定位
-    if (!this.shopInfo) {
-      this.getAddressInfo(false)
+    if (!self.shopInfo) {
+      // 获取用户地址信息
+      self.getAddressInfo(false)
     }
   },
   beforeMount () {

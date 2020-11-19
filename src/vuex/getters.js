@@ -15,10 +15,6 @@ const getters = {
   getHeadimgurl (state) {
     return state.headimgurl
   },
-  // 获取userToken
-  getUserToken (state) {
-    return state.userToken
-  },
   // 获取用户信息
   getUserInfo (state) {
     return state.userInfo

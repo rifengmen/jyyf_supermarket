@@ -75,15 +75,13 @@ export default {
     return {
       // 充值信息
       payData: this.$route.params.payData,
+      // 充值类型
+      moneyType: this.$route.params.moneyType,
       // 支付方式渠道
       channel: 'WX_JSAPI'
     }
   },
   computed: {
-    // 充值类型
-    moneyType () {
-      return this.$store.state.moneyType
-    }
   },
   components: {
     MyHeader
@@ -111,6 +109,7 @@ export default {
           if (res.data.beecloud) {
             let beecloud = res.data.beecloud
             if (beecloud.paymentchannel === 3) { // 银联商务结算
+              sessionStorage.removeItem('jyyf_openid')
               window.location.href = beecloud.unifiedPayStr.payUrl
             } else if (beecloud.paymentchannel === 4) { // 太米结算
               sessionStorage.removeItem('jyyf_openid')

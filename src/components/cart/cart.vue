@@ -13,26 +13,23 @@
                 <div class="goods_input bgffffff" @click="addorder(item.no)">
                   <input class="checkbox" type="checkbox" name="goods" v-model="item.addorder">
                 </div>
-                <div class="goods_item bgffffff ellipsis" @click="goodsdetail(item)">
+                <div class="goods_item bgffffff" @click="goodsdetail(item)">
                   <div class="goods_item_img">
                     <img :src="(item.picture1 ? (imgurl + 'image/' + item.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))">
                     <div v-if="item.promotemode !== 0" class="goods_age ellipsis font24 font_normal colorffffff">{{item.modenote}}</div>
                   </div>
                   <div class="goods_item_cont">
-                    <div class="goods_item_name ellipsis font26">{{item.cusgoodsname}}</div>
-                    <div class="goods_item_name ellipsis font24 colorfa2a2a">{{item.remark}}</div>
+                    <div class="goods_item_name ellipsis2 font26">{{item.cusgoodsname}}</div>
                     <div class="goods_item_editnum">
-                      <div class="goods_item_price" v-if="item.promotemode === 0 || item.promotemode === 2 || item.promotemode === 3 || item.promotemode === 8">
-                        <div class="font30 font_blod colorf84242">￥{{item.saleprice}}</div>
-                      </div>
-                      <div class="goods_item_price" v-if="item.promotemode === 1 || item.promotemode === 6 || item.promotemode === 7">
-                        <div class="font30 font_blod colorf84242">￥{{item.promotevalue}}</div>
-                        <del class="font24 color999999">￥{{item.saleprice}}</del>
+                      <div class="goods_item_price">
+                        <div class="ellipsis font32 font_blod colorf84242" v-if="item.promotevalue">￥{{item.promotevalue}}</div>
+                        <div class="ellipsis font32 font_blod colorf84242" v-else>￥{{item.saleprice}}</div>
+                        <del class="ellipsis font26 color999999" v-if="item.promotevalue && item.promotevalue !== item.saleprice">￥{{item.saleprice}}</del>
                       </div>
                       <div class="goods_num">
-                        <div class="goods_num_btn goods_num_countnum borderc7c7c7 border_r4 tc font40 font_lighter color999999" @click="countAmount(item.amount, item.no)">-</div>
+                        <div class="goods_num_btn goods_num_countnum borderc7c7c7 border_r4 tc font40 font_lighter color999999" @click="countAmount(item)">-</div>
                         <div class="goods_num_input borderc7c7c7 border_r4 tc colorff6400 font30" @click="changeAmount">{{item.amount}}</div>
-                        <div class="goods_num_btn goods_num_addnum borderc7c7c7 border_r4 tc font40 font_lighter color999999" @click="addAmount(item.amount, item.no)">+</div>
+                        <div class="goods_num_btn goods_num_addnum borderc7c7c7 border_r4 tc font40 font_lighter color999999" @click="addAmount(item)">+</div>
                       </div>
                     </div>
                   </div>
@@ -77,6 +74,7 @@ import MyHeader from '@/components/common/header/myheader'
 import nodata from '@/components/common/nodata/nodata'
 import addorder from '@/components/common/addorder/addorder'
 import loading from '@/components/common/loading/loading'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'cart',
@@ -98,7 +96,8 @@ export default {
   },
   computed: {
     carts () {
-      let str = JSON.stringify(this.cartList)
+      let self = this
+      let str = JSON.stringify(self.cartList)
       return JSON.parse(str)
     }
   },
@@ -112,54 +111,52 @@ export default {
   methods: {
     // 获取购物车商品
     getCartList () {
-      this.isShowLoading = true
-      let data = new FormData()
-      let requestData = {
+      let self = this
+      self.isShowLoading = true
+      let data = {
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/car/getCar', data).then(result => {
+      self.$api.api.getCar(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.isShowLoading = false
-          this.cartList = res.data
-          for (let i = 0; i < this.cartList.length; i++) {
-            this.cartList[i].addorder = true
-          }
-          // 计算选中商品总价
-          this.setTotalmoney()
-          this.$store.commit('setCart', res.data)
-        } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
+          self.isShowLoading = false
+          self.cartList = res.data
+          self.cartList.forEach(item => {
+            item.addorder = true
           })
+          // 计算选中商品总价
+          self.setTotalmoney()
+          self.$store.commit('setCart', res.data)
+        } else {
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 商品详情
     goodsdetail (goodsdetail) {
-      this.$store.commit('setGoodsdetail', goodsdetail)
-      this.$router.push({name: 'goodsdetail', query: {goodsid: goodsdetail.goodsid, goodsname: goodsdetail.cusgoodsname}})
+      let self = this
+      self.$store.commit('setGoodsdetail', goodsdetail)
+      self.$router.push({name: 'goodsdetail', query: {goodsid: goodsdetail.goodsid, goodsname: goodsdetail.cusgoodsname}})
     },
     // 加
-    addAmount (amount, no) {
+    addAmount (goods) {
+      let self = this
       window.event.stopPropagation()
-      let num = parseInt(amount) + 1
+      let num = parseInt(goods.amount) + 1
       if (num > 0) {
-        this.editAmount(num, no)
+        // 提交修改信息
+        self.editAmount(num, goods.no)
       }
     },
     // 减
-    countAmount (amount, no) {
+    countAmount (goods) {
+      let self = this
       window.event.stopPropagation()
-      let num = parseInt(amount) - 1
+      let num = parseInt(goods.amount) - 1
       if (num > 0) {
-        this.editAmount(num, no)
+        // 提交修改信息
+        self.editAmount(num, goods.no)
       }
     },
     // 直接输入
@@ -168,119 +165,112 @@ export default {
     },
     // 提交修改信息
     editAmount (amount, no) {
-      let data = new FormData()
-      let requestData = {
+      let self = this
+      let data = {
         amount: amount,
         no: no,
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/car/modifyCar', data).then(result => {
+      self.$api.api.modifyCar(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          for (let i = 0; i < this.cartList.length; i++) {
-            if (this.cartList[i].no === no) {
-              this.cartList[i].amount = amount
+          self.cartList.forEach(item => {
+            if (item.no === no) {
+              item.amount = amount
             }
-          }
-          // 计算选中商品总价
-          this.setTotalmoney()
-        } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
           })
+          // 计算选中商品总价
+          self.setTotalmoney()
+        } else {
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 选中结算商品
     addorder (no) {
+      let self = this
       let flag = true
-      for (let i = 0; i < this.cartList.length; i++) {
-        if (this.cartList[i].no === no) {
-          this.cartList[i].addorder = !this.cartList[i].addorder
+      self.cartList.forEach(item => {
+        if (item.no === no) {
+          item.addorder = !item.addorder
         }
-        if (!this.cartList[i].addorder) {
+        if (!item.addorder) {
           flag = false
         }
-      }
+      })
       if (!flag) {
-        this.all = false
-        this.$refs.all.checked = false
+        self.all = false
+        self.$refs.all.checked = false
       } else {
-        this.all = true
-        this.$refs.all.checked = true
+        self.all = true
+        self.$refs.all.checked = true
       }
       // 计算选中商品总价
-      this.setTotalmoney()
+      self.setTotalmoney()
     },
     // 全选
     setAll () {
-      for (let i = 0; i < this.cartList.length; i++) {
-        this.cartList[i].addorder = true
-      }
-      this.all = true
-      this.$refs.all.checked = true
+      let self = this
+      self.cartList.forEach(item => {
+        item.addorder = true
+      })
+      self.all = true
+      self.$refs.all.checked = true
       // 计算选中商品总价
-      this.setTotalmoney()
+      self.setTotalmoney()
     },
     // 不选
     setNoall () {
-      for (let i = 0; i < this.cartList.length; i++) {
-        this.cartList[i].addorder = false
-      }
-      this.all = false
-      this.$refs.all.checked = false
+      let self = this
+      self.cartList.forEach(item => {
+        item.addorder = false
+      })
+      self.all = false
+      self.$refs.all.checked = false
       // 计算选中商品总价
-      this.setTotalmoney()
+      self.setTotalmoney()
     },
     // 删除商品
     delGoods () {
-      let arrlist = this.cartList.filter(item => item.addorder === true)
+      let self = this
+      let arrlist = self.cartList.filter(item => item.addorder === true)
       let arrno = arrlist.map(item => item.no)
-      let data = new FormData()
-      let requestData = {
+      let data = {
         no: arrno,
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/car/deleteCar', data).then(result => {
+      self.$api.api.deleteCar(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.cartList = this.cartList.filter(item => item.addorder !== true)
-          this.setTotalmoney()
+          self.cartList = self.cartList.filter(item => item.addorder !== true)
+          // 计算选中商品总价
+          self.setTotalmoney()
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
       })
     },
     // 计算商品总价
     setTotalmoney () {
+      let self = this
       let money = 0
       let no = []
-      for (let i = 0; i < this.cartList.length; i++) {
-        if (this.cartList[i].addorder) {
+      self.cartList.forEach(item => {
+        if (item.addorder) {
           let _money
-          no.push(this.cartList[i].no)
-          if (this.cartList[i].promotemode) {
-            _money = parseFloat(this.cartList[i].amount) * parseFloat(this.cartList[i].promotevalue)
+          no.push(item.no)
+          if (!item.promotemode || item.promotemode === 2 || item.promotemode === 3) {
+            _money = parseFloat(item.amount) * parseFloat(item.saleprice)
           } else {
-            _money = parseFloat(this.cartList[i].amount) * parseFloat(this.cartList[i].saleprice)
+            _money = parseFloat(item.amount) * parseFloat(item.promotevalue)
           }
           money += _money
         }
-      }
-      this.totalmoney = money.toFixed(2)
-      this.no = no
+      })
+      self.totalmoney = money.toFixed(2)
+      self.no = no
     }
   },
   watch: {
@@ -295,8 +285,9 @@ export default {
   beforeCreate () {
   },
   created () {
+    let self = this
     // 页面加载时获取购物车商品
-    this.getCartList()
+    self.getCartList()
   },
   beforeMount () {
   },

@@ -12,7 +12,6 @@ export default {
   props: {
     times: {
       type: String,
-      // require: true,
       default: function () {
         return ''
       }
@@ -20,6 +19,8 @@ export default {
   },
   data () {
     return {
+      // 剩余时长
+      time: 1,
       // 小时
       hours: '00',
       // 分钟
@@ -34,26 +35,24 @@ export default {
   methods: {
     // 换算时间写入页面
     initTimes () {
-      setInterval(this.timeTodate, 1000)
+      this.countdown = setInterval(this.timeTodate, 1000)
     },
     // 格式化时间
     timeTodate () {
       let _t = this.times
       _t = _t.replace(/-/g, '/')
       let times = new Date(_t).getTime()
-      let time = (times - new Date().getTime()) / 1000
-      if (time !== null && time !== '') {
-        let h = parseInt(time / (60 * 60))
-        let m = parseInt(time / 60 % 60)
-        let s = parseInt(time % 60)
+      this.time = (times - new Date().getTime()) / 1000
+      if (this.time !== null && this.time !== '' && this.time > 0) {
+        let h = parseInt(this.time / (60 * 60))
+        let m = parseInt(this.time / 60 % 60)
+        let s = parseInt(this.time % 60)
         this.hours = this.checkTime(h)
         this.minutes = this.checkTime(m)
         this.second = this.checkTime(s)
-        if (this.hours <= 0 && this.minutes <= 0 && this.second <= 0) {
-          this.hours = '00'
-          this.minutes = '00'
-          this.second = '00'
-        }
+      } else if (this.time <= 0) {
+        // 关闭定时器
+        clearInterval(this.countdown)
       }
     },
     // 一位时间加零
@@ -65,10 +64,6 @@ export default {
     }
   },
   watch: {
-    times () {
-      // 初始化倒计时
-      this.initTimes()
-    }
   },
   beforeCreate () {
   },
@@ -79,6 +74,10 @@ export default {
   beforeMount () {
   },
   mounted () {
+  },
+  destroyed () {
+    // 关闭定时器
+    clearInterval(this.countdown)
   }
 }
 </script>

@@ -3,19 +3,19 @@
 </template>
 
 <script>
+import tip from '@/utils/Toast'
+
 export default {
   name: 'saomacancelBtn',
   props: {
     flowno: {
       type: String,
-      // require: true,
       default: function () {
         return ''
       }
     },
     deptcode: {
       type: String,
-      // require: true,
       default: function () {
         return ''
       }
@@ -29,43 +29,36 @@ export default {
   methods: {
     // 取消
     cancel (e) {
+      let self = this
       e.stopPropagation()
-      let data = new FormData()
-      let requestData = {
-        flowno: this.flowno,
-        deptcode: this.deptcode
-      }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$dialog.confirm({
+      self.$dialog.confirm({
         message: '确认取消订单吗？'
       }).then(() => {
-        this.$axios.post('invest/microFlow/cancelSaleOrder', data).then(result => {
-          let res = result.data
-          if (res.code === 200) {
-            this.$toast({
-              message: '取消成功！',
-              type: 'success'
-            })
-            if (this.$route.name === 'saomaorderList') {
-              this.$emit('onRefresh')
-              return false
-            }
-            this.$router.back()
-          } else {
-            this.$toast({
-              message: res.msg,
-              type: 'fail'
-            })
-          }
-        }).catch(error => {
-          throw error
-        })
+        // 扫码购取消订单
+        self.cancelSaleOrder()
       }).catch(() => {
-        this.$toast({
-          type: 'fail',
-          message: '操作已取消'
-        })
+        tip('操作已取消！')
+      })
+    },
+    // 扫码购取消订单
+    cancelSaleOrder () {
+      let self = this
+      let data = {
+        flowno: self.flowno,
+        deptcode: self.deptcode
+      }
+      self.$api.invest.cancelSaleOrder(data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          tip('取消成功！')
+          if (self.$route.name === 'saomaorderList') {
+            self.$emit('onRefresh')
+            return false
+          }
+          self.$router.back()
+        } else {
+          tip(res.msg)
+        }
       })
     }
   },

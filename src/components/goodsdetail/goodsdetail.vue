@@ -1,24 +1,24 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div class="container bgeeeeee" v-title :data-title="goodsname">
-    <!-- 商品介绍 start -->
+    <!-- 商品 start -->
     <div class="goods_cont bgeeeeee">
-      <!-- 商品视频简介 start -->
-      <div class="goods_img bgffffff" v-if="playerOptions.sources[0].src">
+      <!-- 商品banner start -->
+      <div class="goods_img bgffffff">
+        <!-- 商品视频简介 start -->
         <video-player
           class="video-player vjs-custom-skin"
           ref="videoPlayer"
           :playsinline="true"
           :options="playerOptions"
-        ></video-player>
-      </div>
-      <!-- 商品视频简介 start -->
-      <!-- 商品轮播图简介 start -->
-      <div class="goods_img bgffffff" v-if="!playerOptions.sources[0].src && goodsPictureList.length">
+          v-if="playerOptions.sources[0].src"></video-player>
+        <!-- 商品视频简介 end -->
+        <!-- 商品轮播图简介 start -->
         <van-swipe
           class="banner_swipe"
           :autoplay="3000"
           indicator-color="#ff6400"
-          @change="onChangePage">
+          @change="onChangePage"
+          v-if="!playerOptions.sources[0].src && goodsPictureList.length">
           <van-swipe-item v-for="(item, index) in goodsPictureList" :key="index">
             <div class="img_box" @click="enlargedView">
               <img v-lazy="item">
@@ -30,33 +30,40 @@
             </div>
           </template>
         </van-swipe>
+        <!-- 商品轮播图简介 end -->
       </div>
-      <!-- 商品轮播图简介 end -->
+      <!-- 商品banner end -->
+      <!-- 商品简介 start -->
       <div class="goods_desc bgffffff border_r6">
         <div class="goods_promot">
           <div class="goods_price_cont">
-            <div class="goods_price" v-if="goodsdetail.promotemode === 0 || goodsdetail.promotemode === 2 || goodsdetail.promotemode === 3 || goodsdetail.promotemode === 8">
-              <div class="goods_promot_age font24 colorffffff borderffffff border_r4" v-if="goodsdetail.promotemode !== 0">{{goodsdetail.modenote}}</div>
-              <div class="font32 font_blod colorffffff">￥{{goodsdetail.saleprice}}</div>
-            </div>
-            <div class="goods_price" v-if="goodsdetail.promotemode === 1 || goodsdetail.promotemode === 6 || goodsdetail.promotemode === 7">
-              <div class="goods_promot_age font24 colorffffff borderffffff border_r4">{{goodsdetail.modenote}}</div>
-              <div class="font32 font_blod colorffffff">￥{{goodsdetail.promotevalue}}</div>
-              <del class="font20 colorffc06e">￥{{goodsdetail.saleprice}}</del>
+            <div class="goods_price">
+              <!-- 标签 start -->
+              <div class="goods_promot_age font24 colorffffff borderffffff border_r4" v-if="goodsdetail.promotemode">{{goodsdetail.modenote}}</div>
+              <!-- 标签 end -->
+              <!-- 销售价 start -->
+              <div class="font32 font_blod colorffffff" v-if="goodsdetail.promotevalue">￥{{goodsdetail.promotevalue}}</div>
+              <div class="font32 font_blod colorffffff" v-else>￥{{goodsdetail.saleprice}}</div>
+              <!-- 销售价 end -->
+              <!-- 原价 start -->
+              <del class="font20 colorffc06e" v-if="goodsdetail.promotevalue && goodsdetail.promotevalue !== goodsdetail.saleprice">￥{{goodsdetail.saleprice}}</del>
+              <!-- 原价 end -->
             </div>
           </div>
-          <div class="countdown" v-if="goodsdetail.startstate === 1 && goodsdetail.promotemode !== 0 && goodsdetail.promoteend">
+          <!-- 倒计时 start -->
+          <div class="countdown" v-if="goodsdetail.startstate && goodsdetail.promotemode">
             <div class="font20 colorffffff">距结束还剩:</div>
             <div class="countdown_cont">
               <countdown :times="goodsdetail.promoteend"></countdown>
             </div>
           </div>
-          <div class="countdown" v-if="goodsdetail.startstate === 0 && goodsdetail.promotemode !== 0 && goodsdetail.promoteend">
+          <div class="countdown" v-if="!goodsdetail.startstate && goodsdetail.promotemode">
             <div class="font20 colorffffff">距开始还剩：</div>
             <div class="countdown_cont">
               <countdown :times="goodsdetail.promotestart"></countdown>
             </div>
           </div>
+          <!-- 倒计时 end -->
         </div>
         <div class="goods_desc_name">
           <div class="goods_name">{{goodsdetail.cusgoodsname}}</div>
@@ -64,9 +71,20 @@
           <div class="goods_name colorff6400 font24" v-if="goodsdetail.promotemode === 8">【{{goodsdetail.topamount}}人砍价】</div>
           <div class="goods_name colorfa2a2a font24">{{goodsdetail.remark}}</div>
         </div>
+        <!-- 数量选择 start -->
+        <!--<div class="goods_num">-->
+          <!--<div class="">数量：</div>-->
+          <!--<div class="goods_num_btn borderc7c7c7 border_r4 tc font40 font_lighter color999999" @click="countAmount">-</div>-->
+          <!--<div class="goods_num_input borderc7c7c7 border_r4 tc colorff6400 font30">-->
+            <!--<input type="tel" class="tc" v-model="amount">-->
+          <!--</div>-->
+          <!--<div class="goods_num_btn borderc7c7c7 border_r4 tc font40 font_lighter color999999" @click="addAmount">+</div>-->
+        <!--</div>-->
+        <!-- 数量选择 end -->
       </div>
+      <!-- 商品简介 end -->
     </div>
-    <!-- 商品介绍 end -->
+    <!-- 商品 end -->
     <!-- 商品放大图 start -->
     <van-image-preview
       v-model="showFlag"
@@ -94,7 +112,7 @@
         </router-link>
       </div>
       <div class="btns">
-        <div class="addcart goods_btn tc colorffffff bgf7bb1f" v-if="goodsdetail.promotemode !== 6 && goodsdetail.promotemode !== 8">
+        <div class="addcart goods_btn tc colorffffff bgf7bb1f" v-if="goodsdetail.promotemode !== 6 && goodsdetail.promotemode !== 8 && goodsdetail.promotemode !== 9">
           <addcart :goodsid="goodsdetail.goodsid" :froms="'goodsdetail'">加购物车</addcart>
         </div>
         <div class="pay goods_btn tc colorffffff bgff6400"  v-if="goodsdetail.promotemode !== 6 && goodsdetail.promotemode !== 8">
@@ -152,8 +170,6 @@ export default {
       goodsid: this.$route.query.goodsid,
       // 商品详情
       goodsdetail: {},
-      // 促销类型
-      Promotemode: this.$store.state.Promotemode,
       // 购物车列表
       cartList: [],
       // 拼团的团号
@@ -352,6 +368,18 @@ export default {
       }).catch(error => {
         throw error
       })
+    },
+    // 加
+    addAmount () {
+      let self = this
+      self.amount += 1
+    },
+    // 减
+    countAmount (goods) {
+      let self = this
+      if (self.amount >= 1) {
+        self.amount -= 1
+      }
     },
     // 获取微信凭证
     getWXConfig () {

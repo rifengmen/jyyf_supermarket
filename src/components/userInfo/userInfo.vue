@@ -235,7 +235,7 @@
 <script>
 import WechatConfig from '@/components/common/wechatConfig/wechatConfig'
 import MyFooter from '@/components/common/footer/myfooter'
-// import { mapState } from 'vuex'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'userInfo',
@@ -276,6 +276,23 @@ export default {
     MyFooter
   },
   methods: {
+    // // 设置用户信息
+    // setUserInfo () {
+    //   let self = this
+    //   let data = {
+    //     wechatID: self.$store.state.wechatID,
+    //     wexinID: self.$store.state.openid
+    //   }
+    //   self.$api.system.login(data).then(result => {
+    //     let res = result.data
+    //     if (res.code === 200) {
+    //       self.$store.commit('setUserInfo', res.data)
+    //       self.$store.commit('setToken', res.data.token)
+    //     } else {
+    //       tip('登陆失败，请重新登陆！')
+    //     }
+    //   })
+    // },
     // 设置用户信息
     setUserInfo () {
       let data = new FormData()
@@ -287,15 +304,12 @@ export default {
       data.append('requestData', requestData)
       this.$axios.post('system/customlogin/login', data).then(result => {
         let res = result.data
+        // res.code 200：正确；20：注册；30：加入卡包；40：激活卡包；500：报错
         if (res.code === 200) {
           this.$store.commit('setUserInfo', res.data)
+          this.$store.commit('setToken', res.data.token)
           sessionStorage.setItem('jyyf_token', res.data.token)
           this.$axios.defaults.headers.common.Authorization = res.data.token
-        } else {
-          this.$toast({
-            message: '登陆失败，请重新登陆！',
-            type: 'fail'
-          })
         }
       }).catch(error => {
         throw error
@@ -303,79 +317,58 @@ export default {
     },
     // 获取用户会员卡信息
     getMyInfo () {
-      let data = new FormData()
-      let requestData = {
-      }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/customlogin/getMyInfo', data).then(result => {
+      let self = this
+      let data = {}
+      self.$api.system.getMyInfo(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$store.commit('setMemType', res.data.mem_type)
-          this.$store.commit('setMoneyDetail', res.data.moneyDetail)
+          self.$store.commit('setMemType', res.data.mem_type)
+          self.$store.commit('setMoneyDetail', res.data.moneyDetail)
+        } else {
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 查询未支付订单数量
     getOrdernums (status) {
-      let data = new FormData()
-      let requestData = {
+      let self = this
+      let data = {
         status: status,
-        page: '1',
-        pageSize: '100',
+        page: 1,
+        pageSize: 100,
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/order/getOrder', data).then(result => {
+      self.$api.api.getOrder(data).then(result => {
         let res = result.data
         if (res.code === 200) {
           if (status === '-1') {
-            this.ordernums1 = res.data.totalSize
+            self.ordernums1 = res.data.totalSize
           } else if (status === '0') {
-            this.ordernums2 = res.data.totalSize
+            self.ordernums2 = res.data.totalSize
           } else if (status === '10') {
-            this.ordernums3 = res.data.totalSize
+            self.ordernums3 = res.data.totalSize
           } else if (status === '11') {
-            this.ordernums4 = res.data.totalSize
+            self.ordernums4 = res.data.totalSize
           }
-        } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 获取我的消息
     getMessageList () {
-      let data = new FormData()
-      let requestData = {
+      let self = this
+      let data = {
         messageFlag: '1',
         page: 1,
-        pageSize: 20
+        pageSize: 100
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('info/InformationController/listmessage', data).then(result => {
+      self.$api.info.listmessage(data).then(result => {
         let res = result.data
         if (res.code === 200) {
           if (res.data.content && res.data.content.length) {
-            this.messagenums = res.data.content[0].mscount
+            self.messagenums = res.data.content[0].mscount
           }
-        } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
         }
-      }).catch(error => {
-        throw error
       })
     }
   },

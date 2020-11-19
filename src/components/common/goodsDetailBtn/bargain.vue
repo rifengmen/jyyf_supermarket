@@ -1,20 +1,11 @@
 <template>
     <div class="btns_cont">
       <div class="btns_cont">
-        <div class="goods_btn tc colorffffff bgff6400" v-if="!bargainno || flag === 0">
-          <div @click="addBargain">发起砍价</div>
-        </div>
-        <div class="goods_btn tc colorffffff bgf7bb1f" v-if="!bargainno || flag === 0">
-          <div @click="setShowBargain">参与砍价</div>
-        </div>
+        <div class="goods_btn tc colorffffff bgff6400" v-if="!bargainno || flag === 0" @click="addBargain">发起砍价</div>
+        <div class="goods_btn tc colorffffff bgf7bb1f" v-if="!bargainno || flag === 0" @click="setShowBargain">参与砍价</div>
         <div class="goods_btn tc color333333 bgeeeeee ellipsis" v-if="bargainno && flag === 1 && !pay">砍价号： {{bargainno}}</div>
-        <div class="goods_btn tc color333333 bgeeeeee ellipsis" v-if="bargainno && pay === 1 && flag === 1">
-          <div class="font26">砍价号：</div>
-          <div class="font26">{{bargainno}}</div>
-        </div>
-        <div class="goods_btn tc colorffffff bgff6400" v-if="bargainno && flag === 1" >
-          <div @click="bargainDetail">砍价详情</div>
-        </div>
+        <div class="goods_btn tc color333333 bgeeeeee ellipsis" v-if="bargainno && pay === 1 && flag === 1">砍价号：{{bargainno}}</div>
+        <div class="goods_btn tc colorffffff bgff6400" v-if="bargainno && flag === 1" @click="bargainDetail">砍价详情</div>
         <div class="pay goods_btn tc colorffffff bgff6400"  v-if="!bargainno || (bargainno && pay === 1 && flag === 1)">
           <addorder :goods="goodsdetail" :goodsdetail="true" :pay="pay" :bargainno="bargainno">立即购买</addorder>
         </div>

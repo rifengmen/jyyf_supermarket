@@ -78,7 +78,7 @@ export default {
       cardno: '',
       // 确认卡号
       cardnos: '',
-      // 充值类型,add:打折;pay满赠
+      // 充值类型
       moneyType: ''
     }
   },
@@ -108,7 +108,6 @@ export default {
         if (res.code === 200) {
           this.$store.commit('setMemType', res.data.mem_type)
           this.$store.commit('setMoneyDetail', res.data.moneyDetail)
-          this.$store.commit('setMoneyType', res.data.moneyType)
           this.moneyType = res.data.moneyType
         }
       }).catch(error => {
@@ -178,7 +177,7 @@ export default {
       this.$axios.post('invest/microFlow/reChargeToPay', data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$router.push({name: 'rechargePay', params: {payData: res.data}})
+          this.$router.push({name: 'rechargePay', params: {payData: res.data, moneyType: this.moneyType}})
         } else {
           this.$toast({
             message: res.msg,

@@ -15,9 +15,6 @@
     <div class="backs" @click="addComment" v-else-if="froms === 'addComment'">
       <slot name="addComment"></slot>
     </div>
-    <!--<div class="backs" @click="userinfo" v-if="froms === 'userinfo'">-->
-      <!--<slot name="orderdetail"></slot>-->
-    <!--</div>-->
     <div class="backs" @click="backs" v-else>
       <slot name="backs"></slot>
     </div>
@@ -35,6 +32,9 @@
     </div>
     <div class="header_right" @click="addComplaint" v-else-if="addFlag === 'complaint'">
       <slot name="addComplaint"></slot>
+    </div>
+    <div class="header_right" @click="setEditflag" v-else-if="addFlag === 'saomacar'">
+      <slot name="editflag"></slot>
     </div>
     <div class="header_right" v-else>
       <slot name="right"></slot>
@@ -116,6 +116,10 @@ export default {
     // 去添加投诉建议
     addComplaint () {
       this.$router.push({name: 'addComplaint', query: {evaluateflag: this.evaluateflag}})
+    },
+    // 编辑开关
+    setEditflag () {
+      this.$emit('setEditflag')
     }
   },
   created () {

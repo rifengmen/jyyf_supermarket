@@ -1,11 +1,15 @@
 <template>
   <div class="container_pt110 bgeeeeee">
     <!-- 头部 start -->
-    <my-header>
+    <my-header :addFlag="'saomacar'" @setEditflag="setEditflag">
       <template v-slot:backs>
         <i class="el-icon-arrow-left"></i>
       </template>
       <template v-slot:header>购物车</template>
+      <template v-slot:editflag>
+        <div class="colorff6400 font24" v-if="editflag">完成</div>
+        <div class="colorff6400 font24" v-else>编辑</div>
+      </template>
     </my-header>
     <!-- 头部 end -->
     <!-- 购物车 start -->
@@ -16,17 +20,32 @@
           <ul ref="cartlist" v-if="saomacar.length">
             <!-- 商品简介 start -->
             <li class="goods_li" v-for="(item, index) in saomacar" :key="index">
+              <div class="goods_input bgffffff" @click="delbtn(item.barcode)" v-if="editflag">
+                <div class="delbtn bge42739 border_r500 font32 colorffffff tc">×</div>
+              </div>
               <div class="goods_item bgffffff ellipsis">
                 <div class="goods_item_cont">
                   <div class="goods_item_name ellipsis font26">{{item.productName}}</div>
-                  <div class="goods_item_editnum">
+                  <div class="goods_item_editnum" v-if="item.scalageScanProduct">
                     <div class="goods_item_price">
                       <div class="ellipsis font32 font_blod colorf84242">￥{{item.actualSaleMoney}}</div>
                       <del class="ellipsis font26 color999999" v-if="item.actualSaleMoney !== item.saleMoney">￥{{item.saleMoney}}</del>
                     </div>
                     <div class="goods_num">
-                      <div class="goods_num_input tc color999999 font30" v-if="item.scalageFlag">×1</div>
-                      <div class="goods_num_input tc color999999 font30" v-else>×{{item.quantity}}</div>
+                      <div class="goods_num_input tc color999999 font30">×1</div>
+                    </div>
+                  </div>
+                  <div class="goods_item_editnum" v-else>
+                    <div class="goods_item_price">
+                      <div class="ellipsis font32 font_blod colorf84242">￥{{item.actualPrice}}</div>
+                      <del class="ellipsis font26 color999999" v-if="item.actualPrice !== item.salePrice">￥{{item.salePrice}}</del>
+                    </div>
+                    <div class="goods_num">
+                      <div class="goods_num_btn goods_num_countnum borderc7c7c7 border_r4 tc font40 font_lighter color999999" @click="countAmount(item)">-</div>
+                      <div class="goods_num_input borderc7c7c7 border_r4 tc colorff6400 font30">
+                        <input type="tel" v-model="item.quantity" @change="editAmount(item)" class="tc">
+                      </div>
+                      <div class="goods_num_btn goods_num_addnum borderc7c7c7 border_r4 tc font40 font_lighter color999999" @click="addAmount(item)">+</div>
                     </div>
                   </div>
                 </div>
@@ -56,7 +75,10 @@
               <span class="font24 color666666">合计：</span>
               <span class="colorf86442 font32">￥{{totalmoney}}</span>
             </div>
-            <div class="settlement bgff6400 colorffffff tc">
+            <div class="settlement bge42739 colorffffff tc" v-if="editflag">
+              <div @click="clearSaomacar"  class="font34">清空购物车</div>
+            </div>
+            <div class="settlement bgff6400 colorffffff tc" v-else>
               <div @click="setTlement">结算（{{saomacar.length}}）</div>
             </div>
           </div>
@@ -89,6 +111,7 @@
 import MyHeader from '@/components/common/header/myheader'
 import nodata from '@/components/common/nodata/nodata'
 import wx from 'weixin-js-sdk'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'saomacar',
@@ -109,7 +132,9 @@ export default {
       // 商品总价
       totalmoney: 0,
       // 流水号
-      flowno: ''
+      flowno: '',
+      // 编辑开关
+      editflag: false
     }
   },
   computed: {
@@ -125,17 +150,12 @@ export default {
   methods: {
     // 扫一扫
     scangoodscode () {
-      if (!this.shopInfo.deptcode) {
-        this.$toast({
-          message: '请选择店铺！',
-          type: 'fail'
-        })
+      let self = this
+      if (!self.shopInfo.deptcode) {
+        tip('请选择店铺！')
         return false
       }
-      // if (this.scanFlag) {
-      // }
-      this.scanFlag = false
-      let _this = this
+      self.scanFlag = false
       wx.scanQRCode({
         // 默认为0，扫描结果由微信处理，1则直接返回扫描结果
         needResult: 1,
@@ -147,41 +167,32 @@ export default {
           if (result.indexOf(',') >= 0) {
             let str1 = result.split(',')
             // 订单号码
-            _this.goodscode = str1[1]
-            _this.scanFlag = true
-            _this.getGoodsInfo()
+            self.goodscode = str1[1]
+            self.scanFlag = true
+            self.getGoodsInfo()
           } else {
-            _this.$toast({
-              message: '请对准条形码扫码!',
-              type: 'fail'
-            })
+            tip('请对准条形码扫码！')
           }
         }
       })
     },
     // 获取商品信息
     getGoodsInfo () {
-      if (this.goodscode && this.shopInfo.deptcode) {
-        let data = new FormData()
-        let requestData = {
-          barcode: this.goodscode,
-          deptcode: this.shopInfo.deptcode
+      let self = this
+      if (self.goodscode && self.shopInfo.deptcode) {
+        let data = {
+          barcode: self.goodscode,
+          deptcode: self.shopInfo.deptcode
         }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
-        this.$axios.post('invest/microFlow/getProductDetailsByBarcode', data).then(result => {
+        self.$api.invest.getProductDetailsByBarcode(data).then(result => {
           let res = result.data
           if (res.code === 200) {
-            this.goodsInfo = res.data
-            this.goodsInfoFlag = true
+            self.goodsInfo = res.data
+            self.goodsInfo.addorder = true
+            self.goodsInfoFlag = true
           } else {
-            this.$toast({
-              message: res.msg,
-              type: 'fail'
-            })
+            tip(res.msg)
           }
-        }).catch(error => {
-          throw error
         })
       }
     },
@@ -217,47 +228,93 @@ export default {
         self.scangoodscode()
       }
     },
+    // 编辑开关
+    setEditflag () {
+      let self = this
+      if (!self.saomacar.length && !self.editflag) {
+        tip('暂无扫码购商品！')
+        return
+      }
+      self.editflag = !self.editflag
+    },
+    // 删除商品
+    delbtn (barcode) {
+      let self = this
+      self.$store.commit('delSaomacar', barcode)
+      // 计算商品总价
+      self.setTotalmoney()
+    },
+    // 加
+    addAmount (goods) {
+      let self = this
+      self.saomacar.forEach(item => {
+        if (item.barcode === goods.barcode) {
+          item.quantity++
+        }
+      })
+      // 提交修改信息
+      self.editAmount()
+    },
+    // 减
+    countAmount (goods) {
+      let self = this
+      self.saomacar.forEach(item => {
+        if (item.barcode === goods.barcode) {
+          if (item.quantity > 1) {
+            item.quantity--
+          }
+        }
+      })
+      // 提交修改信息
+      self.editAmount()
+    },
+    // 提交修改信息
+    editAmount () {
+      let self = this
+      self.$store.commit('setSaomacar', self.saomacar)
+      // 计算商品总价
+      self.setTotalmoney()
+    },
+    // 清空购物车
+    clearSaomacar () {
+      let self = this
+      self.$store.commit('clearSaomacar')
+    },
     // 计算商品总价
     setTotalmoney () {
+      let self = this
       let money = 0
-      this.saomacar.forEach((val, index) => {
+      self.saomacar.forEach(item => {
         let _money
-        // _money = parseFloat(val.quantity) * parseFloat(val.actualPrice)
-        _money = parseFloat(val.actualSaleMoney)
+        if (item.scalageScanProduct) {
+          _money = parseFloat(item.actualSaleMoney)
+        } else {
+          _money = parseFloat(item.actualPrice) * item.quantity
+        }
         money += _money
       })
-      this.totalmoney = money.toFixed(2)
+      self.totalmoney = money.toFixed(2)
     },
     // 结算
     setTlement () {
-      if (!this.saomacar.length) {
-        this.$toast({
-          message: '请添加商品！',
-          type: 'fail'
-        })
+      let self = this
+      if (!self.saomacar.length) {
+        tip('请添加商品！')
         return false
       }
-      let data = new FormData()
-      let requestData = {
-        productList: this.saomacar,
-        deptcode: this.shopInfo.deptcode
+      let data = {
+        productList: self.saomacar,
+        deptcode: self.shopInfo.deptcode
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('invest/microFlow/saveFlow', data).then(result => {
+      self.$api.invest.saveFlow(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.flowno = res.data.flowno
-          this.$store.commit('clearSaomacar')
-          this.$router.push({name: 'saomaorder', query: {flowno: this.flowno, deptcode: this.shopInfo.deptcode, deptname: this.shopInfo.deptname}})
+          self.flowno = res.data.flowno
+          self.$store.commit('clearSaomacar')
+          self.$router.push({name: 'saomaorder', query: {flowno: self.flowno, deptcode: self.shopInfo.deptcode, deptname: self.shopInfo.deptname}})
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     }
   },
@@ -265,12 +322,13 @@ export default {
   beforeCreate () {
   },
   created () {
-    if (this.$route.query.type === 1) {
+    let self = this
+    if (self.$route.query.type === 1) {
       // 扫一扫
-      this.scangoodscode()
+      self.scangoodscode()
     }
     // 计算商品总价
-    this.setTotalmoney()
+    self.setTotalmoney()
   },
   beforeMount () {
   },

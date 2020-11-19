@@ -199,7 +199,9 @@ export default {
       // 收货人电话
       contactNumber: '',
       // 加载中动画
-      isShowLoading: true
+      isShowLoading: true,
+      // 订单类型(用于预售商品只能选择自提地址)
+      orderType: this.$route.query.orderType || 0
     }
   },
   computed: {
@@ -241,6 +243,10 @@ export default {
         if (res.code === 200) {
           this.isShowLoading = false
           if (this.froms === 'editorder') {
+            if (this.orderType === 5) {
+              this.addressList = res.data.filter(item => item.addressMark !== '1')
+              return
+            }
             this.addressList = res.data
           } else {
             this.addressList = res.data.filter(item => item.addressMark === '1')

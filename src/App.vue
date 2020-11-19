@@ -27,8 +27,6 @@ export default {
       jyyf_appid: '',
       // 本地保存openid
       jyyf_openid: '',
-      // token
-      userToken: '',
       // code
       code: '',
       // openid
@@ -71,13 +69,14 @@ export default {
     },
     // 获取wechatID
     getWechatID () {
+      console.log(this.$route, 'wechatID1')
       // 路由开关
       if (this.isRouter) {
         return false
       }
       let baseURL = window.location.href.slice(0, window.location.href.lastIndexOf('/'))
       this.$store.commit('setBaseURL', baseURL)
-      console.log(this.$route, 'wechatID')
+      console.log(this.$route, 'wechatID2')
       let beforeLoginUrl = sessionStorage.getItem('jyyf_beforeLoginUrl')
       let id = beforeLoginUrl.split('=')[1]
       let str
@@ -96,6 +95,7 @@ export default {
     },
     // 获取appid
     getAppid () {
+      console.log(this.$route, 'appid')
       let requestData = {
         wechatID: this.wechatID
       }
@@ -106,7 +106,12 @@ export default {
         let res = result.data
         if (res.code === 200) {
           this.$store.commit('setAppid', res.data.appid)
-          console.log(this.$route, 'appid')
+          // let msgType = this.$route.query.msgType
+          // if (msgType === 'activate') {
+          //   // 卡包过来直接去注册
+          //   this.toRegister()
+          //   return false
+          // }
           let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
           if (url.indexOf('&') >= 0 && url.indexOf('msgType=') >= 0) {
             url = url.split('&')[1] || ''
@@ -138,6 +143,13 @@ export default {
       // 如果没有code，则去请求
       // 截取code
       // https://www.spzlk.cn/testSupermarket/?dianpu=2&code=001PKA0j2nSOTD0WYe2j2qnT0j2PKA09&state=STATE
+      // let code = this.$route.query.code
+      // if (code) {
+      //   this.code = code
+      //   this.getOpenId()
+      // } else {
+      //   window.location.href = URL
+      // }
       if (url.indexOf('&code=') === -1) {
         window.location.href = URL
       } else if (url.indexOf('&code=') >= 0 && url.indexOf('state=')) {
@@ -162,7 +174,6 @@ export default {
           this.$store.commit('setOpenid', res.data.openid)
           this.openid = res.data.openid
           this.$store.commit('setHeadimgurl', res.data.headimgurl)
-          console.log(this.$route, 'openid')
           // 设置用户信息
           this.setUserInfo()
         } else {
@@ -192,6 +203,7 @@ export default {
     },
     // 设置用户信息
     setUserInfo () {
+      let self = this
       let data = new FormData()
       let requestData = {
         wechatID: this.wechatID,
@@ -204,6 +216,7 @@ export default {
         // res.code 200：正确；20：注册；30：加入卡包；40：激活卡包；500：报错
         if (res.code === 200) {
           this.$store.commit('setUserInfo', res.data)
+          this.$store.commit('setToken', res.data.token)
           sessionStorage.setItem('jyyf_token', res.data.token)
           this.$axios.defaults.headers.common.Authorization = res.data.token
           this.isRouter = true
@@ -227,6 +240,19 @@ export default {
         }
       }).catch(error => {
         throw error
+      })
+      // 临时
+      // 封装
+      let datas = {
+        wechatID: this.wechatID,
+        wexinID: this.openid
+      }
+      self.$api.system.login(datas).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          self.$store.commit('setUserInfo', res.data)
+          self.$store.commit('setToken', res.data.token)
+        }
       })
     },
     // 验证卡包

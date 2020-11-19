@@ -87,6 +87,7 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'saomaorder',
@@ -124,114 +125,102 @@ export default {
   },
   methods: {
     onInput (key) {
-      this.payPassword = (this.payPassword + key).slice(0, 4)
+      let self = this
+      self.payPassword = (self.payPassword + key).slice(0, 4)
     },
     onDelete () {
-      this.payPassword = this.payPassword.slice(0, this.payPassword.length - 1)
+      let self = this
+      self.payPassword = self.payPassword.slice(0, self.payPassword.length - 1)
     },
     // 获取订单详情
     getSaomaorderDetail () {
-      let data = new FormData()
-      let requestData = {
-        flowno: this.flowno,
-        deptcode: this.deptcode
+      let self = this
+      let data = {
+        flowno: self.flowno,
+        deptcode: self.deptcode
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('invest/microFlow/listMicroFlowDtl', data).then(result => {
+      self.$api.invest.listMicroFlowDtl(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.saomaorderDetail = res.data
+          self.saomaorderDetail = res.data
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 获取支付方式列表
     getPaymodeList () {
-      let data = new FormData()
-      let requestData = {
-        flowno: this.flowno,
-        shopCode: this.deptcode
+      let self = this
+      let data = {
+        flowno: self.flowno,
+        shopCode: self.deptcode
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('invest/microFlow/getMicroFlowPayMoney', data).then(result => {
+      self.$api.invest.getMicroFlowPayMoney(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.paymodeList = res.data
+          self.paymodeList = res.data
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 是否显示密码弹框
     isSetPasswordShow () {
-      if (this.paymodeid === '3') {
-        this.passwordShow = true
-        this.showKeyboard = true
-        this.payPassword = ''
+      let self = this
+      if (self.paymodeid === '3') {
+        self.passwordShow = true
+        self.showKeyboard = true
+        self.payPassword = ''
         return false
       }
       // 设置支付信息
-      this.setPaylist()
+      self.setPaylist()
     },
     // 设置支付信息
     setPaylist () {
+      let self = this
       // 支付金额
-      let paymoney = this.saomaorderDetail.totalMoney
+      let paymoney = self.saomaorderDetail.totalMoney
       // console.log(paymoney, '支付金额')
       // 支付列表下标
       let index = 0
       // 储值卡
-      if (this.paymodeid === '3') {
+      if (self.paymodeid === '3') {
         let paylist3 = {}
         paylist3.paymode = 3
         if (paymoney < 0) {
           paymoney = 0
         }
         paylist3.paymoney = paymoney
-        this.paylist[index] = paylist3
+        self.paylist[index] = paylist3
         index++
       }
       // 微信
-      if (this.paymodeid === '7') {
+      if (self.paymodeid === '7') {
         let paylist7 = {}
         paylist7.paymode = 7
         if (paymoney < 0) {
           paymoney = 0
         }
         paylist7.paymoney = paymoney
-        this.paylist[index] = paylist7
+        self.paylist[index] = paylist7
         index++
       }
       // 立即支付
-      this.pay()
+      self.pay()
     },
     // 立即支付
     pay () {
-      let data = new FormData()
-      let requestData = {
-        flowno: this.flowno,
-        payPassword: this.payPassword,
-        channel: this.channel,
-        frontUrl: this.frontUrl,
-        payList: this.paylist,
-        shopCode: this.deptcode
+      let self = this
+      let data = {
+        flowno: self.flowno,
+        payPassword: self.payPassword,
+        channel: self.channel,
+        frontUrl: self.frontUrl,
+        payList: self.paylist,
+        shopCode: self.deptcode
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('invest/microFlow/microFlowToPay', data).then(result => {
+      self.$api.invest.microFlowToPay(data).then(result => {
         let res = result.data
         if (res.code === 200) {
           // 微信支付
@@ -257,27 +246,21 @@ export default {
               return false
             }
           } else {
-            this.$toast({
-              message: '支付成功！',
-              type: 'success'
-            })
-            this.toSaomagou()
+            tip('支付成功！')
+            // 去出场码页面
+            self.toSaomaobar()
           }
           return false
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
-          this.toSaomagou()
+          tip(res.msg)
+          // 去出场码页面
+          self.toSaomaobar()
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 微信支付
     onBridgeReady (wechatstr) {
-      let _this = this
+      let self = this
       window.WeixinJSBridge.invoke(
         'getBrandWCPayRequest',
         {
@@ -295,31 +278,44 @@ export default {
         },
         function (_res) {
           if (_res.err_msg === 'get_brand_wcpay_request:ok') {
-            _this.$router.push({name: 'saomagou'})
+            self.$router.push({name: 'saomagou'})
             // 使用以上方式判断前端返回,微信团队郑重提示：
             // res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
           } else if (_res.err_msg === 'get_brand_wcpay_request:cancel' || _res.err_msg === 'get_brand_wcpay_request:fail') {
-            _this.$toast({
-              message: '支付失败！',
-              type: 'fail'
-            })
-            _this.toSaomagou()
+            tip('支付失败！')
+            // 去出场码页面
+            self.toSaomaobar()
           }
         }
       )
     },
-    // 去扫码购首页
-    toSaomagou () {
-      this.$router.push({name: 'saomagou'})
+    // 去出场码页面
+    toSaomaobar () {
+      // 等待前往出场码
+      tip('支付结果获取中...')
+      let self = this
+      let data = {
+        deptcode: self.deptcode
+      }
+      self.$api.invest.getFlowno(data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          self.$router.push({name: 'saomabar', query: {saomabar: res.data.barimg, flowno: res.data.orderInfo.flowno}})
+          tip('支付成功！')
+        } else {
+          tip(res.msg)
+        }
+      })
     }
   },
   beforeCreate () {
   },
   created () {
+    let self = this
     // 获取订单详情
-    this.getSaomaorderDetail()
+    self.getSaomaorderDetail()
     // 获取支付方式列表
-    this.getPaymodeList()
+    self.getPaymodeList()
   },
   beforeMount () {
   },

@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import author from './author'
 import login from './login'
 import index from './index'
 import shopping from './shopping'
@@ -29,8 +28,6 @@ const router = new Router({
     }
   },
   routes: [
-    // 微信授权模块
-    ...author,
     // 登陆模块
     ...login,
     // 首页模块

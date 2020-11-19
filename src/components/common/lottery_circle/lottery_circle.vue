@@ -1,7 +1,25 @@
 <template>
   <div id="turnBox">
-    <div id="turnUlBox" class="border_r500" :style="{backgroundImage: 'url(' + (turnUrl ? IMGURL + 'image/' + turnUrl : './static/img/turnboxbg.png') + ')',}">
-      <ul id="turnUlborder" class="border_r500">
+    <!-- 自定义抽奖图 start -->
+    <div class="turnUlBox border_r500" v-if="isturnbg">
+      <div class="turnUlbg border_r500" :style="{backgroundImage: 'url(' + IMGURL + 'image/' + turnUrl + ')'}"></div>
+      <ul class="turnUltext border_r500">
+        <li
+          v-for="(item,index) in prizeData"
+          :key="index"
+          :style="{webkitTransform: 'rotate(' + -item.angletext + 'deg)'}"
+          class="colorffffff">
+          <div class="prizename font24">{{item.prizename}}</div>
+          <img :src="item.prize_bgurl ? (IMGURL + 'image/' + item.prize_bgurl) : './static/img/thank.png'" v-if="item.prizetype === -1">
+          <img :src="IMGURL + 'image/' + item.prize_bgurl" v-else>
+        </li>
+      </ul>
+    </div>
+    <!-- 自定义抽奖图 end -->
+    <!-- 默认抽奖图 start -->
+    <div class="turnUlBox border_r500" v-else>
+      <div class="turnUlbg border_r500"></div>
+      <ul class="turnUlborder border_r500">
         <li
           v-for="(item,index) in prizeData"
           :key="index"
@@ -9,17 +27,21 @@
           class="borderffffff">
         </li>
       </ul>
-      <ul id="turnUltext" class="border_r500">
+      <ul class="turnUltext turnUltext2 border_r500">
         <li
           v-for="(item,index) in prizeData"
           :key="index"
           :style="{webkitTransform: 'rotate(' + -item.angletext + 'deg)'}"
-          class="colorffffff">
+          class="colorffffff font26">
           <div class="prizename">{{item.prizename}}</div>
         </li>
       </ul>
     </div>
-    <img src="static/img/turntablebtn.png" @click="startPlay" class="turnBtn">
+    <!-- 默认抽奖图 end -->
+    <!-- 抽奖按钮 start -->
+    <img :src="IMGURL + 'image/' + btnUrl" @click="startPlay" class="turnBtn" v-if="isturnbg">
+    <img src="static/img/lotteryStart.png" @click="startPlay" class="turnBtn" v-else>
+    <!-- 抽奖按钮 end -->
   </div>
 </template>
 
@@ -27,15 +49,22 @@
 export default {
   name: 'lottery_circle',
   props: {
-    // 背景图路径
-    bgUrl: {
+    // 自定义抽奖图开关
+    isturnbg: {
+      type: Number,
+      default: function () {
+        return 0
+      }
+    },
+    // 转盘图路径
+    turnUrl: {
       type: String,
       default: function () {
         return ''
       }
     },
-    // 转盘图路径
-    turnUrl: {
+    // 抽奖按钮图路径
+    btnUrl: {
       type: String,
       default: function () {
         return ''
@@ -101,14 +130,7 @@ export default {
   methods: {
     // 点击开始,请求接口抽奖
     startPlay () {
-      if (this.flag) {
-        if (this.totalCent < this.activeObj.prizeUseCent) {
-          this.$toast({
-            message: '积分不足!',
-            type: 'fail'
-          })
-          return false
-        }
+      if (this.flag && this.activeObj.prizeList.length) {
         this.flag = false
         let data = new FormData()
         let requestData = {
@@ -120,7 +142,7 @@ export default {
           if (res.code === 200) {
             this.prize = res.data
             // 更新积分
-            this.$emit('getTotalCent')
+            // this.$emit('getTotalCent')
             // 调抽奖
             this.startBtn(this.prize)
           } else {
@@ -152,8 +174,9 @@ export default {
     startrotate (angle, complete) {
       // 相应的角度 + 满圈 只是在原角度多转了几圈 360 * 6
       let rotate = 2160 * (this.rotNum + 1) + angle
+      this.oTurnUlbg.style.transform = 'rotate(' + rotate + 'deg)'
       this.oTurnUlborder.style.transform = 'rotate(' + rotate + 'deg)'
-      this.oTurntabletext.style.transform = 'rotate(' + rotate + 'deg)'
+      this.oTurnUltext.style.transform = 'rotate(' + rotate + 'deg)'
       clearTimeout(this.timer)
       // 设置5秒后停止旋转,处理接口返回的数据
       this.timer = setTimeout(() => {
@@ -184,11 +207,13 @@ export default {
   beforeMount () {
   },
   mounted () {
-    this.oTurnUlborder = document.querySelector('#turnUlborder')
-    this.oTurntabletext = document.querySelector('#turnUltext')
+    this.oTurnUlbg = document.querySelector('.turnUlbg')
+    this.oTurnUlborder = document.querySelector('.turnUlborder')
+    this.oTurnUltext = document.querySelector('.turnUltext')
     // 过度中属性用时5s
+    this.oTurnUlbg.style.webkitTransition = 'transform ' + this.time / 1000 + 's ease'
     this.oTurnUlborder.style.webkitTransition = 'transform ' + this.time / 1000 + 's ease'
-    this.oTurntabletext.style.webkitTransition = 'transform ' + this.time / 1000 + 's ease'
+    this.oTurnUltext.style.webkitTransition = 'transform ' + this.time / 1000 + 's ease'
   }
 }
 </script>

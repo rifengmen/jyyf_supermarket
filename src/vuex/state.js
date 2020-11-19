@@ -21,6 +21,8 @@ const state = {
   // 路由开关
   isRouter: true,
   // isRouter: false,
+  // token
+  token: '',
   // 用户头像
   headimgurl: '',
   // 用户信息
@@ -29,8 +31,6 @@ const state = {
   mem_type: '',
   // 卡片信息
   moneyDetail: '',
-  // 充值类型
-  moneyType: '',
   // 促销类型
   Promotemode: {
     0: '正常',
@@ -42,9 +42,7 @@ const state = {
     6: '拼团',
     7: '秒杀',
     8: '砍价',
-    9: '',
-    10: '',
-    11: ''
+    9: '预售'
   },
   // 搜索关键字
   keyword: '',
@@ -52,6 +50,18 @@ const state = {
   cart: {},
   // 购物车商品数量
   cartnums: 0,
+  // 订单类型
+  orderType: [
+    {name: '购物车去结算', isotc: '', otc: '', orderType: ''},
+    {name: '拼团立即购买', isotc: 'otc', otc: 'group', orderType: ''},
+    {name: '砍价立即购买', isotc: 'otc', otc: 'hack', orderType: ''},
+    {name: '普通立即购买', isotc: '', otc: 'voucher', orderType: 0},
+    {name: '发起拼团购买', isotc: 'group', otc: 'group', orderType: 1},
+    {name: '参与拼团购买', isotc: 'group', otc: 'group', orderType: 2},
+    {name: '砍价成功购买', isotc: 'hack', otc: 'hack', orderType: 3},
+    {name: '代金券立即购买', isotc: '', otc: 'voucher', orderType: 4},
+    {name: '预售立即购买', isotc: '', otc: 'voucher', orderType: 5}
+  ],
   // 临时订单信息
   order: '',
   // 临时订单积分抵扣

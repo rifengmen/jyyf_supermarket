@@ -91,12 +91,15 @@
         <div class="order_section_usernote bgffffff">
           <div class="">订单备注</div>
           <div class="editorder_usernote border_r8 borderc7c7c7">
-            <el-input
+            <van-field
+              v-model="usernote"
+              rows="2"
+              autosize
               type="textarea"
-              :rows="5"
-              placeholder="请输入内容"
-              v-model="usernote">
-            </el-input>
+              maxlength="50"
+              placeholder="请输入备注"
+              show-word-limit
+            />
           </div>
         </div>
         <!-- 订单备注 end -->
@@ -174,6 +177,7 @@ import MyHeader from '@/components/common/header/myheader'
 import payBtn from '@/components/common/payBtn/payBtn'
 import addresslist from '@/components/common/addressList/addressList'
 import ticklist from '@/components/common/tickList/tickList'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'editorder',
@@ -202,53 +206,63 @@ export default {
   computed: {
     // 收货地址
     address () {
-      return this.$store.state.address
+      let self = this
+      return self.$store.state.address
     },
     // 支付方式列表
     paymodeList () {
-      return this.$store.state.order.paymodeList || []
+      let self = this
+      return self.$store.state.order.paymodeList || []
     },
     // 订单总金额
     Totalmoney () {
-      return this.order.totalMoney
+      let self = this
+      return self.order.totalMoney
     },
     // 收货地址id
     addressid () {
-      return this.address.addressid
+      let self = this
+      return self.address.addressid
     },
     // 配送服务费
     freightmoney () {
-      return this.$store.state.freightmoney
+      let self = this
+      return self.$store.state.freightmoney
     },
     // 积分
     score () {
-      return this.$store.state.score
+      let self = this
+      return self.$store.state.score
     },
     // 积分抵扣金额
     scoreMoney () {
+      let self = this
       let money
-      if (!this.scoreFlag) {
+      if (!self.scoreFlag) {
         money = 0
       } else {
-        money = this.score.Money || 0
+        money = self.score.Money || 0
       }
       return money
     },
     // 零钱
     smallmoney () {
-      let money = this.payMoney - this.order.smallmoney
+      let self = this
+      let money = self.payMoney - self.order.smallmoney
       if (money < 0) {
-        return this.payMoney
+        return self.payMoney
       }
-      return this.order.smallmoney
+      return self.order.smallmoney
     },
     // 优惠券
     tick () {
-      return this.$store.state.tick
+      let self = this
+      return self.$store.state.tick
     },
     // 计算支付金额
     payMoney () {
-      let money = parseFloat(this.Totalmoney) + parseFloat(this.freightmoney.freightmoney || 0) - parseFloat(this.scoreMoney || 0) - parseFloat(this.tick.dicountMoney || 0)
+      let self = this
+      let money = parseFloat(self.Totalmoney) + parseFloat(self.freightmoney.freightmoney || 0) - parseFloat(self.scoreMoney || 0) - parseFloat(self.tick.dicountMoney || 0)
       return money
     }
   },
@@ -261,70 +275,67 @@ export default {
   methods: {
     // 请求可用积分
     getScore () {
-      let data = new FormData()
-      let requestData = {
-        payMoney: parseFloat(this.payMoney),
-        Totalmoney: parseFloat((this.Totalmoney + this.freightmoney))
+      let self = this
+      let data = {
+        payMoney: parseFloat(self.payMoney),
+        Totalmoney: parseFloat((self.Totalmoney + self.freightmoney))
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('bill/pay/payMoneyjf', data).then(result => {
+      self.$api.bill.payMoneyjf(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$store.commit('setScore', res.data)
+          self.$store.commit('setScore', res.data)
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 去地址列表
     setAddressListFlag () {
-      this.addressListFlag = !this.addressListFlag
+      let self = this
+      self.addressListFlag = !self.addressListFlag
     },
     // 去优惠券列表
     tickList () {
-      if (!this.address) {
-        this.$toast({
-          message: '请选择收货地址！',
-          type: 'fail'
-        })
+      let self = this
+      if (!self.address) {
+        tip('请选择收货地址！')
         return false
       }
-      this.$store.commit('setTick', '')
-      this.setTickListFlag()
+      self.$store.commit('setTick', '')
+      self.setTickListFlag()
     },
     // 优惠券列表显示隐藏
     setTickListFlag () {
-      this.tickListFlag = !this.tickListFlag
+      let self = this
+      self.tickListFlag = !self.tickListFlag
     },
     // 是否使用积分
     setScoreflag () {
-      this.scoreFlag = !this.scoreFlag
+      let self = this
+      self.scoreFlag = !self.scoreFlag
     },
     // 清除旧的订单信息
     delOrderDes () {
-      this.$store.commit('setScore', '')
-      this.$store.commit('setAddress', '')
-      this.$store.commit('setFreightmoney', '')
-      this.$store.commit('setTick', '')
+      let self = this
+      self.$store.commit('setScore', '')
+      self.$store.commit('setAddress', '')
+      self.$store.commit('setFreightmoney', '')
+      self.$store.commit('setTick', '')
     },
     // 地址列表、优惠券列表显示隐藏
     setListFlag () {
-      this.addressListFlag = false
-      this.tickListFlag = false
+      let self = this
+      self.addressListFlag = false
+      self.tickListFlag = false
     }
   },
   watch: {
     payMoney (oval, nval) {
-      if (!this.scoreFlag) {
-        if (this.paymodeList.filter(item => item.paymodeid === 5).length) {
+      let self = this
+      if (!self.scoreFlag) {
+        if (self.paymodeList.filter(item => item.paymodeid === 5).length) {
           // 页面加载时请求积分
-          this.getScore()
+          self.getScore()
         }
       }
     }
@@ -332,12 +343,13 @@ export default {
   beforeCreate () {
   },
   created () {
+    let self = this
     // 清除旧的订单信息
-    this.delOrderDes()
+    self.delOrderDes()
     // 存在积分抵扣支付方式时
-    if (this.paymodeList.filter(item => item.paymodeid === 5).length) {
+    if (self.paymodeList.filter(item => item.paymodeid === 5).length) {
       // 页面加载时请求积分
-      this.getScore()
+      self.getScore()
     }
   },
   beforeMount () {

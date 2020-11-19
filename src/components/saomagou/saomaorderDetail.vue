@@ -94,6 +94,7 @@
 <script>
 import MyHeader from '@/components/common/header/myheader'
 import saomacancelBtn from '@/components/common/saomaBtn/saomacancelBtn'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'saomaorderDetail',
@@ -118,45 +119,40 @@ export default {
   methods: {
     // 获取订单详情
     getSaomaorderDetail () {
-      let data = new FormData()
-      let requestData = {
-        flowno: this.flowno,
-        deptcode: this.deptcode
+      let self = this
+      let data = {
+        flowno: self.flowno,
+        deptcode: self.deptcode
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('invest/microFlow/listMicroFlowDtl', data).then(result => {
+      self.$api.invest.listMicroFlowDtl(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.saomaorderDetail = res.data
-          this.goodsList = res.data.gdscodeList
+          self.saomaorderDetail = res.data
+          self.goodsList = res.data.gdscodeList
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     }
   },
   watch: {},
   beforeRouteLeave (to, from, next) {
+    let self = this
     let toReg = /saomaorderList/
     let toReg2 = /saomaorder/
     if (!toReg.test(to.name) && !toReg2.test(to.name)) {
-      this.$store.commit('addExcludeComponent', 'saomaorderList')
+      self.$store.commit('addExcludeComponent', 'saomaorderList')
     } else if (toReg.test(to.name) || toReg2.test(to.name)) {
-      this.$store.commit('removeExcludeComponent', 'saomaorderList')
+      self.$store.commit('removeExcludeComponent', 'saomaorderList')
     }
     next()
   },
   beforeCreate () {
   },
   created () {
+    let self = this
     // 获取订单详情
-    this.getSaomaorderDetail()
+    self.getSaomaorderDetail()
   },
   beforeMount () {
   },

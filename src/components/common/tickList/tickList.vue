@@ -29,8 +29,8 @@
                 <div class="tick_item_head_btn font26 bgf7bb1f border_r500" v-if="froms === 'editorder'" @click="editorder(item)">立即使用</div>
               </div>
               <div class="tick_item_foot color000000">
-                <div class="font26 color999999 ellipsis">使用规则：{{item.dealflagdescrible}}</div>
-                <div class="font26 color999999 ellipsis">使用时间：{{item.startdate}} —— {{item.enddate}}</div>
+                <div class="font26 ellipsis">使用规则：{{item.dealflagdescrible}}</div>
+                <div class="font26 ellipsis">使用时间：{{item.startdate}} —— {{item.enddate}}</div>
               </div>
             </li>
           </ul>

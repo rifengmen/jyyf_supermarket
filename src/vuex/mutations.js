@@ -15,13 +15,13 @@ const mutations = {
   setBaseURL (state, data) {
     state.baseURL = data
   },
+  // 设置token
+  setToken (state, data) {
+    state.token = data
+  },
   // 设置用户头像
   setHeadimgurl (state, data) {
     state.headimgurl = data
-  },
-  // 设置userToken
-  setUserToken (state, data) {
-    state.userToken = data
   },
   // 设置登陆用户信息
   setUserInfo (state, data) {
@@ -85,7 +85,31 @@ const mutations = {
   },
   // 扫码购物车添加商品
   addSaomacar (state, data) {
-    state.saomacar.push(data)
+    let addflag = true
+    state.saomacar.forEach(item => {
+      if (item.barcode === data.barcode && !item.scalageScanProduct) {
+        item.quantity++
+        addflag = false
+      }
+    })
+    if (addflag) {
+      state.saomacar.push(data)
+    }
+  },
+  // 扫码购商品删除
+  delSaomacar (state, data) {
+    state.saomacar = state.saomacar.filter(item => item.barcode !== data)
+  },
+  // 扫码购商品数量修改
+  setSaomacar (state, data) {
+    let saomacar = data
+    saomacar.forEach(item => {
+      if (!item.scalageScanProduct) {
+        item.actualSaleMoney = item.actualPrice * item.quantity
+        item.saleMoney = item.salePrice * item.quantity
+      }
+    })
+    state.saomacar = saomacar
   },
   // 清空扫码购物车
   clearSaomacar (state) {

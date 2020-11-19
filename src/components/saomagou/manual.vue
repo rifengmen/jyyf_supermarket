@@ -47,6 +47,7 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'manual',
@@ -63,6 +64,10 @@ export default {
     }
   },
   computed: {
+    // 扫码购物车
+    saomacar () {
+      return this.$store.state.saomacar
+    }
   },
   components: {
     MyHeader
@@ -70,42 +75,30 @@ export default {
   methods: {
     // 获取商品信息
     getGoodsInfo () {
+      let self = this
       // 验证条码不为空
-      if (!this.goodscode) {
-        this.$toast({
-          message: '请输入商品条码！',
-          type: 'fail'
-        })
+      if (!self.goodscode) {
+        tip('请输入商品条码！')
         return false
       }
       // 验证店铺不为空
-      if (!this.shopInfo.deptcode) {
-        this.$toast({
-          message: '请选择店铺！',
-          type: 'fail'
-        })
+      if (!self.shopInfo.deptcode) {
+        tip('请选择店铺！')
         return false
       }
-      let data = new FormData()
-      let requestData = {
-        barcode: this.goodscode,
-        deptcode: this.shopInfo.deptcode
+      let data = {
+        barcode: self.goodscode,
+        deptcode: self.shopInfo.deptcode
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('invest/microFlow/getProductDetailsByBarcode', data).then(result => {
+      self.$api.invest.getProductDetailsByBarcode(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.goodsInfo = res.data
-          this.goodsInfoFlag = true
+          self.goodsInfo = res.data
+          self.goodsInfo.addorder = true
+          self.goodsInfoFlag = true
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 加入返回
@@ -115,6 +108,8 @@ export default {
       self.addSaomacar()
       // 关闭弹框
       self.closed()
+      // 返回
+      self.$router.back()
     },
     // 加入继续
     addGoOn () {
@@ -131,15 +126,14 @@ export default {
     },
     // 添加商品到购物车
     addSaomacar () {
-      this.$store.commit('addSaomacar', this.goodsInfo)
-      this.$toast({
-        message: '添加成功!',
-        type: 'success'
-      })
+      let self = this
+      self.$store.commit('addSaomacar', self.goodsInfo)
+      tip('添加成功!')
     },
     // 清空输入框
     clearGoodscode () {
-      this.goodscode = ''
+      let self = this
+      self.goodscode = ''
     }
   },
   watch: {},

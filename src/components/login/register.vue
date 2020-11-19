@@ -305,6 +305,7 @@ export default {
         let res = result.data
         if (res.code === 200) {
           this.$store.commit('setUserInfo', res.data)
+          this.$store.commit('setToken', res.data.token)
           sessionStorage.setItem('jyyf_token', res.data.token)
           this.$axios.defaults.headers.common.Authorization = res.data.token
           let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
@@ -332,6 +333,7 @@ export default {
         let res = result.data
         if (res.code === 200) {
           this.$store.commit('setUserInfo', res.data)
+          this.$store.commit('setToken', res.data.token)
           sessionStorage.setItem('jyyf_token', res.data.token)
           this.$axios.defaults.headers.common.Authorization = res.data.token
           this.$router.push('/')

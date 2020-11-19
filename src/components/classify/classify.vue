@@ -21,7 +21,7 @@
         <div class="classify_nav bgeeeeee">
           <ul>
             <li :class="{tc: true, active: index === classifyActive, bgffffff:  index === classifyActive}" @click="addActive(index)" v-if="classify.length" v-for="(item, index) in classify" :key="index" :optionvalue="item.optionvalue">
-              <div>{{item.optionname}}</div>
+              <div class="font24">{{item.optionname}}</div>
             </li>
           </ul>
         </div>
@@ -40,24 +40,21 @@
                 finished-text="没有更多了"
                 @load="onLoad">
                 <div v-for="(item, index) in goodsList" :key="index" class="goods_li">
-                  <div class="goods_item bgffffff ellipsis" @click="goodsdetail(item)">
+                  <div class="goods_item bgffffff" @click="goodsdetail(item)">
                     <div class="goods_item_img">
                       <img :src="(item.picture1 ? (imgurl + 'image/' + item.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))">
                       <div v-if="item.promotemode !== 0" class="goods_age ellipsis font24 font_normal colorffffff">{{item.modenote}}</div>
                     </div>
                     <div class="goods_item_cont">
-                      <div class="goods_item_name ellipsis font26">{{item.cusgoodsname}}</div>
-                      <div class="goods_item_name ellipsis font24 colorfa2a2a">{{item.remark}}</div>
+                      <div class="goods_item_name ellipsis2 font26">{{item.cusgoodsname}}</div>
+                      <div class="goods_item_name ellipsis2 font22 colorfa2a2a">{{item.remark}}</div>
                       <div class="goods_item_editnum">
-                        <div class="goods_item_price goods_item_prices" v-if="item.promotemode === 0 || item.promotemode === 2 || item.promotemode === 3 || item.promotemode === 8">
-                          <div class="ellipsis font32 font_blod colorf84242">￥{{item.saleprice}}</div>
+                        <div class="goods_item_price goods_item_prices">
+                          <div class="ellipsis font32 font_blod colorf84242" v-if="item.promotevalue">￥{{item.promotevalue}}</div>
+                          <div class="ellipsis font32 font_blod colorf84242" v-else>￥{{item.saleprice}}</div>
+                          <del class="ellipsis font26 color999999" v-if="item.promotevalue && item.promotevalue !== item.saleprice">￥{{item.saleprice}}</del>
                         </div>
-                        <div class="goods_item_price goods_item_prices" v-if="item.promotemode === 1 ||
-                        item.promotemode === 6 || item.promotemode === 7">
-                          <div class="ellipsis font32 font_blod colorf84242">￥{{item.promotevalue}}</div>
-                          <del class="ellipsis font26 color999999">￥{{item.saleprice}}</del>
-                        </div>
-                        <div class="goods_item_cart" v-if="item.promotemode !== 6 && item.promotemode !== 8">
+                        <div class="goods_item_cart" v-if="item.promotemode !== 6 && item.promotemode !== 8 && item.promotemode !== 9">
                           <addcart :goodsid="item.goodsid">
                             <img src="static/img/gwc.png">
                           </addcart>
@@ -88,6 +85,7 @@ import MyFooter from '@/components/common/footer/myfooter'
 import loading from '@/components/common/loading/loading'
 import addcart from '@/components/common/addcart/addcart'
 import nodata from '@/components/common/nodata/nodata'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'classify',
@@ -135,8 +133,9 @@ export default {
   },
   computed: {
     classcode () {
-      if (this.classify.length) {
-        return this.classify[this.classifyActive].optionvalue
+      let self = this
+      if (self.classify.length) {
+        return self.classify[self.classifyActive].optionvalue
       }
     }
   },
@@ -148,75 +147,77 @@ export default {
     nodata
   },
   methods: {
+    // 首次加载
     onLoad () {
-      this.page++
-      this.getGoodsList()
+      let self = this
+      self.page++
+      // 获取分类商品列表
+      self.getGoodsList()
     },
+    // 刷新
     onRefresh () {
-      this.isShowLoading = true
+      let self = this
+      self.isShowLoading = true
       // 清空列表数据
-      this.finished = false
+      self.finished = false
       // 重新加载数据
       // 将 loading 设置为 true，表示处于加载状态
-      this.loading = true
-      this.page = 0
-      this.goodsList = []
-      this.onLoad()
+      self.loading = true
+      self.page = 0
+      self.goodsList = []
+      // 首次加载
+      self.onLoad()
     },
-    // 获取商品列表公共方法
+    // 获取分类商品列表
     getGoodsList () {
-      let data = new FormData()
-      let requestData = {
-        classcode: this.classcode,
-        page: this.page,
-        pageSize: this.pageSize,
+      let self = this
+      let data = {
+        classcode: self.classcode,
+        page: self.page,
+        pageSize: self.pageSize,
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/goods/listGoodsForCategory', data).then(result => {
+      self.$api.api.listGoodsForCategory(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.isShowLoading = false
+          self.isShowLoading = false
           // 无数据时
           if (!res.data.totalSize) {
-            this.finished = true
+            self.finished = true
           }
           if (res.data.content && res.data.content.length) {
-            let currentpage = this.page
-            let total = Math.ceil(res.data.totalSize / this.pageSize)
+            let currentpage = self.page
+            let total = Math.ceil(res.data.totalSize / self.pageSize)
             // 页码不足或者最后一页不足的情况
-            if (currentpage >= total || res.data.content.length < this.pageSize) {
-              this.finished = true
+            if (currentpage >= total || res.data.content.length < self.pageSize) {
+              self.finished = true
             }
             // 刷新
-            if (this.refreshing) {
-              this.goodsList = res.data.content
-              this.refreshing = false
+            if (self.refreshing) {
+              self.goodsList = res.data.content
+              self.refreshing = false
             } else {
-              this.goodsList.push(...res.data.content)
+              self.goodsList.push(...res.data.content)
             }
-            this.loading = false
+            self.loading = false
           }
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 添加分类选中状态
     addActive (index) {
-      this.classifyActive = index
-      this.onRefresh()
+      let self = this
+      self.classifyActive = index
+      // 刷新
+      self.onRefresh()
     },
     // 获取商品分类
     getClassify () {
-      this.classify = [
+      let self = this
+      self.classify = [
         {
           optionname: '推荐',
           optionvalue: '-2',
@@ -229,28 +230,24 @@ export default {
           classname: null
         }
       ]
-      let data = new FormData()
-      let requestData = {
+      let data = {
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/globaldata/getCusClassOption2', data).then(result => {
+      self.$api.system.getCusClassOption2(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.classify.push(...res.data, this.all)
+          self.classify.push(...res.data, self.all)
         }
-      }).catch(error => {
-        throw error
       })
       // 页面加载时获取商品列表
-      this.onLoad()
+      self.onLoad()
     },
     // 商品详情
     goodsdetail (goodsdetail) {
-      this.$store.commit('setGoodsdetail', goodsdetail)
-      this.$router.push({name: 'goodsdetail', query: {goodsid: goodsdetail.goodsid, goodsname: goodsdetail.cusgoodsname}})
+      let self = this
+      self.$store.commit('setGoodsdetail', goodsdetail)
+      self.$router.push({name: 'goodsdetail', query: {goodsid: goodsdetail.goodsid, goodsname: goodsdetail.cusgoodsname}})
     }
   },
   watch: {
@@ -262,19 +259,21 @@ export default {
     })
   },
   beforeRouteLeave (to, from, next) {
+    let self = this
     let reg = /goodsdetail/
     if (reg.test(to.name)) {
-      this.$store.commit('removeExcludeComponent', 'classify')
+      self.$store.commit('removeExcludeComponent', 'classify')
     } else {
-      this.$store.commit('addExcludeComponent', 'classify')
+      self.$store.commit('addExcludeComponent', 'classify')
     }
     next()
   },
   beforeCreate () {
   },
   created () {
+    let self = this
     // 页面加载时获取商品分类
-    this.getClassify()
+    self.getClassify()
   },
   beforeMount () {
   },

@@ -25,13 +25,14 @@
 }
 .classify_nav li {
   width: 100%;
-  padding: .3rem 0;
+  padding: .2rem 0;
 }
 .classify_nav li div {
-  width: calc(100% - .1rem);
-  height: .4rem;
+  width: calc(100% - .3rem);
+  min-height: .4rem;
   line-height: .4rem;
   border-left: .1rem solid #eeeeee;
+  padding: 0 .1rem;
 }
 .classify_nav li.active div {
   border-left: .1rem solid #fa6400;
