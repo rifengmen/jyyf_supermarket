@@ -253,8 +253,6 @@ export default {
           return false
         } else {
           tip(res.msg)
-          // 去出场码页面
-          self.toSaomaobar()
         }
       })
     },
@@ -278,13 +276,12 @@ export default {
         },
         function (_res) {
           if (_res.err_msg === 'get_brand_wcpay_request:ok') {
-            self.$router.push({name: 'saomagou'})
+            // 去出场码页面
+            self.toSaomaobar()
             // 使用以上方式判断前端返回,微信团队郑重提示：
             // res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
           } else if (_res.err_msg === 'get_brand_wcpay_request:cancel' || _res.err_msg === 'get_brand_wcpay_request:fail') {
             tip('支付失败！')
-            // 去出场码页面
-            self.toSaomaobar()
           }
         }
       )
@@ -293,18 +290,20 @@ export default {
     toSaomaobar () {
       // 等待前往出场码
       tip('支付结果获取中...')
-      let self = this
-      let data = {
-        deptcode: self.deptcode
-      }
-      self.$api.invest.getFlowno(data).then(result => {
-        let res = result.data
-        if (res.code === 200) {
-          self.$router.push({name: 'saomabar', query: {saomabar: res.data.barimg, flowno: res.data.orderInfo.flowno}})
-          tip('支付成功！')
-        } else {
-          tip(res.msg)
+      setTimeout(() => {
+        let self = this
+        let data = {
+          deptcode: self.deptcode
         }
+        self.$api.invest.getFlowno(data).then(result => {
+          let res = result.data
+          if (res.code === 200) {
+            tip('支付成功！')
+            self.$router.push({name: 'saomabar', query: {saomabar: res.data.barimg, flowno: res.data.orderInfo.flowno}})
+          } else {
+            tip(res.msg)
+          }
+        }, 3000)
       })
     }
   },

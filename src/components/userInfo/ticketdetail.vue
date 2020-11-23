@@ -11,6 +11,7 @@
     <!-- 内容部分盒子 start -->
     <div class="userinfo_main bgffffff">
       <div class="tick_detail">
+        <!-- 面额 start -->
         <div class="tick_detail_card colorff7e42">
           <div class="font40 font_blod tc" v-if="ticketInfo.tickettype === 1">
             ￥
@@ -25,18 +26,37 @@
             <div class="font26 tc">满{{ticketInfo.minsalemoney}}元使用</div>
           </div>
         </div>
+        <!-- 面额 end -->
+        <!-- 券信息 start -->
         <div class="tick_detail_info">
-          <div class="font28 font_blod">券码</div>
-          <div class="font26 color999999">{{ticketInfo.tickid}}</div>
-          <div class="font28 font_blod">有效期</div>
-          <div class="font26 color999999">{{ticketInfo.startdate}} —— {{ticketInfo.enddate}}</div>
-          <div class="font28 font_blod">使用规则</div>
-          <div class="font26 color999999">{{ticketInfo.dealflagdescription}}</div>
+          <div class="">
+            <div class="font28 font_blod">券码</div>
+            <div class="font26 color999999">{{ticketInfo.tickid}}</div>
+          </div>
+          <div class="">
+            <div class="font28 font_blod">领用时间</div>
+            <div class="font26 color999999">{{ticketInfo.panicstart}} —— {{ticketInfo.panicend}}</div>
+          </div>
+          <div class="">
+            <div class="font28 font_blod">使用时间</div>
+            <div class="font26 color999999">{{ticketInfo.startdate}} —— {{ticketInfo.enddate}}</div>
+          </div>
+          <div class="">
+            <div class="font28 font_blod">限用名称日期</div>
+            <div class="font26 color999999">{{ticketInfo.limitname}}</div>
+          </div>
+          <div class="">
+            <div class="font28 font_blod">使用说明</div>
+            <div class="font26 color999999">{{ticketInfo.useinstructions}}</div>
+          </div>
         </div>
-        <div class="tick_detail_btn bgffae43 colorffffff font30 border_r10" @click="getTick">立即领取</div>
+        <!-- 券信息 end -->
       </div>
     </div>
     <!-- 内容部分盒子 end -->
+    <!-- 领用按钮 start -->
+    <div class="tick_detail_btn bgffae43 colorffffff font30 border_r10 tc" @click="getTick">立即领取</div>
+    <!-- 领用按钮 end -->
   </div>
 </template>
 
@@ -124,14 +144,14 @@ export default {
 <style scoped>
 .userinfo_main{
   width: 100%;
-  height: 100%;
+  min-height: 100%;
 }
 .tick_detail {
   width: calc(100% - 0.48rem);
   display: flex;
   flex-direction: column;
-  padding: 0 0.24rem 0 0.24rem;
-  margin-bottom: 0.24rem;
+  padding: 0 0.24rem;
+  margin-bottom: 1.8rem;
 }
 .tick_detail_card {
   height: 1.54rem;
@@ -141,21 +161,18 @@ export default {
   padding: 0.24rem;
   margin: 0.24rem 0 0.24rem 0;
 }
-.tick_detail_info {
-  display: flex;
-  flex-direction: column;
-  margin-left: 0.24rem;
-}
 .tick_detail_info div {
+  line-height: 1.5;
   margin-bottom: 0.24rem;
 }
 .tick_detail_btn {
-  width: calc(100% - 0.48rem);
-  height: 0.96rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  bottom: 0.48rem;
   position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 0.48rem);
+  height: 0.8rem;
+  line-height: .8rem;
+  margin: .5rem auto;
 }
 </style>

@@ -129,7 +129,7 @@ export default {
       })
       // // 测试数据
       // self.lat = 37.858363
-      // self.lng = 112.581113
+      // self.lng = 112.581242
       // if (isGet || !self.shopInfo) {
       //   self.getShopList(isGet)
       // }

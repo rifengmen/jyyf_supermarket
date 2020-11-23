@@ -56,6 +56,7 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
+import wx from 'weixin-js-sdk'
 import tip from '@/utils/Toast'
 
 export default {
@@ -68,9 +69,6 @@ export default {
       imgurl: this.IMGURL,
       // 条码
       saomabar: this.$route.query.saomabar,
-      // 店铺信息
-      deptcode: this.$store.state.shopInfo.deptcode,
-      deptname: this.$store.state.shopInfo.deptname,
       // 订单flowno
       flowno: this.$route.query.flowno,
       // 订单详情
@@ -79,12 +77,127 @@ export default {
       goodsList: ''
     }
   },
-  computed: {},
+  computed: {
+    // 店铺信息
+    deptcode () {
+      return this.$store.state.shopInfo.deptcode
+    },
+    deptname () {
+      return this.$store.state.shopInfo.deptname
+    }
+  },
   components: {
     MyHeader
   },
   inject: ['reload'],
   methods: {
+    // 获取用户地址信息
+    wxGetLocation () {
+      let self = this
+      // 获取定位
+      wx.ready(() => {
+        wx.getLocation({
+          type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+          success: function (res) {
+            self.lat = res.latitude // 纬度，浮点数，范围为90 ~ -90
+            self.lng = res.longitude // 经度，浮点数，范围为180 ~ -180。
+            self.getShopList()
+          },
+          fail: function (res) {
+            // alert(JSON.stringify(res))
+          },
+          cancel: function (res) {
+            tip('已取消')
+          }
+        })
+      })
+    },
+    // 获取用户地址信息
+    getAddressInfo () {
+      let self = this
+      if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+        self.curPageUrl = self.baseURL + sessionStorage.getItem('jyyf_beforeLoginUrl')
+      } else if (/(Android|Windows)/i.test(navigator.userAgent)) {
+        self.curPageUrl = window.location.href
+      }
+      let data = {
+        wechatID: self.$store.state.wechatID,
+        curPageUrl: self.curPageUrl
+      }
+      self.$api.api.getWXConfig(data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          self.wxstr = res.data
+          wx.config({
+            // debug: true,
+            debug: false,
+            appId: self.wxstr.appid,
+            timestamp: self.wxstr.timestamp,
+            nonceStr: self.wxstr.noncestr,
+            signature: self.wxstr.signure,
+            // 所有要调用的 API 都要加到这个列表中
+            jsApiList: [
+              'addCard',
+              'openCard',
+              'scanQRCode',
+              'getLocation',
+              'updateAppMessageShareData',
+              'updateTimelineShareData',
+              'onMenuShareAppMessage',
+              'onMenuShareTimeline'
+            ]
+          })
+          // 微信api注册
+          self.wxGetLocation()
+        }
+      })
+    },
+    // 获取附近店铺信息
+    getShopList () {
+      let self = this
+      let data = {
+        Latitude: self.lat,
+        Longitude: self.lng
+      }
+      self.$api.system.listDeptInfo(data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          // 如果没有店铺
+          if (!res.data.list.length) {
+            tip('附近暂无扫码购店铺')
+          } else if (res.data.list.length >= 1) { // 如果有多家店铺
+            self.$store.commit('setShopInfo', res.data.list[0])
+            // 设置页面title
+            self.setTitle(res.data.list[0].deptname)
+            // 去出场码页面
+            self.toSaomaobar()
+          }
+        } else {
+          tip(res.msg)
+        }
+      })
+    },
+    // 设置页面title
+    setTitle (title) {
+      let self = this
+      document.title = title || self.$store.state.userInfo.deptname
+    },
+    // 去出场码页面
+    toSaomaobar () {
+      let self = this
+      let data = {
+        deptcode: self.deptcode
+      }
+      self.$api.invest.getFlowno(data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          self.saomabar = res.data.barimg
+          self.flowno = res.data.orderInfo.flowno
+        } else {
+          tip(res.msg)
+        }
+      })
+    },
     // 切换出场码和详情
     toggleFlag () {
       let self = this
@@ -114,7 +227,9 @@ export default {
     // 设置图片路径
     setSrc () {
       let self = this
-      self.reload()
+      if (self.$route.query.saomabar && self.$route.query.flowno) {
+        self.reload()
+      }
     },
     // 关闭出场码
     closeBar () {
@@ -126,6 +241,11 @@ export default {
   beforeCreate () {
   },
   created () {
+    let self = this
+    if (!self.$route.query.saomabar && !self.$route.query.flowno) {
+      // 获取用户地址信息
+      self.getAddressInfo(false)
+    }
   },
   beforeMount () {
   },
