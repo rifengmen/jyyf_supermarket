@@ -73,6 +73,7 @@
 <script>
 import MyHeader from '@/components/common/header/myheader'
 import MyFooter from '@/components/common/footer/myfooter'
+import tip from '../../utils/Toast'
 
 export default {
   name: 'mycode',
@@ -92,6 +93,8 @@ export default {
       online_bar: 'static/img/goods.png',
       // 二维码
       online_qr: 'static/img/goods.png',
+      // 获取付款码是否需要密码0:需要；1:不需要
+      password_on: 0,
       // 储值卡支付密码
       Cpassword: ''
     }
@@ -117,80 +120,70 @@ export default {
   methods: {
     // 获取用户会员卡信息
     getMyInfo () {
-      let data = new FormData()
-      let requestData = {
-      }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/customlogin/getMyInfo', data).then(result => {
+      let self = this
+      let data = {}
+      self.$api.system.getMyInfo(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$store.commit('setMemType', res.data.mem_type)
-          this.$store.commit('setMoneyDetail', res.data.moneyDetail)
+          self.$store.commit('setMemType', res.data.mem_type)
+          self.$store.commit('setMoneyDetail', res.data.moneyDetail)
+          self.password_on = parseFloat(res.data.password_on)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 获取电子会员卡
     getOnlineVip () {
-      let data = new FormData()
-      let requestData = {
-      }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/customlogin/myCard', data).then(result => {
+      let self = this
+      let data = {}
+      self.$api.system.myCard(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.codename = '会员码'
-          this.codetype = 1
-          this.online_bar = res.data.mybarcode
-          this.online_qr = res.data.myqrcode
+          self.codename = '会员码'
+          self.codetype = 1
+          self.online_bar = res.data.mybarcode
+          self.online_qr = res.data.myqrcode
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     onInput (key) {
-      this.Cpassword = (this.Cpassword + key).slice(0, 4)
+      let self = this
+      self.Cpassword = (self.Cpassword + key).slice(0, 4)
     },
     onDelete () {
-      this.Cpassword = this.Cpassword.slice(0, this.Cpassword.length - 1)
+      let self = this
+      self.Cpassword = self.Cpassword.slice(0, self.Cpassword.length - 1)
     },
     // 输入储值卡支付密码
     sendCpassword () {
-      this.passwordShow = true
-      this.showKeyboard = true
-      this.Cpassword = ''
+      let self = this
+      // 判断获取付款码是否需要密码
+      if (self.password_on) {
+        // 获取储值卡付款码
+        self.getOnlinecard()
+      } else {
+        self.passwordShow = true
+        self.showKeyboard = true
+        self.Cpassword = ''
+      }
     },
     // 获取储值卡付款码
     getOnlinecard () {
-      let data = new FormData()
-      let requestData = {
-        Cpassword: this.Cpassword
+      let self = this
+      let data = {
+        Cpassword: self.Cpassword
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('mem/member/createPayMoneyStr', data).then(result => {
+      self.$api.mem.createPayMoneyStr(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.codename = '付款码'
-          this.codetype = 2
-          this.online_bar = res.data.payBarcode
-          this.online_qr = res.data.payQrcode
+          self.codename = '付款码'
+          self.codetype = 2
+          self.online_bar = res.data.payBarcode
+          self.online_qr = res.data.payQrcode
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     }
   },
@@ -198,10 +191,11 @@ export default {
   beforeCreate () {
   },
   created () {
+    let self = this
     // 获取用户会员卡信息
-    this.getMyInfo()
+    self.getMyInfo()
     // 获取电子会员
-    this.getOnlineVip()
+    self.getOnlineVip()
   },
   beforeMount () {
   },

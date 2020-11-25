@@ -8,6 +8,7 @@ import pay from './pay'
 import info from './info'
 import invest from './invest'
 import bill from './bill'
+import mem from './mem'
 
 // 导出接口
 export default {
@@ -16,5 +17,6 @@ export default {
   pay,
   info,
   invest,
-  bill
+  bill,
+  mem
 }

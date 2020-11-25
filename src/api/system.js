@@ -12,6 +12,8 @@ const system = {
   login: data => http.post('system/customlogin/login', data),
   // 获取卡信息
   getMyInfo: data => http.post('system/customlogin/getMyInfo', data),
+  // 获取电子会员卡
+  myCard: data => http.post('system/customlogin/myCard', data),
   // banner列表
   listShopHomeSlide: data => http.post('system/slide/listShopHomeSlide', data),
   // banner详情

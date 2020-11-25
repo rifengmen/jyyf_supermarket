@@ -1,22 +1,15 @@
 const state = {
   // 店铺wechatID
   wechatID: '2',
-  // wechatID: 'LCHLG',
   // wechatID: '',
   // appid
   appid: 'wx700e813e33fcebec',
-  // appid: 'wx0157c53ba4e659f3', // LCHLG
   // appid: '',
   // 用户openid
-  // openid: 'oWBPAv2kv3TxjGHCGVeWQqZfGhqw',
   openid: 'oWBPAv82A3OaXxPa6neaWv09g90A',
-  // openid: 'oWBPAv1-db9Sy3F26H9bZUcId9_g',
-  // openid: 'oWBPAvz0mRjmzCRLGXLgfhhRjz7I',
-  // openid: 'ouG8UwjRuZFkhiyowhH8pqBXVJIE', // LCHLG
   // openid: '',
   // 基础路径
   baseURL: 'https://www.spzlk.cn',
-  // baseURL: 'http://192.168.1.25:8083/',
   // baseURL: '',
   // 路由开关
   isRouter: true,
