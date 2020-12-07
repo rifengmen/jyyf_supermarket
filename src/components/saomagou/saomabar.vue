@@ -80,10 +80,12 @@ export default {
   computed: {
     // 店铺信息
     deptcode () {
-      return this.$store.state.shopInfo.deptcode
+      let self = this
+      return self.$store.state.shopInfo.deptcode
     },
     deptname () {
-      return this.$store.state.shopInfo.deptname
+      let self = this
+      return self.$store.state.shopInfo.deptname
     }
   },
   components: {

@@ -14,6 +14,7 @@
 <script>
 import wx from 'weixin-js-sdk'
 import WechatConfig from '@/components/common/wechatConfig/wechatConfig'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'App',
@@ -40,15 +41,18 @@ export default {
   computed: {
     // appid
     appid () {
-      return this.$store.state.appid
+      let self = this
+      return self.$store.state.appid
     },
     // baseURL
     baseURL () {
-      return this.$store.state.baseURL
+      let self = this
+      return self.$store.state.baseURL
     },
     // 缓存组件
     excludeComponents () {
-      return this.$store.state.excludeComponents
+      let self = this
+      return self.$store.state.excludeComponents
     }
   },
   components: {
@@ -62,21 +66,23 @@ export default {
   methods: {
     // 页面重载的方法
     reload () {
-      this.isRouter = false
-      this.$nextTick(() => {
-        this.isRouter = true
+      let self = this
+      self.isRouter = false
+      self.$nextTick(() => {
+        self.isRouter = true
       })
     },
     // 获取wechatID
     getWechatID () {
-      console.log(this.$route, 'wechatID1')
+      let self = this
+      console.log(self.$route, 'wechatID1')
       // 路由开关
-      if (this.isRouter) {
+      if (self.isRouter) {
         return false
       }
       let baseURL = window.location.href.slice(0, window.location.href.lastIndexOf('/'))
-      this.$store.commit('setBaseURL', baseURL)
-      console.log(this.$route, 'wechatID2')
+      self.$store.commit('setBaseURL', baseURL)
+      console.log(self.$route, 'wechatID2')
       let beforeLoginUrl = sessionStorage.getItem('jyyf_beforeLoginUrl')
       let id = beforeLoginUrl.split('=')[1]
       let str
@@ -89,196 +95,149 @@ export default {
       if (str && (str.indexOf('=') === str.length - 1)) {
         str = str.substr(0, str.length - 1)
       }
-      this.wechatID = str
-      this.$store.commit('setWechatID', this.wechatID)
-      this.getAppid()
+      self.wechatID = str
+      self.$store.commit('setWechatID', self.wechatID)
+      // 获取Appid
+      self.getAppid()
     },
     // 获取appid
     getAppid () {
-      console.log(this.$route, 'appid')
-      let requestData = {
-        wechatID: this.wechatID
+      let self = this
+      console.log(self.$route, 'appid')
+      let data = {
+        wechatID: self.wechatID
       }
-      requestData = JSON.stringify(requestData)
-      let data = new FormData()
-      data.append('requestData', requestData)
-      this.$axios.post('system/customlogin/getPrimaryKey', data).then(result => {
+      self.$api.system.getPrimaryKey(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$store.commit('setAppid', res.data.appid)
-          // let msgType = this.$route.query.msgType
-          // if (msgType === 'activate') {
-          //   // 卡包过来直接去注册
-          //   this.toRegister()
-          //   return false
-          // }
+          self.$store.commit('setAppid', res.data.appid)
           let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
           if (url.indexOf('&') >= 0 && url.indexOf('msgType=') >= 0) {
             url = url.split('&')[1] || ''
             let msgType = url.split('=')[1] || ''
             if (msgType === 'activate') {
               // 卡包过来直接去注册
-              this.toRegister()
+              self.toRegister()
               return false
             }
           }
-          this.getCode()
+          // 非静默授权，第一次有弹框
+          self.getCode()
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 非静默授权，第一次有弹框
     getCode () {
-      console.log(this.$route, 'code')
+      let self = this
+      console.log(self.$route, 'code')
       let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
-      const REDIRECT_URI = encodeURIComponent(this.baseURL + url)
-      const URL = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + this.appid + '&redirect_uri=' + REDIRECT_URI + '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
+      const REDIRECT_URI = encodeURIComponent(self.baseURL + url)
+      const URL = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + self.appid + '&redirect_uri=' + REDIRECT_URI + '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
       // 非静默授权，第一次有弹框
       // 如果没有code，则去请求
       // 截取code
       // https://www.spzlk.cn/testSupermarket/?dianpu=2&code=001PKA0j2nSOTD0WYe2j2qnT0j2PKA09&state=STATE
-      // let code = this.$route.query.code
-      // if (code) {
-      //   this.code = code
-      //   this.getOpenId()
-      // } else {
-      //   window.location.href = URL
-      // }
       if (url.indexOf('&code=') === -1) {
         window.location.href = URL
       } else if (url.indexOf('&code=') >= 0 && url.indexOf('state=')) {
-        this.code = url.substring(url.indexOf('&code=') + 6, url.indexOf('state=') - 1)
-        this.getOpenId()
+        self.code = url.substring(url.indexOf('&code=') + 6, url.indexOf('state=') - 1)
+        // 获取openid
+        self.getOpenId()
       }
     },
-    // 发送code请求openid
+    // 获取openid
     getOpenId () {
-      let requestData = {
-        wechatID: this.wechatID,
-        code: this.code
+      let self = this
+      let data = {
+        wechatID: self.wechatID,
+        code: self.code
       }
-      requestData = JSON.stringify(requestData)
-      let data = new FormData()
-      data.append('requestData', requestData)
-      // 发送给后台并请求token
-      this.$axios.post('system/customlogin/getOpenID', data).then(result => {
+      self.$api.system.getOpenID(data).then(result => {
         let res = result.data
         if (res.code === 200) {
           sessionStorage.setItem('jyyf_openid', res.data.openid)
-          this.$store.commit('setOpenid', res.data.openid)
-          this.openid = res.data.openid
-          this.$store.commit('setHeadimgurl', res.data.headimgurl)
+          self.$store.commit('setOpenid', res.data.openid)
+          self.openid = res.data.openid
+          self.$store.commit('setHeadimgurl', res.data.headimgurl)
           // 设置用户信息
-          this.setUserInfo()
+          self.setUserInfo()
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 卡包注册
     toRegister () {
-      console.log(this.$route, 'toRegister')
+      let self = this
+      console.log(self.$route, 'toRegister')
       let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
       let toPath = url.slice(1, 9)
       if (toPath === 'register') {
         let _arr = url.split('=')
         let openid = _arr[_arr.length - 1]
         sessionStorage.setItem('jyyf_openid', openid)
-        this.$store.commit('setOpenid', openid)
-        this.openid = openid
-        this.isRouter = true
-        this.$router.push(url)
+        self.$store.commit('setOpenid', openid)
+        self.openid = openid
+        self.isRouter = true
+        self.$router.push(url)
       }
     },
     // 设置用户信息
     setUserInfo () {
       let self = this
-      let data = new FormData()
-      let requestData = {
-        wechatID: this.wechatID,
-        wexinID: this.openid
+      let data = {
+        wechatID: self.wechatID,
+        wexinID: self.openid
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/customlogin/login', data).then(result => {
+      self.$api.system.login(data).then(result => {
         let res = result.data
         // res.code 200：正确；20：注册；30：加入卡包；40：激活卡包；500：报错
         if (res.code === 200) {
-          this.$store.commit('setUserInfo', res.data)
-          this.$store.commit('setToken', res.data.token)
-          sessionStorage.setItem('jyyf_token', res.data.token)
-          this.$axios.defaults.headers.common.Authorization = res.data.token
-          this.isRouter = true
-          let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
-          this.$router.push(url)
-        } else if (res.code === 20) {
-          this.isRouter = true
-          this.$router.push('/register')
-        } else if (res.code === 30) {
-          // 验证卡包
-          this.getWechatCardList(30)
-        } else if (res.code === 40) {
-          this.retwxcode = res.data.code
-          // 验证卡包
-          this.getWechatCardList(40)
-        } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
-        }
-      }).catch(error => {
-        throw error
-      })
-      // 临时
-      // 封装
-      let datas = {
-        wechatID: this.wechatID,
-        wexinID: this.openid
-      }
-      self.$api.system.login(datas).then(result => {
-        let res = result.data
-        if (res.code === 200) {
           self.$store.commit('setUserInfo', res.data)
           self.$store.commit('setToken', res.data.token)
+          sessionStorage.setItem('jyyf_token', res.data.token)
+          self.$axios.defaults.headers.common.Authorization = res.data.token
+          self.isRouter = true
+          let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
+          self.$router.push(url)
+        } else if (res.code === 20) {
+          self.isRouter = true
+          self.$router.push('/register')
+        } else if (res.code === 30) {
+          // 验证卡包
+          self.getWechatCardList(30)
+        } else if (res.code === 40) {
+          self.retwxcode = res.data.code
+          // 验证卡包
+          self.getWechatCardList(40)
+        } else {
+          tip(res.msg)
         }
       })
     },
     // 验证卡包
     getWechatCardList (code) {
+      let self = this
       if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
-        this.curPageUrl = this.baseURL + sessionStorage.getItem('jyyf_beforeLoginUrl')
+        self.curPageUrl = self.baseURL + sessionStorage.getItem('jyyf_beforeLoginUrl')
       } else if (/(Android|Windows)/i.test(navigator.userAgent)) {
-        this.curPageUrl = window.location.href
+        self.curPageUrl = window.location.href
       } else {
-        this.curPageUrl = window.location.href
+        self.curPageUrl = window.location.href
       }
-      let data = new FormData()
-      let requestData = {
-        wechatID: this.wechatID,
-        curPageUrl: this.curPageUrl
+      let data = {
+        wechatID: self.wechatID,
+        curPageUrl: self.curPageUrl
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/customlogin/getWeiXinCardList', data).then(result => {
+      self.$api.system.getWeiXinCardList(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          let _this = this
           wx.config({
             // debug: true,
             debug: false,
-            appId: _this.$store.state.appid,
+            appId: self.$store.state.appid,
             timestamp: res.data.cardExt.timestamp,
             nonceStr: res.data.cardExt.nonce_str,
             signature: res.data.wxsignstr,
@@ -290,24 +249,18 @@ export default {
           })
           if (code === 30) {
             // 添加卡券
-            this.addCard(res.data)
+            self.addCard(res.data)
           } else if (code === 40) {
             // 激活卡券
-            this.openCard(res.data)
+            self.openCard(res.data)
           }
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 添加卡券
     addCard (data) {
-      let _this = this
       wx.ready(() => {
         // 添加卡券
         wx.addCard({
@@ -318,45 +271,37 @@ export default {
             }
           ],
           success: function (res) {
-            _this.$toast({
-              message: '已添加卡券请激活！',
-              type: 'success'
-            })
+            tip('已添加卡券请激活！')
           },
           cancel: function (res) {
-            _this.$toast({
-              message: res,
-              type: 'fail'
-            })
+            tip(res)
           }
         })
       })
     },
     // 激活卡券
     openCard (data) {
-      let _this = this
+      let self = this
       wx.ready(() => {
         // 激活卡券
         wx.openCard({
           cardList: [
             {
               cardId: data.cardId,
-              code: _this.retwxcode
+              code: self.retwxcode
             }
           ],
           cancel: function (res) {
-            _this.$toast({
-              message: res,
-              type: 'fail'
-            })
+            tip(res)
           }
         })
       })
     }
   },
   created () {
+    let self = this
     // 获取wechatID
-    this.getWechatID()
+    self.getWechatID()
   },
   mounted: function () {
     // 浏览器关闭时清除缓存

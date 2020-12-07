@@ -31,6 +31,7 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'commentdetail',
@@ -49,23 +50,15 @@ export default {
   methods: {
     // 获取评价详情
     getCommentDetail () {
-      let data = new FormData()
-      let requestData = {
-      }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('', data).then(result => {
+      let self = this
+      let data = {}
+      self.$api.mem.listShopEvaluation(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.commentdetail = res.data
+          self.commentdetail = res.data
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     }
   },
@@ -74,7 +67,7 @@ export default {
   },
   created () {
     // 页面加载时获取评价详情
-    // this.getCommentDetail()
+    this.getCommentDetail()
   },
   beforeMount () {
   },

@@ -58,6 +58,7 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'addComment',
@@ -80,46 +81,29 @@ export default {
   methods: {
     // 发送评价
     sendComment () {
-      if (!this.comment) {
-        this.$toast({
-          message: '内容不能为空！',
-          type: 'fail'
-        })
+      let self = this
+      if (!self.comment) {
+        tip('内容不能为空！')
         return false
       }
-      if (this.comment.length > 140) {
-        this.$toast({
-          message: '已超过140个字符！',
-          type: 'fail'
-        })
+      if (self.comment.length > 140) {
+        tip('已超过140个字符！')
         return false
       }
-      let data = new FormData()
-      let requestData = {
-        gdsid: this.goods.Gdscode ? this.goods.Gdscode : this.goods.gdscode,
-        content: this.comment,
+      let data = {
+        gdsid: self.goods.Gdscode ? self.goods.Gdscode : self.goods.gdscode,
+        content: self.comment,
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/goods/addAppraise', data).then(result => {
+      self.$api.api.addAppraise(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$toast({
-            message: '提交成功!',
-            type: 'success'
-          })
-          this.$router.back()
-          // this.$router.push({name: 'commentList'})
+          tip('提交成功!')
+          self.$router.back()
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 删除照片
@@ -128,8 +112,9 @@ export default {
     },
     // 查看放大图
     handlePictureCardPreview (file) {
-      this.dialogImageUrl = file.url
-      this.dialogVisible = true
+      let self = this
+      self.dialogImageUrl = file.url
+      self.dialogVisible = true
     }
   },
   watch: {},

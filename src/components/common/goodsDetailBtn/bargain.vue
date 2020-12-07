@@ -51,6 +51,7 @@
 
 <script>
 import addorder from '@/components/common/addorder/addorder'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'bargain',
@@ -111,123 +112,94 @@ export default {
   methods: {
     // 显示砍价输入框
     setShowBargain () {
-      this.joinno = ''
-      this.showBargain = true
+      let self = this
+      self.joinno = ''
+      self.showBargain = true
     },
     // 新增砍价
     addBargain () {
-      let data = new FormData()
-      let requestData = {
-        goodsid: this.goodsdetail.goodsid.toString(),
-        amount: this.amount,
-        saleprice: this.goodsdetail.saleprice,
-        discountvalue: this.goodsdetail.discountvalue,
+      let self = this
+      let data = {
+        goodsid: self.goodsdetail.goodsid.toString(),
+        amount: self.amount,
+        saleprice: self.goodsdetail.saleprice,
+        discountvalue: self.goodsdetail.discountvalue,
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/goods/hackAdd', data).then(result => {
+      self.$api.api.hackAdd(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$toast({
-            message: '发起成功，快去邀人砍价0×0',
-            type: 'success'
-          })
-          this.$emit('getBargainNo')
+          tip('发起成功，快去邀人砍价0×0')
+          self.$emit('getBargainNo')
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 参与砍价
     joinBargain (group) {
-      let data = new FormData()
-      let requestData = {
-        goodsid: this.goodsdetail.goodsid.toString(),
-        amount: this.amount,
-        groupno: this.joinno,
-        saleprice: this.goodsdetail.saleprice,
-        discountvalue: this.goodsdetail.discountvalue,
+      let self = this
+      let data = {
+        goodsid: self.goodsdetail.goodsid.toString(),
+        amount: self.amount,
+        groupno: self.joinno,
+        saleprice: self.goodsdetail.saleprice,
+        discountvalue: self.goodsdetail.discountvalue,
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/goods/hackIncrease', data).then(result => {
+      self.$api.api.hackIncrease(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$toast({
-            message: '砍价成功!',
-            type: 'success'
-          })
+          tip('砍价成功!')
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 砍价详情
     bargainDetail () {
-      let data = new FormData()
-      let requestData = {
-        goodsid: this.goodsdetail.goodsid.toString(),
+      let self = this
+      let data = {
+        goodsid: self.goodsdetail.goodsid.toString(),
         amount: 1,
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/goods/generateHackBill', data).then(result => {
+      self.$api.api.generateHackBill(data).then(result => {
         let res = result.data
         if (res.code === 200 && res.data.list.length) {
-          this.bargaindetail = res.data.list.reverse()
-          this.showBargainDetail = true
+          self.bargaindetail = res.data.list.reverse()
+          self.showBargainDetail = true
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 填写砍价号验证
     checkJoinBargain () {
-      if (this.joinno) {
-        let data = new FormData()
-        let requestData = {
-          goodsid: this.goodsdetail.goodsid.toString(),
-          joinno: this.joinno,
+      let self = this
+      if (self.joinno) {
+        let data = {
+          goodsid: self.goodsdetail.goodsid.toString(),
+          joinno: self.joinno,
           // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
           flag: 'wemember'
         }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
-        this.$axios.post('api/goods/generateHackBill', data).then(result => {
+        self.$api.api.generateHackBill(data).then(result => {
           let res = result.data
           if (res.code === 200) {
             // 拼团
-            this.joinBargain(res.data)
+            self.joinBargain(res.data)
           } else {
-            this.$toast({
-              message: res.msg,
-              type: 'fail'
-            })
+            tip(res.msg)
           }
-        }).catch(error => {
-          throw error
         })
       }
     },
     // 关闭砍价详情窗口
     closeBargainDetail () {
-      this.$emit('getBargainNo')
+      let self = this
+      self.$emit('getBargainNo')
     }
   }
 }

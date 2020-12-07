@@ -74,6 +74,7 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'userDetail',
@@ -93,94 +94,73 @@ export default {
   computed: {
     // 用户头像
     headimgurl () {
-      return this.$store.state.headimgurl
+      let self = this
+      return self.$store.state.headimgurl
     }
   },
   components: {
     MyHeader
   },
   methods: {
-    // 获取用户资料
+    // 获取用户账户资料
     getMyInfo () {
-      let data = new FormData()
-      let requestData = {
-      }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('mem/member/getMyInfo', data).then(result => {
+      let self = this
+      let data = {}
+      self.$api.mem.getMyInfo(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.myInfo = res.data
-          this.radio = res.data.birthday ? 'birthday' : 'lunarbirthday'
+          self.myInfo = res.data
+          self.radio = res.data.birthday ? 'birthday' : 'lunarbirthday'
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 完善资料
     sendMyInfo () {
-      let data = new FormData()
-      let requestData
-      if (this.radio === 'birthday') {
-        requestData = {
-          mobile: this.myInfo.mobile,
-          memName: this.myInfo.nickname,
+      let self = this
+      let data
+      if (self.radio === 'birthday') {
+        data = {
+          mobile: self.myInfo.mobile,
+          memName: self.myInfo.nickname,
           lunarbirthday: '',
-          birthday: this.myInfo.birthday
+          birthday: self.myInfo.birthday
         }
-      } else if (this.radio === 'lunarbirthday') {
-        requestData = {
-          mobile: this.myInfo.mobile,
-          memName: this.myInfo.nickname,
-          lunarbirthday: this.myInfo.lunarbirthday,
+      } else if (self.radio === 'lunarbirthday') {
+        data = {
+          mobile: self.myInfo.mobile,
+          memName: self.myInfo.nickname,
+          lunarbirthday: self.myInfo.lunarbirthday,
           birthday: ''
         }
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/customlogin/modifyname', data).then(result => {
+      self.$api.system.modifyname(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$toast({
-            message: '资料修改成功！',
-            type: 'success'
-          })
+          tip('资料修改成功！')
           // 更新用户资料
-          this.setUserInfo()
+          self.setUserInfo()
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 设置用户信息
     setUserInfo () {
-      let data = new FormData()
-      let requestData = {
-        wechatID: this.$store.state.wechatID,
-        wexinID: this.$store.state.openid
+      let self = this
+      let data = {
+        wechatID: self.$store.state.wechatID,
+        wexinID: self.$store.state.openid
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/customlogin/login', data).then(result => {
+      self.$api.system.login(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$store.commit('setUserInfo', res.data)
-          this.$store.commit('setToken', res.data.token)
+          self.$store.commit('setUserInfo', res.data)
+          self.$store.commit('setToken', res.data.token)
           sessionStorage.setItem('jyyf_token', res.data.token)
-          this.$axios.defaults.headers.common.Authorization = res.data.token
+          self.$axios.defaults.headers.common.Authorization = res.data.token
         }
-      }).catch(error => {
-        throw error
       })
     }
   },
@@ -188,8 +168,9 @@ export default {
   beforeCreate () {
   },
   created () {
+    let self = this
     // 获取用户资料
-    this.getMyInfo()
+    self.getMyInfo()
   },
   beforeMount () {
   },

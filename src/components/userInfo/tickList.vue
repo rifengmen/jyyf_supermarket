@@ -30,7 +30,8 @@ export default {
   },
   computed: {
     froms () {
-      return this.$route.query.froms || 'userinfo'
+      let self = this
+      return self.$route.query.froms || 'userinfo'
     }
   },
   components: {

@@ -63,6 +63,7 @@
 <script>
 import MyHeader from '@/components/common/header/myheader'
 import nodata from '@/components/common/nodata/nodata'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'expendDetail',
@@ -86,27 +87,20 @@ export default {
     nodata
   },
   methods: {
-    // 获取订单详情
+    // 获取消费详情
     getExpendDetail () {
-      let data = new FormData()
-      let requestData = {
-        Flowno: this.Flowno,
-        Deptcode: this.Deptcode
+      let self = this
+      let data = {
+        Flowno: self.Flowno,
+        Deptcode: self.Deptcode
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('mem/member/listDetails', data).then(result => {
+      self.$api.mem.listDetails(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.expendDetail = res.data
+          self.expendDetail = res.data
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     }
   },
@@ -114,8 +108,9 @@ export default {
   beforeCreate () {
   },
   created () {
+    let self = this
     // 页面加载时获取消费记录详情
-    this.getExpendDetail()
+    self.getExpendDetail()
   },
   beforeMount () {
   },

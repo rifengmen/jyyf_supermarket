@@ -45,6 +45,7 @@
 import MyHeader from '@/components/common/header/myheader'
 import loading from '@/components/common/loading/loading'
 import nodata from '@/components/common/nodata/nodata'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'lotteryList',
@@ -77,15 +78,15 @@ export default {
   computed: {
     // 查询时间
     date () {
-      let _this = this
-      if (!this.startdate) {
+      let self = this
+      if (!self.startdate) {
         let dt = new Date()
         dt.setMonth(dt.getMonth() - 6)
         dt = dt.toLocaleString()
         dt = (dt.replace(/\//g, '-')).split(' ')[0]
-        _this.startdate = dt
+        self.startdate = dt
       }
-      return this.startdate
+      return self.startdate
     }
   },
   components: {
@@ -95,75 +96,72 @@ export default {
   },
   methods: {
     onLoad () {
-      this.page++
-      this.getLotteryList()
+      let self = this
+      self.page++
+      self.getLotteryList()
     },
     onRefresh () {
-      this.isShowLoading = true
+      let self = this
+      self.isShowLoading = true
       // 清空列表数据
-      this.finished = false
+      self.finished = false
       // 重新加载数据
       // 将 loading 设置为 true，表示处于加载状态
-      this.loading = true
-      this.page = 0
-      this.lotteryList = []
-      this.onLoad()
+      self.loading = true
+      self.page = 0
+      self.lotteryList = []
+      self.onLoad()
     },
-    // 获取商品列表公共方法
+    // 获取中奖记录列表公共方法
     getLotteryList () {
-      let data = new FormData()
-      let requestData = {
-        startDate: this.date,
-        page: this.page,
-        pageSize: this.pageSize
+      let self = this
+      let data = {
+        startDate: self.date,
+        page: self.page,
+        pageSize: self.pageSize
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/prize/listPrizeLog', data).then(result => {
+      self.$api.system.listPrizeLog(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.isShowLoading = false
+          self.isShowLoading = false
           // 无数据时
           if (!res.data.totalSize) {
-            this.finished = true
+            self.finished = true
           }
           if (res.data.content && res.data.content.length) {
-            let currentpage = this.page
-            let total = Math.ceil(res.data.rowCount / this.pageSize)
+            let currentpage = self.page
+            let total = Math.ceil(res.data.rowCount / self.pageSize)
             // 页码不足或者最后一页不足的情况
-            if (currentpage >= total || res.data.content.length < this.pageSize) {
-              this.finished = true
+            if (currentpage >= total || res.data.content.length < self.pageSize) {
+              self.finished = true
             }
             // 刷新
-            if (this.refreshing) {
-              this.lotteryList = res.data.content
-              this.refreshing = false
+            if (self.refreshing) {
+              self.lotteryList = res.data.content
+              self.refreshing = false
             } else {
-              this.lotteryList.push(...res.data.content)
+              self.lotteryList.push(...res.data.content)
             }
-            this.loading = false
+            self.loading = false
           }
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 设置查询开始时间
     setStartdate (data) {
-      this.startdate = data
-      this.onRefresh()
+      let self = this
+      self.startdate = data
+      self.onRefresh()
     }
   },
   watch: {},
   beforeCreate () {
   },
   created () {
-    this.onLoad()
+    let self = this
+    self.onLoad()
   },
   beforeMount () {
   },

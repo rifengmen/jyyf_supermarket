@@ -48,6 +48,7 @@
 <script>
 import nodata from '@/components/common/nodata/nodata'
 import loading from '@/components/common/loading/loading'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'tickList',
@@ -98,135 +99,104 @@ export default {
     loading
   },
   methods: {
-    // 请求优惠券
-    getList (data, url) {
-      this.isShowLoading = true
-      this.$axios.post(url, data).then(result => {
-        let res = result.data
-        if (res.code === 200) {
-          this.isShowLoading = false
-          this.tickList = res.data.reverse()
-          this.tickList.forEach(item => {
-            if (item.dealflagdescription) {
-              item.dealflagdescrible = item.dealflagdescription
-            }
-            if (item.bgurl === '0') {
-              item.bgurl = ''
-            }
-          })
-        } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
-        }
-      }).catch(error => {
-        throw error
-      })
-    },
     // 获取优惠券列表
     getTicklist () {
-      if (this.froms === 'editorder') { // 来自填写订单
-        let data = new FormData()
-        let requestData
-        requestData = {
-          payMoney: this.payMoney,
-          Totalmoney: this.Totalmoney,
-          addressid: this.addressid,
+      let self = this
+      if (self.froms === 'editorder') { // 来自填写订单
+        let data = {
+          payMoney: self.payMoney,
+          Totalmoney: self.Totalmoney,
+          addressid: self.addressid,
           // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
           flag: 'wemember'
         }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
-        let url = 'bill/pay/payMoneytick'
-        this.getList(data, url)
-      } else if (this.froms === 'userinfo') { // 来自会员中心
-        let data = new FormData()
-        let requestData
-        requestData = {
+        self.$api.bill.payMoneytick(data).then(result => {
+          // 设置优惠券列表
+          self.setList(result)
+        })
+      } else if (self.froms === 'userinfo') { // 来自会员中心
+        let data = {
           // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
           flag: 'wemember'
         }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
-        let url = 'mem/member/listCoupon'
-        this.getList(data, url)
-      } else if (this.froms === 'index') { // 来自首页
-        let data = new FormData()
-        let requestData
-        requestData = {
-        }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
-        let url = 'mem/member/listCouponForGet'
-        this.getList(data, url)
+        self.$api.mem.listCoupon(data).then(result => {
+          // 设置优惠券列表
+          self.setList(result)
+        })
+      } else if (self.froms === 'index') { // 来自首页
+        let data = {}
+        self.$api.mem.listCouponForGet(data).then(result => {
+          // 设置优惠券列表
+          self.setList(result)
+        })
+      }
+    },
+    // 设置优惠券列表
+    setList (result) {
+      let self = this
+      let res = result.data
+      if (res.code === 200) {
+        self.isShowLoading = false
+        self.tickList = res.data.reverse()
+        self.tickList.forEach(item => {
+          if (item.dealflagdescription) {
+            item.dealflagdescrible = item.dealflagdescription
+          }
+          if (item.bgurl === '0') {
+            item.bgurl = ''
+          }
+        })
+      } else {
+        tip(res.msg)
       }
     },
     // 领取优惠券
     getTick (item) {
+      let self = this
       // console.log(item)
       // 阻止冒泡
       window.event.stopPropagation()
-      let data = new FormData()
-      let requestData
-      requestData = {
+      let data = {
         tickid: item.tickid
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('mem/member/panicCoupon', data).then(result => {
+      self.$api.mem.panicCoupon(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$toast({
-            message: res.msg,
-            type: 'success'
-          })
+          tip(res.msg)
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 去填写订单
     editorder (tick) {
-      if (this.froms === 'editorder') {
-        let data = new FormData()
-        let requestData
-        requestData = {
-          payMoney: this.payMoney,
+      let self = this
+      if (self.froms === 'editorder') {
+        let data = {
+          payMoney: self.payMoney,
           tick: tick,
           otc: '',
           // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
           flag: 'wemember'
         }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
-        this.$axios.post('invest/microFlow/payTicketCheck', data).then(result => {
+        self.$api.invest.payTicketCheck(data).then(result => {
           let res = result.data
           if (res.code === 200) {
             tick.dicountMoney = res.data.dicountMoney
-            this.$store.commit('setTick', tick)
-            this.$emit('setTickListFlag')
+            self.$store.commit('setTick', tick)
+            self.$emit('setTickListFlag')
           } else {
-            this.$toast({
-              message: res.msg,
-              type: 'fail'
-            })
+            tip(res.msg)
           }
-        }).catch(error => {
-          throw error
         })
       }
     },
     // 跳转优惠券详情
     toTicketInfo (index) {
+      let self = this
       // console.log(this.tickList[index].tickid)
-      if (this.froms === 'index') {
-        this.$router.push({name: 'ticketdetail', query: {tickid: this.tickList[index].tickid}})
+      if (self.froms === 'index') {
+        self.$router.push({name: 'ticketdetail', query: {tickid: self.tickList[index].tickid}})
       }
     }
   },
@@ -234,8 +204,9 @@ export default {
   beforeCreate () {
   },
   created () {
+    let self = this
     // 获取优惠券列表
-    this.getTicklist()
+    self.getTicklist()
   },
   beforeMount () {
   },

@@ -4,6 +4,7 @@
 
 <script>
 import wx from 'weixin-js-sdk'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'wechatConfig',
@@ -29,67 +30,71 @@ export default {
   computed: {
     // baseURL
     baseURL () {
-      return this.$store.state.baseURL
+      let self = this
+      return self.$store.state.baseURL
     },
     // 商品详情页用，商品详情
     goodsdetail () {
-      return this.$store.state.goodsdetail
+      let self = this
+      return self.$store.state.goodsdetail
     },
     // token
     token () {
-      return this.$axios.defaults.headers.common.Authorization || ''
+      let self = this
+      return self.$axios.defaults.headers.common.Authorization || ''
     }
   },
   components: {},
   methods: {
     // 获取微信凭证
     getWXConfig () {
+      let self = this
       if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
-        this.curPageUrl = this.baseURL + sessionStorage.getItem('jyyf_beforeLoginUrl')
+        self.curPageUrl = self.baseURL + sessionStorage.getItem('jyyf_beforeLoginUrl')
       } else if (/(Android|Windows)/i.test(navigator.userAgent)) {
-        this.curPageUrl = window.location.href
+        self.curPageUrl = window.location.href
       } else {
-        this.curPageUrl = window.location.href
+        self.curPageUrl = window.location.href
       }
       let data = new FormData()
       let requestData = {
-        wechatID: this.$store.state.wechatID,
-        curPageUrl: this.curPageUrl
+        wechatID: self.$store.state.wechatID,
+        curPageUrl: self.curPageUrl
       }
       requestData = JSON.stringify(requestData)
       data.append('requestData', requestData)
-      this.$axios.post('api/payment/getWXConfig', data).then(result => {
+      self.$axios.post('api/payment/getWXConfig', data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.wxstr = res.data
-          let _this = this
+          self.wxstr = res.data
           wx.config({
             // debug: true,
             debug: false,
-            appId: _this.wxstr.appid,
-            timestamp: _this.wxstr.timestamp,
-            nonceStr: _this.wxstr.noncestr,
-            signature: _this.wxstr.signure,
+            appId: self.wxstr.appid,
+            timestamp: self.wxstr.timestamp,
+            nonceStr: self.wxstr.noncestr,
+            signature: self.wxstr.signure,
             // 所有要调用的 API 都要加到这个列表中
             jsApiList: [
-              'addCard',
-              'openCard',
-              'scanQRCode',
-              'getLocation',
-              'updateAppMessageShareData',
-              'updateTimelineShareData',
-              'onMenuShareAppMessage',
-              'onMenuShareTimeline'
+              'addCard', // 卡包-领卡
+              'openCard', // 卡包-开卡
+              'scanQRCode', // 扫一扫
+              'getLocation', // 获取当前定位
+              'updateAppMessageShareData', // 分享
+              'updateTimelineShareData', // 分享
+              'onMenuShareAppMessage', // 分享
+              'onMenuShareTimeline', // 分享
+              'previewImage' // 图片预览
             ]
           })
           wx.ready(() => {
             // 分享接口
             // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容
             wx.updateAppMessageShareData({
-              title: _this.shareConfig.title,
-              desc: _this.shareConfig.desc,
-              link: _this.shareConfig.link.replace('&code=', ''),
-              imgUrl: _this.shareConfig.imgUrl,
+              title: self.shareConfig.title,
+              desc: self.shareConfig.desc,
+              link: self.shareConfig.link.replace('&code=', ''),
+              imgUrl: self.shareConfig.imgUrl,
               trigger: function (res) {
                 // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
                 // alert('用户点击分享给朋友')
@@ -105,36 +110,31 @@ export default {
             })
             // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容
             wx.updateTimelineShareData({
-              title: _this.shareConfig.title,
-              link: _this.shareConfig.link.replace('&code=', ''),
-              imgUrl: _this.shareConfig.imgUrl
+              title: self.shareConfig.title,
+              link: self.shareConfig.link.replace('&code=', ''),
+              imgUrl: self.shareConfig.imgUrl
             })
             // 监听“分享给朋友”，按钮点击、自定义分享内容及分享结果接口
             wx.onMenuShareAppMessage({
-              title: _this.shareConfig.title,
-              desc: _this.shareConfig.desc,
-              link: _this.shareConfig.link.replace('&code=', ''),
-              imgUrl: _this.shareConfig.imgUrl
+              title: self.shareConfig.title,
+              desc: self.shareConfig.desc,
+              link: self.shareConfig.link.replace('&code=', ''),
+              imgUrl: self.shareConfig.imgUrl
             })
             // 监听“分享到朋友圈”按钮点击、自定义分享内容及分享结果接口
             wx.onMenuShareTimeline({
-              title: _this.shareConfig.title,
-              link: _this.shareConfig.link.replace('&code=', ''),
-              imgUrl: _this.shareConfig.imgUrl
+              title: self.shareConfig.title,
+              link: self.shareConfig.link.replace('&code=', ''),
+              imgUrl: self.shareConfig.imgUrl
             })
-            console.log('_this.shareConfig', _this.shareConfig)
-            console.log('_this.baseURL', _this.baseURL)
+            console.log('self.shareConfig', self.shareConfig)
+            console.log('self.baseURL', self.baseURL)
           })
           wx.error((res) => {
           })
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     }
   },
@@ -142,10 +142,11 @@ export default {
   beforeCreate () {
   },
   created () {
+    let self = this
     // token存在时执行
-    if (this.token) {
+    if (self.token) {
       // 获取微信凭证
-      this.getWXConfig()
+      self.getWXConfig()
     }
   },
   beforeMount () {

@@ -44,6 +44,7 @@
 
 <script>
 import addorder from '@/components/common/addorder/addorder'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'group',
@@ -95,95 +96,76 @@ export default {
   methods: {
     // 发起拼团
     addGroup () {
-      let data = new FormData()
-      let requestData = {
-        goodsid: this.goodsdetail.goodsid.toString(),
-        amount: this.amount,
+      let self = this
+      let data = {
+        goodsid: self.goodsdetail.goodsid.toString(),
+        amount: self.amount,
         otc: 'group',
         isotc: 'group',
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('invest/microFlow/buyEnd', data).then(result => {
+      self.$api.invest.buyEnd(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$store.commit('setOrder', res.data)
-          this.$router.push({name: 'editorder', query: {goodsid: this.goodsdetail.goodsid.toString(), ordertype: 1, otc: 'group'}})
+          self.$store.commit('setOrder', res.data)
+          self.$router.push({name: 'editorder', query: {goodsid: self.goodsdetail.goodsid.toString(), ordertype: 1, otc: 'group'}})
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 显示参团输入框
     setShowGroup () {
-      this.joinno = ''
-      this.showGroup = true
+      let self = this
+      self.joinno = ''
+      self.showGroup = true
     },
     // 查看拼团详情
     groupDetail () {
-      this.showGroupDetail = true
+      let self = this
+      self.showGroupDetail = true
     },
     // 填写团号验证
     checkJoinGroup () {
-      if (this.joinno) {
-        let data = new FormData()
-        let requestData = {
-          goodsid: this.goodsdetail.goodsid.toString(),
-          joinno: this.joinno,
+      let self = this
+      if (self.joinno) {
+        let data = {
+          goodsid: self.goodsdetail.goodsid.toString(),
+          joinno: self.joinno,
           // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
           flag: 'wemember'
         }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
-        this.$axios.post('api/goods/getGroupInfo', data).then(result => {
+        self.$api.api.getGroupInfo(data).then(result => {
           let res = result.data
           if (res.code === 200) {
             // 拼团
-            this.joinGroup(res.data)
+            self.joinGroup(res.data)
           } else {
-            this.$toast({
-              message: res.msg,
-              type: 'fail'
-            })
+            tip(res.msg)
           }
-        }).catch(error => {
-          throw error
         })
       }
     },
     // 参与拼团
     joinGroup (group) {
-      let data = new FormData()
-      let requestData = {
-        goodsid: this.goodsdetail.goodsid.toString(),
-        amount: this.amount,
+      let self = this
+      let data = {
+        goodsid: self.goodsdetail.goodsid.toString(),
+        amount: self.amount,
         otc: 'group',
         isotc: 'group',
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('invest/microFlow/buyEnd', data).then(result => {
+      self.$api.invest.buyEnd(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$store.commit('setOrder', res.data)
-          this.$router.push({name: 'editorder', query: {goodsid: this.goodsdetail.goodsid.toString(), ordertype: 2, groupno: this.joinno, otc: 'group'}})
+          self.$store.commit('setOrder', res.data)
+          self.$router.push({name: 'editorder', query: {goodsid: self.goodsdetail.goodsid.toString(), ordertype: 2, groupno: self.joinno, otc: 'group'}})
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     }
   }

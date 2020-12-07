@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import tip from '@/utils/Toast'
+
 export default {
   name: 'delBtn',
   props: {
@@ -22,42 +24,29 @@ export default {
   methods: {
     // 删除
     del (e) {
+      let self = this
       e.stopPropagation()
-      let data = new FormData()
-      let requestData = {
-        tradeno: this.tradeno
+      let data = {
+        tradeno: self.tradeno
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$dialog.confirm({
+      self.$dialog.confirm({
         message: '确认删除订单吗？'
       }).then(() => {
-        this.$axios.post('api/order/deleteOrder', data).then(result => {
+        self.$api.api.deleteOrder(data).then(result => {
           let res = result.data
           if (res.code === 200) {
-            this.$toast({
-              message: '删除成功！',
-              type: 'success'
-            })
-            if (this.$route.name === 'orderList') {
-              this.$emit('onRefresh')
+            tip('删除成功！')
+            if (self.$route.name === 'orderList') {
+              self.$emit('onRefresh')
               return false
             }
-            this.$router.back()
+            self.$router.back()
           } else {
-            this.$toast({
-              message: res.msg,
-              type: 'fail'
-            })
+            tip(res.msg)
           }
-        }).catch(error => {
-          throw error
         })
       }).catch(() => {
-        this.$toast({
-          type: 'fail',
-          message: '操作已取消'
-        })
+        tip('操作已取消')
       })
     }
   },

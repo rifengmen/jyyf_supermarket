@@ -141,6 +141,7 @@
 import MyHeader from '@/components/common/header/myheader'
 import nodata from '@/components/common/nodata/nodata'
 import loading from '@/components/common/loading/loading'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'addressList',
@@ -207,17 +208,18 @@ export default {
   computed: {
     // 验证手机号码格式是否正确
     flag () {
-      if (this.contactNumber && /^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9]|19[0-9])\d{8}$/.test(this.contactNumber)) {
+      let self = this
+      if (self.contactNumber && /^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9]|19[0-9])\d{8}$/.test(self.contactNumber)) {
         return true
       }
       return false
     },
     // 区范围介绍
     areaDesc () {
-      if (this.sheetList.length) {
+      let self = this
+      if (self.sheetList.length) {
         let _arr
-        let _this = this
-        _arr = this.sheetList.filter(item => item.sheetid === _this.sheetid)
+        _arr = self.sheetList.filter(item => item.sheetid === self.sheetid)
         return _arr[0].areaDesc
       }
     }
@@ -230,189 +232,138 @@ export default {
   methods: {
     // 获取地址列表
     getAddresslist () {
-      this.isShowLoading = true
-      let data = new FormData()
-      let requestData = {
+      let self = this
+      self.isShowLoading = true
+      let data = {
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/area/getAddressForOrder', data).then(result => {
+      self.$api.api.getAddressForOrder(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.isShowLoading = false
-          if (this.froms === 'editorder') {
-            if (this.orderType === 5) {
-              this.addressList = res.data.filter(item => item.addressMark !== '1')
+          self.isShowLoading = false
+          if (self.froms === 'editorder') {
+            if (self.orderType === 5) {
+              self.addressList = res.data.filter(item => item.addressMark !== '1')
               return
             }
-            this.addressList = res.data
+            self.addressList = res.data
           } else {
-            this.addressList = res.data.filter(item => item.addressMark === '1')
+            self.addressList = res.data.filter(item => item.addressMark === '1')
           }
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 删除地址
     delAddress (addressid) {
-      let data = new FormData()
-      let requestData = {
+      let self = this
+      let data = {
         addressid: addressid
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$dialog.confirm({
+      self.$dialog.confirm({
         message: '确认删除地址吗？'
       }).then(() => {
-        this.$axios.post('api/area/deleteAddress', data).then(result => {
+        self.$api.api.deleteAddress(data).then(result => {
           let res = result.data
           if (res.code === 200) {
-            this.$toast({
-              type: 'success',
-              message: '删除成功!'
-            })
-            this.addressList = this.addressList.filter(item => item.addressid !== addressid)
+            tip('删除成功!')
+            self.addressList = self.addressList.filter(item => item.addressid !== addressid)
           } else {
-            this.$toast({
-              message: res.msg,
-              type: 'fail'
-            })
+            tip(res.msg)
           }
-        }).catch(error => {
-          throw error
         })
       }).catch(() => {
-        this.$toast({
-          type: 'info',
-          message: '操作已取消'
-        })
+        tip('操作已取消')
       })
     },
     // 新建地址
     editAddress () {
+      let self = this
       window.event.stopPropagation()
-      this.addressFlag = false
+      self.addressFlag = false
     },
     // 请求片列表
     getAreaList () {
-      let data = new FormData()
-      let requestData = {}
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/area/getArea', data).then(result => {
+      let self = this
+      let data = {}
+      self.$api.api.getArea(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.areaList = res.data
+          self.areaList = res.data
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 请求区列表
     getSheetList () {
-      this.sheetList = []
-      this.sheetid = ''
-      if (this.areaid) {
-        let data = new FormData()
-        let requestData = {
-          areaid: this.areaid.toString()
+      let self = this
+      self.sheetList = []
+      self.sheetid = ''
+      if (self.areaid) {
+        let data = {
+          areaid: self.areaid.toString()
         }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
-        this.$axios.post('api/area/getFlat', data).then(result => {
+        self.$api.api.getFlat(data).then(result => {
           let res = result.data
           if (res.code === 200) {
-            this.sheetList = res.data
+            self.sheetList = res.data
           } else {
-            this.$toast({
-              message: res.msg,
-              type: 'fail'
-            })
+            tip(res.msg)
           }
-        }).catch(error => {
-          throw error
         })
       }
     },
     // 保存地址
     addaddress () {
-      if (this.contactPerson === '') {
-        this.$toast({
-          message: '请输入收货人！',
-          type: 'fail'
-        })
+      let self = this
+      if (self.contactPerson === '') {
+        tip('请输入收货人！')
         return false
       }
-      if (this.contactNumber === '') {
-        this.$toast({
-          message: '请输入手机号！',
-          type: 'fail'
-        })
+      if (self.contactNumber === '') {
+        tip('请输入手机号！')
         return false
       }
-      if (!this.flag) {
-        this.$toast({
-          message: '手机号码格式有误，请重新输入！',
-          type: 'fail'
-        })
+      if (!self.flag) {
+        tip('手机号码格式有误，请重新输入！')
         return false
       }
-      if (this.areaid === '') {
-        this.$toast({
-          message: '请选择片！',
-          type: 'fail'
-        })
+      if (self.areaid === '') {
+        tip('请选择片！')
         return false
       }
-      if (this.sheetid === '') {
-        this.$toast({
-          message: '请选择区！',
-          type: 'fail'
-        })
+      if (self.sheetid === '') {
+        tip('请选择区！')
         return false
       }
-      if (this.address === '') {
-        this.$toast({
-          message: '请输入详细地址！',
-          type: 'fail'
-        })
+      if (self.address === '') {
+        tip('请输入详细地址！')
         return false
       }
-      let data = new FormData()
-      let requestData = {
-        areaid: this.areaid,
-        sheetid: this.sheetid,
-        address: this.address,
-        contactPerson: this.contactPerson,
-        contactNumber: this.contactNumber
+      let data = {
+        areaid: self.areaid,
+        sheetid: self.sheetid,
+        address: self.address,
+        contactPerson: self.contactPerson,
+        contactNumber: self.contactNumber
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/area/addAddress', data).then(result => {
+      self.$api.api.addAddress(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$toast({
-            message: '添加成功！',
-            type: 'success'
-          })
-          this.getAddresslist()
-          this.addressFlag = true
-          this.editorder(res.data)
+          tip('添加成功！')
+          // 获取地址列表
+          self.getAddresslist()
+          self.addressFlag = true
+          // 判断是否去填写订单
+          if (self.froms === 'editorder') {
+            // 去填写订单
+            self.editorder(res.data)
+          }
         } else {
-          this.$toast({
+          tip({
             message: res.msg,
             type: 'fail'
           })
@@ -423,35 +374,25 @@ export default {
     },
     // 去填写订单
     editorder (address) {
-      if (this.froms === 'editorder') {
-        let data = new FormData()
-        let requestData
-        requestData = {
-          address: address,
-          totalmoney: this.Totalmoney,
-          goodsid: this.$route.query.goodsid,
-          otc: this.$route.query.otc,
-          // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
-          flag: 'wemember'
-        }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
-        this.$axios.post('invest/microFlow/getFreight', data).then(result => {
-          let res = result.data
-          if (res.code === 200) {
-            this.$store.commit('setAddress', address)
-            this.$store.commit('setFreightmoney', res.data)
-            this.$emit('setAddressListFlag')
-          } else {
-            this.$toast({
-              message: res.msg,
-              type: 'fail'
-            })
-          }
-        }).catch(error => {
-          throw error
-        })
+      let self = this
+      let data = {
+        address: address,
+        totalmoney: self.Totalmoney,
+        goodsid: self.$route.query.goodsid,
+        otc: self.$route.query.otc,
+        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+        flag: 'wemember'
       }
+      self.$api.invest.getFreight(data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          self.$store.commit('setAddress', address)
+          self.$store.commit('setFreightmoney', res.data)
+          self.$emit('setAddressListFlag')
+        } else {
+          tip(res.msg)
+        }
+      })
     }
   },
   watch: {
@@ -467,10 +408,11 @@ export default {
   beforeCreate () {
   },
   created () {
+    let self = this
     // 获取地址列表
-    this.getAddresslist()
+    self.getAddresslist()
     // 页面加载时请求片
-    this.getAreaList()
+    self.getAreaList()
   },
   beforeMount () {
   },

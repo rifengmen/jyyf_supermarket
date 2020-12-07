@@ -62,6 +62,7 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'ticketdetail',
@@ -79,60 +80,42 @@ export default {
   methods: {
     // 获取优惠券详情
     getTicketInfo () {
-      let data = new FormData()
-      let requestData
-      requestData = {
-        tickid: this.tickid
+      let self = this
+      let data = {
+        tickid: self.tickid
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('mem/member/getCouponDtl', data).then(result => {
+      self.$api.mem.getCouponDtl(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.ticketInfo = res.data[0]
+          self.ticketInfo = res.data[0]
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 领取优惠券
     getTick () {
-      let data = new FormData()
-      let requestData
-      requestData = {
-        tickid: this.tickid
+      let self = this
+      let data = {
+        tickid: self.tickid
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('mem/member/panicCoupon', data).then(result => {
+      self.$api.mem.panicCoupon(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$toast({
-            message: res.msg,
-            type: 'success'
-          })
-          this.$router.back()
+          tip(res.msg)
+          self.$router.back()
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     }
   },
   beforeCreate () {
   },
   created () {
+    let self = this
     // 页面加载时获取优惠券详情
-    this.getTicketInfo()
+    self.getTicketInfo()
   },
   beforeMount () {
   },

@@ -72,6 +72,7 @@ import payBtn from '@/components/common/payBtn/payBtn'
 import delBtn from '@/components/common/delBtn/delBtn'
 import cancelBtn from '@/components/common/cancelBtn/cancelBtn'
 import nodata from '@/components/common/nodata/nodata'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'orderList',
@@ -131,7 +132,8 @@ export default {
   },
   computed: {
     status () {
-      return this.ordernav.filter(item => item.billstatus === this.orderActive)[0].billstatus
+      let self = this
+      return self.ordernav.filter(item => item.billstatus === self.orderActive)[0].billstatus
     }
   },
   components: {
@@ -145,74 +147,71 @@ export default {
   methods: {
     // 切换订单分类
     addActive (billstatus) {
-      this.orderActive = billstatus
-      this.onRefresh()
+      let self = this
+      self.orderActive = billstatus
+      self.onRefresh()
     },
     onLoad () {
-      this.page++
-      this.getOrderList()
+      let self = this
+      self.page++
+      self.getOrderList()
     },
     onRefresh () {
-      this.isShowLoading = true
+      let self = this
+      self.isShowLoading = true
       // 清空列表数据
-      this.finished = false
+      self.finished = false
       // 重新加载数据
       // 将 loading 设置为 true，表示处于加载状态
-      this.loading = true
-      this.page = 0
-      this.orderList = []
-      this.onLoad()
+      self.loading = true
+      self.page = 0
+      self.orderList = []
+      self.onLoad()
     },
     // 获取商品列表公共方法
     getOrderList () {
-      let data = new FormData()
-      let requestData = {
-        status: this.status,
-        page: this.page,
-        pageSize: this.pageSize,
+      let self = this
+      let data = {
+        status: self.status,
+        page: self.page,
+        pageSize: self.pageSize,
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/order/getOrder', data).then(result => {
+      self.$api.api.getOrder(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.isShowLoading = false
+          self.isShowLoading = false
           // 无数据时
           if (!res.data.totalSize) {
-            this.finished = true
+            self.finished = true
           }
           if (res.data.content && res.data.content.length) {
-            let currentpage = this.page
-            let total = Math.ceil(res.data.totalSize / this.pageSize)
+            let currentpage = self.page
+            let total = Math.ceil(res.data.totalSize / self.pageSize)
             // 页码不足或者最后一页不足的情况
-            if (currentpage >= total || res.data.content.length < this.pageSize) {
-              this.finished = true
+            if (currentpage >= total || res.data.content.length < self.pageSize) {
+              self.finished = true
             }
             // 刷新
-            if (this.refreshing) {
-              this.orderList = res.data.content
-              this.refreshing = false
+            if (self.refreshing) {
+              self.orderList = res.data.content
+              self.refreshing = false
             } else {
-              this.orderList.push(...res.data.content)
+              self.orderList.push(...res.data.content)
             }
-            this.loading = false
+            self.loading = false
           }
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 再支付
     againPay (order) {
+      let self = this
       window.event.stopPropagation()
-      this.$router.push({name: 'againPay', query: {tradeno: order.tradeno, group: order.ordertype, groupno: order.groupno}})
+      self.$router.push({name: 'againPay', query: {tradeno: order.tradeno, group: order.ordertype, groupno: order.groupno}})
     }
   },
   watch: {},
@@ -223,19 +222,21 @@ export default {
     })
   },
   beforeRouteLeave (to, from, next) {
+    let self = this
     let reg = /orderdetail/
     let reg2 = /again/
     if (reg.test(to.name) || reg2.test(to.name)) {
-      this.$store.commit('removeExcludeComponent', 'orderList')
+      self.$store.commit('removeExcludeComponent', 'orderList')
     } else {
-      this.$store.commit('addExcludeComponent', 'orderList')
+      self.$store.commit('addExcludeComponent', 'orderList')
     }
     next()
   },
   beforeCreate () {
   },
   created () {
-    this.addActive(this.$route.query.billstatus)
+    let self = this
+    self.addActive(self.$route.query.billstatus)
   },
   beforeMount () {
   },

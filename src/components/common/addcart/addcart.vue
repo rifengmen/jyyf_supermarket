@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import tip from '@/utils/Toast'
+
 export default {
   name: 'addcart',
   props: {
@@ -38,76 +40,62 @@ export default {
   computed: {
     // 购物车详情
     cart () {
-      return this.$store.state.cart
+      let self = this
+      return self.$store.state.cart
     },
     // 购物车商品数量
     cartnums () {
-      return this.$store.state.cartnums
+      let self = this
+      return self.$store.state.cartnums
     }
   },
   components: {},
   methods: {
     // 加入购物车
     addcart (e) {
+      let self = this
       e.stopPropagation()
-      let data = new FormData()
-      let requestData = {
-        goodsid: this.goodsid.toString(),
-        amount: this.amount,
+      let data = {
+        goodsid: self.goodsid.toString(),
+        amount: self.amount,
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/car/addCar', data).then(result => {
+      self.$api.api.addCar(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$toast({
-            message: '添加成功！',
-            type: 'success'
-          })
-          this.getCart()
+          tip('添加成功！')
+          // 获取购物车列表
+          self.getCart()
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 获取购物车商品
     getCart () {
-      let data = new FormData()
-      let requestData = {
+      let self = this
+      let data = {
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/car/getCar', data).then(result => {
+      self.$api.getCar(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$store.commit('setCart', res.data)
-          if (this.cart.length) {
-            let numsList = this.cart.map(item => item.amount)
+          self.$store.commit('setCart', res.data)
+          if (self.cart.length) {
+            let numsList = self.cart.map(item => item.amount)
             let nums = 0
             numsList.forEach(item => {
               nums += parseFloat(item)
             })
-            this.$store.commit('setCartnums', nums)
+            self.$store.commit('setCartnums', nums)
           } else {
-            this.$store.commit('setCartnums', 0)
+            self.$store.commit('setCartnums', 0)
           }
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     }
   },
@@ -115,9 +103,10 @@ export default {
   beforeCreate () {
   },
   created () {
-    if (this.froms) {
+    let self = this
+    if (self.froms) {
       // 获取购物车商品
-      this.getCart()
+      self.getCart()
     }
   },
   beforeMount () {

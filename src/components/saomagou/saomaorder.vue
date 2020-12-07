@@ -231,17 +231,16 @@ export default {
             } else if (beecloud.paymentchannel === 4) { // 太米结算
               window.location.href = beecloud.tmPayStr.payUrl
             } else if (beecloud.paymentchannel === 2) { // 微信官方结算
-              let vm = this
               let wechatstr = res.data.beecloud.wechatPayStr
               if (typeof WeixinJSBridge === 'undefined') {
                 if (document.addEventListener) {
-                  document.addEventListener('WeixinJSBridgeReady', vm.onBridgeReady(wechatstr), false)
+                  document.addEventListener('WeixinJSBridgeReady', self.onBridgeReady(wechatstr), false)
                 } else if (document.attachEvent) {
-                  document.attachEvent('WeixinJSBridgeReady', vm.onBridgeReady(wechatstr))
-                  document.attachEvent('onWeixinJSBridgeReady', vm.onBridgeReady(wechatstr))
+                  document.attachEvent('WeixinJSBridgeReady', self.onBridgeReady(wechatstr))
+                  document.attachEvent('onWeixinJSBridgeReady', self.onBridgeReady(wechatstr))
                 }
               } else {
-                vm.onBridgeReady(wechatstr)
+                self.onBridgeReady(wechatstr)
               }
               return false
             }

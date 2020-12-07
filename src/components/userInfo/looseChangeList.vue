@@ -51,6 +51,7 @@
 import MyHeader from '@/components/common/header/myheader'
 import nodata from '@/components/common/nodata/nodata'
 import loading from '@/components/common/loading/loading'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'scoreList',
@@ -68,15 +69,15 @@ export default {
   },
   computed: {
     date () {
-      let _this = this
-      if (!this.startdate) {
+      let self = this
+      if (!self.startdate) {
         let dt = new Date()
         dt.setMonth(dt.getMonth() - 6)
         dt = dt.toLocaleString()
         dt = (dt.replace(/\//g, '-')).split(' ')[0]
-        _this.startdate = dt
+        self.startdate = dt
       }
-      return this.startdate
+      return self.startdate
     }
   },
   components: {
@@ -85,45 +86,39 @@ export default {
     loading
   },
   methods: {
-    // 获取积分记录列表
+    // 获取零钱记录列表
     getLooseChangeList () {
-      this.isShowLoading = true
-      let data = new FormData()
-      let requestData
-      requestData = {
-        memcode: this.$store.state.userInfo.memcode,
-        startdate: this.date
+      let self = this
+      self.isShowLoading = true
+      let data = {
+        memcode: self.$store.state.userInfo.memcode,
+        startdate: self.date
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('mem/card/listSmallMoneyDtl', data).then(result => {
+      self.$api.mem.listSmallMoneyDtl(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.isShowLoading = false
-          this.looseChangeList = res.data.dataList
-          this.smallMoney = res.data.smallMoney
+          self.isShowLoading = false
+          self.looseChangeList = res.data.dataList
+          self.smallMoney = res.data.smallMoney
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 设置查询开始时间
     setStartdate (data) {
-      this.startdate = data
-      this.getLooseChangeList()
+      let self = this
+      self.startdate = data
+      self.getLooseChangeList()
     }
   },
   watch: {},
   beforeCreate () {
   },
   created () {
+    let self = this
     // 获取积分记录列表
-    this.getLooseChangeList()
+    self.getLooseChangeList()
   },
   beforeMount () {
   },

@@ -91,35 +91,43 @@ export default {
   methods: {
     // 返回
     backs () {
-      this.$router.back()
+      let self = this
+      self.$router.back()
     },
     // 返回购物车
     editorder () {
-      this.$router.push({name: 'cart'})
+      let self = this
+      self.$router.push({name: 'cart'})
     },
     // 返回订单列表
     orderdetail () {
-      this.$router.push({name: 'orderList'})
+      let self = this
+      self.$router.push({name: 'orderList'})
     },
     // 返回会员中心
     userinfo () {
-      this.$router.push({name: 'userInfo'})
+      let self = this
+      self.$router.push({name: 'userInfo'})
     },
     // 返回评价列表
     addComment () {
-      this.$router.push({name: 'commentList'})
+      let self = this
+      self.$router.push({name: 'commentList'})
     },
     // 设置查询开始时间
     setStartdate () {
-      this.$emit('setStartdate', this.startdate)
+      let self = this
+      self.$emit('setStartdate', this.startdate)
     },
     // 去添加投诉建议
     addComplaint () {
-      this.$router.push({name: 'addComplaint', query: {evaluateflag: this.evaluateflag}})
+      let self = this
+      self.$router.push({name: 'addComplaint', query: {evaluateflag: this.evaluateflag}})
     },
     // 编辑开关
     setEditflag () {
-      this.$emit('setEditflag')
+      let self = this
+      self.$emit('setEditflag')
     }
   },
   created () {

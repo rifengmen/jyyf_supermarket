@@ -23,7 +23,23 @@ const invest = {
   // 扫码购支付
   microFlowToPay: data => http.post('invest/microFlow/microFlowToPay', data),
   // 扫码购取消订单
-  cancelSaleOrder: data => http.post('invest/microFlow/cancelSaleOrder', data)
+  cancelSaleOrder: data => http.post('invest/microFlow/cancelSaleOrder', data),
+  // 结算
+  buyEnd: data => http.post('invest/microFlow/buyEnd', data),
+  // 获取运费
+  getFreight: data => http.post('invest/microFlow/getFreight', data),
+  // 检验优惠券
+  payTicketCheck: data => http.post('invest/microFlow/payTicketCheck', data),
+  // 提交订单
+  orderCommit: data => http.post('invest/microFlow/orderCommit', data),
+  // 免密支付验证
+  getInputPayPasswdFlag: data => http.post('invest/microFlow/getInputPayPasswdFlag', data),
+  // 获取再支付信息
+  getCanPayMoneyForTrade: data => http.post('invest/microFlow/getCanPayMoneyForTrade', data),
+  // 充值结算
+  reChargeToPay: data => http.post('invest/microFlow/reChargeToPay', data),
+  // 充值支付
+  reChargePay: data => http.post('invest/microFlow/reChargePay', data)
 }
 
 export default invest

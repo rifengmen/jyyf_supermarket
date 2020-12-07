@@ -65,6 +65,7 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'recharge',
@@ -85,11 +86,13 @@ export default {
   computed: {
     // 用户信息
     userInfo () {
-      return this.$store.state.userInfo
+      let self = this
+      return self.$store.state.userInfo
     },
     // 户头信息
     moneyDetail () {
-      return this.$store.state.moneyDetail
+      let self = this
+      return self.$store.state.moneyDetail
     }
   },
   components: {
@@ -98,94 +101,70 @@ export default {
   methods: {
     // 获取用户会员卡信息
     getMyInfo () {
-      let data = new FormData()
-      let requestData = {
-      }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/customlogin/getMyInfo', data).then(result => {
+      let self = this
+      let data = {}
+      self.$api.system.getMyInfo(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$store.commit('setMemType', res.data.mem_type)
-          this.$store.commit('setMoneyDetail', res.data.moneyDetail)
-          this.moneyType = res.data.moneyType
+          self.$store.commit('setMemType', res.data.mem_type)
+          self.$store.commit('setMoneyDetail', res.data.moneyDetail)
+          self.moneyType = res.data.moneyType
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 切换充值人员清空填写
     resetrecharge () {
-      this.money = ''
-      this.cardno = ''
-      this.cardnos = ''
+      let self = this
+      self.money = ''
+      self.cardno = ''
+      self.cardnos = ''
     },
     // 去充值
     isSend () {
-      if (this.flag) {
-        if (!this.cardno) {
-          this.$toast({
-            message: '请输入会员卡号！',
-            type: 'fail'
-          })
+      let self = this
+      if (self.flag) {
+        if (!self.cardno) {
+          tip('请输入会员卡号！')
           return false
         }
-        if (!this.cardnos) {
-          this.$toast({
-            message: '请再次输入会员卡号！',
-            type: 'fail'
-          })
+        if (!self.cardnos) {
+          tip('请再次输入会员卡号！')
           return false
         }
-        if (this.cardno !== this.cardnos) {
-          this.$toast({
-            message: '两次会员卡号不一致，请重新输入！',
-            type: 'fail'
-          })
+        if (self.cardno !== self.cardnos) {
+          tip('两次会员卡号不一致，请重新输入！')
           return false
         }
-        if (!this.money) {
-          this.$toast({
-            message: '请输入充值金额！',
-            type: 'fail'
-          })
+        if (!self.money) {
+          tip('请输入充值金额！')
           return false
         }
-        this.sendRecharge()
+        self.sendRecharge()
       } else {
-        if (!this.money) {
-          this.$toast({
-            message: '请输入充值金额！',
-            type: 'fail'
-          })
+        if (!self.money) {
+          tip('请输入充值金额！')
           return false
         }
-        this.cardno = this.userInfo.memcode
-        this.sendRecharge()
+        self.cardno = self.userInfo.memcode
+        // 发送充值信息
+        self.sendRecharge()
       }
     },
     // 发送充值信息
     sendRecharge () {
-      let data = new FormData()
-      let requestData = {
-        card_no: this.cardno,
-        toMoney: this.money,
-        moneyType: this.moneyType
+      let self = this
+      let data = {
+        card_no: self.cardno,
+        toMoney: self.money,
+        moneyType: self.moneyType
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('invest/microFlow/reChargeToPay', data).then(result => {
+      self.$api.invest.reChargeToPay(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$router.push({name: 'rechargePay', params: {payData: res.data, moneyType: this.moneyType}})
+          self.$router.push({name: 'rechargePay', params: {payData: res.data, moneyType: self.moneyType}})
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     }
   },
@@ -197,19 +176,21 @@ export default {
     })
   },
   beforeRouteLeave (to, from, next) {
+    let self = this
     let reg = /rechargePay/
     if (reg.test(to.name)) {
-      this.$store.commit('removeExcludeComponent', 'recharge')
+      self.$store.commit('removeExcludeComponent', 'recharge')
     } else {
-      this.$store.commit('addExcludeComponent', 'recharge')
+      self.$store.commit('addExcludeComponent', 'recharge')
     }
     next()
   },
   beforeCreate () {
   },
   created () {
+    let self = this
     // 获取用户会员卡信息
-    this.getMyInfo()
+    self.getMyInfo()
   },
   beforeMount () {
   },

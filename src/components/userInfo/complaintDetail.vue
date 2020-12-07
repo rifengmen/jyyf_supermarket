@@ -43,6 +43,7 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'complaintDetail',
@@ -63,24 +64,17 @@ export default {
   methods: {
     // 获取投诉建议详情
     getComplaintDetail () {
-      let data = new FormData()
-      let requestData = {
-        id: this.id
+      let self = this
+      let data = {
+        id: self.id
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/suggestion/listSuggestionDtl', data).then(result => {
+      self.$api.system.listSuggestionDtl(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.complaintDetail = res.data
+          self.complaintDetail = res.data
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     }
   },
@@ -88,8 +82,9 @@ export default {
   beforeCreate () {
   },
   created () {
+    let self = this
     // 页面加载时获取评价详情
-    this.getComplaintDetail()
+    self.getComplaintDetail()
   },
   beforeMount () {
   },

@@ -66,7 +66,8 @@ export default {
   computed: {
     // 扫码购物车
     saomacar () {
-      return this.$store.state.saomacar
+      let self = this
+      return self.$store.state.saomacar
     }
   },
   components: {

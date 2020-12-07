@@ -153,6 +153,7 @@
 <script>
 import MyHeader from '@/components/common/header/myheader'
 import payBtn from '@/components/common/payBtn/payBtn'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'againPay',
@@ -179,29 +180,33 @@ export default {
   computed: {
     // 支付方式列表
     paymodeList () {
-      return this.$store.state.order.paymodeList || []
+      let self = this
+      return self.$store.state.order.paymodeList || []
     },
     // 积分
     score () {
-      return this.$store.state.score
+      let self = this
+      return self.$store.state.score
     },
     // 积分抵扣金额
     scoreMoney () {
+      let self = this
       let money
-      if (!this.scoreFlag) {
+      if (!self.scoreFlag) {
         money = 0
       } else {
-        money = this.score.Money || 0
+        money = self.score.Money || 0
       }
       return money
     },
     // 零钱
     smallmoney () {
-      let money = this.paymoney - this.order.smallmoney
+      let self = this
+      let money = self.paymoney - self.order.smallmoney
       if (money < 0) {
-        return this.paymoney
+        return self.paymoney
       }
-      return this.order.smallmoney
+      return self.order.smallmoney
     }
   },
   components: {
@@ -211,89 +216,69 @@ export default {
   methods: {
     // 获取订单详情
     getOrderdetail () {
-      let data = new FormData()
-      let requestData = {
-        tradeno: this.tradeno,
+      let self = this
+      let data = {
+        tradeno: self.tradeno,
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/order/getOrderDtl', data).then(result => {
+      self.$api.api.getOrderDtl(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.orderdetail = res.data
-          this.goodsList = res.data.OrderDetail
+          self.orderdetail = res.data
+          self.goodsList = res.data.OrderDetail
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 获取再支付信息
     getOrder () {
-      let data = new FormData()
-      let requestData = {
-        tradeno: this.tradeno
+      let self = this
+      let data = {
+        tradeno: self.tradeno
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('invest/microFlow/getCanPayMoneyForTrade', data).then(result => {
+      self.$api.invest.getCanPayMoneyForTrade(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$store.commit('setOrder', res.data)
-          this.$store.commit('setFreightmoney', {freightmoney: res.data.freightmoney})
-          this.order = res.data
-          this.paymoney = res.data.canPayMoney
+          self.$store.commit('setOrder', res.data)
+          self.$store.commit('setFreightmoney', {freightmoney: res.data.freightmoney})
+          self.order = res.data
+          self.paymoney = res.data.canPayMoney
           // 存在积分抵扣支付方式时
-          if (this.paymodeList.filter(item => item.paymodeid === 5).length) {
+          if (self.paymodeList.filter(item => item.paymodeid === 5).length) {
             // 页面加载时请求积分
-            this.getScore()
+            self.getScore()
           }
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 请求可用积分
     getScore () {
-      let data = new FormData()
-      let requestData = {
-        payMoney: parseFloat(this.order.canPayMoney),
-        Totalmoney: parseFloat(this.order.totalMoney)
+      let self = this
+      let data = {
+        payMoney: parseFloat(self.order.canPayMoney),
+        Totalmoney: parseFloat(self.order.totalMoney)
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('bill/pay/payMoneyjf', data).then(result => {
+      self.$api.bill.payMoneyjf(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$store.commit('setScore', res.data)
+          self.$store.commit('setScore', res.data)
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 是否使用积分
     setScoreflag () {
-      this.scoreFlag = !this.scoreFlag
-      if (this.scoreFlag) {
-        this.paymoney = this.paymoney - this.score.Money
+      let self = this
+      self.scoreFlag = !self.scoreFlag
+      if (self.scoreFlag) {
+        self.paymoney = self.paymoney - self.score.Money
       } else {
-        this.paymoney = this.paymoney + this.score.Money
+        self.paymoney = self.paymoney + self.score.Money
       }
     }
   },
@@ -301,10 +286,11 @@ export default {
   beforeCreate () {
   },
   created () {
+    let self = this
     // 页面加载时获取订单详情
-    this.getOrderdetail()
+    self.getOrderdetail()
     // 页面加载时获取再支付信息
-    this.getOrder()
+    self.getOrder()
   },
   beforeMount () {
   },

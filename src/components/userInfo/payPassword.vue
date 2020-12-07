@@ -23,7 +23,7 @@
         <!-- 按钮部分 start -->
         <div class="btn_box section">
           <!-- 保存按钮 start -->
-          <div class="send_btn register_btn borderff7e42 border_r6 bgff7e42 colorffffff font32 font_normal" @click="payPasswordReset">重置支付密码</div>
+          <div class="send_btn register_btn borderff7e42 border_r6 bgff7e42 colorffffff font32 font_normal" @click="setCoflags">重置支付密码</div>
           <!-- 保存按钮 end -->
           <!-- 取消按钮 start -->
           <div class="send_btn register_btn borderc7c7c7 border_r6 bgffffff color666666 font32 font_normal" @click="payPasswordClose">关闭支付密码</div>
@@ -132,6 +132,7 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'payPassword',
@@ -165,11 +166,13 @@ export default {
   computed: {
     // 获取用户信息
     userInfo () {
-      return this.$store.state.userInfo
+      let self = this
+      return self.$store.state.userInfo
     },
     // conflag 显示修改框
     coflag () {
-      return this.$store.state.userInfo.coflag
+      let self = this
+      return self.$store.state.userInfo.coflag
     }
   },
   components: {
@@ -178,187 +181,153 @@ export default {
   methods: {
     // 获取图形验证码
     getImgcode () {
-      let data = new FormData()
-      let requestData = {}
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/customlogin/getVerifyCodeGraphic', data).then(result => {
+      let self = this
+      let data = {}
+      self.$api.system.getVerifyCodeGraphic(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.imgCode = this.IMGURL + res.data.GraphicFileName
-          this.token = res.data.token
+          self.imgCode = self.IMGURL + res.data.GraphicFileName
+          self.token = res.data.token
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 发送图片验证码请求短信验证码
     sendImgcode () {
-      // if (this.mobilecode === '') {
-      //   this.$toast({
-      //     message: '请输入图形验证码！',
-      //     type: 'fail'
-      //   })
+      let self = this
+      // if (self.mobilecode === '') {
+      //   tip('请输入图形验证码！')
       //   return false
       // }
-      this.count = setInterval(this.countDown, 1000)
-      let data = new FormData()
-      let requestData = {
-        mobile: this.userInfo.mobile,
-        mobilecode: this.mobilecode,
-        token: this.token
+      self.count = setInterval(self.countDown, 1000)
+      let data = {
+        mobile: self.userInfo.mobile,
+        mobilecode: self.mobilecode,
+        token: self.token
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/customlogin/getCheckCode', data).then(result => {
+      self.$api.system.getCheckCode(data).then(result => {
         let res = result.data
         if (res.code === 200) {
           // 关闭发送按钮，开始倒计时
-          this.msgFlag = false
-          this.$toast({
-            message: '发送验证码成功，请查收短信!',
-            type: 'success'
-          })
+          self.msgFlag = false
+          tip('发送验证码成功，请查收短信!')
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
       })
     },
     // 倒计时
     countDown () {
-      let num = this.num
+      let self = this
+      let num = self.num
       num--
-      this.num = num
-      if (this.num === 0) {
-        this.msgFlag = true
-        this.num = this.nums
-        clearInterval(this.count)
+      self.num = num
+      if (self.num === 0) {
+        self.msgFlag = true
+        self.num = self.nums
+        clearInterval(self.count)
       }
     },
     // 关闭支付密码
     payPasswordClose () {
-      let data = new FormData()
-      let requestData = {}
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('bill/pay/cardpayclose', data).then(result => {
+      let self = this
+      let data = {}
+      self.$api.bill.cardpayclose(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$toast({
-            message: '关闭成功！',
-            type: 'success'
-          })
-          this.coflags = false
+          tip('关闭成功！')
+          self.coflags = false
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
-    // 重置支付密码
-    payPasswordReset () {
-      this.coflags = !this.coflags
+    // 显示重置页面
+    setCoflags () {
+      let self = this
+      self.coflags = !self.coflags
     },
-    // 设置支付密码 修改支付密码
+    // 设置支付密码/修改支付密码内容校验
     payPasswordEdit () {
-      if (this.password === '' || this.password.length < 4) {
-        this.$toast({
-          message: '请输入四位支付密码！',
-          type: 'fail'
-        })
+      let self = this
+      if (self.password === '' || self.password.length < 4) {
+        tip('请输入四位支付密码！')
         return false
       }
-      if (this.password1 === '' || this.password1.length < 4) {
-        this.$toast({
+      if (self.password1 === '' || self.password1.length < 4) {
+        tip({
           message: '请再次输入四位支付密码！',
           type: 'error'
         })
         return false
       }
-      if (this.password !== this.password1) {
-        this.$toast({
+      if (self.password !== self.password1) {
+        tip({
           message: '两次输入密码不一致，请重新输入！',
           type: 'error'
         })
         return false
       }
-      if (this.Checkno === '') {
-        this.$toast({
+      if (self.Checkno === '') {
+        tip({
           message: '请输入短信验证码！',
           type: 'error'
         })
         return false
       }
-      if (this.btnFlag) {
-        this.btnFlag = false
-        let data = new FormData()
-        let requestData = {
-          Checkno: this.Checkno,
-          Cpassword: this.password
+      if (self.btnFlag) {
+        self.btnFlag = false
+        let data = {
+          Checkno: self.Checkno,
+          Cpassword: self.password
         }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
         // coflag 0：未开通；1：已开通
-        if (this.coflag) {
-          this.$axios.post('bill/pay/payPasswordReset', data).then(result => {
-            this.btnFlag = true
-            let res = result.data
-            if (res.code === 200) {
-              this.$toast({
-                message: '重置成功！',
-                type: 'success'
-              })
-              this.coflags = true
-            } else {
-              this.$toast({
-                message: res.msg,
-                type: 'error'
-              })
-            }
-          }).catch(error => {
-            throw error
-          })
-          return false
+        if (self.coflag) {
+          // 重置支付密码
+          self.payPasswordReset(data)
+        } else {
+          // 开通支付密码
+          self.cardpayopen(data)
         }
-        this.$axios.post('bill/pay/cardpayopen', data).then(result => {
-          this.btnFlag = true
-          let res = result.data
-          if (res.code === 200) {
-            this.$toast({
-              message: '开通成功！',
-              type: 'success'
-            })
-            this.coflags = true
-          } else {
-            this.$toast({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        }).catch(error => {
-          throw error
-        })
       }
+    },
+    // 开通支付密码
+    cardpayopen (data) {
+      let self = this
+      self.$api.bill.cardpayopen(data).then(result => {
+        self.btnFlag = true
+        let res = result.data
+        if (res.code === 200) {
+          tip('开通成功！')
+          self.coflags = true
+        } else {
+          tip(res.msg)
+        }
+      })
+    },
+    // 重置支付密码
+    payPasswordReset (data) {
+      let self = this
+      self.$api.bill.payPasswordReset(data).then(result => {
+        self.btnFlag = true
+        let res = result.data
+        if (res.code === 200) {
+          tip('重置成功！')
+          self.coflags = true
+        } else {
+          tip(res.msg)
+        }
+      })
     }
   },
   watch: {},
   beforeCreate () {
   },
   created () {
+    let self = this
     // 页面加载时获取图形验证码
-    this.getImgcode()
+    self.getImgcode()
   },
   beforeMount () {
   },

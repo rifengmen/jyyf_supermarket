@@ -48,6 +48,7 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'pick',
@@ -60,7 +61,8 @@ export default {
   computed: {
     // 用户信息
     userInfo () {
-      return this.$store.state.userInfo
+      let self = this
+      return self.$store.state.userInfo
     }
   },
   components: {
@@ -69,38 +71,29 @@ export default {
   methods: {
     // 发送订单编号
     sendPickoutcode () {
-      if (this.pickoutcode) {
-        let data = new FormData()
-        let requestData = {
-          role: this.userInfo.role,
-          phone: this.userInfo.mobile,
-          pickoutcode: this.pickoutcode,
+      let self = this
+      if (self.pickoutcode) {
+        let data = {
+          role: self.userInfo.role,
+          phone: self.userInfo.mobile,
+          pickoutcode: self.pickoutcode,
           // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
           flag: 'wemember'
         }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
-        this.$axios.post('api/order/pickOutOrder', data).then(result => {
+        self.$api.api.pickOutOrder(data).then(result => {
           let res = result.data
           if (res.code === 200) {
-            this.$toast({
-              message: '取货成功!',
-              type: 'success'
-            })
+            tip('取货成功!')
           } else {
-            this.$toast({
-              message: res.msg,
-              type: 'fail'
-            })
+            tip(res.msg)
           }
-        }).catch(error => {
-          throw error
         })
       }
     },
     // 重置订单编号
     resetPickoutcode () {
-      this.pickoutcode = ''
+      let self = this
+      self.pickoutcode = ''
     }
   },
   watch: {},

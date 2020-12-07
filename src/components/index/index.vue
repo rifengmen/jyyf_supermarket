@@ -211,6 +211,22 @@
           </ul>
         </div>
         <!-- 会员功能部分 end -->
+        <!-- 轮播图 start -->
+        <div class="banner">
+          <div class="banner_cont" v-if="bannerlist.length">
+            <van-swipe
+              class="banner_swipe"
+              :autoplay="4000"
+              indicator-color="#ff6400">
+              <van-swipe-item v-for="(item, index) in bannerlist" :key="index">
+                <div class="banner_img font24 color666666 border10 overflow" @click="getLinkForSlide(item.Sort)">
+                  <img v-lazy="IMGURL + 'image/' + item.Imageurl">
+                </div>
+              </van-swipe-item>
+            </van-swipe>
+          </div>
+        </div>
+        <!-- 轮播图 end -->
         <!-- 通知 start -->
         <div class="notice">
           <div class="notice_img">
@@ -431,9 +447,15 @@ export default {
             if (item.linktype === res.data.linktype) {
               // banner跳转类型,0:无，2：分类，3：推荐，4：公告，5：充值，6：积分抽奖，7：领券
               if (res.data.linktype === 2) {
-                self.$router.push({name: item.name, query: {classcode: res.data.linkcode, classname: res.data.linkname}})
+                // 判断商城模式可用
+                if (self.userInfo.typeflag) {
+                  self.$router.push({name: item.name, query: {classcode: res.data.linkcode, classname: res.data.linkname}})
+                }
               } else if (res.data.linktype === 3) {
-                self.$router.push({name: item.name, query: {recommendid: res.data.linkcode, recommendName: res.data.linkname}})
+                // 判断商城模式可用
+                if (self.userInfo.typeflag) {
+                  self.$router.push({name: item.name, query: {recommendid: res.data.linkcode, recommendName: res.data.linkname}})
+                }
               } else if (res.data.linktype === 4) {
                 self.$router.push({name: item.name, query: {id: res.data.linkcode}})
               } else if (res.data.linktype === 5) {
@@ -441,7 +463,7 @@ export default {
               } else if (res.data.linktype === 6) {
                 self.$router.push({name: item.name})
               } else if (res.data.linktype === 7) {
-                self.$router.push({name: item.name, params: {header_tit: '领券中心', froms: 'index'}})
+                self.$router.push({name: item.name, query: {header_tit: '领券中心', froms: 'index'}})
               }
             }
           })
@@ -591,6 +613,10 @@ export default {
         if (res.code === 200) {
           self.$store.commit('setUserInfo', res.data)
           self.$store.commit('setToken', res.data.token)
+          if (!self.userInfo.typeflag) {
+            // 获取banner列表
+            self.getBanner()
+          }
         }
       })
     }

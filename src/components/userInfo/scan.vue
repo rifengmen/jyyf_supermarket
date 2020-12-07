@@ -55,6 +55,7 @@
 <script>
 import MyHeader from '@/components/common/header/myheader'
 import wx from 'weixin-js-sdk'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'scan1',
@@ -69,7 +70,8 @@ export default {
   computed: {
     // 用户信息
     userInfo () {
-      return this.$store.state.userInfo
+      let self = this
+      return self.$store.state.userInfo
     }
   },
   components: {
@@ -78,43 +80,34 @@ export default {
   methods: {
     // 发送订单编号
     sendTradeno () {
-      if (this.tradeno) {
-        let data = new FormData()
-        let requestData = {
-          role: this.$route.params.role,
-          phone: this.userInfo.mobile,
-          tradeno: this.tradeno,
+      let self = this
+      if (self.tradeno) {
+        let data = {
+          role: self.$route.params.role,
+          phone: self.userInfo.mobile,
+          tradeno: self.tradeno,
           // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
           flag: 'wemember'
         }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
-        this.$axios.post('api/order/pickOrder', data).then(result => {
+        self.$api.api.pickOrder(data).then(result => {
           let res = result.data
           if (res.code === 200) {
-            this.$toast({
-              message: res.msg,
-              type: 'success'
-            })
+            tip(res.msg)
           } else {
-            this.$toast({
-              message: res.msg,
-              type: 'fail'
-            })
+            tip(res.msg)
           }
-        }).catch(error => {
-          throw error
         })
       }
     },
     // 重置订单编号
     resetTradeno () {
-      this.tradeno = ''
+      let self = this
+      self.tradeno = ''
     },
     // 扫一扫
     scanTradeno () {
-      this.scanFlag = false
-      let _this = this
+      let self = this
+      self.scanFlag = false
       wx.scanQRCode({
         // 默认为0，扫描结果由微信处理，1则直接返回扫描结果
         needResult: 1,
@@ -126,14 +119,12 @@ export default {
           if (result.indexOf(',') >= 0) {
             let str1 = result.split(',')
             // 订单号码
-            _this.tradeno = str1[1]
-            _this.scanFlag = true
-            _this.sendTradeno()
+            self.tradeno = str1[1]
+            self.scanFlag = true
+            // 发送订单编号
+            self.sendTradeno()
           } else {
-            _this.$toast({
-              message: '请对准条形码扫码!',
-              type: 'fail'
-            })
+            tip('请对准条形码扫码!')
           }
         }
       })

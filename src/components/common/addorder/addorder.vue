@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import tip from '@/utils/Toast'
+
 export default {
   name: 'addorder',
   props: {
@@ -56,89 +58,75 @@ export default {
   methods: {
     // 添加购物车
     addorder () {
-      let data = new FormData()
+      let self = this
       // goodsdetail 标识是从详情页直接立即购买正常商品
-      if (this.goodsdetail && this.goods.promotemode !== 6 && this.goods.promotemode !== 8 && this.goods.promotemode !== 9) { // 普通商品立即购买
-        let requestData = {
-          goodsid: this.goods.goodsid.toString(),
-          standardid: this.standardid,
-          amount: this.amount,
+      if (self.goodsdetail && self.goods.promotemode !== 6 && self.goods.promotemode !== 8 && self.goods.promotemode !== 9) { // 普通商品立即购买
+        let data = {
+          goodsid: self.goods.goodsid.toString(),
+          standardid: self.standardid,
+          amount: self.amount,
           otc: 'voucher',
           // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
           flag: 'wemember'
         }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
-        this.setOrder(data, 'voucher', 0)
-      } else if (this.goodsdetail && this.goods.promotemode === 9) { // 预售商品立即购买
-        let requestData = {
-          goodsid: this.goods.goodsid.toString(),
-          standardid: this.standardid,
-          amount: this.amount,
+        self.setOrder(data, 'voucher', 0)
+      } else if (self.goodsdetail && self.goods.promotemode === 9) { // 预售商品立即购买
+        let data = {
+          goodsid: self.goods.goodsid.toString(),
+          standardid: self.standardid,
+          amount: self.amount,
           otc: 'voucher',
           // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
           flag: 'wemember'
         }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
-        this.setOrder(data, 'voucher', 5)
-      } else if (this.goodsdetail && this.goods.promotemode === 6) { // 拼团的立即购买
-        let requestData = {
-          goodsid: this.goods.goodsid.toString(),
-          amount: this.amount,
+        self.setOrder(data, 'voucher', 5)
+      } else if (self.goodsdetail && self.goods.promotemode === 6) { // 拼团的立即购买
+        let data = {
+          goodsid: self.goods.goodsid.toString(),
+          amount: self.amount,
           otc: 'group',
           isotc: 'otc',
           // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
           flag: 'wemember'
         }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
-        this.setOrder(data, 'group')
-      } else if (this.goodsdetail && this.goods.promotemode === 8) { // 砍价的立即购买
-        let requestData = {
-          amount: this.amount,
-          goodsid: this.goods.goodsid.toString(),
+        self.setOrder(data, 'group')
+      } else if (self.goodsdetail && self.goods.promotemode === 8) { // 砍价的立即购买
+        let data = {
+          amount: self.amount,
+          goodsid: self.goods.goodsid.toString(),
           otc: 'hack',
           isotc: 'otc',
           // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
           flag: 'wemember'
         }
         let ordertype = ''
-        if (this.pay) { // 砍价成功
-          requestData.isotc = 'hack'
-          requestData.groupno = this.bargainno
+        if (self.pay) { // 砍价成功
+          data.isotc = 'hack'
+          data.groupno = self.bargainno
           ordertype = 3
         }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
-        this.setOrder(data, 'hack', ordertype)
+        self.setOrder(data, 'hack', ordertype)
       } else { // 购物车页面去结算
-        let requestData = {
-          no: this.no,
+        let data = {
+          no: self.no,
           // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
           flag: 'wemember'
         }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
-        this.setOrder(data)
+        self.setOrder(data)
       }
     },
     // 设置临时订单
     setOrder (data, otc, ordertype) {
-      this.$axios.post('invest/microFlow/buyEnd', data).then(result => {
+      let self = this
+      self.$api.invest.buyEnd(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          let goodsid = (this.goods.goodsid || '').toString()
-          this.$store.commit('setOrder', res.data)
-          this.$router.push({name: 'editorder', query: {goodsid: goodsid, otc: otc, groupno: this.bargainno, orderType: ordertype}})
+          let goodsid = (self.goods.goodsid || '').toString()
+          self.$store.commit('setOrder', res.data)
+          self.$router.push({name: 'editorder', query: {goodsid: goodsid, otc: otc, groupno: self.bargainno, orderType: ordertype}})
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     }
   },

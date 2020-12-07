@@ -13,7 +13,7 @@
       <div class="main_desc">
         <div class="tc font34 font_blod">{{noticedetail.title}}</div>
         <div class="tc font26 color666666">{{noticedetail.pubdate}}</div>
-        <div class="detail" v-html="noticedetail.content"></div>
+        <div class="detail" v-html="noticedetail.content" @click="previewImage"></div>
       </div>
     </div>
     <!-- 内容部分盒子 -->
@@ -22,6 +22,8 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
+import wx from 'weixin-js-sdk'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'noticedetail',
@@ -40,24 +42,37 @@ export default {
   methods: {
     // 获取消息详情
     getNoticedetail () {
-      let data = new FormData()
-      let requestData = {
-        id: this.id
+      let self = this
+      let data = {
+        id: self.id
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('info/InformationController/listNoticeDtl', data).then(result => {
+      self.$api.info.listNoticeDtl(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.noticedetail = res.data
+          self.noticedetail = res.data
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
+      })
+    },
+    // 放大图预览
+    previewImage (e) {
+      let self = this
+      let imgList = []
+      if (self.noticedetail) {
+        let data = self.noticedetail.content
+        imgList = data.match(/<img[^>]*src=['"]([^'"]+)[^>]*>/gi)
+      }
+      let srcList = []
+      imgList.forEach(item => {
+        item.replace(/<img[^>]*src=['"]([^'"]+)[^>]*>/gi, (match, capture) => {
+          srcList.push(capture)
+        })
+      })
+      let current = e.target.src
+      wx.previewImage({
+        current: current, // 当前显示图片的http链接
+        urls: srcList // 需要预览图片http链接列表
       })
     }
   },
@@ -65,8 +80,9 @@ export default {
   beforeCreate () {
   },
   created () {
+    let self = this
     // 页面加载时获取消息详情
-    this.getNoticedetail()
+    self.getNoticedetail()
   },
   beforeMount () {
   },

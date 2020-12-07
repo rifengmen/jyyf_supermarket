@@ -153,6 +153,7 @@ import addorder from '@/components/common/addorder/addorder'
 import group from '@/components/common/goodsDetailBtn/group'
 import bargain from '@/components/common/goodsDetailBtn/bargain'
 import wx from 'weixin-js-sdk'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'goodsdetail',
@@ -222,39 +223,42 @@ export default {
   computed: {
     // 页面标题
     goodsname () {
-      return this.$route.query.goodsname
+      let self = this
+      return self.$route.query.goodsname
     },
     // 购物车商品数量
     cartnums () {
-      return this.$store.state.cartnums
+      let self = this
+      return self.$store.state.cartnums
     },
     // 图片列表
     goodsPictureList () {
+      let self = this
       let arr = []
-      let data = this.goodsdetail
+      let data = self.goodsdetail
       if (data) {
         if (data.picture1) {
-          let str = this.IMGURL + 'image/' + data.picture1
+          let str = self.IMGURL + 'image/' + data.picture1
           arr.push(str)
         }
         if (data.picture2) {
-          let str = this.IMGURL + 'image/' + data.picture2
+          let str = self.IMGURL + 'image/' + data.picture2
           arr.push(str)
         }
         if (data.picture3) {
-          let str = this.IMGURL + 'image/' + data.picture3
+          let str = self.IMGURL + 'image/' + data.picture3
           arr.push(str)
         }
         if (data.gdsimg2) {
-          let str = this.IMGURL + 'image/' + data.gdsimg2
+          let str = self.IMGURL + 'image/' + data.gdsimg2
           arr.push(str)
         }
         if (data.gdsimg3) {
-          let str = this.IMGURL + 'image/' + data.gdsimg3
+          let str = self.IMGURL + 'image/' + data.gdsimg3
           arr.push(str)
         }
         if (data.ingredientImage) {
-          let str = this.IMGURL + 'image/' + data.ingredientImage
+          let str = self.IMGURL + 'image/' + data.ingredientImage
           arr.push(str)
         }
       }
@@ -262,7 +266,8 @@ export default {
     },
     // baseURL
     baseURL () {
-      return this.$store.state.baseURL
+      let self = this
+      return self.$store.state.baseURL
     }
   },
   components: {
@@ -275,98 +280,86 @@ export default {
   methods: {
     // 页码指示器
     onChangePage (index) {
-      this.goodsPage = index
+      let self = this
+      self.goodsPage = index
     },
     // 放大图预览
     enlargedView () {
-      this.showFlag = true
-      this.startPage = this.goodsPage
+      let self = this
+      self.showFlag = true
+      self.startPage = self.goodsPage
     },
     // 放大图页码
     onChangeEnlarged (index) {
-      this.enlargedViewPage = index
+      let self = this
+      self.enlargedViewPage = index
     },
     // 获取商品详情
     getGoodsdetail () {
-      let data = new FormData()
-      let requestData = {
-        goodsid: this.goodsid,
+      let self = this
+      let data = {
+        goodsid: self.goodsid,
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/goods/getById', data).then(result => {
+      self.$api.api.getById(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.goodsdetail = res.data
-          this.$store.commit('setGoodsdetail', res.data)
-          this.playerOptions.sources[0].src = res.data.videourl
+          self.goodsdetail = res.data
+          self.$store.commit('setGoodsdetail', res.data)
+          self.playerOptions.sources[0].src = res.data.videourl
           // 页面加载获取顾客商品拼团信息
-          if (this.goodsdetail.promotemode === 6) {
-            this.getGroupNo()
+          if (self.goodsdetail.promotemode === 6) {
+            self.getGroupNo()
           }
           // 页面加载获取顾客商品的砍价信息
-          if (this.goodsdetail.promotemode === 8) {
-            this.getBargainNo()
+          if (self.goodsdetail.promotemode === 8) {
+            self.getBargainNo()
           }
           // 获取微信凭证
-          this.getWXConfig()
+          self.getWXConfig()
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 获取拼团信息
     getGroupNo () {
-      let data = new FormData()
-      let requestData = {
-        goodsid: this.goodsid,
+      let self = this
+      let data = {
+        goodsid: self.goodsid,
         amount: 1,
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/goods/groupIncrease', data).then(result => {
+      self.$api.api.groupIncrease(data).then(result => {
         let res = result.data
         if (res.code === 200) {
           if (res.data && res.data.temlist.length) {
-            this.groupno = res.data.groupno
-            this.groupdetail = res.data.temlist
+            self.groupno = res.data.groupno
+            self.groupdetail = res.data.temlist
           }
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 获取砍价信息
     getBargainNo () {
-      let data = new FormData()
-      let requestData = {
-        goodsid: this.goodsid.toString(),
+      let self = this
+      let data = {
+        goodsid: self.goodsid.toString(),
         amount: 1,
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/goods/generateHackBill', data).then(result => {
+      self.$api.api.generateHackBill(data).then(result => {
         let res = result.data
         if (res.code === 200) {
           if (res.data && res.data.list.length) {
-            this.bargainno = res.data.list[0].groupno
-            this.pay = res.data.pay
-            this.flag = res.data.flag
+            self.bargainno = res.data.list[0].groupno
+            self.pay = res.data.pay
+            self.flag = res.data.flag
           }
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 加
@@ -383,40 +376,37 @@ export default {
     },
     // 获取微信凭证
     getWXConfig () {
-      if (this.goodsid) {
-        this.shareConfig = {
-          title: this.goodsdetail.cusgoodsname,
-          desc: this.goodsdetail.remark,
-          link: this.$store.state.baseURL + '/goodsdetail?dianpu=' + this.$store.state.wechatID + '&goodsid=' + this.goodsdetail.goodsid + '&goodsname=' + encodeURIComponent(this.goodsdetail.cusgoodsname),
-          imgUrl: this.IMGURL + 'image/' + this.goodsdetail.picture1
+      let self = this
+      if (self.goodsid) {
+        self.shareConfig = {
+          title: self.goodsdetail.cusgoodsname,
+          desc: self.goodsdetail.remark,
+          link: self.$store.state.baseURL + '/goodsdetail?dianpu=' + self.$store.state.wechatID + '&goodsid=' + self.goodsdetail.goodsid + '&goodsname=' + encodeURIComponent(self.goodsdetail.cusgoodsname),
+          imgUrl: self.IMGURL + 'image/' + self.goodsdetail.picture1
         }
       }
       if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
-        this.curPageUrl = this.baseURL + sessionStorage.getItem('jyyf_beforeLoginUrl')
+        self.curPageUrl = self.baseURL + sessionStorage.getItem('jyyf_beforeLoginUrl')
       } else if (/(Android|Windows)/i.test(navigator.userAgent)) {
-        this.curPageUrl = window.location.href
+        self.curPageUrl = window.location.href
       } else {
-        this.curPageUrl = window.location.href
+        self.curPageUrl = window.location.href
       }
-      let data = new FormData()
-      let requestData = {
-        wechatID: this.$store.state.wechatID,
-        curPageUrl: this.curPageUrl
+      let data = {
+        wechatID: self.$store.state.wechatID,
+        curPageUrl: self.curPageUrl
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/payment/getWXConfig', data).then(result => {
+      self.$api.api.getWXConfig(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.wxstr = res.data
-          let _this = this
+          self.wxstr = res.data
           wx.config({
             // debug: true,
             debug: false,
-            appId: _this.wxstr.appid,
-            timestamp: _this.wxstr.timestamp,
-            nonceStr: _this.wxstr.noncestr,
-            signature: _this.wxstr.signure,
+            appId: self.wxstr.appid,
+            timestamp: self.wxstr.timestamp,
+            nonceStr: self.wxstr.noncestr,
+            signature: self.wxstr.signure,
             // 所有要调用的 API 都要加到这个列表中
             jsApiList: [
               'updateAppMessageShareData',
@@ -430,10 +420,10 @@ export default {
             // 分享接口
             // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容
             wx.updateAppMessageShareData({
-              title: _this.shareConfig.title,
-              desc: _this.shareConfig.desc,
-              link: _this.shareConfig.link.replace('&code=', ''),
-              imgUrl: _this.shareConfig.imgUrl,
+              title: self.shareConfig.title,
+              desc: self.shareConfig.desc,
+              link: self.shareConfig.link.replace('&code=', ''),
+              imgUrl: self.shareConfig.imgUrl,
               trigger: function (res) {
                 // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
                 // alert('用户点击分享给朋友')
@@ -450,9 +440,9 @@ export default {
             })
             // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容
             wx.updateTimelineShareData({
-              title: _this.shareConfig.title,
-              link: _this.shareConfig.link.replace('&code=', ''),
-              imgUrl: _this.shareConfig.imgUrl,
+              title: self.shareConfig.title,
+              link: self.shareConfig.link.replace('&code=', ''),
+              imgUrl: self.shareConfig.imgUrl,
               trigger: function (res) {
                 // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
                 // alert('用户点击分享到朋友圈')
@@ -469,10 +459,10 @@ export default {
             })
             // 监听“分享给朋友”，按钮点击、自定义分享内容及分享结果接口
             wx.onMenuShareAppMessage({
-              title: _this.shareConfig.title,
-              desc: _this.shareConfig.desc,
-              link: _this.shareConfig.link.replace('&code=', ''),
-              imgUrl: _this.shareConfig.imgUrl,
+              title: self.shareConfig.title,
+              desc: self.shareConfig.desc,
+              link: self.shareConfig.link.replace('&code=', ''),
+              imgUrl: self.shareConfig.imgUrl,
               trigger: function (res) {
                 // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
                 // alert('用户点击发送给朋友')
@@ -489,9 +479,9 @@ export default {
             })
             // 监听“分享到朋友圈”按钮点击、自定义分享内容及分享结果接口
             wx.onMenuShareTimeline({
-              title: _this.shareConfig.title,
-              link: _this.shareConfig.link.replace('&code=', ''),
-              imgUrl: _this.shareConfig.imgUrl,
+              title: self.shareConfig.title,
+              link: self.shareConfig.link.replace('&code=', ''),
+              imgUrl: self.shareConfig.imgUrl,
               trigger: function (res) {
                 // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
                 // alert('用户点击发送给朋友')
@@ -508,10 +498,10 @@ export default {
             })
             // 监听“分享到微博”按钮点击、自定义分享内容及分享结果接口
             wx.onMenuShareWeibo({
-              title: _this.shareConfig.title,
-              desc: _this.shareConfig.desc,
-              link: _this.shareConfig.link.replace('&code=', ''),
-              imgUrl: _this.shareConfig.imgUrl,
+              title: self.shareConfig.title,
+              desc: self.shareConfig.desc,
+              link: self.shareConfig.link.replace('&code=', ''),
+              imgUrl: self.shareConfig.imgUrl,
               trigger: function (res) {
                 // alert('用户点击分享到微博')
               },
@@ -532,7 +522,7 @@ export default {
           wx.error((res) => {
           })
         } else {
-          this.$toast({
+          tip({
             message: res.msg,
             type: 'fail'
           })
@@ -546,8 +536,9 @@ export default {
   beforeCreate () {
   },
   created () {
+    let self = this
     // 页面加载时获取商品详情
-    this.getGoodsdetail()
+    self.getGoodsdetail()
   },
   beforeMount () {
   },

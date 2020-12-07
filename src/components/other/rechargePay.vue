@@ -68,6 +68,7 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'rechargePay',
@@ -89,20 +90,18 @@ export default {
   methods: {
     // 发送支付信息
     sendPay () {
-      let data = new FormData()
-      let requestData = {
-        moneyType: this.moneyType,
-        card_no: this.payData.card_no,
-        paymodeid: this.payData.Paymodelist[0].paymodeid,
-        paymoney: this.payData.paymoney,
-        presentmoney: this.payData.presentmoney,
-        channel: this.channel,
+      let self = this
+      let data = {
+        moneyType: self.moneyType,
+        card_no: self.payData.card_no,
+        paymodeid: self.payData.Paymodelist[0].paymodeid,
+        paymoney: self.payData.paymoney,
+        presentmoney: self.payData.presentmoney,
+        channel: self.channel,
         // 支付完成后返回路径
-        frontUrl: this.$store.state.baseURL + '/userInfo?dianpu=' + this.$store.state.wechatID
+        frontUrl: self.$store.state.baseURL + '/userInfo?dianpu=' + self.$store.state.wechatID
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('invest/microFlow/reChargePay', data).then(result => {
+      self.$api.invest.reChargePay(data).then(result => {
         let res = result.data
         if (res.code === 200) {
           // 微信支付
@@ -115,40 +114,31 @@ export default {
               sessionStorage.removeItem('jyyf_openid')
               window.location.href = beecloud.tmPayStr.payUrl
             } else if (beecloud.paymentchannel === 2) { // 微信官方结算
-              let vm = this
               let wechatstr = res.data.beecloud.wechatPayStr
               if (typeof WeixinJSBridge === 'undefined') {
                 if (document.addEventListener) {
-                  document.addEventListener('WeixinJSBridgeReady', vm.onBridgeReady(wechatstr), false)
+                  document.addEventListener('WeixinJSBridgeReady', self.onBridgeReady(wechatstr), false)
                 } else if (document.attachEvent) {
-                  document.attachEvent('WeixinJSBridgeReady', vm.onBridgeReady(wechatstr))
-                  document.attachEvent('onWeixinJSBridgeReady', vm.onBridgeReady(wechatstr))
+                  document.attachEvent('WeixinJSBridgeReady', self.onBridgeReady(wechatstr))
+                  document.attachEvent('onWeixinJSBridgeReady', self.onBridgeReady(wechatstr))
                 }
               } else {
-                vm.onBridgeReady(wechatstr)
+                self.onBridgeReady(wechatstr)
               }
               return false
             }
           } else {
-            this.$toast({
-              message: '支付成功!',
-              type: 'success'
-            })
-            this.$router.push({name: 'userInfo'})
+            tip('支付成功!')
+            self.$router.push({name: 'userInfo'})
           }
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 微信支付
     onBridgeReady (wechatstr) {
-      let _this = this
+      let self = this
       window.WeixinJSBridge.invoke(
         'getBrandWCPayRequest',
         {
@@ -166,14 +156,11 @@ export default {
         },
         function (_res) {
           if (_res.err_msg === 'get_brand_wcpay_request:ok') {
-            _this.$router.push({name: 'userInfo'})
+            self.$router.push({name: 'userInfo'})
             // 使用以上方式判断前端返回,微信团队郑重提示：
             // res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
           } else if (_res.err_msg === 'get_brand_wcpay_request:cancel' || _res.err_msg === 'get_brand_wcpay_request:fail') {
-            _this.$toast({
-              message: '支付失败！',
-              type: 'fail'
-            })
+            tip('支付失败！')
           }
         }
       )

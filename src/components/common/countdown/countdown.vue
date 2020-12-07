@@ -35,24 +35,26 @@ export default {
   methods: {
     // 换算时间写入页面
     initTimes () {
-      this.countdown = setInterval(this.timeTodate, 1000)
+      let self = this
+      self.countdown = setInterval(self.timeTodate, 1000)
     },
     // 格式化时间
     timeTodate () {
-      let _t = this.times
+      let self = this
+      let _t = self.times
       _t = _t.replace(/-/g, '/')
       let times = new Date(_t).getTime()
-      this.time = (times - new Date().getTime()) / 1000
-      if (this.time !== null && this.time !== '' && this.time > 0) {
-        let h = parseInt(this.time / (60 * 60))
-        let m = parseInt(this.time / 60 % 60)
-        let s = parseInt(this.time % 60)
-        this.hours = this.checkTime(h)
-        this.minutes = this.checkTime(m)
-        this.second = this.checkTime(s)
-      } else if (this.time <= 0) {
+      self.time = (times - new Date().getTime()) / 1000
+      if (self.time !== null && self.time !== '' && self.time > 0) {
+        let h = parseInt(self.time / (60 * 60))
+        let m = parseInt(self.time / 60 % 60)
+        let s = parseInt(self.time % 60)
+        self.hours = self.checkTime(h)
+        self.minutes = self.checkTime(m)
+        self.second = self.checkTime(s)
+      } else if (self.time <= 0) {
         // 关闭定时器
-        clearInterval(this.countdown)
+        clearInterval(self.countdown)
       }
     },
     // 一位时间加零
@@ -68,16 +70,18 @@ export default {
   beforeCreate () {
   },
   created () {
+    let self = this
     // 初始化倒计时
-    this.initTimes()
+    self.initTimes()
   },
   beforeMount () {
   },
   mounted () {
   },
   destroyed () {
+    let self = this
     // 关闭定时器
-    clearInterval(this.countdown)
+    clearInterval(self.countdown)
   }
 }
 </script>

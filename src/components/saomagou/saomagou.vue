@@ -91,15 +91,18 @@ export default {
   computed: {
     // baseURL
     baseURL () {
-      return this.$store.state.baseURL
+      let self = this
+      return self.$store.state.baseURL
     },
     // 店铺信息
     shopInfo () {
-      return this.$store.state.shopInfo
+      let self = this
+      return self.$store.state.shopInfo
     },
     // 扫码购物车
     saomacar () {
-      return this.$store.state.saomacar
+      let self = this
+      return self.$store.state.saomacar
     }
   },
   components: {

@@ -72,6 +72,8 @@
 </template>
 
 <script>
+import tip from '@/utils/Toast'
+
 export default {
   name: 'register',
   data () {
@@ -103,14 +105,16 @@ export default {
   computed: {
     // 验证手机号码格式是否正确
     flag () {
-      if (this.mobile && /^(13[0-9]|14[0-9]|15[0-9]|16[0-9]|17[0-9]|18[0-9]|19[0-9])\d{8}$/.test(this.mobile)) {
+      let self = this
+      if (self.mobile && /^(13[0-9]|14[0-9]|15[0-9]|16[0-9]|17[0-9]|18[0-9]|19[0-9])\d{8}$/.test(self.mobile)) {
         return true
       }
       return false
     },
     // msgType
     msgType () {
-      let str = this.$route.query.msgType || ''
+      let self = this
+      let str = self.$route.query.msgType || ''
       if (str && (str.indexOf('=') === str.length - 1)) {
         str = str.substr(0, str.length - 1)
       }
@@ -118,239 +122,187 @@ export default {
     },
     // card_id
     card_id () {
-      return this.$route.query.card_id || ''
+      let self = this
+      return self.$route.query.card_id || ''
     },
     // encrypt_code
     encrypt_code () {
-      let str = this.$route.query.encrypt_code || ''
+      let self = this
+      let str = self.$route.query.encrypt_code || ''
       return str
     },
     // openid
     openid () {
-      return this.$route.query.openid || ''
+      let self = this
+      return self.$route.query.openid || ''
     },
     // wechatIDget
     wechatIDget () {
-      return this.$route.query.dianpu || ''
+      let self = this
+      return self.$route.query.dianpu || ''
     }
   },
   methods: {
     // 获取图形验证码
     getImgcode () {
-      let data = new FormData()
-      let requestData = {}
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/customlogin/getVerifyCodeGraphic', data).then(result => {
+      let self = this
+      let data = {}
+      self.$api.system.getVerifyCodeGraphic(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.imgCode = this.IMGURL + res.data.GraphicFileName
-          this.token = res.data.token
+          self.imgCode = self.IMGURL + res.data.GraphicFileName
+          self.token = res.data.token
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 发送图片验证码请求短信验证码
     sendImgcode () {
-      if (this.mobile === '') {
-        this.$toast({
-          message: '请输入手机号码！',
-          type: 'fail'
-        })
+      let self = this
+      if (self.mobile === '') {
+        tip('请输入手机号码！')
         return false
       }
-      if (!this.flag) {
-        this.$toast({
-          message: '手机号码格式有误，请重新输入！',
-          type: 'fail'
-        })
+      if (!self.flag) {
+        tip('手机号码格式有误，请重新输入！')
         return false
       }
-      if (this.mobilecode === '') {
-        this.$toast({
-          message: '请输入图形验证码！',
-          type: 'fail'
-        })
+      if (self.mobilecode === '') {
+        tip('请输入图形验证码！')
         return false
       }
-      this.count = setInterval(this.countDown, 1000)
-      let data = new FormData()
-      let requestData = {
-        mobile: this.mobile,
-        mobilecode: this.mobilecode,
-        token: this.token
+      self.count = setInterval(self.countDown, 1000)
+      let data = {
+        mobile: self.mobile,
+        mobilecode: self.mobilecode,
+        token: self.token
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/customlogin/getCheckCode', data).then(result => {
+      self.$api.system.getCheckCode(data).then(result => {
         let res = result.data
         if (res.code === 200) {
           // 关闭发送按钮，开始倒计时
-          this.msgFlag = false
-          this.$toast({
-            message: '发送验证码成功，请查收短信!',
-            type: 'success'
-          })
+          self.msgFlag = false
+          tip('发送验证码成功，请查收短信!')
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 倒计时
     countDown () {
-      let num = this.num
+      let self = this
+      let num = self.num
       num--
-      this.num = num
-      if (this.num === 0) {
-        this.msgFlag = true
-        this.num = this.nums
-        clearInterval(this.count)
+      self.num = num
+      if (self.num === 0) {
+        self.msgFlag = true
+        self.num = self.nums
+        clearInterval(self.count)
       }
     },
     // 发送注册信息
     sendRegister () {
-      if (this.mobile === '') {
-        this.$toast({
-          message: '请输入手机号码！',
-          type: 'fail'
-        })
+      let self = this
+      if (self.mobile === '') {
+        tip('请输入手机号码！')
         return false
       }
-      if (!this.flag) {
-        this.$toast({
-          message: '手机号码格式有误，请重新输入！',
-          type: 'fail'
-        })
+      if (!self.flag) {
+        tip('手机号码格式有误，请重新输入！')
         return false
       }
-      if (this.mobilecode === '') {
-        this.$toast({
-          message: '请输入图形验证码！',
-          type: 'fail'
-        })
+      if (self.mobilecode === '') {
+        tip('请输入图形验证码！')
         return false
       }
-      if (this.Checkno === '') {
-        this.$toast({
-          message: '请输入短信验证码！',
-          type: 'fail'
-        })
+      if (self.Checkno === '') {
+        tip('请输入短信验证码！')
         return false
       }
-      if (this.btnFlag) {
-        this.btnFlag = false
-        let data = new FormData()
-        let requestData = {
-          msgType: this.msgType,
-          card_id: this.card_id,
-          encrypt_code: this.encrypt_code,
-          openid: this.openid,
-          wechatIDget: this.wechatIDget,
-          wechatID: this.$store.state.wechatID,
-          wexinID: this.$store.state.openid,
-          mobile: this.mobile,
-          birthday: this.birthday,
+      if (self.btnFlag) {
+        self.btnFlag = false
+        let data = {
+          msgType: self.msgType,
+          card_id: self.card_id,
+          encrypt_code: self.encrypt_code,
+          openid: self.openid,
+          wechatIDget: self.wechatIDget,
+          wechatID: self.$store.state.wechatID,
+          wexinID: self.$store.state.openid,
+          mobile: self.mobile,
+          birthday: self.birthday,
           isMember: 0,
-          Checkno: this.Checkno
+          Checkno: self.Checkno
         }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
-        this.$axios.post('system/customlogin/registerAndLogin', data).then(result => {
-          this.btnFlag = true
+        self.$api.system.registerAndLogin(data).then(result => {
+          self.btnFlag = true
           let res = result.data
           if (res.code === 200) {
             // 卡包执行
-            if (this.card_id && this.encrypt_code) {
-              this.$toast({
-                message: '激活成功！',
-                type: 'success'
-              })
+            if (self.card_id && self.encrypt_code) {
+              tip('激活成功！')
               // 卡包设置用户信息
-              this.cardSetUserInfo()
+              self.setUserInfo()
               return false
             }
-            this.$toast({
-              message: '注册成功!',
-              type: 'success'
-            })
+            tip('注册成功!')
             // 设置用户信息
-            this.setUserInfo()
+            self.setUserInfo()
           } else {
-            this.$toast({
-              message: res.msg,
-              type: 'fail'
-            })
+            tip(res.msg)
           }
-        }).catch(error => {
-          throw error
         })
       }
     },
     // 设置用户信息
     setUserInfo () {
-      let data = new FormData()
-      let requestData = {
-        wechatID: this.$store.state.wechatID,
-        wexinID: this.$store.state.openid
+      let self = this
+      let data = {
+        wechatID: self.wechatIDget || self.$store.state.wechatID,
+        wexinID: self.$store.state.openid
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/customlogin/login', data).then(result => {
+      self.$api.system.login(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$store.commit('setUserInfo', res.data)
-          this.$store.commit('setToken', res.data.token)
+          self.$store.commit('setUserInfo', res.data)
+          self.$store.commit('setToken', res.data.token)
           sessionStorage.setItem('jyyf_token', res.data.token)
-          this.$axios.defaults.headers.common.Authorization = res.data.token
-          let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
-          this.$router.push(url)
+          self.$axios.defaults.headers.common.Authorization = res.data.token
+          if (self.card_id && self.encrypt_code) {
+            self.$router.push('/')
+          } else {
+            let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
+            self.$router.push(url)
+          }
         } else {
-          this.$toast({
-            message: '登陆失败，请重新登陆！',
-            type: 'fail'
-          })
+          tip('登陆失败，请重新登陆！')
         }
-      }).catch(error => {
-        throw error
-      })
-    },
-    // 卡包设置用户信息
-    cardSetUserInfo () {
-      let data = new FormData()
-      let requestData = {
-        wechatID: this.wechatIDget,
-        wexinID: this.openid
-      }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/customlogin/login', data).then(result => {
-        let res = result.data
-        if (res.code === 200) {
-          this.$store.commit('setUserInfo', res.data)
-          this.$store.commit('setToken', res.data.token)
-          sessionStorage.setItem('jyyf_token', res.data.token)
-          this.$axios.defaults.headers.common.Authorization = res.data.token
-          this.$router.push('/')
-        } else {
-          this.$toast({
-            message: '登陆失败，请重新登陆！',
-            type: 'fail'
-          })
-        }
-      }).catch(error => {
-        throw error
       })
     }
+    // // 卡包设置用户信息
+    // cardSetUserInfo () {
+    //   let self = this
+    //   let data = {
+    //     wechatID: self.wechatIDget,
+    //     wexinID: self.openid
+    //   }
+    //   self.$api.system.login(data).then(result => {
+    //     let res = result.data
+    //     if (res.code === 200) {
+    //       self.$store.commit('setUserInfo', res.data)
+    //       self.$store.commit('setToken', res.data.token)
+    //       sessionStorage.setItem('jyyf_token', res.data.token)
+    //       self.$axios.defaults.headers.common.Authorization = res.data.token
+    //       self.$router.push('/')
+    //     } else {
+    //       tip('登陆失败，请重新登陆！')
+    //     }
+    //   })
+    // }
   },
   created () {
+    let self = this
     // 页面加载时获取图形验证码
-    this.getImgcode()
+    self.getImgcode()
   }
 }
 </script>

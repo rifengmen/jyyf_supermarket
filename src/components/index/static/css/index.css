@@ -7,6 +7,17 @@
 }
 .index_main2 {
   margin-top: -0.7rem;
+  padding-bottom: unset;
+}
+.index_main2 .banner {
+  min-height: unset;
+}
+.index_main2 .banner_cont {
+  height: 3.74rem;
+}
+.index_main2 .banner_img {
+  width: calc(100% - .48rem);
+  margin: 0 auto;
 }
 /* 轮播图 start */
 .banner {

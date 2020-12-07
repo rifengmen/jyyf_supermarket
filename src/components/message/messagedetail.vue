@@ -22,6 +22,7 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'messagedetail',
@@ -40,24 +41,17 @@ export default {
   methods: {
     // 获取消息详情
     getMessagedetail () {
-      let data = new FormData()
-      let requestData = {
-        id: this.id
+      let self = this
+      let data = {
+        id: self.id
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('info/InformationController/listDtl', data).then(result => {
+      self.$api.info.listDtl(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.messagedetail = res.data
+          self.messagedetail = res.data
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     }
   },
@@ -65,8 +59,9 @@ export default {
   beforeCreate () {
   },
   created () {
+    let self = this
     // 页面加载时获取消息详情
-    this.getMessagedetail()
+    self.getMessagedetail()
   },
   beforeMount () {
   },

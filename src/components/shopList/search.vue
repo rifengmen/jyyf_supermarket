@@ -37,6 +37,7 @@
 
 <script>
 import WechatConfig from '@/components/common/wechatConfig/wechatConfig'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'search',
@@ -54,49 +55,37 @@ export default {
   methods: {
     // 设置搜索关键字
     sendSearch (event) {
+      let self = this
       if (event.keyCode === 13) {
-        if (!this.keyword) {
-          this.$toast({
-            message: '请输入搜索内容！',
-            type: 'fail'
-          })
+        if (!self.keyword) {
+          tip('请输入搜索内容！')
         }
-        let data = new FormData()
-        let requestData = {
-          keyword: this.keyword,
+        let data = {
+          keyword: self.keyword,
           // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
           flag: 'wemember'
         }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
-        this.$axios.post('api/goods/searchGoodsRecord', data).then(result => {
+        self.$api.api.searchGoodsRecord(data).then(result => {
           let res = result.data
           if (res.code === 200) {
-            // this.$store.commit('setKeyword', this.keyword)
-            if (this.keyword !== '') {
-              this.$router.push('/searchList?keyword=' + this.keyword)
+            if (self.keyword !== '') {
+              self.$router.push('/searchList?keyword=' + self.keyword)
             }
           } else {
-            this.$toast({
-              message: res.msg,
-              type: 'fail'
-            })
+            tip(res.msg)
           }
-        }).catch(error => {
-          throw error
         })
       }
     },
     // 输入框获取焦点
     setFocus () {
-      this.$refs.searchInput.focus()
-      // this.$once('hook:mounted', () => {
-      //   this.$refs.searchInput.focus()
-      // })
+      let self = this
+      self.$refs.searchInput.focus()
     },
     // 返回上一页
     backs () {
-      this.$router.back()
+      let self = this
+      self.$router.back()
     }
   },
   watch: {
@@ -108,11 +97,12 @@ export default {
     })
   },
   beforeRouteLeave (to, from, next) {
+    let self = this
     let reg = /searchList/
     if (reg.test(to.name)) {
-      this.$store.commit('removeExcludeComponent', 'search')
+      self.$store.commit('removeExcludeComponent', 'search')
     } else {
-      this.$store.commit('addExcludeComponent', 'search')
+      self.$store.commit('addExcludeComponent', 'search')
     }
     next()
   },
@@ -123,8 +113,6 @@ export default {
   beforeMount () {
   },
   mounted () {
-    // 输入框获取焦点
-    // this.setFocus()
   }
 }
 </script>

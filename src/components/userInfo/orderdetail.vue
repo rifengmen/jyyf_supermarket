@@ -151,6 +151,7 @@ import MyHeader from '@/components/common/header/myheader'
 import payBtn from '@/components/common/payBtn/payBtn'
 import delBtn from '@/components/common/delBtn/delBtn'
 import cancelBtn from '@/components/common/cancelBtn/cancelBtn'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'orderdetail',
@@ -179,58 +180,53 @@ export default {
   methods: {
     // 获取订单详情
     getOrderdetail () {
-      let data = new FormData()
-      let requestData = {
-        tradeno: this.tradeno,
+      let self = this
+      let data = {
+        tradeno: self.tradeno,
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('api/order/getOrderDtl', data).then(result => {
+      self.$api.api.getOrderDtl(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.orderdetail = res.data
-          this.paymoney = res.data.shouldmoney
-          this.goodsList = res.data.OrderDetail
-          let _this = this
+          self.orderdetail = res.data
+          self.paymoney = res.data.shouldmoney
+          self.goodsList = res.data.OrderDetail
           // 页面加载时计算实付金额
-          this.orderdetail.PayDetail.forEach((item) => {
+          self.orderdetail.PayDetail.forEach((item) => {
             if (item.paymodeid === 4 || item.paymodeid === 5 || item.paymodeid === 10) {
-              _this.paymoney -= item.paymoney
+              self.paymoney -= item.paymoney
             }
           })
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 再支付
     againPay () {
-      this.$router.push({name: 'againPay', query: {tradeno: this.tradeno, group: this.orderdetail.ordertype, groupno: this.orderdetail.groupno}})
+      let self = this
+      self.$router.push({name: 'againPay', query: {tradeno: self.tradeno, group: self.orderdetail.ordertype, groupno: self.orderdetail.groupno}})
     }
   },
   watch: {},
   beforeRouteLeave (to, from, next) {
+    let self = this
     let toReg = /orderList/
     let toReg2 = /again/
     if (!toReg.test(to.name) && !toReg2.test(to.name)) {
-      this.$store.commit('addExcludeComponent', 'orderList')
+      self.$store.commit('addExcludeComponent', 'orderList')
     } else if (toReg.test(to.name) || toReg2.test(to.name)) {
-      this.$store.commit('removeExcludeComponent', 'orderList')
+      self.$store.commit('removeExcludeComponent', 'orderList')
     }
     next()
   },
   beforeCreate () {
   },
   created () {
+    let self = this
     // 页面加载时获取订单详情
-    this.getOrderdetail()
+    self.getOrderdetail()
   },
   beforeMount () {
   },

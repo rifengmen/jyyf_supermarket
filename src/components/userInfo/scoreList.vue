@@ -51,6 +51,7 @@
 import MyHeader from '@/components/common/header/myheader'
 import nodata from '@/components/common/nodata/nodata'
 import loading from '@/components/common/loading/loading'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'scoreList',
@@ -70,15 +71,15 @@ export default {
   },
   computed: {
     date () {
-      let _this = this
-      if (!this.startdate) {
+      let self = this
+      if (!self.startdate) {
         let dt = new Date()
         dt.setMonth(dt.getMonth() - 6)
         dt = dt.toLocaleString()
         dt = (dt.replace(/\//g, '-')).split(' ')[0]
-        _this.startdate = dt
+        self.startdate = dt
       }
-      return this.startdate
+      return self.startdate
     }
   },
   components: {
@@ -89,44 +90,38 @@ export default {
   methods: {
     // 获取积分记录列表
     getScoreList () {
-      this.isShowLoading = true
-      let data = new FormData()
-      let requestData
-      requestData = {
-        memcode: this.$store.state.userInfo.memcode,
-        startdate: this.date
+      let self = this
+      self.isShowLoading = true
+      let data = {
+        memcode: self.$store.state.userInfo.memcode,
+        startdate: self.date
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('mem/card/listScoreDtl', data).then(result => {
+      self.$api.mem.listScoreDtl(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.isShowLoading = false
-          this.scoreList = res.data.dataList
-          this.yearScore = res.data.yearScore
-          this.Score = res.data.Score
+          self.isShowLoading = false
+          self.scoreList = res.data.dataList
+          self.yearScore = res.data.yearScore
+          self.Score = res.data.Score
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 设置查询开始时间
     setStartdate (data) {
-      this.startdate = data
-      this.getScoreList()
+      let self = this
+      self.startdate = data
+      self.getScoreList()
     }
   },
   watch: {},
   beforeCreate () {
   },
   created () {
+    let self = this
     // 获取积分记录列表
-    this.getScoreList()
+    self.getScoreList()
   },
   beforeMount () {
   },

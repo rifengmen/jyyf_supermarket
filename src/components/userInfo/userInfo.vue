@@ -256,19 +256,23 @@ export default {
   computed: {
     // 用户信息
     userInfo () {
-      return this.$store.state.userInfo
+      let self = this
+      return self.$store.state.userInfo
     },
     // 用户会员等级
     mem_type () {
-      return this.$store.state.mem_type
+      let self = this
+      return self.$store.state.mem_type
     },
     // 卡片信息
     moneyDetail () {
-      return this.$store.state.moneyDetail
+      let self = this
+      return self.$store.state.moneyDetail
     },
     // 用户头像
     headimgurl () {
-      return this.$store.state.headimgurl
+      let self = this
+      return self.$store.state.headimgurl
     }
   },
   components: {
@@ -276,43 +280,21 @@ export default {
     MyFooter
   },
   methods: {
-    // // 设置用户信息
-    // setUserInfo () {
-    //   let self = this
-    //   let data = {
-    //     wechatID: self.$store.state.wechatID,
-    //     wexinID: self.$store.state.openid
-    //   }
-    //   self.$api.system.login(data).then(result => {
-    //     let res = result.data
-    //     if (res.code === 200) {
-    //       self.$store.commit('setUserInfo', res.data)
-    //       self.$store.commit('setToken', res.data.token)
-    //     } else {
-    //       tip('登陆失败，请重新登陆！')
-    //     }
-    //   })
-    // },
     // 设置用户信息
     setUserInfo () {
-      let data = new FormData()
-      let requestData = {
-        wechatID: this.$store.state.wechatID,
-        wexinID: this.$store.state.openid
+      let self = this
+      let data = {
+        wechatID: self.$store.state.wechatID,
+        wexinID: self.$store.state.openid
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/customlogin/login', data).then(result => {
+      self.$api.system.login(data).then(result => {
         let res = result.data
-        // res.code 200：正确；20：注册；30：加入卡包；40：激活卡包；500：报错
         if (res.code === 200) {
-          this.$store.commit('setUserInfo', res.data)
-          this.$store.commit('setToken', res.data.token)
-          sessionStorage.setItem('jyyf_token', res.data.token)
-          this.$axios.defaults.headers.common.Authorization = res.data.token
+          self.$store.commit('setUserInfo', res.data)
+          self.$store.commit('setToken', res.data.token)
+        } else {
+          tip('登陆失败，请重新登陆！')
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 获取用户会员卡信息
@@ -382,20 +364,21 @@ export default {
     })
   },
   created () {
+    let self = this
     // 设置用户信息
-    this.setUserInfo()
+    self.setUserInfo()
     // 获取用户会员卡信息
-    this.getMyInfo()
+    self.getMyInfo()
     // 查询未读消息条数
-    this.getMessageList()
+    self.getMessageList()
     // 查询未完成订单数量
-    this.getOrdernums('-1')
+    self.getOrdernums('-1')
     // 查询未受理订单数量
-    this.getOrdernums('0')
+    self.getOrdernums('0')
     // 查询待配送订单数量
-    this.getOrdernums('10')
+    self.getOrdernums('10')
     // 查询配送中订单数量
-    this.getOrdernums('11')
+    self.getOrdernums('11')
   }
 }
 </script>

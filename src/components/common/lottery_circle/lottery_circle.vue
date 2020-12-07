@@ -46,6 +46,8 @@
 </template>
 
 <script>
+import tip from '@/utils/Toast'
+
 export default {
   name: 'lottery_circle',
   props: {
@@ -112,7 +114,8 @@ export default {
   computed: {
     // 自动生成角度添加到数组上
     prizeData () {
-      let arr = this.activeObj.prizeList
+      let self = this
+      let arr = self.activeObj.prizeList
       if (arr && arr.length) {
         let len = arr.length
         let base = 360 / len
@@ -130,64 +133,56 @@ export default {
   methods: {
     // 点击开始,请求接口抽奖
     startPlay () {
-      if (this.flag && this.activeObj.prizeList.length) {
-        this.flag = false
-        let data = new FormData()
-        let requestData = {
-        }
-        requestData = JSON.stringify(requestData)
-        data.append('requestData', requestData)
-        this.$axios.post('system/prize/centPrize', data).then(result => {
+      let self = this
+      if (self.flag && self.activeObj.prizeList.length) {
+        self.flag = false
+        let data = {}
+        self.$api.system.centPrize(data).then(result => {
           let res = result.data
           if (res.code === 200) {
-            this.prize = res.data
-            // 更新积分
-            // this.$emit('getTotalCent')
+            self.prize = res.data
             // 调抽奖
-            this.startBtn(this.prize)
+            self.startBtn(self.prize)
           } else {
-            this.flag = true
-            this.$toast({
-              message: res.msg,
-              type: 'fail'
-            })
+            self.flag = true
+            tip(res.msg)
           }
-        }).catch(error => {
-          throw error
         })
       }
     },
     // 开始转动,通过奖项级别进行匹配:id
     async startBtn (val) {
-      let _this = this
-      _this.activeObj.prizeList.forEach((i, d) => {
+      let self = this
+      self.activeObj.prizeList.forEach((i, d) => {
         if (i.prizeno === val.prizeno) {
-          _this.pIndex = d
+          self.pIndex = d
         }
       })
       // 拿到相应的角度调旋转接口
-      _this.startrotate(_this.activeObj.prizeList[_this.pIndex].angletext, () => {
-        _this.fulfillHandle(_this.activeObj.prizeList[_this.pIndex])
+      self.startrotate(self.activeObj.prizeList[self.pIndex].angletext, () => {
+        self.fulfillHandle(self.activeObj.prizeList[self.pIndex])
       })
     },
     // 开始旋转 angle角度  complete回调成功函数
     startrotate (angle, complete) {
+      let self = this
       // 相应的角度 + 满圈 只是在原角度多转了几圈 360 * 6
-      let rotate = 2160 * (this.rotNum + 1) + angle
-      this.oTurnUlbg.style.transform = 'rotate(' + rotate + 'deg)'
-      this.oTurnUlborder.style.transform = 'rotate(' + rotate + 'deg)'
-      this.oTurnUltext.style.transform = 'rotate(' + rotate + 'deg)'
-      clearTimeout(this.timer)
+      let rotate = 2160 * (self.rotNum + 1) + angle
+      self.oTurnUlbg.style.transform = 'rotate(' + rotate + 'deg)'
+      self.oTurnUlborder.style.transform = 'rotate(' + rotate + 'deg)'
+      self.oTurnUltext.style.transform = 'rotate(' + rotate + 'deg)'
+      clearTimeout(self.timer)
       // 设置5秒后停止旋转,处理接口返回的数据
-      this.timer = setTimeout(() => {
+      self.timer = setTimeout(() => {
         complete()
-        this.rotNum++
-      }, this.time)
+        self.rotNum++
+      }, self.time)
     },
     // 得奖后的处理
     fulfillHandle (prize) {
-      this.$emit('getResult', prize)
-      this.flag = true
+      let self = this
+      self.$emit('getResult', prize)
+      self.flag = true
     },
     // 自动换行
     autoWrap (str) {
@@ -207,13 +202,14 @@ export default {
   beforeMount () {
   },
   mounted () {
-    this.oTurnUlbg = document.querySelector('.turnUlbg')
-    this.oTurnUlborder = document.querySelector('.turnUlborder')
-    this.oTurnUltext = document.querySelector('.turnUltext')
+    let self = this
+    self.oTurnUlbg = document.querySelector('.turnUlbg')
+    self.oTurnUlborder = document.querySelector('.turnUlborder')
+    self.oTurnUltext = document.querySelector('.turnUltext')
     // 过度中属性用时5s
-    this.oTurnUlbg.style.webkitTransition = 'transform ' + this.time / 1000 + 's ease'
-    this.oTurnUlborder.style.webkitTransition = 'transform ' + this.time / 1000 + 's ease'
-    this.oTurnUltext.style.webkitTransition = 'transform ' + this.time / 1000 + 's ease'
+    self.oTurnUlbg.style.webkitTransition = 'transform ' + self.time / 1000 + 's ease'
+    self.oTurnUlborder.style.webkitTransition = 'transform ' + self.time / 1000 + 's ease'
+    self.oTurnUltext.style.webkitTransition = 'transform ' + self.time / 1000 + 's ease'
   }
 }
 </script>

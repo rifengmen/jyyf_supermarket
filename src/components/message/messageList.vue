@@ -45,6 +45,7 @@
 import MyHeader from '@/components/common/header/myheader'
 import loading from '@/components/common/loading/loading'
 import nodata from '@/components/common/nodata/nodata'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'messageList',
@@ -81,72 +82,68 @@ export default {
   },
   methods: {
     onLoad () {
-      this.page++
-      this.getMessageList()
+      let self = this
+      self.page++
+      self.getMessageList()
     },
     onRefresh () {
-      this.isShowLoading = true
+      let self = this
+      self.isShowLoading = true
       // 清空列表数据
-      this.finished = false
+      self.finished = false
       // 重新加载数据
       // 将 loading 设置为 true，表示处于加载状态
-      this.loading = true
-      this.page = 0
-      this.messageList = []
-      this.onLoad()
+      self.loading = true
+      self.page = 0
+      self.messageList = []
+      self.onLoad()
     },
     // 获取消息列表公共方法
     getMessageList () {
-      let data = new FormData()
-      let requestData = {
+      let self = this
+      let data = {
         messageFlag: '1',
-        page: this.page,
-        pageSize: this.pageSize
+        page: self.page,
+        pageSize: self.pageSize
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('info/InformationController/listmessage', data).then(result => {
+      self.$api.info.listmessage(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.isShowLoading = false
+          self.isShowLoading = false
           // 无数据时
           if (!res.data.totalSize) {
-            this.finished = true
+            self.finished = true
           }
           if (res.data.content && res.data.content.length) {
-            let currentpage = this.page
-            let total = Math.ceil(res.data.totalSize / this.pageSize)
+            let currentpage = self.page
+            let total = Math.ceil(res.data.totalSize / self.pageSize)
             // 页码不足或者最后一页不足的情况
-            if (currentpage >= total || res.data.content.length < this.pageSize) {
-              this.finished = true
+            if (currentpage >= total || res.data.content.length < self.pageSize) {
+              self.finished = true
             }
             // 刷新
-            if (this.refreshing) {
-              this.messageList = res.data.content
-              this.refreshing = false
+            if (self.refreshing) {
+              self.messageList = res.data.content
+              self.refreshing = false
             } else {
-              this.messageList.push(...res.data.content)
+              self.messageList.push(...res.data.content)
             }
-            this.loading = false
+            self.loading = false
           }
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 去详情页
     toMessagedetail (id) {
-      this.messageList.forEach((val, index) => {
+      let self = this
+      self.messageList.forEach((val, index) => {
         if (val.id === id) {
           val.flag = 1
         }
       })
-      this.$router.push({name: 'messagedetail', query: {id: id}})
+      self.$router.push({name: 'messagedetail', query: {id: id}})
     }
   },
   watch: {},
@@ -157,17 +154,19 @@ export default {
     })
   },
   beforeRouteLeave (to, from, next) {
+    let self = this
     let reg = /messagedetail/
     if (reg.test(to.name)) {
-      this.$store.commit('removeExcludeComponent', 'messageList')
+      self.$store.commit('removeExcludeComponent', 'messageList')
     } else {
-      this.$store.commit('addExcludeComponent', 'messageList')
+      self.$store.commit('addExcludeComponent', 'messageList')
     }
     next()
   },
   beforeCreate () {},
   created () {
-    this.onLoad()
+    let self = this
+    self.onLoad()
   },
   beforeMount () {},
   mounted () {}

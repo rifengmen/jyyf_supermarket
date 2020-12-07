@@ -51,6 +51,7 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
+import tip from '@/utils/Toast'
 
 export default {
   name: 'addComplaint',
@@ -73,43 +74,27 @@ export default {
   methods: {
     // 发送投诉内容
     sendComplaint () {
-      if (!this.complaint) {
-        this.$toast({
-          message: '内容不能为空！',
-          type: 'fail'
-        })
+      let self = this
+      if (!self.complaint) {
+        tip('内容不能为空！')
         return false
       }
-      if (this.complaint.length > 140) {
-        this.$toast({
-          message: '已超过140个字符！',
-          type: 'fail'
-        })
+      if (self.complaint.length > 140) {
+        tip('已超过140个字符！')
         return false
       }
-      let data = new FormData()
-      let requestData = {
-        Content: this.complaint,
-        flag: this.evaluateflag
+      let data = {
+        Content: self.complaint,
+        flag: self.evaluateflag
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      this.$axios.post('system/suggestion/addSuggestion', data).then(result => {
+      self.$api.system.addSuggestion(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          this.$toast({
-            message: '提交成功!',
-            type: 'success'
-          })
-          this.$router.back()
+          tip('提交成功!')
+          self.$router.back()
         } else {
-          this.$toast({
-            message: res.msg,
-            type: 'fail'
-          })
+          tip(res.msg)
         }
-      }).catch(error => {
-        throw error
       })
     },
     // 删除照片
@@ -118,8 +103,9 @@ export default {
     },
     // 查看放大图
     handlePictureCardPreview (file) {
-      this.dialogImageUrl = file.url
-      this.dialogVisible = true
+      let self = this
+      self.dialogImageUrl = file.url
+      self.dialogVisible = true
     }
   },
   watch: {},
