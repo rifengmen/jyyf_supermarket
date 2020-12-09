@@ -75,9 +75,9 @@ export default {
   data () {
     return {
       // 充值信息
-      payData: this.$route.params.payData,
+      payData: this.$route.query.payData,
       // 充值类型
-      moneyType: this.$route.params.moneyType,
+      moneyType: this.$route.query.moneyType,
       // 支付方式渠道
       channel: 'WX_JSAPI'
     }

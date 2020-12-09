@@ -161,7 +161,7 @@ export default {
       self.$api.invest.reChargeToPay(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          self.$router.push({name: 'rechargePay', params: {payData: res.data, moneyType: self.moneyType}})
+          self.$router.push({name: 'rechargePay', query: {payData: res.data, moneyType: self.moneyType}})
         } else {
           tip(res.msg)
         }

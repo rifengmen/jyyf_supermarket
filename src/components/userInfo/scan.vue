@@ -5,7 +5,7 @@
       <template v-slot:userinfo>
         <i class="el-icon-arrow-left"></i>
       </template>
-      <template v-slot:header>{{$route.params.header_tit}}</template>
+      <template v-slot:header>{{$route.query.header_tit}}</template>
     </my-header>
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
@@ -21,7 +21,7 @@
         <div class="user_section">
           <div></div>
           <div class="user_desc bgffffff border_r500">
-            <input type="text" v-model="$route.params.header_tit" class="tr" disabled>
+            <input type="text" v-model="$route.query.header_tit" class="tr" disabled>
           </div>
         </div>
         <div class="user_section">
@@ -83,7 +83,7 @@ export default {
       let self = this
       if (self.tradeno) {
         let data = {
-          role: self.$route.params.role,
+          role: self.$route.query.role,
           phone: self.userInfo.mobile,
           tradeno: self.tradeno,
           // 区分微会员和百货，wemember：微会员；generalMerchandise：百货

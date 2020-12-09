@@ -137,7 +137,7 @@
             </router-link>
             <!-- 我的地址 end -->
             <!-- 支付密码 start -->
-            <router-link :to="{name: 'payPassword', params:{msg_status: 1}}" tag="li"  class="cont_item">
+            <router-link :to="{name: 'payPassword', query:{msg_status: 1}}" tag="li"  class="cont_item">
               <div class="imgbox">
                 <img src="static/img/user_zfmm.png">
               </div>
@@ -189,7 +189,7 @@
             </router-link>
             <!-- 消费记录 end -->
             <!-- 会员解绑 start -->
-            <!--<router-link :to="{name: 'userList', params:{header_tit: '会员解绑'}}" tag="li"  class="cont_item">-->
+            <!--<router-link :to="{name: 'userList', query:{header_tit: '会员解绑'}}" tag="li"  class="cont_item">-->
             <!--<div class="imgbox">-->
             <!--<img src="static/img/user_hyjb.png">-->
             <!--</div>-->
@@ -197,7 +197,7 @@
             <!--</router-link>-->
             <!-- 会员解绑 end -->
             <!-- 拣货 start -->
-            <router-link :to="{name: 'scan', params:{header_tit: '拣货', role: '1'}}" tag="li"  class="cont_item"  v-if="userInfo.role && (userInfo.role.indexOf(1) >= 0)">
+            <router-link :to="{name: 'scan', query:{header_tit: '拣货', role: '1'}}" tag="li"  class="cont_item"  v-if="userInfo.role && (userInfo.role.indexOf(1) >= 0)">
               <div class="imgbox">
                 <img src="static/img/user_jpqr.png">
               </div>
@@ -205,7 +205,7 @@
             </router-link>
             <!-- 拣货 end -->
             <!-- 配送 start -->
-            <router-link :to="{name: 'scan', params:{header_tit: '配送', role: '2'}}" tag="li"  class="cont_item"  v-if="userInfo.role && (userInfo.role.indexOf(2) >= 0)">
+            <router-link :to="{name: 'scan', query:{header_tit: '配送', role: '2'}}" tag="li"  class="cont_item"  v-if="userInfo.role && (userInfo.role.indexOf(2) >= 0)">
               <div class="imgbox">
                 <img src="static/img/user_jpqr.png">
               </div>
@@ -213,7 +213,7 @@
             </router-link>
             <!-- 配送 end -->
             <!-- 取货 start -->
-            <router-link :to="{name: 'scan', params:{header_tit: '取货', role: '3'}}" tag="li"  class="cont_item" v-if="userInfo.role && (userInfo.role.indexOf(3) >= 0)">
+            <router-link :to="{name: 'scan', query:{header_tit: '取货', role: '3'}}" tag="li"  class="cont_item" v-if="userInfo.role && (userInfo.role.indexOf(3) >= 0)">
               <div class="imgbox">
                 <img src="static/img/user_jpqr.png">
               </div>

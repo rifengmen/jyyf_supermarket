@@ -285,7 +285,7 @@
           </div>
           <!-- 每日签到 end -->
           <!-- 支付密码 start-->
-          <router-link :to="{name: 'payPassword', params:{msg_status: 1}}" tag="div" class="index_common_item2">
+          <router-link :to="{name: 'payPassword', query:{msg_status: 1}}" tag="div" class="index_common_item2">
             <div class="index_common_img">
               <img src="static/img/user_password.png">
             </div>
