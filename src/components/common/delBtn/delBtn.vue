@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'delBtn',

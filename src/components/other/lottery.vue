@@ -38,7 +38,7 @@
 import MyHeader from '@/components/common/header/myheader'
 import loading from '@/components/common/loading/loading'
 import LotteryCircle from '@/components/common/lottery_circle/lottery_circle'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'lottery',
@@ -59,9 +59,7 @@ export default {
       // 用户积分
       totalCent: 0,
       // 奖项设置
-      activeObj: {},
-      // 查询积分用
-      startdate: ''
+      activeObj: {}
     }
   },
   computed: {
@@ -69,18 +67,6 @@ export default {
     moneyDetail () {
       let self = this
       return self.$store.state.moneyDetail
-    },
-    // 查询时间，查询积分用
-    date () {
-      let self = this
-      if (!self.startdate) {
-        let dt = new Date()
-        dt.setMonth(dt.getMonth() - 6)
-        dt = dt.toLocaleString()
-        dt = (dt.replace(/\//g, '-')).split(' ')[0]
-        self.startdate = dt
-      }
-      return self.startdate
     }
   },
   components: {

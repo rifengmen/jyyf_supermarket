@@ -16,17 +16,17 @@
       </router-link>
       <!-- 搜索 end -->
       <!-- 分类内容 start -->
-      <div class="classify">
+      <div class="category">
         <!-- 分类导航 start -->
-        <div class="classify_nav bgeeeeee">
+        <div class="category_nav bgeeeeee">
           <ul>
-            <li :class="{tc: true, active: index === classifyActive, bgffffff:  index === classifyActive}" @click="addActive(index)" v-if="classify.length" v-for="(item, index) in classify" :key="index" :optionvalue="item.optionvalue">
+            <li :class="{tc: true, active: index === categoryActive, bgffffff:  index === categoryActive}" @click="addActive(index)" v-if="category.length" v-for="(item, index) in category" :key="index" :optionvalue="item.optionvalue">
               <div class="font24">{{item.optionname}}</div>
             </li>
           </ul>
         </div>
         <!-- 分类导航 end -->
-        <div class="classify_cont">
+        <div class="category_cont">
           <!-- 加载中动画 start -->
           <loading v-if="isShowLoading"></loading>
           <!-- 加载中动画 end -->
@@ -39,8 +39,8 @@
                 :offset="offset"
                 finished-text="没有更多了"
                 @load="onLoad">
-                <div v-for="(item, index) in goodsList" :key="index" class="goods_li">
-                  <div class="goods_item bgffffff" @click="goodsdetail(item)">
+                <div v-for="(item, index) in goodsList" :key="index" class="goods_li bgffffff">
+                  <div class="goods_item" @click="goodsdetail(item)">
                     <div class="goods_item_img">
                       <img :src="(item.picture1 ? (imgurl + 'image/' + item.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))">
                       <div v-if="item.promotemode !== 0" class="goods_age ellipsis font24 font_normal colorffffff">{{item.modenote}}</div>
@@ -54,8 +54,10 @@
                           <div class="ellipsis font32 font_blod colorf84242" v-else>￥{{item.saleprice}}</div>
                           <del class="ellipsis font26 color999999" v-if="item.promotevalue && item.promotevalue !== item.saleprice">￥{{item.saleprice}}</del>
                         </div>
-                        <div class="goods_item_cart" v-if="item.promotemode !== 6 && item.promotemode !== 8 && item.promotemode !== 9">
-                          <addcart :goodsid="item.goodsid">
+                        <div class="goods_item_cart" v-if="item.promotemode < 6 || item.promotemode > 9">
+                          <addcart
+                                  :goodsid="item.goodsid"
+                                  :amount="1">
                             <img src="static/img/gwc.png">
                           </addcart>
                         </div>
@@ -85,10 +87,10 @@ import MyFooter from '@/components/common/footer/myfooter'
 import loading from '@/components/common/loading/loading'
 import addcart from '@/components/common/addcart/addcart'
 import nodata from '@/components/common/nodata/nodata'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
-  name: 'classify',
+  name: 'category',
   data () {
     return {
       // 图片路径
@@ -102,7 +104,7 @@ export default {
       // 滚动条与底部距离小于 offset 时触发load事件
       offset: 100,
       // 商品分类
-      classify: [],
+      category: [],
       // 全部
       all: {
         optionname: '全部',
@@ -116,7 +118,7 @@ export default {
         classname: null
       },
       // 分类选中状态
-      classifyActive: 0,
+      categoryActive: 0,
       // 搜索结果
       goodsList: [],
       // 当前页码
@@ -134,8 +136,8 @@ export default {
   computed: {
     classcode () {
       let self = this
-      if (self.classify.length) {
-        return self.classify[self.classifyActive].optionvalue
+      if (self.category.length) {
+        return self.category[self.categoryActive].optionvalue
       }
     }
   },
@@ -210,14 +212,14 @@ export default {
     // 添加分类选中状态
     addActive (index) {
       let self = this
-      self.classifyActive = index
+      self.categoryActive = index
       // 刷新
       self.onRefresh()
     },
     // 获取商品分类
-    getClassify () {
+    getcategory () {
       let self = this
-      self.classify = [
+      self.category = [
         {
           optionname: '推荐',
           optionvalue: '-2',
@@ -237,7 +239,7 @@ export default {
       self.$api.system.getCusClassOption2(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          self.classify.push(...res.data, self.all)
+          self.category.push(...res.data, self.all)
         }
       })
       // 页面加载时获取商品列表
@@ -254,7 +256,7 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.$store.commit('removeExcludeComponent', 'classify')
+      vm.$store.commit('removeExcludeComponent', 'category')
       next()
     })
   },
@@ -262,9 +264,9 @@ export default {
     let self = this
     let reg = /goodsdetail/
     if (reg.test(to.name)) {
-      self.$store.commit('removeExcludeComponent', 'classify')
+      self.$store.commit('removeExcludeComponent', 'category')
     } else {
-      self.$store.commit('addExcludeComponent', 'classify')
+      self.$store.commit('addExcludeComponent', 'category')
     }
     next()
   },
@@ -273,7 +275,7 @@ export default {
   created () {
     let self = this
     // 页面加载时获取商品分类
-    self.getClassify()
+    self.getcategory()
   },
   beforeMount () {
   },
@@ -283,7 +285,7 @@ export default {
 </script>
 
 <style scoped>
-@import "static/css/classify.css";
+@import "static/css/category.css";
   .nodata {
     height: calc(100vh - 2.1rem);
   }

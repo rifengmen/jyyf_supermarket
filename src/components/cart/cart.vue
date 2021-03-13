@@ -9,17 +9,17 @@
           <div class="goodslist">
             <ul ref="cartlist">
               <!-- 商品简介 start -->
-              <li class="goods_li" v-for="(item, index) in cartList" :key="index">
-                <div class="goods_input bgffffff" @click="addorder(item.no)">
+              <li class="goods_li bgffffff" v-for="(item, index) in cartList" :key="index">
+                <div class="goods_input" @click="addorder(item.no)">
                   <input class="checkbox" type="checkbox" name="goods" v-model="item.addorder">
                 </div>
-                <div class="goods_item bgffffff" @click="goodsdetail(item)">
-                  <div class="goods_item_img">
+                <div class="goods_item">
+                  <div class="goods_item_img" @click="goodsdetail(item)">
                     <img :src="(item.picture1 ? (imgurl + 'image/' + item.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))">
                     <div v-if="item.promotemode !== 0" class="goods_age ellipsis font24 font_normal colorffffff">{{item.modenote}}</div>
                   </div>
                   <div class="goods_item_cont">
-                    <div class="goods_item_name ellipsis2 font26">{{item.cusgoodsname}}</div>
+                    <div class="goods_item_name ellipsis2 font26" @click="goodsdetail(item)">{{item.cusgoodsname}}</div>
                     <div class="goods_item_editnum">
                       <div class="goods_item_price">
                         <div class="ellipsis font32 font_blod colorf84242" v-if="item.promotevalue">￥{{item.promotevalue}}</div>
@@ -28,7 +28,7 @@
                       </div>
                       <div class="goods_num">
                         <div class="goods_num_btn goods_num_countnum borderc7c7c7 border_r4 tc font40 font_lighter color999999" @click="countAmount(item)">-</div>
-                        <div class="goods_num_input borderc7c7c7 border_r4 tc colorff6400 font30" @click="changeAmount">{{item.amount}}</div>
+                        <div class="goods_num_input borderc7c7c7 border_r4 tc colorff6400 font30">{{item.amount}}</div>
                         <div class="goods_num_btn goods_num_addnum borderc7c7c7 border_r4 tc font40 font_lighter color999999" @click="addAmount(item)">+</div>
                       </div>
                     </div>
@@ -49,11 +49,13 @@
             </div>
             <div class="editcart_btn font28 font_normal color999999" @click="delGoods">删除</div>
             <div class="cart_nums">
-              <span class="font24 color666666">合计：</span>
-              <span class="colorf86442 font32">￥{{totalmoney}}</span>
+              <!--<span class="font24 color666666">合计：</span>-->
+              <!--<span class="colorf86442 font32">￥{{totalmoney}}</span>-->
             </div>
             <div class="pay bgff6400 colorffffff tc">
-              <addorder :no="no">结算</addorder>
+              <addorder
+                      :amount="1"
+                      :no="no">结算</addorder>
             </div>
           </div>
         </div>
@@ -74,7 +76,7 @@ import MyHeader from '@/components/common/header/myheader'
 import nodata from '@/components/common/nodata/nodata'
 import addorder from '@/components/common/addorder/addorder'
 import loading from '@/components/common/loading/loading'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'cart',
@@ -142,7 +144,6 @@ export default {
     // 加
     addAmount (goods) {
       let self = this
-      window.event.stopPropagation()
       let num = parseInt(goods.amount) + 1
       if (num > 0) {
         // 提交修改信息
@@ -152,16 +153,11 @@ export default {
     // 减
     countAmount (goods) {
       let self = this
-      window.event.stopPropagation()
       let num = parseInt(goods.amount) - 1
       if (num > 0) {
         // 提交修改信息
         self.editAmount(num, goods.no)
       }
-    },
-    // 直接输入
-    changeAmount () {
-      window.event.stopPropagation()
     },
     // 提交修改信息
     editAmount (amount, no) {
@@ -276,7 +272,7 @@ export default {
   watch: {
   },
   beforeRouteEnter (to, from, next) {
-    let ExcludeComponent = ['classify', 'searchList', 'recommendList', 'classList']
+    let ExcludeComponent = ['category', 'searchList', 'recommendList', 'classList']
     next(vm => {
       vm.$store.commit('addExcludeComponent', ExcludeComponent)
       next()

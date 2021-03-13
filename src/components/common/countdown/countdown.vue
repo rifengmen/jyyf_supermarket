@@ -10,10 +10,18 @@
 export default {
   name: 'countdown',
   props: {
+    // 时间点
     times: {
       type: String,
       default: function () {
         return ''
+      }
+    },
+    // type，时间点类型，0：距开始时间点；1：距结束时间点
+    type: {
+      type: Number,
+      default () {
+        return 0
       }
     }
   },
@@ -45,6 +53,7 @@ export default {
       _t = _t.replace(/-/g, '/')
       let times = new Date(_t).getTime()
       self.time = (times - new Date().getTime()) / 1000
+      // 倒计时进行
       if (self.time !== null && self.time !== '' && self.time > 0) {
         let h = parseInt(self.time / (60 * 60))
         let m = parseInt(self.time / 60 % 60)
@@ -52,9 +61,17 @@ export default {
         self.hours = self.checkTime(h)
         self.minutes = self.checkTime(m)
         self.second = self.checkTime(s)
-      } else if (self.time <= 0) {
+        // console.log(self.hours + 'H' + self.minutes + 'M' + self.second + 'S')
+      } else if (self.time <= 0) { // 倒计时结束
         // 关闭定时器
         clearInterval(self.countdown)
+        if (self.type) {
+          // 触发父组件结束商品活动
+          self.$emit('promotemodeStart')
+        } else {
+          // 触发父组件结束商品活动
+          self.$emit('promotemodeEnd')
+        }
       }
     },
     // 一位时间加零

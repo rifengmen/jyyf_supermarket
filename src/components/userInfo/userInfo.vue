@@ -50,10 +50,41 @@
           </div>
         </li>
         <!-- 我的钱包 end -->
+        <!-- 内部功能 start -->
+        <li class="user_item border_r10 bgffffff" v-if="userInfo.role">
+          <div class="user_item_tit font32">内部功能</div>
+          <ul class="color666666">
+            <!-- 拣货 start -->
+            <router-link :to="{name: 'scan', query:{header_tit: '拣货', role: '1'}}" tag="li"  class="cont_item"  v-if="userInfo.role.indexOf(1) >= 0">
+              <div class="imgbox">
+                <img src="static/img/user_jpqr.png">
+              </div>
+              <div class="imgname font24">拣货</div>
+            </router-link>
+            <!-- 拣货 end -->
+            <!-- 配送 start -->
+            <router-link :to="{name: 'scan', query:{header_tit: '配送', role: '2'}}" tag="li"  class="cont_item"  v-if="userInfo.role.indexOf(2) >= 0">
+              <div class="imgbox">
+                <img src="static/img/user_jpqr.png">
+              </div>
+              <div class="imgname font24">配送</div>
+            </router-link>
+            <!-- 配送 end -->
+            <!-- 取货 start -->
+            <router-link :to="{name: 'scan', query:{header_tit: '取货', role: '3'}}" tag="li"  class="cont_item" v-if="userInfo.role.indexOf(3) >= 0">
+              <div class="imgbox">
+                <img src="static/img/user_jpqr.png">
+              </div>
+              <div class="imgname font24">取货</div>
+            </router-link>
+            <!-- 取货 end -->
+          </ul>
+        </li>
+        <!-- 内部功能 end -->
         <!-- 我的订单 start -->
         <li class="user_item border_r10 bgffffff">
-          <div class="user_item_tit font32">
-            <div>我的订单</div>
+          <div class="user_item_tit">
+            <div class="font32">我的订单</div>
             <router-link :to="{name: 'orderList', query: {billstatus: '-2'}}" tag="div" class="font24 color666666">全部订单 <i class="el-icon-arrow-right" style="font-size: .28rem!important;"></i></router-link>
           </div>
           <ul class="color666666">
@@ -196,30 +227,6 @@
             <!--<div class="imgname font24">会员解绑</div>-->
             <!--</router-link>-->
             <!-- 会员解绑 end -->
-            <!-- 拣货 start -->
-            <router-link :to="{name: 'scan', query:{header_tit: '拣货', role: '1'}}" tag="li"  class="cont_item"  v-if="userInfo.role && (userInfo.role.indexOf(1) >= 0)">
-              <div class="imgbox">
-                <img src="static/img/user_jpqr.png">
-              </div>
-              <div class="imgname font24">拣货</div>
-            </router-link>
-            <!-- 拣货 end -->
-            <!-- 配送 start -->
-            <router-link :to="{name: 'scan', query:{header_tit: '配送', role: '2'}}" tag="li"  class="cont_item"  v-if="userInfo.role && (userInfo.role.indexOf(2) >= 0)">
-              <div class="imgbox">
-                <img src="static/img/user_jpqr.png">
-              </div>
-              <div class="imgname font24">配送</div>
-            </router-link>
-            <!-- 配送 end -->
-            <!-- 取货 start -->
-            <router-link :to="{name: 'scan', query:{header_tit: '取货', role: '3'}}" tag="li"  class="cont_item" v-if="userInfo.role && (userInfo.role.indexOf(3) >= 0)">
-              <div class="imgbox">
-                <img src="static/img/user_jpqr.png">
-              </div>
-              <div class="imgname font24">取货</div>
-            </router-link>
-            <!-- 取货 end -->
           </ul>
         </li>
         <!-- 常用功能 end -->
@@ -235,7 +242,7 @@
 <script>
 import WechatConfig from '@/components/common/wechatConfig/wechatConfig'
 import MyFooter from '@/components/common/footer/myfooter'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'userInfo',
@@ -357,7 +364,7 @@ export default {
   watch: {
   },
   beforeRouteEnter (to, from, next) {
-    let ExcludeComponent = ['classify', 'searchList', 'recommendList', 'classList']
+    let ExcludeComponent = ['category', 'searchList', 'recommendList', 'classList']
     next(vm => {
       vm.$store.commit('addExcludeComponent', ExcludeComponent)
       next()

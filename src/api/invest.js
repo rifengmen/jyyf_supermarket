@@ -32,6 +32,8 @@ const invest = {
   payTicketCheck: data => http.post('invest/microFlow/payTicketCheck', data),
   // 提交订单
   orderCommit: data => http.post('invest/microFlow/orderCommit', data),
+  // 秒杀提交订单
+  payOrderComit: data => http.post('invest/microFlow/payOrderComit', data),
   // 免密支付验证
   getInputPayPasswdFlag: data => http.post('invest/microFlow/getInputPayPasswdFlag', data),
   // 获取再支付信息

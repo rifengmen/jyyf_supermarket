@@ -32,8 +32,8 @@
             :offset="offset"
             finished-text="没有更多了"
             @load="onLoad">
-            <div v-for="(item, index) in goodsList" :key="index" class="goods_li">
-              <div class="goods_item bgffffff" @click="goodsdetail(item)">
+            <div v-for="(item, index) in goodsList" :key="index" class="goods_li bgffffff">
+              <div class="goods_item" @click="goodsdetail(item)">
                 <div class="goods_item_img">
                   <img :src="(item.picture1 ? (imgurl + 'image/' + item.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))">
                   <div v-if="item.promotemode !== 0" class="goods_age ellipsis font24 font_normal colorffffff">{{item.modenote}}</div>
@@ -47,8 +47,10 @@
                       <div class="ellipsis font32 font_blod colorf84242" v-else>￥{{item.saleprice}}</div>
                       <del class="ellipsis font26 color999999" v-if="item.promotevalue && item.promotevalue !== item.saleprice">￥{{item.saleprice}}</del>
                     </div>
-                    <div class="goods_item_cart" v-if="item.promotemode !== 6 && item.promotemode !== 8 && item.promotemode !== 9">
-                      <addcart :goodsid="item.goodsid">
+                    <div class="goods_item_cart" v-if="item.promotemode < 6 || item.promotemode > 9">
+                      <addcart
+                              :goodsid="item.goodsid"
+                              :amount="1">
                         <img src="static/img/gwc.png">
                       </addcart>
                     </div>
@@ -72,7 +74,7 @@ import WechatConfig from '@/components/common/wechatConfig/wechatConfig'
 import loading from '@/components/common/loading/loading'
 import addcart from '@/components/common/addcart/addcart'
 import nodata from '@/components/common/nodata/nodata'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'searchList',
@@ -142,7 +144,7 @@ export default {
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      self.$api.listGoodsForCategory(data).then(result => {
+      self.$api.api.listGoodsForCategory(data).then(result => {
         let res = result.data
         if (res.code === 200) {
           self.isShowLoading = false
@@ -180,6 +182,7 @@ export default {
     },
     // 返回上一页
     backs () {
+      let self = this
       self.$router.back()
     }
   },

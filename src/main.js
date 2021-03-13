@@ -5,7 +5,6 @@ import App from './App'
 import router from './router/router' // 导入路由
 import store from './vuex/store' // 导入vuex
 import api from './api' // 导入api接口
-import axios from 'axios'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import Vant from 'vant'
@@ -16,11 +15,7 @@ import VideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 
 Vue.config.productionTip = false
-// 这里写上自己的基础url
-axios.defaults.baseURL = process.env.API_ROOT
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 Vue.prototype.$api = api
-Vue.prototype.$axios = axios
 Vue.prototype.IMGURL = process.env.VUE_APP_IMG_BASEURL
 Vue.use(ElementUI)
 Vue.use(Vant)

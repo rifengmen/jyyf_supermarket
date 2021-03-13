@@ -20,11 +20,8 @@
               <div>{{address.contactNumber}}</div>
               <div class="address_item_age bgffae43 colorffffff tc border_r4 font22 font_normal" v-if="address.addressMark !== '1'">店铺</div>
             </div>
-            <div class="address_item_address ellipsis color666666">
-              <div class="font24">{{address.areaname}}</div>
-              <div class="font24">{{address.sheetname}}</div>
-              <div class="font24">{{address.address}}</div>
-            </div>
+            <div class="address_item_address color666666 font24">{{address.areaname}} {{address.sheetname}}</div>
+            <div class="address_item_address color666666 font24">{{address.address}}</div>
           </div>
         </div>
         <div class="order_section bgffffff" @click="setAddressListFlag" v-else>请选择收货地址</div>
@@ -138,8 +135,8 @@
             :paymodeid="paymodeid"
             :scoreFlag="scoreFlag"
             :usernote="usernote"
-            :froms="'editorder'"
-          >立即支付</pay-btn>
+            :amount="amount"
+            :froms="'editorder'">立即支付</pay-btn>
         </div>
       </div>
       <!-- 结算金额 end -->
@@ -149,24 +146,23 @@
     <div class="order_main order_main_list bgffffff" v-if="addressListFlag">
       <div class="headerback fl" @click="setListFlag"></div>
       <addresslist
-        :froms="'editorder'"
-        :Totalmoney="Totalmoney"
-        :goodsid="goodsid"
-        :otc="otc"
-        @setAddressListFlag="setAddressListFlag"
-      ></addresslist>
+              :froms="'editorder'"
+              :Totalmoney="Totalmoney"
+              :goodsid="goodsid"
+              :otc="otc"
+              @setAddressListFlag="setAddressListFlag"></addresslist>
     </div>
     <!-- 地址 end -->
     <!-- 优惠券 start -->
     <div class="order_main order_main_list" v-if="tickListFlag">
       <div class="headerback fl" @click="setListFlag"></div>
       <ticklist
-        :froms="'editorder'"
-        :payMoney="payMoney"
-        :Totalmoney="Totalmoney"
-        :addressid="addressid"
-        @setTickListFlag="setTickListFlag"
-      ></ticklist>
+              class="tick_conts"
+              :froms="'editorder'"
+              :payMoney="payMoney"
+              :Totalmoney="Totalmoney"
+              :addressid="addressid"
+              @setTickListFlag="setTickListFlag"></ticklist>
     </div>
     <!-- 优惠券 end -->
   </div>
@@ -177,7 +173,7 @@ import MyHeader from '@/components/common/header/myheader'
 import payBtn from '@/components/common/payBtn/payBtn'
 import addresslist from '@/components/common/addressList/addressList'
 import ticklist from '@/components/common/tickList/tickList'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'editorder',
@@ -204,6 +200,11 @@ export default {
     }
   },
   computed: {
+    // 商品数量（单品立即购买用）
+    amount () {
+      let self = this
+      return self.$route.query.amount
+    },
     // 收货地址
     address () {
       let self = this

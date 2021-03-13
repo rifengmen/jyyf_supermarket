@@ -12,18 +12,19 @@
     <div class="userinfo_main bgffffff">
       <div class="tick_detail">
         <!-- 面额 start -->
-        <div class="tick_detail_card colorff7e42">
-          <div class="font40 font_blod tc" v-if="ticketInfo.tickettype === 1">
-            ￥
-            <span class="font80">{{ticketInfo.usemoney}}</span>
+        <div class="tick_detail_card colorff7e42 bgfef7ed">
+          <div class="font_blod tc" v-if="tickDetail.tickettype === 1">
+            <span class="font30">￥</span>
+            <span class="font80">{{tickDetail.usemoney}}</span>
           </div>
-          <div class="font40 font_blod tc" v-if="ticketInfo.tickettype === 2">
-            折
-            <span class="font80">{{ticketInfo.usemoney * 10}}</span>
+          <div class="font40 font_blod tc" v-if="tickDetail.tickettype === 2">
+            <span class="font30">折</span>
+            <span class="font80">{{tickDetail.usemoney * 10}}</span>
           </div>
-          <div>
-            <div class="font26 tc">{{ticketInfo.tickname}}</div>
-            <div class="font26 tc">满{{ticketInfo.minsalemoney}}元使用</div>
+          <div class="tick_item_name">
+            <div class="font32 tc" v-if="tickDetail.score">{{tickDetail.score}}积分兑换</div>
+            <div class="font26 tc">{{tickDetail.tickettypename}}</div>
+            <div class="font26 tc">满{{tickDetail.minsalemoney}}元使用</div>
           </div>
         </div>
         <!-- 面额 end -->
@@ -31,23 +32,31 @@
         <div class="tick_detail_info">
           <div class="">
             <div class="font28 font_blod">券码</div>
-            <div class="font26 color999999">{{ticketInfo.tickid}}</div>
+            <div class="font26 color999999">{{tickDetail.tickid}}</div>
           </div>
           <div class="">
-            <div class="font28 font_blod">领用时间</div>
-            <div class="font26 color999999">{{ticketInfo.panicstart}} —— {{ticketInfo.panicend}}</div>
+            <div class="font28 font_blod">券名称</div>
+            <div class="font26 color999999">{{tickDetail.tickname}}</div>
           </div>
           <div class="">
             <div class="font28 font_blod">使用时间</div>
-            <div class="font26 color999999">{{ticketInfo.startdate}} —— {{ticketInfo.enddate}}</div>
+            <div class="font26 color999999">{{tickDetail.startdate}} —— {{tickDetail.enddate}}</div>
           </div>
           <div class="">
-            <div class="font28 font_blod">限用名称日期</div>
-            <div class="font26 color999999">{{ticketInfo.limitname}}</div>
+            <div class="font28 font_blod">发行量</div>
+            <div class="font26 color999999">{{tickDetail.totalcount}}张</div>
+          </div>
+          <div class="">
+            <div class="font28 font_blod">剩余量</div>
+            <div class="font26 color999999">{{tickDetail.residuecount}}张</div>
+          </div>
+          <div class="">
+            <div class="font28 font_blod">使用规则</div>
+            <div class="font26 color999999">{{tickDetail.limitname || '无'}}</div>
           </div>
           <div class="">
             <div class="font28 font_blod">使用说明</div>
-            <div class="font26 color999999">{{ticketInfo.useinstructions}}</div>
+            <div class="font26 color999999">{{tickDetail.useinstructions || '无'}}</div>
           </div>
         </div>
         <!-- 券信息 end -->
@@ -55,31 +64,37 @@
     </div>
     <!-- 内容部分盒子 end -->
     <!-- 领用按钮 start -->
-    <div class="tick_detail_btn bgffae43 colorffffff font30 border_r10 tc" @click="getTick">立即领取</div>
+    <div class="tick_detail_btn colorffffff font32 border_r10 tc" :class="[tickDetail.residuecount ? 'bgffae43' : 'bgcecece']" v-if="froms === 'index'">
+      <panic-tick :tick="tickDetail" :from="'ticketdetail'"></panic-tick>
+    </div>
     <!-- 领用按钮 end -->
   </div>
 </template>
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
-import tip from '@/utils/Toast'
+import panicTick from '@/components/common/panicTick/panicTick'
+import tip from '@/utils/tip'
 
 export default {
   name: 'ticketdetail',
   data () {
     return {
+      // 调用的地方
+      froms: this.$route.query.froms,
       // 优惠券ID
       tickid: this.$route.query.tickid,
       // 优惠券详情
-      ticketInfo: {}
+      tickDetail: {}
     }
   },
   components: {
-    MyHeader
+    MyHeader,
+    panicTick
   },
   methods: {
     // 获取优惠券详情
-    getTicketInfo () {
+    getTickDetail () {
       let self = this
       let data = {
         tickid: self.tickid
@@ -87,23 +102,13 @@ export default {
       self.$api.mem.getCouponDtl(data).then(result => {
         let res = result.data
         if (res.code === 200) {
-          self.ticketInfo = res.data[0]
-        } else {
-          tip(res.msg)
-        }
-      })
-    },
-    // 领取优惠券
-    getTick () {
-      let self = this
-      let data = {
-        tickid: self.tickid
-      }
-      self.$api.mem.panicCoupon(data).then(result => {
-        let res = result.data
-        if (res.code === 200) {
-          tip(res.msg)
-          self.$router.back()
+          let tickDetail = res.data[0]
+          let residuecount = tickDetail.totalcount - tickDetail.havepaniccount
+          if (residuecount < 0) {
+            residuecount = 0
+          }
+          tickDetail.residuecount = residuecount
+          self.tickDetail = tickDetail
         } else {
           tip(res.msg)
         }
@@ -115,7 +120,7 @@ export default {
   created () {
     let self = this
     // 页面加载时获取优惠券详情
-    self.getTicketInfo()
+    self.getTickDetail()
   },
   beforeMount () {
   },
@@ -133,16 +138,15 @@ export default {
   width: calc(100% - 0.48rem);
   display: flex;
   flex-direction: column;
-  padding: 0 0.24rem;
-  margin-bottom: 1.8rem;
+  padding: 0 .24rem 1.8rem .24rem;
 }
 .tick_detail_card {
+  width: calc(100% - .48rem);
   height: 1.54rem;
   display: flex;
-  background-color: #FEF7ED;
   align-items: center;
   padding: 0.24rem;
-  margin: 0.24rem 0 0.24rem 0;
+  margin: 0.24rem auto;
 }
 .tick_detail_info div {
   line-height: 1.5;

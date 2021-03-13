@@ -30,9 +30,9 @@
       <div class="order_sections bgffffff">
         <div class="order_goods">
           <!-- 商品列表 start -->
-          <ul class="goodsList">
+          <ul class="goods_list goodsList">
             <!-- 商品简介 start -->
-            <li v-for="(item, index) in goodsList" :key="index">
+            <li class="goods_li" v-for="(item, index) in goodsList" :key="index">
               <div class="goods_item bgffffff ellipsis">
                 <div class="goods_item_img">
                   <img v-lazy="(item.picture1) ? IMGURL + 'image/' + item.picture1.replace('.', '-zip-300.') : ''">
@@ -153,7 +153,7 @@
 <script>
 import MyHeader from '@/components/common/header/myheader'
 import payBtn from '@/components/common/payBtn/payBtn'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'againPay',

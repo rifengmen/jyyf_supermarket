@@ -31,6 +31,15 @@
           </template>
         </van-swipe>
         <!-- 商品轮播图简介 end -->
+        <!-- 活动提醒 start -->
+        <div class="promotemode_age bg000000_40" v-if="!goodsdetail.startstate && goodsdetail.promotestart && goodsdetail.oldpromotemode">
+          <div class="desc">
+            <div class="modenote colorffffff bgff6400 font28 border_r4">{{goodsdetail.modenote}}</div>
+            <div class="colorffffff font22">活动时间：{{goodsdetail.promotestart}} - {{goodsdetail.promoteend}}</div>
+          </div>
+          <div class="price colorff6400 font36">¥{{goodsdetail.oldpromotevalue}}</div>
+        </div>
+        <!-- 活动提醒 end -->
       </div>
       <!-- 商品banner end -->
       <!-- 商品简介 start -->
@@ -46,41 +55,38 @@
               <div class="font32 font_blod colorffffff" v-else>￥{{goodsdetail.saleprice}}</div>
               <!-- 销售价 end -->
               <!-- 原价 start -->
-              <del class="font20 colorffc06e" v-if="goodsdetail.promotevalue && goodsdetail.promotevalue !== goodsdetail.saleprice">￥{{goodsdetail.saleprice}}</del>
+              <del class="font20 color999999" v-if="goodsdetail.promotevalue && goodsdetail.promotevalue !== goodsdetail.saleprice">￥{{goodsdetail.saleprice}}</del>
               <!-- 原价 end -->
             </div>
           </div>
           <!-- 倒计时 start -->
-          <div class="countdown" v-if="goodsdetail.startstate && goodsdetail.promotemode">
+          <div class="countdown" v-show="goodsdetail.startstate && goodsdetail.promotemode">
             <div class="font20 colorffffff">距结束还剩:</div>
             <div class="countdown_cont">
-              <countdown :times="goodsdetail.promoteend"></countdown>
+              <countdown
+                      :times="goodsdetail.promoteend"
+                      :type="0"
+                      @promotemodeEnd="promotemodeEnd"></countdown>
             </div>
           </div>
-          <div class="countdown" v-if="!goodsdetail.startstate && goodsdetail.promotemode">
+          <div class="countdown" v-if="!goodsdetail.startstate && goodsdetail.promotestart">
             <div class="font20 colorffffff">距开始还剩：</div>
             <div class="countdown_cont">
-              <countdown :times="goodsdetail.promotestart"></countdown>
+              <countdown
+                      :times="goodsdetail.promotestart"
+                      :type="1"
+                      @promotemodeStart="promotemodeStart"></countdown>
             </div>
           </div>
           <!-- 倒计时 end -->
         </div>
         <div class="goods_desc_name">
           <div class="goods_name">{{goodsdetail.cusgoodsname}}</div>
-          <div class="goods_name colorff6400 font24" v-if="goodsdetail.promotemode === 6">【{{goodsdetail.topamount}}人成团】</div>
+          <div class="goods_name colorff6400 font24" v-if="goodsdetail.promotemode === 6">【{{goodsdetail.topamount + 1}}人成团】</div>
           <div class="goods_name colorff6400 font24" v-if="goodsdetail.promotemode === 8">【{{goodsdetail.topamount}}人砍价】</div>
           <div class="goods_name colorfa2a2a font24">{{goodsdetail.remark}}</div>
+          <div class="goods_name color999999 font24" v-if="goodsdetail.deliverdesc">配送费说明：{{goodsdetail.deliverdesc}}</div>
         </div>
-        <!-- 数量选择 start -->
-        <!--<div class="goods_num">-->
-          <!--<div class="">数量：</div>-->
-          <!--<div class="goods_num_btn borderc7c7c7 border_r4 tc font40 font_lighter color999999" @click="countAmount">-</div>-->
-          <!--<div class="goods_num_input borderc7c7c7 border_r4 tc colorff6400 font30">-->
-            <!--<input type="tel" class="tc" v-model="amount">-->
-          <!--</div>-->
-          <!--<div class="goods_num_btn borderc7c7c7 border_r4 tc font40 font_lighter color999999" @click="addAmount">+</div>-->
-        <!--</div>-->
-        <!-- 数量选择 end -->
       </div>
       <!-- 商品简介 end -->
     </div>
@@ -97,6 +103,45 @@
       <template v-slot:index>{{ enlargedViewPage + 1 }}/{{goodsPictureList.length}}</template>
     </van-image-preview>
     <!-- 商品放大图 end -->
+    <!-- 商品数量/样式 start -->
+    <div class="amount_style bg000000_60" v-if="standardflag" @click="setStandardflag">
+      <div class="amount_style_cont bgffffff">
+        <!-- 商品简介 start -->
+        <div class="goods_li">
+          <div class="goods_item bgffffff">
+            <div class="goods_item_img">
+              <img :src="(goodsdetail.picture1 ? (imgurl + 'image/' + goodsdetail.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))">
+            </div>
+            <div class="goods_item_cont">
+              <div class="goods_item_name ellipsis2 font26">{{goodsdetail.cusgoodsname}}</div>
+              <div class="goods_item_editnum">
+                <div class="goods_item_price goods_item_prices">
+                  <!-- 销售价 start -->
+                  <div class="font32 font_blod colorff6400" v-if="goodsdetail.promotevalue">￥{{goodsdetail.promotevalue}}</div>
+                  <div class="font32 font_blod colorff6400" v-else>￥{{goodsdetail.saleprice}}</div>
+                  <!-- 销售价 end -->
+                  <!-- 原价 start -->
+                  <del class="font20 color999999" v-if="goodsdetail.promotevalue && goodsdetail.promotevalue !== goodsdetail.saleprice">￥{{goodsdetail.saleprice}}</del>
+                  <!-- 原价 end -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 商品简介 end -->
+        <!-- 数量 start -->
+        <div class="goods_amount">
+          <div class="">购买数量</div>
+          <div class="goods_nums">
+            <div class="goods_num_btn goods_num_countnum borderc7c7c7 border_r4 tc font40 font_lighter color999999" @click.stop="countAmount">-</div>
+            <div class="goods_num_input borderc7c7c7 border_r4 tc colorff6400 font30">{{amount}}</div>
+            <div class="goods_num_btn goods_num_addnum borderc7c7c7 border_r4 tc font40 font_lighter color999999" @click.stop="addAmount">+</div>
+          </div>
+        </div>
+        <!-- 数量 end -->
+      </div>
+    </div>
+    <!-- 商品数量/样式 end -->
     <!-- 购物车 start -->
     <div class="carts bgffffff">
       <div class="carts_btn">
@@ -112,34 +157,62 @@
         </router-link>
       </div>
       <div class="btns">
-        <div class="addcart goods_btn tc colorffffff bgf7bb1f" v-if="goodsdetail.promotemode !== 6 && goodsdetail.promotemode !== 8 && goodsdetail.promotemode !== 9">
-          <addcart :goodsid="goodsdetail.goodsid" :froms="'goodsdetail'">加购物车</addcart>
+        <div class="addcart goods_btn tc colorffffff bgf7bb1f" v-if="goodsdetail.promotemode < 6 || goodsdetail.promotemode > 9">
+          <addcart
+                  :goodsid="goodsdetail.goodsid"
+                  :amount="amount"
+                  :froms="'goodsdetail'"
+                  @setStandardflag="setStandardflag"
+                  @isSetStandard="isSetStandard">加购物车</addcart>
         </div>
-        <div class="pay goods_btn tc colorffffff bgff6400"  v-if="goodsdetail.promotemode !== 6 && goodsdetail.promotemode !== 8">
-          <addorder :goods="goodsdetail" :goodsdetail="true">立即购买</addorder>
+        <div class="pay goods_btn tc colorffffff bgff6400" v-if="goodsdetail.promotemode < 6 || goodsdetail.promotemode > 9">
+          <addorder
+                  :goods="goodsdetail"
+                  :amount="amount"
+                  :goodsdetail="true"
+                  @isSetStandard="isSetStandard">立即购买</addorder>
         </div>
-        <!-- 拼团按钮--hhk--start-->
+        <!-- 秒杀 start -->
+        <div class="pay goods_btn tc colorffffff bgff6400" v-if="goodsdetail.promotemode === 7">
+          <addorder
+                  :goods="goodsdetail"
+                  :amount="amount"
+                  :goodsdetail="true"
+                  @isSetStandard="isSetStandard">立即购买</addorder>
+        </div>
+        <!-- 秒杀 end -->
+        <!-- 预售 start -->
+        <div class="pay goods_btn tc colorffffff bgff6400" v-if="goodsdetail.promotemode === 9">
+          <addorder
+                  :goods="goodsdetail"
+                  :amount="amount"
+                  :goodsdetail="true"
+                  @isSetStandard="isSetStandard">立即购买</addorder>
+        </div>
+        <!-- 预售 end -->
+        <!-- 拼团按钮 start -->
         <div class="btns_cont" v-if="goodsdetail.promotemode === 6">
           <group
-            :goodsdetail="goodsdetail"
-            :groupno="groupno"
-            :joinno="joinno"
-            :groupdetail="groupdetail"
-          ></group>
+                  :goodsdetail="goodsdetail"
+                  :groupno="groupno"
+                  :joinno="joinno"
+                  :groupdetail="groupdetail"
+                  @isSetStandard="isSetStandard"></group>
         </div>
-        <!-- 拼团按钮--hhk--end-->
-        <!-- 砍价按钮--hhk--start-->
+        <!-- 拼团按钮 end -->
+        <!-- 砍价按钮 start -->
         <div class="btns_cont" v-if="goodsdetail.promotemode === 8">
           <bargain
-            :goodsdetail="goodsdetail"
-            :bargainno="bargainno"
-            :joinno="joinno"
-            :pay="pay"
-            :flag="flag"
-            @getBargainNo="getBargainNo"
-          ></bargain>
+                  :goodsdetail="goodsdetail"
+                  :groupno="groupno"
+                  :joinno="joinno"
+                  :pay="pay"
+                  :flag="flag"
+                  @setStandardflag="setStandardflag"
+                  @isSetStandard="isSetStandard"
+                  @getBargainNo="getBargainNo"></bargain>
         </div>
-        <!-- 砍价按钮--hhk--end-->
+        <!-- 砍价按钮 end -->
       </div>
     </div>
     <!-- 购物车 end -->
@@ -153,12 +226,16 @@ import addorder from '@/components/common/addorder/addorder'
 import group from '@/components/common/goodsDetailBtn/group'
 import bargain from '@/components/common/goodsDetailBtn/bargain'
 import wx from 'weixin-js-sdk'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'goodsdetail',
   data () {
     return {
+      // 图片路径
+      imgurl: this.IMGURL,
+      // 规格显示开关
+      standardflag: false,
       // 放大图
       showFlag: false,
       // 放大图页码
@@ -171,22 +248,20 @@ export default {
       goodsid: this.$route.query.goodsid,
       // 商品详情
       goodsdetail: {},
-      // 购物车列表
-      cartList: [],
-      // 拼团的团号
+      // 活动号
       groupno: '',
       // 参团号
       joinno: '',
-      // 砍价号
-      bargainno: '',
       // 拼团详情
       groupdetail: [],
       // 商品数量
-      amount: 1,
+      amount: 0,
       // 砍价支付状态
       pay: 0,
       // 是否是砍价发起人，即购买人
       flag: 0,
+      // 促销类型
+      Promotemode: this.$store.state.Promotemode,
       // 商品视频简介
       playerOptions: {
         // playbackRates: [0.7, 1.0, 1.5, 2.0], // 播放速度
@@ -221,6 +296,11 @@ export default {
     }
   },
   computed: {
+    // 重定向对象
+    redirect () {
+      let self = this
+      return self.$store.state.redirect
+    },
     // 页面标题
     goodsname () {
       let self = this
@@ -277,7 +357,43 @@ export default {
     group,
     bargain
   },
+  inject: ['reload'],
   methods: {
+    // 是否弹出商品规格
+    isSetStandard () {
+      let self = this
+      self.standardflag = true
+      // 判断商品活动类别显示初始数量,有活动显示最大限购量，无活动显示1
+      if (self.goodsdetail.promotemode === 7) {
+        self.amount = self.goodsdetail.perlimit
+      } else {
+        self.amount = 1
+      }
+    },
+    // 隐藏商品规格
+    setStandardflag () {
+      let self = this
+      self.standardflag = !self.amount
+      self.amount = 0
+    },
+    // 加
+    addAmount () {
+      let self = this
+      let goodsdetail = self.goodsdetail
+      // 判断限量
+      if (goodsdetail.promotemode && goodsdetail.perlimit && (self.amount >= goodsdetail.perlimit)) {
+        tip('已达最大限购量！')
+        return false
+      }
+      self.amount++
+    },
+    // 减
+    countAmount () {
+      let self = this
+      if (self.amount >= 2) {
+        self.amount--
+      }
+    },
     // 页码指示器
     onChangePage (index) {
       let self = this
@@ -323,6 +439,22 @@ export default {
         }
       })
     },
+    // 开始商品活动
+    promotemodeStart () {
+      let self = this
+      self.goodsdetail.startstate = 1
+      self.goodsdetail.promotemode = self.goodsdetail.oldpromotemode
+      self.goodsdetail.promotevalue = self.goodsdetail.oldpromotevalue
+    },
+    // 结束商品活动
+    promotemodeEnd () {
+      let self = this
+      self.goodsdetail.promotemode = 0
+      self.goodsdetail.startstate = 0
+      self.goodsdetail.promotevalue = self.goodsdetail.saleprice
+      self.goodsdetail.promotestart = ''
+      self.goodsdetail.promoteend = ''
+    },
     // 获取拼团信息
     getGroupNo () {
       let self = this
@@ -355,24 +487,12 @@ export default {
         let res = result.data
         if (res.code === 200) {
           if (res.data && res.data.list.length) {
-            self.bargainno = res.data.list[0].groupno
+            self.groupno = res.data.list[0].groupno
             self.pay = res.data.pay
             self.flag = res.data.flag
           }
         }
       })
-    },
-    // 加
-    addAmount () {
-      let self = this
-      self.amount += 1
-    },
-    // 减
-    countAmount (goods) {
-      let self = this
-      if (self.amount >= 1) {
-        self.amount -= 1
-      }
     },
     // 获取微信凭证
     getWXConfig () {
@@ -386,7 +506,7 @@ export default {
         }
       }
       if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
-        self.curPageUrl = self.baseURL + sessionStorage.getItem('jyyf_beforeLoginUrl')
+        self.curPageUrl = self.baseURL + self.redirect.fullPath
       } else if (/(Android|Windows)/i.test(navigator.userAgent)) {
         self.curPageUrl = window.location.href
       } else {

@@ -70,19 +70,9 @@
           <div>下单时间</div>
           <div class="font24 color666666">{{saomaorderDetail.saletime}}</div>
         </div>
-        <div class="orderdesc" v-if="!saomaorderDetail.payFLag && saomaorderDetail.payList[0].payModeName === '会员卡储值支付'">
+        <div class="orderdesc" v-if="!saomaorderDetail.payFLag && saomaorderDetail.payList.length">
           <div>付款方式</div>
-          <div class="pay_img tl color666666">
-            <img src="static/img/card.png">&nbsp;储值卡
-          </div>
-          <div class="pay_img color666666" v-if="saomaorderDetail.payMoney === 0">无</div>
-        </div>
-        <div class="orderdesc" v-if="!saomaorderDetail.payFLag && saomaorderDetail.payList[0].payModeName === '微信'">
-          <div>付款方式</div>
-          <div class="pay_img tl color666666">
-            <img src="static/img/wechat.png">&nbsp;微信
-          </div>
-          <div class="pay_img color666666" v-if="saomaorderDetail.payMoney === 0">无</div>
+          <div class="pay_img tl color666666">{{saomaorderDetail.payList[0].payModeName || '无'}}</div>
         </div>
       </div>
       <!-- 订单信息 end -->
@@ -94,7 +84,7 @@
 <script>
 import MyHeader from '@/components/common/header/myheader'
 import saomacancelBtn from '@/components/common/saomaBtn/saomacancelBtn'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'saomaorderDetail',

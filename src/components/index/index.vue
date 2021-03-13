@@ -348,7 +348,7 @@
 import WechatConfig from '@/components/common/wechatConfig/wechatConfig'
 import MyFooter from '@/components/common/footer/myfooter'
 import loading from '@/components/common/loading/loading'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'index',

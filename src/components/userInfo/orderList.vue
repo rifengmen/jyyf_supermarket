@@ -40,7 +40,7 @@
                   <div class="font24 colorf84242">{{item.stausdescribe}}</div>
                   <div class="item_btn" v-if="item.payflag || item.cancelflag || item.deleflag">
                     <div class="pay_btn border_r4 bgff6400 colorffffff borderff6400" v-if="item.payflag">
-                      <div @click="againPay(item)">付款</div>
+                      <div @click.stop="againPay(item)">付款</div>
                     </div>
                     <div class="cancel_btn border_r4 bgffffff color666666 borderc7c7c7" v-if="item.cancelflag">
                       <cancel-btn :tradeno="item.tradeno" @onRefresh="onRefresh"></cancel-btn>
@@ -72,7 +72,7 @@ import payBtn from '@/components/common/payBtn/payBtn'
 import delBtn from '@/components/common/delBtn/delBtn'
 import cancelBtn from '@/components/common/cancelBtn/cancelBtn'
 import nodata from '@/components/common/nodata/nodata'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'orderList',
@@ -210,7 +210,6 @@ export default {
     // 再支付
     againPay (order) {
       let self = this
-      window.event.stopPropagation()
       self.$router.push({name: 'againPay', query: {tradeno: order.tradeno, group: order.ordertype, groupno: order.groupno}})
     }
   },

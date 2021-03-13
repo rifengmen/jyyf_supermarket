@@ -16,6 +16,8 @@ const state = {
   // isRouter: false,
   // token
   token: '',
+  // 重定向对象
+  redirect: {},
   // 用户头像
   headimgurl: '',
   // 用户信息
@@ -24,6 +26,12 @@ const state = {
   mem_type: '',
   // 卡片信息
   moneyDetail: '',
+  // 搜索关键字
+  keyword: '',
+  // 购物车
+  cart: {},
+  // 购物车商品数量
+  cartnums: 0,
   // 促销类型
   Promotemode: {
     0: '正常',
@@ -37,23 +45,18 @@ const state = {
     8: '砍价',
     9: '预售'
   },
-  // 搜索关键字
-  keyword: '',
-  // 购物车
-  cart: {},
-  // 购物车商品数量
-  cartnums: 0,
   // 订单类型
   orderType: [
-    {name: '购物车去结算', isotc: '', otc: '', orderType: ''},
-    {name: '拼团立即购买', isotc: 'otc', otc: 'group', orderType: ''},
-    {name: '砍价立即购买', isotc: 'otc', otc: 'hack', orderType: ''},
-    {name: '普通立即购买', isotc: '', otc: 'voucher', orderType: 0},
-    {name: '发起拼团购买', isotc: 'group', otc: 'group', orderType: 1},
-    {name: '参与拼团购买', isotc: 'group', otc: 'group', orderType: 2},
-    {name: '砍价成功购买', isotc: 'hack', otc: 'hack', orderType: 3},
-    {name: '代金券立即购买', isotc: '', otc: 'voucher', orderType: 4},
-    {name: '预售立即购买', isotc: '', otc: 'voucher', orderType: 5}
+    {promotemode: 0, name: '购物车去结算', isotc: '', otc: '', orderType: ''},
+    {promotemode: 6, name: '拼团立即购买', isotc: 'otc', otc: 'group', orderType: ''},
+    {promotemode: 8, name: '砍价立即购买', isotc: 'otc', otc: 'hack', orderType: ''},
+    {promotemode: 0, name: '普通立即购买', isotc: '', otc: 'voucher', orderType: 0},
+    {promotemode: 6, name: '发起拼团购买', isotc: 'group', otc: 'group', orderType: 1},
+    {promotemode: 6, name: '参与拼团购买', isotc: 'group', otc: 'group', orderType: 2},
+    {promotemode: 8, name: '砍价成功购买', isotc: 'hack', otc: 'hack', orderType: 3},
+    {promotemode: 0, name: '代金券立即购买', isotc: '', otc: 'voucher', orderType: 4},
+    {promotemode: 9, name: '预售立即购买', isotc: '', otc: 'voucher', orderType: 5},
+    {promotemode: 7, name: '秒杀立即购买', isotc: '', otc: 'voucher', orderType: 7}
   ],
   // 临时订单信息
   order: '',

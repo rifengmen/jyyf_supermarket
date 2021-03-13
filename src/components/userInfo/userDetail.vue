@@ -74,7 +74,7 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'userDetail',
@@ -159,7 +159,6 @@ export default {
           self.$store.commit('setUserInfo', res.data)
           self.$store.commit('setToken', res.data.token)
           sessionStorage.setItem('jyyf_token', res.data.token)
-          self.$axios.defaults.headers.common.Authorization = res.data.token
         }
       })
     }

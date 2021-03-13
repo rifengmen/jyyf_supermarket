@@ -22,8 +22,8 @@
             :offset="offset"
             finished-text="没有更多了"
             @load="onLoad">
-            <div v-for="(item, index) in goodsList" :key="index" class="goods_li">
-              <div class="goods_item bgffffff" @click="goodsdetail(item)">
+            <div v-for="(item, index) in goodsList" :key="index" class="goods_li bgffffff">
+              <div class="goods_item" @click="goodsdetail(item)">
                 <div class="goods_item_img">
                   <img :src="(item.picture1 ? (imgurl + 'image/' + item.picture1.replace('.', '-zip-300.')) : ('static/img/goods.png'))">
                   <div v-if="item.promotemode !== 0" class="goods_age ellipsis font24 font_normal colorffffff">{{item.modenote}}</div>
@@ -37,8 +37,10 @@
                       <div class="ellipsis font32 font_blod colorf84242" v-else>￥{{item.saleprice}}</div>
                       <del class="ellipsis font26 color999999" v-if="item.promotevalue && item.promotevalue !== item.saleprice">￥{{item.saleprice}}</del>
                     </div>
-                    <div class="goods_item_cart" v-if="item.promotemode !== 6 && item.promotemode !== 8 && item.promotemode !== 9">
-                      <addcart :goodsid="item.goodsid">
+                    <div class="goods_item_cart" v-if="item.promotemode < 6 || item.promotemode > 9">
+                      <addcart
+                              :goodsid="item.goodsid"
+                              :amount="1">
                         <img src="static/img/gwc.png">
                       </addcart>
                     </div>
@@ -63,7 +65,7 @@ import MyHeader from '@/components/common/header/myheader'
 import loading from '@/components/common/loading/loading'
 import addcart from '@/components/common/addcart/addcart'
 import nodata from '@/components/common/nodata/nodata'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'classList',
@@ -79,8 +81,6 @@ export default {
       refreshing: false,
       // 滚动条与底部距离小于 offset 时触发load事件
       offset: 100,
-      // 搜索关键词
-      keyword: this.$store.getters.getKeyword,
       // 推荐商品列表
       goodsList: [],
       // 当前页码

@@ -57,7 +57,7 @@
 <script>
 import MyHeader from '@/components/common/header/myheader'
 import wx from 'weixin-js-sdk'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'saomabar',
@@ -78,6 +78,11 @@ export default {
     }
   },
   computed: {
+    // 重定向对象
+    redirect () {
+      let self = this
+      return self.$store.state.redirect
+    },
     // 店铺信息
     deptcode () {
       let self = this
@@ -118,8 +123,10 @@ export default {
     getAddressInfo () {
       let self = this
       if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
-        self.curPageUrl = self.baseURL + sessionStorage.getItem('jyyf_beforeLoginUrl')
+        self.curPageUrl = self.baseURL + self.redirect.fullPath
       } else if (/(Android|Windows)/i.test(navigator.userAgent)) {
+        self.curPageUrl = window.location.href
+      } else {
         self.curPageUrl = window.location.href
       }
       let data = {

@@ -2,7 +2,7 @@ import axios from 'axios'
 // import QS from 'qs'
 // import router from '@/router/router'
 import store from '@/vuex/store'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 /**
  * 请求失败后的错误统一处理

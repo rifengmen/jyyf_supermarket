@@ -23,7 +23,7 @@
 <script>
 import MyHeader from '@/components/common/header/myheader'
 import wx from 'weixin-js-sdk'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'noticedetail',

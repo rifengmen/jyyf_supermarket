@@ -51,7 +51,7 @@
 import MyHeader from '@/components/common/header/myheader'
 import nodata from '@/components/common/nodata/nodata'
 import loading from '@/components/common/loading/loading'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'cardMoneyList',
@@ -73,11 +73,11 @@ export default {
     date () {
       let self = this
       if (!self.startdate) {
-        let dt = new Date()
-        dt.setMonth(dt.getMonth() - 6)
-        dt = dt.toLocaleString()
-        dt = (dt.replace(/\//g, '-')).split(' ')[0]
-        self.startdate = dt
+        let nowdate = new Date()
+        let timelength = 6 * 30 * 24 * 60 * 60 * 1000
+        let startdate = new Date(nowdate - timelength).toLocaleString().split('午')[0]
+        startdate = startdate.slice(0, startdate.length - 1)
+        self.startdate = startdate
       }
       return self.startdate
     }

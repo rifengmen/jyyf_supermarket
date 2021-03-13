@@ -1,4 +1,8 @@
 const mutations = {
+  // 设置重定向对象
+  setRedirect (state, data) {
+    state.redirect = data
+  },
   // 设置wechatID
   setWechatID (state, data) {
     state.wechatID = data
@@ -15,13 +19,13 @@ const mutations = {
   setBaseURL (state, data) {
     state.baseURL = data
   },
-  // 设置token
-  setToken (state, data) {
-    state.token = data
-  },
   // 设置用户头像
   setHeadimgurl (state, data) {
     state.headimgurl = data
+  },
+  // 设置token
+  setToken (state, data) {
+    state.token = data
   },
   // 设置登陆用户信息
   setUserInfo (state, data) {

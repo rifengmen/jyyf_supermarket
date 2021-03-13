@@ -1,13 +1,17 @@
 <template>
     <div class="btns_cont">
       <div class="btns_cont">
-        <div class="goods_btn tc colorffffff bgff6400" v-if="!bargainno || flag === 0" @click="addBargain">发起砍价</div>
-        <div class="goods_btn tc colorffffff bgf7bb1f" v-if="!bargainno || flag === 0" @click="setShowBargain">参与砍价</div>
-        <div class="goods_btn tc color333333 bgeeeeee ellipsis" v-if="bargainno && flag === 1 && !pay">砍价号： {{bargainno}}</div>
-        <div class="goods_btn tc color333333 bgeeeeee ellipsis" v-if="bargainno && pay === 1 && flag === 1">砍价号：{{bargainno}}</div>
-        <div class="goods_btn tc colorffffff bgff6400" v-if="bargainno && flag === 1" @click="bargainDetail">砍价详情</div>
-        <div class="pay goods_btn tc colorffffff bgff6400"  v-if="!bargainno || (bargainno && pay === 1 && flag === 1)">
-          <addorder :goods="goodsdetail" :goodsdetail="true" :pay="pay" :bargainno="bargainno">立即购买</addorder>
+        <div class="goods_btn tc colorffffff bgf7bb1f" v-if="!groupno || !flag" @click="setShowBargain">参与砍价</div>
+        <div class="goods_btn tc colorffffff bgff6400" v-if="!groupno || !flag" @click="addBargain">发起砍价</div>
+        <div class="goods_btn tc color333333 bgeeeeee ellipsis" v-if="groupno && !pay && flag">砍价号：{{groupno}}</div>
+        <div class="goods_btn tc colorffffff bgf7bb1f" v-if="groupno && flag" @click="bargainDetail">砍价详情</div>
+        <div class="pay goods_btn tc colorffffff bgff6400"  v-if="groupno && pay && flag">
+          <addorder
+                  :goods="goodsdetail"
+                  :goodsdetail="true"
+                  :pay="pay"
+                  :amount="amount"
+                  :groupno="groupno">立即购买</addorder>
         </div>
       </div>
       <!-- 参与砍价弹框 start -->
@@ -41,7 +45,7 @@
           <div class="tr font24">{{item.mobile.slice(0, 3) + '****' + item.mobile.slice(7, item.mobile.length)}}</div>
         </div>
         <img
-          v-if="!bargainno || (pay === 1 && flag === 1)"
+          v-if="!groupno || (pay === 1 && flag === 1)"
           src="static/img/bargainsuccess.png"
           class="item_tag">
       </van-dialog>
@@ -51,7 +55,7 @@
 
 <script>
 import addorder from '@/components/common/addorder/addorder'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'bargain',
@@ -70,8 +74,8 @@ export default {
         return 1
       }
     },
-    // 砍价号
-    bargainno: {
+    // 活动号
+    groupno: {
       type: String,
       default: function () {
         return ''
@@ -119,6 +123,11 @@ export default {
     // 新增砍价
     addBargain () {
       let self = this
+      // 校验选择数量/样式
+      if (!self.amount) {
+        self.$emit('isSetStandard')
+        return false
+      }
       let data = {
         goodsid: self.goodsdetail.goodsid.toString(),
         amount: self.amount,
@@ -131,7 +140,10 @@ export default {
         let res = result.data
         if (res.code === 200) {
           tip('发起成功，快去邀人砍价0×0')
+          // 获取砍价号
           self.$emit('getBargainNo')
+          // 关闭弹框
+          self.$emit('setStandardflag')
         } else {
           tip(res.msg)
         }
@@ -188,7 +200,7 @@ export default {
         self.$api.api.generateHackBill(data).then(result => {
           let res = result.data
           if (res.code === 200) {
-            // 拼团
+            // 参与砍价
             self.joinBargain(res.data)
           } else {
             tip(res.msg)

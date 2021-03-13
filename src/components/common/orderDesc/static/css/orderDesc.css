@@ -1,0 +1,18 @@
+.order_goods {
+    width: 100%;
+    height: auto;
+}
+.order_goods .goods_li {
+    height: unset;
+    min-height: unset;
+}
+.order_goods .goods_item {
+    height: unset;
+}
+.order_goods .goods_item_img {
+    width: 1rem;
+    height: 1rem;
+}
+.order_goods .goods_item_cont {
+    min-height: unset;
+}

@@ -1,13 +1,21 @@
 <template>
     <div class="btns_cont">
       <div class="btns_cont">
-        <div class="goods_btn tc colorffffff bgff6400" v-if="!groupno" @click="addGroup">发起拼团</div>
-        <div class="goods_btn tc colorffffff bgf7bb1f"  v-if="!groupno" @click="setShowGroup">参与拼团</div>
-        <div class="goods_btn tc color333333 bgeeeeee ellipsis" v-if="groupno">拼团号：{{groupno}}</div>
-        <div class="goods_btn tc colorffffff bgff6400" v-if="groupno" @click="groupDetail">拼团详情</div>
-        <div class="pay goods_btn tc colorffffff bgff6400"  v-if="!groupno">
-          <addorder :goods="goodsdetail" :goodsdetail="true">立即购买</addorder>
-        </div>
+        <div
+                class="goods_btn tc colorffffff bgf7bb1f"
+                v-if="!groupno"
+                @click="setShowGroup">参与拼团</div>
+        <div
+                class="goods_btn tc colorffffff bgff6400"
+                v-if="!groupno"
+                @click="addGroup">发起拼团</div>
+        <div
+                class="goods_btn tc color333333 bgeeeeee ellipsis"
+                v-if="groupno">拼团号：{{groupno}}</div>
+        <div
+                class="goods_btn tc colorffffff bgff6400"
+                v-if="groupno"
+                @click="groupDetail">拼团详情</div>
       </div>
       <!-- 参团弹框 start -->
       <van-dialog
@@ -44,7 +52,7 @@
 
 <script>
 import addorder from '@/components/common/addorder/addorder'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'group',
@@ -97,6 +105,11 @@ export default {
     // 发起拼团
     addGroup () {
       let self = this
+      // 校验选择数量/样式
+      if (!self.amount) {
+        self.$emit('isSetStandard')
+        return false
+      }
       let data = {
         goodsid: self.goodsdetail.goodsid.toString(),
         amount: self.amount,

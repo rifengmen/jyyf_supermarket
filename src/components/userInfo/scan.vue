@@ -9,7 +9,7 @@
     </my-header>
     <!-- 头部 end -->
     <!-- 内容部分盒子 start -->
-    <div class="order_main bgffffff">
+    <div class="order_main bgffffff" :class="{scan_cont: goodsList.length}">
       <!-- 用户资料部分 start -->
       <div class="user_detail">
         <div class="user_section">
@@ -19,13 +19,7 @@
           </div>
         </div>
         <div class="user_section">
-          <div></div>
-          <div class="user_desc bgffffff border_r500">
-            <input type="text" v-model="$route.query.header_tit" class="tr" disabled>
-          </div>
-        </div>
-        <div class="user_section">
-          <div></div>
+          <div>{{$route.query.header_tit}}</div>
           <div class="user_desc bgffffff border_r500">
             <input type="text" v-model="tradeno" class="tr" placeholder="输入订单号、取货码或点击右侧扫描条形码">
             <!-- 扫一扫按钮 start -->
@@ -37,25 +31,32 @@
         </div>
       </div>
       <!-- 用户资料部分 end -->
-      <!-- 按钮部分 start -->
-      <div class="btn_box scan_section">
-        <!-- 确认按钮 start -->
-        <div class="send_btn border_r6 borderff7e42 bgff7e42 colorffffff font32 font_normal" @click="sendTradeno">确认</div>
-        <!-- 确认按钮 end -->
-        <!-- 重置按钮 start -->
-        <div class="send_btn border_r6 borderff7e42 bgffffff colorff7e42 font32 font_normal" @click="resetTradeno">重置</div>
-        <!-- 重置按钮 end -->
-      </div>
-      <!-- 按钮部分 end -->
+      <!-- 订单详情 start -->
+      <order-desc
+              v-if="goodsList.length"
+              :orderdetail="orderdetail"
+              :goodsList="goodsList"></order-desc>
+      <!-- 订单详情 end -->
     </div>
     <!-- 内容部分盒子 -->
+    <!-- 按钮部分 start -->
+    <div class="btn_cont">
+      <!-- 确认按钮 start -->
+      <div class="btn colorffffff font32 font_normal bgff7e42 border_r6 borderff7e42 tc" @click="confrim">确认</div>
+      <!-- 确认按钮 end -->
+      <!-- 重置按钮 start -->
+      <div class="btn colorff7e42 font32 font_normal bgffffff border_r6 borderff7e42 tc" @click="resetTradeno">重置</div>
+      <!-- 重置按钮 end -->
+    </div>
+    <!-- 按钮部分 end -->
   </div>
 </template>
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
+import orderDesc from '@/components/common/orderDesc/orderDesc'
 import wx from 'weixin-js-sdk'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'scan1',
@@ -64,7 +65,11 @@ export default {
       // 订单编号
       tradeno: '',
       // 扫一扫调用开关
-      scanFlag: true
+      scanFlag: true,
+      // 订单详情
+      orderdetail: '',
+      // 订单商品列表
+      goodsList: ''
     }
   },
   computed: {
@@ -75,29 +80,43 @@ export default {
     }
   },
   components: {
-    MyHeader
+    MyHeader,
+    orderDesc
   },
   methods: {
-    // 发送订单编号
-    sendTradeno () {
+    // 确定按钮
+    confrim () {
       let self = this
+      // 判断订单编号不为空
       if (self.tradeno) {
-        let data = {
-          role: self.$route.query.role,
-          phone: self.userInfo.mobile,
-          tradeno: self.tradeno,
-          // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
-          flag: 'wemember'
+        // 判断查询订单详情还是修改订单状态
+        if (self.goodsList.length) {
+          // 修改订单状态
+          self.pickOrder()
+        } else {
+          // 获取订单详情
+          self.getOrderdetail()
         }
-        self.$api.api.pickOrder(data).then(result => {
-          let res = result.data
-          if (res.code === 200) {
-            tip(res.msg)
-          } else {
-            tip(res.msg)
-          }
-        })
       }
+    },
+    // 修改订单状态
+    pickOrder () {
+      let self = this
+      let data = {
+        role: self.$route.query.role,
+        phone: self.userInfo.mobile,
+        tradeno: self.tradeno,
+        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+        flag: 'wemember'
+      }
+      self.$api.api.pickOrder(data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          self.orderdetail = ''
+          self.goodsList = []
+        }
+        tip(res.msg)
+      })
     },
     // 重置订单编号
     resetTradeno () {
@@ -121,11 +140,29 @@ export default {
             // 订单号码
             self.tradeno = str1[1]
             self.scanFlag = true
-            // 发送订单编号
-            self.sendTradeno()
+            // 获取订单详情
+            self.getOrderdetail()
           } else {
             tip('请对准条形码扫码!')
           }
+        }
+      })
+    },
+    // 获取订单详情
+    getOrderdetail () {
+      let self = this
+      let data = {
+        tradeno: self.tradeno,
+        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+        flag: 'wemember'
+      }
+      self.$api.api.getOrderDtl(data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          self.orderdetail = res.data
+          self.goodsList = res.data.OrderDetail
+        } else {
+          tip(res.msg)
         }
       })
     }

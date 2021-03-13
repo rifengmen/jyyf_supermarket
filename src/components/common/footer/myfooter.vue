@@ -9,7 +9,7 @@
       </router-link>
       <!-- 首页 end -->
       <!-- 分类 start -->
-      <router-link :to="{name:'classify'}" tag="div" class="footer_class footer_nav tc">
+      <router-link :to="{name:'category'}" tag="div" class="footer_class footer_nav tc">
         <div class="bgimg"></div>
         <!--<img src="static/img/supplier.png">-->
         <div class="listname font24 color666">分类</div>

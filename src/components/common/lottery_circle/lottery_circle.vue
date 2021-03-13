@@ -32,8 +32,8 @@
           v-for="(item,index) in prizeData"
           :key="index"
           :style="{webkitTransform: 'rotate(' + -item.angletext + 'deg)'}"
-          class="colorffffff font26">
-          <div class="prizename">{{item.prizename}}</div>
+          class="colorffffff">
+          <div class="prizename font24">{{item.prizename}}</div>
         </li>
       </ul>
     </div>
@@ -42,11 +42,32 @@
     <img :src="IMGURL + 'image/' + btnUrl" @click="startPlay" class="turnBtn" v-if="isturnbg">
     <img src="static/img/lotteryStart.png" @click="startPlay" class="turnBtn" v-else>
     <!-- 抽奖按钮 end -->
+    <!-- 倒计时 start -->
+    <div class="lottery_countdown" v-show="!startFlag">
+      <div class="font20 colorffffff">距开始还剩：</div>
+      <div class="countdown_cont">
+        <countdown
+                :times="activeObj.lotteryStart"
+                :type="1"
+                @promotemodeStart="setStartFlag"></countdown>
+      </div>
+    </div>
+    <div class="lottery_countdown" v-show="!endFlag && startFlag">
+      <div class="font20 colorffffff">距结束还剩：</div>
+      <div class="countdown_cont">
+        <countdown
+                :times="activeObj.lotteryEnd"
+                :type="0"
+                @promotemodeEnd="setEndFlag"></countdown>
+      </div>
+    </div>
+    <!-- 倒计时 end -->
   </div>
 </template>
 
 <script>
-import tip from '@/utils/Toast'
+import countdown from '@/components/common/countdown/countdown'
+import tip from '@/utils/tip'
 
 export default {
   name: 'lottery_circle',
@@ -76,7 +97,7 @@ export default {
     activeObj: {
       type: Object,
       default: function () {
-        return {}
+        return ''
       }
     },
     // 用户积分
@@ -91,6 +112,10 @@ export default {
     return {
       // 图片路径
       IMGURL: this.IMGURL,
+      // 抽奖开始标识
+      startFlag: false,
+      // 抽奖结束标识
+      endFlag: false,
       // 中奖物品的下标
       pIndex: 0,
       // 旋转圈数基数
@@ -129,11 +154,33 @@ export default {
       return arr
     }
   },
-  components: {},
+  components: {
+    countdown
+  },
   methods: {
+    // 设置抽奖开始标识
+    setStartFlag () {
+      let self = this
+      self.startFlag = true
+    },
+    // 设置抽奖结束标识
+    setEndFlag () {
+      let self = this
+      self.endFlag = true
+    },
     // 点击开始,请求接口抽奖
     startPlay () {
       let self = this
+      // 判断抽奖开始时间，拦截请求
+      if (!self.startFlag) {
+        tip('本次抽奖活动还未开始，请耐心等待！')
+        return false
+      }
+      // 判断抽奖结束时间，拦截请求
+      if (self.endFlag) {
+        tip('本次抽奖活动已经结束，下次活动正在准备中！')
+        return false
+      }
       if (self.flag && self.activeObj.prizeList.length) {
         self.flag = false
         let data = {}
@@ -215,4 +262,18 @@ export default {
 </script>
 
 <style scoped>
+  .lottery_countdown {
+    position: absolute;
+    top: -1.36rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: .8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .lottery_countdown .countdown_cont {
+    width: 1.5rem;
+  }
 </style>

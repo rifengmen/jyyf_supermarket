@@ -1,7 +1,7 @@
 const search = () => import(/* webpackChunkName: 'shopping' */ '@/components/shopList/search')
 const searchList = () => import(/* webpackChunkName: 'shopping' */ '@/components/shopList/searchList')
 const recommendList = () => import(/* webpackChunkName: 'shopping' */ '@/components/shopList/recommendList')
-const classify = () => import(/* webpackChunkName: 'shopping' */ '@/components/classify/classify')
+const category = () => import(/* webpackChunkName: 'shopping' */ '@/components/category/category')
 const goodsdetail = () => import(/* webpackChunkName: 'shopping' */ '@/components/goodsdetail/goodsdetail')
 const classList = () => import(/* webpackChunkName: 'shopping' */ '@/components/shopList/classList')
 const cart = () => import(/* webpackChunkName: 'shopping' */ '@/components/cart/cart')
@@ -15,11 +15,11 @@ export default [
   // 推荐列表
   {path: '/recommendList', component: recommendList, name: 'recommendList', meta: {keepAlive: true}},
   // 分类
-  {path: '/classify', name: 'classify', component: classify, meta: {keepAlive: true}},
+  {path: '/category', name: 'category', component: category, meta: {keepAlive: true}},
   // 分类列表
   {path: '/classList', name: 'classList', component: classList, meta: {keepAlive: true}},
   // 商品详情
-  {path: '/goodsdetail', component: goodsdetail, name: 'goodsdetail'},
+  {path: '/goodsdetail', name: 'goodsdetail', component: goodsdetail},
   // 购物车
   {path: '/cart', name: 'cart', component: cart},
   // 填写订单

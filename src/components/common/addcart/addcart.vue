@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'addcart',
@@ -22,7 +22,7 @@ export default {
     amount: {
       type: Number,
       default: function () {
-        return 1
+        return 0
       }
     },
     // 调用父组件
@@ -53,8 +53,13 @@ export default {
   methods: {
     // 加入购物车
     addcart (e) {
-      let self = this
       e.stopPropagation()
+      let self = this
+      // 校验选择数量/样式
+      if (!self.amount) {
+        self.$emit('isSetStandard')
+        return false
+      }
       let data = {
         goodsid: self.goodsid.toString(),
         amount: self.amount,
@@ -65,6 +70,8 @@ export default {
         let res = result.data
         if (res.code === 200) {
           tip('添加成功！')
+          // 关闭弹框
+          self.$emit('setStandardflag')
           // 获取购物车列表
           self.getCart()
         } else {
@@ -79,7 +86,7 @@ export default {
         // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
         flag: 'wemember'
       }
-      self.$api.getCar(data).then(result => {
+      self.$api.api.getCar(data).then(result => {
         let res = result.data
         if (res.code === 200) {
           self.$store.commit('setCart', res.data)
@@ -118,11 +125,11 @@ export default {
 
 <style scoped>
   .addcart_btn {
-    width: 100%;
-    height: 100%;
+      width: 100%;
+      height: 100%;
   }
   .addcart_btn img {
-    width: 100%;
-    height: 100%;
+      width: .5rem;
+      height: .5rem;
   }
 </style>

@@ -17,11 +17,8 @@
                     <div>{{item.contactNumber}}</div>
                     <div class="address_item_age bgffae43 colorffffff tc border_r4 font22 font_normal" v-if="item.addressMark !== '1'">店铺</div>
                   </div>
-                  <div class="address_item_address ellipsis color666666">
-                    <div class="font24">{{item.areaname}}</div>
-                    <div class="font24">{{item.sheetname}}</div>
-                    <div class="font24">{{item.address}}</div>
-                  </div>
+                  <div class="address_item_address color666666 font24">{{item.areaname}} {{item.sheetname}}</div>
+                  <div class="address_item_address color666666 font24">{{item.address}}</div>
                 </div>
                 <div class="address_item_img" v-if="item.addressMark === '1'" @click="delAddress(item.addressid)">
                   <img src="static/img/delete.png">
@@ -37,7 +34,7 @@
       </div>
       <!-- 添加按钮地址 start -->
       <div class="address_btn bgffffff">
-        <div class="send_btn tc bgff7e42 colorffffff font32 border_r4" @click="editAddress">新建地址</div>
+        <div class="send_btn tc bgff7e42 colorffffff font32 border_r4" @click.stop="editAddress">新建地址</div>
       </div>
       <!-- 添加按钮地址 end -->
     </div>
@@ -141,7 +138,7 @@
 import MyHeader from '@/components/common/header/myheader'
 import nodata from '@/components/common/nodata/nodata'
 import loading from '@/components/common/loading/loading'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'addressList',
@@ -281,7 +278,6 @@ export default {
     // 新建地址
     editAddress () {
       let self = this
-      window.event.stopPropagation()
       self.addressFlag = false
     },
     // 请求片列表

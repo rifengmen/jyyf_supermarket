@@ -14,7 +14,7 @@
           <!-- 返回 end -->
           <div class="search_input border_r6 bgffffff fl">
             <img src="static/img/search.png" class="fl">
-            <form action="javascript: true;" class="search_form">
+            <form action="javascript: return true;" class="search_form">
               <input
                 ref="searchInput"
                 type="search"
@@ -37,7 +37,7 @@
 
 <script>
 import WechatConfig from '@/components/common/wechatConfig/wechatConfig'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'search',
@@ -113,6 +113,9 @@ export default {
   beforeMount () {
   },
   mounted () {
+    let self = this
+    // 输入框获取焦点
+    self.setFocus()
   }
 }
 </script>

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '@/vuex/store'
 import login from './login'
 import index from './index'
 import shopping from './shopping'
@@ -14,7 +15,7 @@ const router = new Router({
   mode: 'history',
   // 超市测试(暂时停用)
   // base: '/testSupermarket',
-  // 超市生产
+  // 超市生产(开发时需关闭)
   // base: '/supermarket',
   // 记忆列表页位置
   scrollBehavior (to, from, savePosition) {
@@ -46,27 +47,18 @@ const router = new Router({
 })
 
 //  使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
-// router.beforeEach((to, from, next) => {
-//   let jyyfopenid = sessionStorage.getItem('jyyf_openid')
-//   if (!jyyfopenid && to.fullPath !== '/author') {
-//     let urlPath = to.fullPath
-//     urlPath = urlPath.replace(/%5Cu003d/g, '=')
-//     urlPath = urlPath.replace(/%5Cu0026/g, '&')
-//     // 保存用户进入的url
-//     sessionStorage.setItem('jyyf_beforeLoginUrl', urlPath)
-//     next('/author')
-//     return false
-//   }
-//   next()
-// })
 router.beforeEach((to, from, next) => {
   let jyyfopenid = sessionStorage.getItem('jyyf_openid')
   if (!jyyfopenid) {
-    let urlPath = to.fullPath
+    // let urlPath = to.fullPath
     // urlPath = urlPath.replace(/%5Cu003d/g, '=')
     // urlPath = urlPath.replace(/%5Cu0026/g, '&')
     // 保存用户进入的url
-    sessionStorage.setItem('jyyf_beforeLoginUrl', urlPath)
+    // sessionStorage.setItem('jyyf_beforeLoginUrl', urlPath)
+    store.commit('setRedirect', to)
+  }
+  if (to.meta.title) {
+    document.title = to.meta.title
   }
   next()
 })

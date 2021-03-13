@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'register',
@@ -103,6 +103,11 @@ export default {
     }
   },
   computed: {
+    // 重定向对象
+    redirect () {
+      let self = this
+      return self.$store.state.redirect
+    },
     // 验证手机号码格式是否正确
     flag () {
       let self = this
@@ -115,9 +120,9 @@ export default {
     msgType () {
       let self = this
       let str = self.$route.query.msgType || ''
-      if (str && (str.indexOf('=') === str.length - 1)) {
-        str = str.substr(0, str.length - 1)
-      }
+      // if (str && (str.indexOf('=') === str.length - 1)) {
+      //   str = str.substr(0, str.length - 1)
+      // }
       return str
     },
     // card_id
@@ -128,8 +133,7 @@ export default {
     // encrypt_code
     encrypt_code () {
       let self = this
-      let str = self.$route.query.encrypt_code || ''
-      return str
+      return self.$route.query.encrypt_code || ''
     },
     // openid
     openid () {
@@ -266,12 +270,10 @@ export default {
           self.$store.commit('setUserInfo', res.data)
           self.$store.commit('setToken', res.data.token)
           sessionStorage.setItem('jyyf_token', res.data.token)
-          self.$axios.defaults.headers.common.Authorization = res.data.token
           if (self.card_id && self.encrypt_code) {
             self.$router.push('/')
           } else {
-            let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
-            self.$router.push(url)
+            self.$router.push(self.redirect.fullPath)
           }
         } else {
           tip('登陆失败，请重新登陆！')

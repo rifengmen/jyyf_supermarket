@@ -13,6 +13,35 @@ textarea {
 input {
   padding-left: .2rem;
 }
+input[type=checkbox] {
+  margin-right: .04rem;
+  /*font-size: 14px;*/
+  width: .4rem;
+  /*height: 12px;*/
+  position: relative;
+  visibility: hidden;
+}
+input[type=checkbox]:after {
+  position: absolute;
+  width: .24rem;
+  height: .24rem;
+  top: 0;
+  content: " ";
+  color: #ffffff;
+  display: inline-block;
+  visibility: visible;
+  border-radius: .04rem;
+  background:#ffffff;
+  border:1px solid #dddddd;
+}
+input[type=checkbox]:checked:after {
+  content: "✓";
+  font-size: .2rem;
+  font-weight:600;
+  background-color: #ff6400;
+  text-align: center;
+  line-height: .24rem;
+}
 textarea {
   padding: .2rem;
 }
@@ -159,6 +188,9 @@ input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
 .color999999 {
   color: #999999;
 }
+.colorcecece {
+  color: #cecece;
+}
 .coloreeeeee {
   color: #eeeeee;
 }
@@ -218,14 +250,17 @@ input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
 .bgd9d9d9 {
   background-color: #d9d9d9;
 }
-.bg000000_40 {
-  background-color: rgba(0,0,0,.4);
+.bgf9f9f9 {
+  background-color: #f9f9f9;
 }
 .bgc8f5ee {
   background-color: #c8f5ee;
 }
 .bgff7e42 {
   background-color: #ff7e42;
+}
+.bgcecece {
+  background-color: #cecece;
 }
 .bgfcfbf2 {
   background-color: #fcfbf2;
@@ -256,6 +291,12 @@ input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
 }
 .bgfef7ed {
   background-color: #fef7ed;
+}
+.bg000000_40 {
+  background-color: rgba(0,0,0,.4);
+}
+.bg000000_60 {
+  background-color: rgba(0,0,0,.6);
 }
 /* 背景颜色 end */
 /* 边框 start */
@@ -451,10 +492,10 @@ input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
   background-image: url('../img/indexactive.png');
 }
 .footer_class > div:first-child{
-  background-image: url('../img/class.png');
+  background-image: url('../img/category.png');
 }
 .footer_class.router-link-exact-active > div:first-child {
-  background-image: url('../img/classactive.png');
+  background-image: url('../img/categoryactive.png');
 }
 .footer_cart > div:first-child{
   background-image: url('../img/cart.png');
@@ -574,64 +615,34 @@ input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
 }
 .goods_li {
   width: 100%;
-  height: 2.2rem;
+  min-height: 2.2rem;
   display: flex;
   align-items: center;
   margin-bottom: .1rem;
 }
-.goods_input {
+.goods_li .goods_input {
   width: .3rem;
-  height: 100%;
+  height: 1rem;
   margin-bottom: .06rem;
-  padding: 0 .24rem;
+  padding: 0 .12rem 0 .24rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-input[type=checkbox] {
-  margin-right: .04rem;
-  /*font-size: 14px;*/
-  width: .4rem;
-  /*height: 12px;*/
-  position: relative;
-  visibility: hidden;
-}
-input[type=checkbox]:after {
-  position: absolute;
-  width: .24rem;
-  height: .24rem;
-  top: 0;
-  content: " ";
-  color: #ffffff;
-  display: inline-block;
-  visibility: visible;
-  border-radius: .04rem;
-  background:#ffffff;
-  border:1px solid #dddddd;
-}
-input[type=checkbox]:checked:after {
-  content: "✓";
-  font-size: .2rem;
-  font-weight:600;
-  background-color: #ff6400;
-  text-align: center;
-  line-height: .24rem;
-}
-.goods_input .delbtn {
+.goods_li .goods_input .delbtn {
   width: .3rem;
   height: .3rem;
   line-height: .3rem;
 }
-.goods_item {
+.goods_li .goods_item {
   width: calc(100% - .48rem);
-  height: 2.2rem;
   margin-bottom: .06rem;
   padding: 0 .24rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.goods_item_img {
+.goods_li .goods_item .goods_item_img {
   width: 1.8rem;
   height: 1.8rem;
   overflow: hidden;
@@ -640,38 +651,42 @@ input[type=checkbox]:checked:after {
   justify-content: center;
   align-items: center;
 }
-.goods_item_img img {
+.goods_li .goods_item_img img {
   width: 100%;
 }
-.goods_item_cont {
+.goods_li .goods_item_cont {
   width: calc(100% - 2rem);
+  min-height: 1.8rem;
   margin-left: .2rem;
   display: flex;
   justify-content: space-between;
   flex-flow: column;
 }
-.goods_item_name {
+.goods_li .goods_item_name {
   width: 100%;
   max-height: 1rem;
   line-height: 1.5;
 }
-.goods_item_name:first-child {
+.goods_li .goods_item_name:first-child {
   max-height: 1.6rem;
   margin-bottom: .1rem;
 }
-.goods_item_price {
+.goods_li .goods_item_price {
   width: 56%;
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
 }
-.goods_item_prices {
+.goods_li .goods_item_prices {
   width: 80%;
 }
-.goods_item_price > div:first-child {
+.goods_li .goods_item_price > div {
+  max-width: 95%;
+}
+.goods_li .goods_item_price > div:first-child {
   margin-right: .2rem;
 }
-.goods_item_editnum {
+.goods_li .goods_item_editnum {
   width: 100%;
   height: .4rem;
   padding: .1rem 0;
@@ -679,33 +694,36 @@ input[type=checkbox]:checked:after {
   justify-content: space-between;
   align-items: flex-end;
 }
-.goods_item_editnum .goods_num {
+.goods_li .goods_item_editnum .goods_num {
   width: 1.76rem;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.goods_item_editnum .goods_num_btn {
+.goods_li .goods_item_editnum .goods_num_btn {
   width: .4rem;
   height: .4rem;
   line-height: .4rem;
 }
-.goods_item_editnum .goods_num_input {
+.goods_li .goods_item_editnum .goods_num_input {
   width: .7rem;
   height: .4rem;
   line-height: .4rem;
   margin: 0 .1rem;
 }
-.goods_item_editnum .goods_num_input input {
+.goods_li .goods_item_editnum .goods_num_input input {
   width: 100%;
   margin: unset;
   padding: unset;
 }
-.goods_item_editnum .goods_item_cart {
+.goods_li .goods_item_editnum .goods_item_cart {
   width: .5rem;
   height: .5rem;
   overflow: hidden;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
 }
 /* 商品列表 end */
 /* 地址列表 start */
@@ -733,7 +751,7 @@ input[type=checkbox]:checked:after {
 /* 地址列表 end */
 /* 优惠券 start */
 .tick_list {
-  width: calc(100% - .48rem);
+  width: 100%;
   height: calc(100% - .4rem);
   margin: .2rem .24rem;
   overflow: hidden;
@@ -744,16 +762,23 @@ input[type=checkbox]:checked:after {
   height: auto;
 }
 .tick_item {
-  width: 100%;
+  width: calc(100% - .48rem);
   height: 3.24rem;
-  margin-bottom: .2rem;
+  margin: .2rem auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
+.tick_item:first-child {
+  margin-top: unset;
+}
+.tick_item:last-child {
+  margin-bottom: unset;
+}
 .tick_item_head{
-  width: 100%;
+  width: calc(100% - .48rem);
   height: 1.58rem;
+  padding: 0 .24rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -765,22 +790,25 @@ input[type=checkbox]:checked:after {
 .tick_item_head_left{
   display: flex;
   align-items: center;
-  margin-left: 0.12rem;
+}
+.tick_item_name {
+  margin-left: .2rem;
+}
+.tick_item_name > div {
+  margin-bottom: .2rem;
+}
+.tick_item_name > div:last-child {
+  margin-bottom: unset;
 }
 .tick_item_head_btn{
-  width: 1.44rem;
-  height: 0.52rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 0.12rem;
+  padding: .16rem .3rem;
 }
 .tick_item_foot{
-  display: flex;
-  flex-direction: column;
   height: calc(100% - 1.58rem);
-  justify-content: center;
   margin-left: 0.22rem;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 .tick_item_foot div{
   margin-top: 0.1rem;
@@ -1018,6 +1046,75 @@ input[type=checkbox]:checked:after {
   border: 1px solid #cccccc;
 }
 /* 表单样式 end */
+/* 订单详情 start */
+.order_cont {
+  width: 100%;
+  min-height: calc(100% - .2rem);
+}
+.order_section {
+  width: calc(100% - .48rem);
+  height: auto;
+  padding: .3rem .24rem;
+  margin-top: .2rem;
+  display: flex;
+  justify-content: space-between;
+  flex-flow: column;
+}
+.order_sections {
+  width: 100%;
+  height: auto;
+  padding: .2rem 0;
+  margin-top: .2rem;
+  display: flex;
+  justify-content: space-between;
+}
+.order_sectionss {
+  width: calc(100% - .48rem);
+  height: auto;
+  padding: .3rem .24rem;
+  margin: .2rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+}
+.paydesc {
+  width: 100%;
+  height: .6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.orderdesc {
+  width: 100%;
+  height: auto;
+  padding: .2rem 0;
+  border-top: .02rem solid #f4f4f4;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.orderdesc:first-child {
+  border: unset;
+}
+.orderdesc > div:first-child {
+  width: 1.5rem;
+}
+.order_comment {
+  max-width: calc(100% - 1.5rem);
+  line-height: 1.5;
+}
+.pay_img {
+  width: calc(100% - 1.5rem);
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.pay_img img {
+  height: .4rem;
+}
+/* 订单详情 end */
 /* 积分抵扣开关 start */
 .score_img img {
   width: .72rem;
@@ -1039,6 +1136,25 @@ input[type=checkbox]:checked:after {
   align-items: center;
 }
 /* 返回键 end */
+/* 底部按钮样式 start */
+.btn_cont {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: calc(100vw - .48rem);
+  height: auto;
+  padding: .6rem .24rem;
+}
+.btn_cont .btn {
+  width: calc(100% - 2px);
+  height: calc(.8rem - 2px);
+  line-height: .8rem;
+  margin-bottom: .4rem;
+}
+.btn_cont .btn:last-child {
+  margin-bottom: unset;
+}
+/* 底部按钮样式 end */
 /* 支付方式 start */
 .paymode_img img {
   height: .4rem;
@@ -1119,7 +1235,7 @@ input.el-input__inner::placeholder {
 /* 修改el默认样式 end */
 /* 修改vant默认样式 start */
 .van-dialog {
-  width: 5rem!important;
+  width: 5.5rem!important;
   border-radius: .08rem!important;
 }
 .van-dialog__confirm,
@@ -1146,7 +1262,7 @@ input.el-input__inner::placeholder {
 }
 .van-radio--horizontal .payname {
   display: flex;
-  width: 1rem;
+  /*width: 1rem;*/
 }
 /* 修改vant默认样式 end */
 /* 公共样式 end */
@@ -1165,7 +1281,6 @@ input.el-input__inner::placeholder {
   width: 100%;
   height: 100%;
   position: relative;
-  overflow: hidden;
   margin: 0 auto;
   display: flex;
   justify-content: center;

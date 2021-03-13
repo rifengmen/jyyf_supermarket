@@ -45,7 +45,7 @@
 import MyHeader from '@/components/common/header/myheader'
 import loading from '@/components/common/loading/loading'
 import nodata from '@/components/common/nodata/nodata'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'messageList',

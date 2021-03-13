@@ -47,7 +47,7 @@
 
 <script>
 import MyHeader from '@/components/common/header/myheader'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'manual',

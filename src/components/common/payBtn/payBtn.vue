@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'payBtn',
@@ -130,7 +130,7 @@ export default {
       let self = this
       return self.$store.state.cart
     },
-    // 订单类型标识,1: 发起拼团，2：参与拼团，3：砍价订单
+    // 订单类型标识
     ordertype () {
       let self = this
       return self.$route.query.ordertype || 0
@@ -153,8 +153,9 @@ export default {
     },
     // 支付
     pay (e) {
-      let self = this
       e.stopPropagation()
+      let self = this
+      // 验证不存在订单编号，选择收货地址
       if (!self.tradeno) {
         // 验证选择收货地址
         if (!self.address) {
@@ -289,7 +290,7 @@ export default {
         isotc: self.order.isotc,
         goodsid: self.$route.query.goodsid || '',
         groupno: self.$route.query.groupno,
-        amount: self.amount || 1,
+        amount: self.amount,
         Sendid: self.address.addressid,
         Usernote: self.usernote,
         paylist: self.paylist,
@@ -317,41 +318,83 @@ export default {
               let wechatstr = res.data.beecloud.wechatPayStr
               if (typeof WeixinJSBridge === 'undefined') {
                 if (document.addEventListener) {
-                  document.addEventListener('WeixinJSBridgeReady', self.onBridgeReady(wechatstr, res.data.tradeno), false)
+                  document.addEventListener('WeixinJSBridgeReady', self.onBridgeReady(wechatstr), false)
                 } else if (document.attachEvent) {
-                  document.attachEvent('WeixinJSBridgeReady', self.onBridgeReady(wechatstr, res.data.tradeno))
-                  document.attachEvent('onWeixinJSBridgeReady', self.onBridgeReady(wechatstr, res.data.tradeno))
+                  document.attachEvent('WeixinJSBridgeReady', self.onBridgeReady(wechatstr))
+                  document.attachEvent('onWeixinJSBridgeReady', self.onBridgeReady(wechatstr))
                 }
               } else {
-                self.onBridgeReady(wechatstr, res.data.tradeno)
+                self.onBridgeReady(wechatstr)
               }
               return false
             }
           } else {
-            if (parseInt(self.group) === 1) {
-              self.groupAdd(res.data.tradeno)
-              self.orderdetail(res.data.tradeno)
-            } else if (parseInt(self.group) === 2) {
-              self.groupEnd(res.data.tradeno)
-              self.orderdetail(res.data.tradeno)
-            } else {
-              tip('支付成功！')
-              self.orderdetail(res.data.tradeno)
-            }
+            // 已作废，后台自动调用
+            // if (parseInt(self.ordertype) === 1) {
+            //   self.groupAdd(res.data.tradeno)
+            //   self.orderdetail()
+            // } else if (parseInt(self.ordertype) === 2) {
+            //   self.groupEnd(res.data.tradeno)
+            //   self.orderdetail()
+            // } else {
+            //   tip('支付成功！')
+            //   self.orderdetail()
+            // }
+            tip('支付成功！')
+            self.orderdetail()
           }
           return false
         } else {
           if (res.data) {
             tip(res.msg)
-            self.orderdetail(res.data.tradeno)
+            self.orderdetail()
             return false
           }
           tip(res.msg)
         }
       })
     },
+    // 秒杀结算
+    panicPay () {
+      let self = this
+      let data = {
+        goodsid: self.$route.query.goodsid,
+        amount: self.amount,
+        // 支付完成后返回路径
+        frontUrl: self.$store.state.baseURL + '/userInfo?dianpu=' + self.$store.state.wechatID,
+        // 区分微会员和百货，wemember：微会员；generalMerchandise：百货
+        flag: 'wemember'
+      }
+      self.$api.invest.payOrderComit(data).then(result => {
+        let res = result.data
+        if (res.code === 200) {
+          // 微信支付
+          let beecloud = res.data.beecloud
+          if (beecloud.paymentchannel === 3) { // 银联商务结算
+            window.location.href = beecloud.unifiedPayStr.payUrl
+          } else if (beecloud.paymentchannel === 4) { // 太米结算
+            window.location.href = beecloud.tmPayStr.payUrl
+          } else if (beecloud.paymentchannel === 2) { // 微信官方结算
+            let wechatstr = res.data.beecloud.wechatPayStr
+            if (typeof WeixinJSBridge === 'undefined') {
+              if (document.addEventListener) {
+                document.addEventListener('WeixinJSBridgeReady', self.onBridgeReady(wechatstr), false)
+              } else if (document.attachEvent) {
+                document.attachEvent('WeixinJSBridgeReady', self.onBridgeReady(wechatstr))
+                document.attachEvent('onWeixinJSBridgeReady', self.onBridgeReady(wechatstr))
+              }
+            } else {
+              self.onBridgeReady(wechatstr)
+            }
+            return false
+          }
+        } else {
+          tip(res.msg)
+        }
+      })
+    },
     // 微信支付
-    onBridgeReady (wechatstr, tradeno) {
+    onBridgeReady (wechatstr) {
       let self = this
       window.WeixinJSBridge.invoke(
         'getBrandWCPayRequest',
@@ -375,7 +418,7 @@ export default {
             // res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
           } else if (_res.err_msg === 'get_brand_wcpay_request:cancel' || _res.err_msg === 'get_brand_wcpay_request:fail') {
             tip('支付失败！')
-            self.orderdetail(tradeno)
+            self.orderdetail()
           }
         }
       )
@@ -446,7 +489,7 @@ export default {
       })
     },
     // 去会员中心页面
-    orderdetail (tradeno) {
+    orderdetail () {
       let self = this
       self.$store.commit('setOrder', '')
       self.$store.commit('setScore', '')

@@ -63,7 +63,7 @@ import MyHeader from '@/components/common/header/myheader'
 import loading from '@/components/common/loading/loading'
 import saomacancelBtn from '@/components/common/saomaBtn/saomacancelBtn'
 import nodata from '@/components/common/nodata/nodata'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'saomaorderList',
@@ -98,11 +98,11 @@ export default {
     date () {
       let self = this
       if (!self.startdate) {
-        let dt = new Date()
-        dt.setMonth(dt.getMonth() - 6)
-        dt = dt.toLocaleString()
-        dt = (dt.replace(/\//g, '-')).split(' ')[0]
-        self.startdate = dt
+        let nowdate = new Date()
+        let timelength = 6 * 30 * 24 * 60 * 60 * 1000
+        let startdate = new Date(nowdate - timelength).toLocaleString().split('午')[0]
+        startdate = startdate.slice(0, startdate.length - 1)
+        self.startdate = startdate
       }
       return self.startdate
     }
@@ -153,7 +153,6 @@ export default {
             // 页码不足或者最后一页不足的情况
             if (currentpage >= total || res.data.retlist.length < self.pageSize) {
               self.finished = true
-              return false
             }
             if (self.refreshing) { // 刷新
               self.saomaorderList = res.data.retlist

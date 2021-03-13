@@ -14,7 +14,7 @@
 <script>
 import wx from 'weixin-js-sdk'
 import WechatConfig from '@/components/common/wechatConfig/wechatConfig'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'App',
@@ -39,6 +39,11 @@ export default {
     }
   },
   computed: {
+    // 重定向对象
+    redirect () {
+      let self = this
+      return self.$store.state.redirect
+    },
     // appid
     appid () {
       let self = this
@@ -59,8 +64,9 @@ export default {
     WechatConfig
   },
   provide () {
+    let self = this
     return {
-      reload: this.reload
+      reload: self.reload
     }
   },
   methods: {
@@ -75,27 +81,13 @@ export default {
     // 获取wechatID
     getWechatID () {
       let self = this
-      console.log(self.$route, 'wechatID1')
       // 路由开关
       if (self.isRouter) {
         return false
       }
       let baseURL = window.location.href.slice(0, window.location.href.lastIndexOf('/'))
       self.$store.commit('setBaseURL', baseURL)
-      console.log(self.$route, 'wechatID2')
-      let beforeLoginUrl = sessionStorage.getItem('jyyf_beforeLoginUrl')
-      let id = beforeLoginUrl.split('=')[1]
-      let str
-      if (id.indexOf('&') >= 0) {
-        str = decodeURIComponent(id.split('&')[0].replace(/"/g, ''))
-      } else if (id.indexOf('&') === -1) {
-        str = decodeURIComponent(id.replace(/"/g, ''))
-      }
-      // 卡券过来时去掉最后面的等号
-      if (str && (str.indexOf('=') === str.length - 1)) {
-        str = str.substr(0, str.length - 1)
-      }
-      self.wechatID = str
+      self.wechatID = self.redirect.query.dianpu
       self.$store.commit('setWechatID', self.wechatID)
       // 获取Appid
       self.getAppid()
@@ -103,7 +95,6 @@ export default {
     // 获取appid
     getAppid () {
       let self = this
-      console.log(self.$route, 'appid')
       let data = {
         wechatID: self.wechatID
       }
@@ -111,15 +102,10 @@ export default {
         let res = result.data
         if (res.code === 200) {
           self.$store.commit('setAppid', res.data.appid)
-          let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
-          if (url.indexOf('&') >= 0 && url.indexOf('msgType=') >= 0) {
-            url = url.split('&')[1] || ''
-            let msgType = url.split('=')[1] || ''
-            if (msgType === 'activate') {
-              // 卡包过来直接去注册
-              self.toRegister()
-              return false
-            }
+          if (self.redirect.query.msgType === 'activate') {
+            // 卡包过来直接去注册
+            self.toRegister()
+            return false
           }
           // 非静默授权，第一次有弹框
           self.getCode()
@@ -131,20 +117,18 @@ export default {
     // 非静默授权，第一次有弹框
     getCode () {
       let self = this
-      console.log(self.$route, 'code')
-      let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
-      const REDIRECT_URI = encodeURIComponent(self.baseURL + url)
+      self.code = self.$route.query.code
+      const REDIRECT_URI = encodeURIComponent(self.baseURL + self.redirect.fullPath)
       const URL = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + self.appid + '&redirect_uri=' + REDIRECT_URI + '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
       // 非静默授权，第一次有弹框
       // 如果没有code，则去请求
       // 截取code
-      // https://www.spzlk.cn/testSupermarket/?dianpu=2&code=001PKA0j2nSOTD0WYe2j2qnT0j2PKA09&state=STATE
-      if (url.indexOf('&code=') === -1) {
-        window.location.href = URL
-      } else if (url.indexOf('&code=') >= 0 && url.indexOf('state=')) {
-        self.code = url.substring(url.indexOf('&code=') + 6, url.indexOf('state=') - 1)
+      // https://www.spzlk.cn/supermarket/?dianpu=2&code=001PKA0j2nSOTD0WYe2j2qnT0j2PKA09&state=STATE
+      if (self.code) {
         // 获取openid
         self.getOpenId()
+      } else {
+        window.location.href = URL
       }
     },
     // 获取openid
@@ -171,17 +155,14 @@ export default {
     // 卡包注册
     toRegister () {
       let self = this
-      console.log(self.$route, 'toRegister')
-      let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
-      let toPath = url.slice(1, 9)
-      if (toPath === 'register') {
-        let _arr = url.split('=')
-        let openid = _arr[_arr.length - 1]
+      let redirect = self.redirect
+      if (redirect.name === 'register') {
+        let openid = redirect.query.openid
         sessionStorage.setItem('jyyf_openid', openid)
         self.$store.commit('setOpenid', openid)
         self.openid = openid
         self.isRouter = true
-        self.$router.push(url)
+        self.$router.push(redirect.fullPath)
       }
     },
     // 设置用户信息
@@ -198,10 +179,8 @@ export default {
           self.$store.commit('setUserInfo', res.data)
           self.$store.commit('setToken', res.data.token)
           sessionStorage.setItem('jyyf_token', res.data.token)
-          self.$axios.defaults.headers.common.Authorization = res.data.token
           self.isRouter = true
-          let url = sessionStorage.getItem('jyyf_beforeLoginUrl').replace(/"/g, '')
-          self.$router.push(url)
+          self.$router.push(self.redirect.fullPath)
         } else if (res.code === 20) {
           self.isRouter = true
           self.$router.push('/register')
@@ -221,7 +200,7 @@ export default {
     getWechatCardList (code) {
       let self = this
       if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
-        self.curPageUrl = self.baseURL + sessionStorage.getItem('jyyf_beforeLoginUrl')
+        self.curPageUrl = self.baseURL + self.redirect.fullPath
       } else if (/(Android|Windows)/i.test(navigator.userAgent)) {
         self.curPageUrl = window.location.href
       } else {

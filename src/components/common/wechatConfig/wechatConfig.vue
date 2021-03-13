@@ -4,7 +4,7 @@
 
 <script>
 import wx from 'weixin-js-sdk'
-import tip from '@/utils/Toast'
+import tip from '@/utils/tip'
 
 export default {
   name: 'wechatConfig',
@@ -28,6 +28,11 @@ export default {
     }
   },
   computed: {
+    // 重定向对象
+    redirect () {
+      let self = this
+      return self.$store.state.redirect
+    },
     // baseURL
     baseURL () {
       let self = this
@@ -41,7 +46,7 @@ export default {
     // token
     token () {
       let self = this
-      return self.$axios.defaults.headers.common.Authorization || ''
+      return self.$store.state.token
     }
   },
   components: {},
@@ -50,20 +55,17 @@ export default {
     getWXConfig () {
       let self = this
       if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
-        self.curPageUrl = self.baseURL + sessionStorage.getItem('jyyf_beforeLoginUrl')
+        self.curPageUrl = self.baseURL + self.redirect.fullPath
       } else if (/(Android|Windows)/i.test(navigator.userAgent)) {
         self.curPageUrl = window.location.href
       } else {
         self.curPageUrl = window.location.href
       }
-      let data = new FormData()
-      let requestData = {
+      let data = {
         wechatID: self.$store.state.wechatID,
         curPageUrl: self.curPageUrl
       }
-      requestData = JSON.stringify(requestData)
-      data.append('requestData', requestData)
-      self.$axios.post('api/payment/getWXConfig', data).then(result => {
+      self.$api.api.getWXConfig(data).then(result => {
         let res = result.data
         if (res.code === 200) {
           self.wxstr = res.data
