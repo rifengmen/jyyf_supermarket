@@ -13,18 +13,20 @@
       <div class="tick_detail">
         <!-- 面额 start -->
         <div class="tick_detail_card colorff7e42 bgfef7ed">
-          <div class="font_blod tc" v-if="tickDetail.tickettype === 1">
+          <div class="font_blod tc" v-if="tickettype === 1">
             <span class="font30">￥</span>
-            <span class="font80">{{tickDetail.usemoney}}</span>
+            <span class="font80">{{usemoney}}</span>
           </div>
-          <div class="font40 font_blod tc" v-if="tickDetail.tickettype === 2">
+          <div class="font40 font_blod tc" v-if="tickettype === 2">
             <span class="font30">折</span>
-            <span class="font80">{{tickDetail.usemoney * 10}}</span>
+            <span class="font80">{{usemoney * 10}}</span>
           </div>
           <div class="tick_item_name">
             <div class="font32 tc" v-if="tickDetail.score">{{tickDetail.score}}积分兑换</div>
-            <div class="font26 tc">{{tickDetail.tickettypename}}</div>
-            <div class="font26 tc">满{{tickDetail.minsalemoney}}元使用</div>
+            <div class="font26 tc" v-if="tickettype === 1">{{'金额券'}}</div>
+            <div class="font26 tc" v-else-if="tickettype === 2">{{'折扣券'}}</div>
+            <div class="font26 tc" v-else>{{tickDetail.tickettypename}}</div>
+            <div class="font26 tc">满{{minsalemoney}}元使用</div>
           </div>
         </div>
         <!-- 面额 end -->
@@ -32,27 +34,27 @@
         <div class="tick_detail_info">
           <div class="">
             <div class="font28 font_blod">券码</div>
-            <div class="font26 color999999">{{tickDetail.tickid}}</div>
+            <div class="font26 color999999">{{tickid}}</div>
           </div>
           <div class="">
             <div class="font28 font_blod">券名称</div>
-            <div class="font26 color999999">{{tickDetail.tickname}}</div>
+            <div class="font26 color999999">{{tickname}}</div>
           </div>
           <div class="">
             <div class="font28 font_blod">使用时间</div>
-            <div class="font26 color999999">{{tickDetail.startdate}} —— {{tickDetail.enddate}}</div>
+            <div class="font26 color999999">{{startdate}} —— {{enddate}}</div>
           </div>
           <div class="">
             <div class="font28 font_blod">发行量</div>
-            <div class="font26 color999999">{{tickDetail.totalcount}}张</div>
+            <div class="font26 color999999">{{tickDetail.totalcount || 0}}张</div>
           </div>
           <div class="">
             <div class="font28 font_blod">剩余量</div>
-            <div class="font26 color999999">{{tickDetail.residuecount}}张</div>
+            <div class="font26 color999999">{{tickDetail.residuecount || 0}}张</div>
           </div>
           <div class="">
             <div class="font28 font_blod">使用规则</div>
-            <div class="font26 color999999">{{tickDetail.limitname || '无'}}</div>
+            <div class="font26 color999999">{{limitname || '无'}}</div>
           </div>
           <div class="">
             <div class="font28 font_blod">使用说明</div>
@@ -74,16 +76,29 @@
 <script>
 import MyHeader from '@/components/common/header/myheader'
 import panicTick from '@/components/common/panicTick/panicTick'
-import tip from '@/utils/tip'
 
 export default {
   name: 'ticketdetail',
   data () {
     return {
       // 调用的地方
-      froms: this.$route.query.froms,
+      froms: '',
       // 优惠券ID
-      tickid: this.$route.query.tickid,
+      tickid: '',
+      // 面额
+      usemoney: '',
+      // 券类型
+      tickettype: '',
+      // 最低消费金额
+      minsalemoney: '',
+      // 券名称
+      tickname: '',
+      // 使用规则
+      limitname: '',
+      // 使用开始时间
+      startdate: '',
+      // 使用结束时间
+      enddate: '',
       // 优惠券详情
       tickDetail: {}
     }
@@ -109,8 +124,6 @@ export default {
           }
           tickDetail.residuecount = residuecount
           self.tickDetail = tickDetail
-        } else {
-          tip(res.msg)
         }
       })
     }
@@ -119,7 +132,17 @@ export default {
   },
   created () {
     let self = this
-    // 页面加载时获取优惠券详情
+    let {query} = self.$route
+    self.froms = query.froms
+    self.tickid = query.tickid
+    self.enddate = query.enddate
+    self.limitname = query.limitname
+    self.minsalemoney = query.minsalemoney
+    self.startdate = query.startdate
+    self.tickettype = query.tickettype
+    self.tickname = query.tickname
+    self.usemoney = query.usemoney
+    // 获取优惠券详情
     self.getTickDetail()
   },
   beforeMount () {

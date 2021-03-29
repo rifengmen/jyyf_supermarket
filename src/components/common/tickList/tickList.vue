@@ -192,7 +192,22 @@ export default {
       if (self.froms === 'editorder') {
         return false
       }
-      self.$router.push({name: 'ticketdetail', query: {tickid: tick.onlinetickid, froms: self.froms}})
+      self.$router.push(
+        {
+          name: 'ticketdetail',
+          query: {
+            froms: self.froms,
+            tickid: tick.onlinetickid,
+            usemoney: tick.usemoney,
+            tickettype: tick.tickettype,
+            minsalemoney: tick.minsalemoney,
+            tickname: tick.tickname,
+            limitname: tick.limitname,
+            startdate: tick.startdate,
+            enddate: tick.enddate
+          }
+        }
+      )
     }
   },
   watch: {},
