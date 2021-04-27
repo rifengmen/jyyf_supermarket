@@ -16,7 +16,7 @@
               </div>
               <div class="font_blod tc" v-if="item.tickettype === 2">
                 <span class="font30">折</span>
-                <span class="font80">{{item.usemoney * 10}}</span>
+                <span class="font80">{{(item.usemoney * 10).toFixed(2)}}</span>
               </div>
               <div class="tick_item_name">
                 <div class="font32 tc" v-if="item.score">{{item.score}}积分兑换</div>

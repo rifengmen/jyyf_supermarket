@@ -126,6 +126,9 @@ export default {
     min-height: .8rem;
     border-bottom: 1px solid #f4f4f4;
     padding: .1rem .24rem .1rem .3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   .goodsList li:last-child .goods_item {
     border-bottom: unset;
@@ -142,10 +145,12 @@ export default {
     width: 2.3rem;
     display: flex;
     justify-content: flex-end;
+    align-items: flex-end;
   }
   .goods_item_editnum {
     width: 1rem;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
   }
 </style>
